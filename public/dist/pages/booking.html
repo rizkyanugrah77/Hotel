@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Booking details — Sitio Tio Resort</title>
+  <script type="module" src="/resources/js/main.js"></script>
+</head>
+<body class="bg-background text-foreground font-inter">
+
+  <!-- Minimal Navbar for Checkout Flow -->
+  <nav class="bg-white shadow-sm border-b border-gray-100">
+    <div class="max-w-5xl mx-auto px-4 h-20 flex items-center justify-between">
+      <a href="/" class="flex items-center gap-3">
+        <div class="w-10 h-10 bg-gradient-primary rounded-xl flex items-center justify-center shadow-red">
+          <svg class="w-6 h-6 text-white" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M8.25 21v-4.875c0-.621.504-1.125 1.125-1.125h5.25c.621 0 1.125.504 1.125 1.125V21m0 0h4.5V3.545M12.75 21h7.5M10.5 21V8.121c0-.312.11-.611.308-.848l4.692-5.58a.75.75 0 0 1 1.149.024l4.469 5.404c.18.217.282.5.282.79V21m-14.4 0H3.75c-.621 0-1.125-.504-1.125-1.125v-6.75c0-.621.504-1.125 1.125-1.125h3.375" /></svg>
+        </div>
+        <span class="font-poppins font-bold text-lg">Sitio Tio Secure Checkout</span>
+      </a>
+      <a href="javascript:history.back()" class="text-sm text-gray-500 hover:text-primary transition-colors flex items-center gap-1">
+        <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M9 15 3 9m0 0 6-6M3 9h12a6 6 0 0 1 0 12h-3" /></svg>
+        Go Back
+      </a>
+    </div>
+  </nav>
+
+  <main class="py-12 px-4">
+    <div class="max-w-5xl mx-auto">
+      
+      <!-- Stepper -->
+      <div class="mb-12">
+        <div class="flex items-center justify-between max-w-2xl mx-auto relative">
+          <div class="absolute left-0 top-1/2 -translate-y-1/2 w-full h-1 bg-gray-200 rounded-full -z-10"></div>
+          <div class="absolute left-0 top-1/2 -translate-y-1/2 w-[50%] h-1 bg-primary rounded-full -z-10 transition-all duration-500"></div>
+          
+          <div class="flex flex-col items-center gap-2">
+            <div class="w-10 h-10 rounded-full bg-primary text-white flex items-center justify-center font-bold shadow-red"><svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="m4.5 12.75 6 6 9-13.5" /></svg></div>
+            <span class="text-xs font-semibold text-primary">Select Room</span>
+          </div>
+          <div class="flex flex-col items-center gap-2">
+            <div class="w-10 h-10 rounded-full bg-primary text-white flex items-center justify-center font-bold shadow-red ring-4 ring-primary/20">2</div>
+            <span class="text-xs font-semibold text-primary">Guest Details</span>
+          </div>
+          <div class="flex flex-col items-center gap-2">
+            <div class="w-10 h-10 rounded-full bg-white border-2 border-gray-300 text-gray-400 flex items-center justify-center font-bold">3</div>
+            <span class="text-xs font-medium text-gray-400">Payment</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        
+        <!-- Left: Form -->
+        <div class="lg:col-span-2 space-y-6">
+          <div class="card p-6 md:p-8 border border-gray-100">
+            <h2 class="text-xl font-poppins font-bold text-foreground mb-6">Guest Information</h2>
+            <form action="/pages/payment.html" id="booking-form" class="space-y-6">
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                  <label for="fname" class="input-label">First Name *</label>
+                  <input type="text" id="fname" class="input" required placeholder="John" />
+                </div>
+                <div>
+                  <label for="lname" class="input-label">Last Name *</label>
+                  <input type="text" id="lname" class="input" required placeholder="Doe" />
+                </div>
+                <div>
+                  <label for="email" class="input-label">Email Address *</label>
+                  <input type="email" id="email" class="input" required placeholder="john@example.com" />
+                </div>
+                <div>
+                  <label for="phone" class="input-label">Phone Number *</label>
+                  <input type="tel" id="phone" class="input" required placeholder="+62 812 3456 7890" />
+                </div>
+              </div>
+
+              <div class="pt-4 border-t border-gray-100">
+                <h3 class="font-poppins font-semibold text-foreground mb-4">Special Requests (Optional)</h3>
+                <textarea class="input min-h-[100px] resize-y" placeholder="E.g., early check-in, late check-out, anniversary celebration..."></textarea>
+                <p class="text-xs text-gray-500 mt-2">Special requests cannot be guaranteed, but we will do our best to meet your needs.</p>
+              </div>
+
+              <div class="pt-4 flex justify-end">
+                <button type="submit" class="btn-primary !px-8 text-lg">
+                  Continue to Payment
+                  <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3" /></svg>
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+
+        <!-- Right: Summary -->
+        <div>
+          <div class="card overflow-hidden border border-gray-100 sticky top-6">
+            <img src="/resources/assets/images/room-deluxe.png" alt="Deluxe Room" class="w-full h-40 object-cover" />
+            <div class="p-6">
+              <div class="flex items-center gap-2 mb-2">
+                <span class="badge-primary">Deluxe Lake View</span>
+              </div>
+              <h3 class="font-poppins font-bold text-lg mb-4">Sitio Tio Resort</h3>
+              
+              <div class="space-y-3 pb-4 border-b border-gray-100 text-sm">
+                <div class="flex justify-between">
+                  <span class="text-gray-500">Check-in</span>
+                  <span class="font-medium">12 Oct 2026, 14:00</span>
+                </div>
+                <div class="flex justify-between">
+                  <span class="text-gray-500">Check-out</span>
+                  <span class="font-medium">14 Oct 2026, 12:00</span>
+                </div>
+                <div class="flex justify-between">
+                  <span class="text-gray-500">Length of stay</span>
+                  <span class="font-medium">2 Nights</span>
+                </div>
+                <div class="flex justify-between">
+                  <span class="text-gray-500">Guests</span>
+                  <span class="font-medium">2 Adults</span>
+                </div>
+              </div>
+
+              <div class="pt-4 space-y-2 text-sm">
+                <div class="flex justify-between text-gray-600">
+                  <span>Room rate</span>
+                  <span>Rp 2.400.000</span>
+                </div>
+                <div class="flex justify-between text-gray-600">
+                  <span>Taxes & Fees (11%)</span>
+                  <span>Rp 264.000</span>
+                </div>
+                <div class="pt-4 mt-2 border-t border-gray-200 flex justify-between items-center">
+                  <span class="font-bold text-foreground">Total Due</span>
+                  <span class="text-xl font-poppins font-bold text-primary">Rp 2.664.000</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+</body>
+</html>

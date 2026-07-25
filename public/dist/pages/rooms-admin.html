@@ -1,0 +1,663 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Kelola Rooms — Sitio Tio Resort Admin</title>
+  <script type="module" src="/resources/js/main.js"></script>
+</head>
+<body class="bg-gray-100 text-foreground font-inter h-screen overflow-hidden flex">
+
+  <!-- Sidebar -->
+  <aside class="w-64 bg-gradient-dark text-white flex-shrink-0 hidden md:flex flex-col">
+    <div class="h-20 flex items-center gap-3 px-6 border-b border-white/10">
+      <div class="w-8 h-8 bg-gradient-primary rounded-lg flex items-center justify-center">
+        <svg class="w-5 h-5 text-white" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M8.25 21v-4.875c0-.621.504-1.125 1.125-1.125h5.25c.621 0 1.125.504 1.125 1.125V21m0 0h4.5V3.545M12.75 21h7.5M10.5 21V8.121c0-.312.11-.611.308-.848l4.692-5.58a.75.75 0 0 1 1.149.024l4.469 5.404c.18.217.282.5.282.79V21m-14.4 0H3.75c-.621 0-1.125-.504-1.125-1.125v-6.75c0-.621.504-1.125 1.125-1.125h3.375" /></svg>
+      </div>
+      <span class="font-poppins font-bold tracking-wide">Sitio Tio Admin</span>
+    </div>
+    
+    <nav class="flex-1 py-6 px-4 space-y-2 overflow-y-auto">
+      <a href="admin.html" class="flex items-center gap-3 px-4 py-3 text-white/60 hover:text-white hover:bg-white/5 rounded-xl transition-colors">
+        <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6A2.25 2.25 0 0 1 6 3.75h2.25A2.25 2.25 0 0 1 10.5 6v2.25a2.25 2.25 0 0 1-2.25 2.25H6a2.25 2.25 0 0 1-2.25-2.25V6ZM3.75 15.75A2.25 2.25 0 0 1 6 13.5h2.25a2.25 2.25 0 0 1 2.25 2.25V18a2.25 2.25 0 0 1-2.25 2.25H6A2.25 2.25 0 0 1 3.75 18v-2.25ZM13.5 6a2.25 2.25 0 0 1 2.25-2.25H18A2.25 2.25 0 0 1 20.25 6v2.25A2.25 2.25 0 0 1 18 10.5h-2.25a2.25 2.25 0 0 1-2.25-2.25V6ZM13.5 15.75a2.25 2.25 0 0 1 2.25-2.25H18a2.25 2.25 0 0 1 2.25 2.25V18A2.25 2.25 0 0 1 18 20.25h-2.25a2.25 2.25 0 0 1-2.25-2.25v-2.25Z" /></svg>
+        Dashboard
+      </a>
+      <a href="#" class="flex items-center gap-3 px-4 py-3 text-white/60 hover:text-white hover:bg-white/5 rounded-xl transition-colors">
+        <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 0 1 2.25-2.25h13.5A2.25 2.25 0 0 1 21 7.5v11.25m-18 0A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75m-18 0v-7.5A2.25 2.25 0 0 1 5.25 9h13.5A2.25 2.25 0 0 1 21 11.25v7.5" /></svg>
+        Bookings
+      </a>
+      <a href="#" class="flex items-center gap-3 px-4 py-3 text-white/60 hover:text-white hover:bg-white/5 rounded-xl transition-colors">
+        <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z" /></svg>
+        Guests
+      </a>
+      <a href="rooms.html" class="flex items-center gap-3 px-4 py-3 bg-white/10 text-white rounded-xl font-medium">
+        <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M8.25 21v-4.875c0-.621.504-1.125 1.125-1.125h5.25c.621 0 1.125.504 1.125 1.125V21m0 0h4.5V3.545M12.75 21h7.5M10.5 21V8.121c0-.312.11-.611.308-.848l4.692-5.58a.75.75 0 0 1 1.149.024l4.469 5.404c.18.217.282.5.282.79V21m-14.4 0H3.75c-.621 0-1.125-.504-1.125-1.125v-6.75c0-.621.504-1.125 1.125-1.125h3.375" /></svg>
+        Rooms
+      </a>
+      <a href="#" class="flex items-center gap-3 px-4 py-3 text-white/60 hover:text-white hover:bg-white/5 rounded-xl transition-colors">
+        <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6v12m-3-2.818.879.659c1.171.879 3.07.879 4.242 0 1.172-.879 1.172-2.303 0-3.182C13.536 12.219 12.768 12 12 12c-.725 0-1.45-.22-2.003-.659-1.106-.879-1.106-2.303 0-3.182s2.9-.879 4.006 0l.415.33M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" /></svg>
+        Finance
+      </a>
+    </nav>
+    <div class="p-4 border-t border-white/10">
+      <a href="/" class="flex items-center gap-3 px-4 py-3 text-white/60 hover:text-white rounded-xl transition-colors text-sm">
+        <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0 0 13.5 3h-6a2.25 2.25 0 0 0-2.25 2.25v13.5A2.25 2.25 0 0 0 7.5 21h6a2.25 2.25 0 0 0 2.25-2.25V15M12 9l-3 3m0 0 3 3m-3-3h12.75" /></svg>
+        Sign Out
+      </a>
+    </div>
+  </aside>
+
+  <!-- Main Content Area -->
+  <div class="flex-1 flex flex-col h-screen overflow-hidden">
+    
+    <!-- Topbar -->
+    <header class="h-20 bg-white border-b border-gray-200 flex items-center justify-between px-8 flex-shrink-0">
+      <h1 class="text-xl font-poppins font-bold text-foreground">Kelola Rooms</h1>
+      <div class="flex items-center gap-4">
+        <button class="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center text-gray-600 hover:bg-gray-200 relative">
+          <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M14.857 17.082a23.848 23.848 0 0 0 5.454-1.31A8.967 8.967 0 0 1 18 9.75V9A6 6 0 0 0 6 9v.75a8.967 8.967 0 0 1-2.312 6.022c1.733.64 3.56 1.085 5.455 1.31m5.714 0a24.255 24.255 0 0 1-5.714 0m5.714 0a3 3 0 1 1-5.714 0" /></svg>
+          <span class="absolute top-2 right-2 w-2 h-2 bg-primary rounded-full"></span>
+        </button>
+        <div class="flex items-center gap-2">
+          <div class="w-10 h-10 rounded-full bg-primary text-white flex items-center justify-center font-bold">A</div>
+        </div>
+      </div>
+    </header>
+
+    <!-- Content -->
+    <main class="flex-1 overflow-y-auto p-8">
+      
+      <!-- KPI Cards -->
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+        <div class="bg-white border border-gray-100 shadow-sm rounded-2xl p-6">
+          <div class="flex justify-between items-start mb-4">
+            <div>
+              <p class="text-sm text-gray-500 mb-1">Total Rooms</p>
+              <h3 class="text-2xl font-poppins font-bold text-foreground">52</h3>
+            </div>
+            <div class="w-10 h-10 bg-primary/10 text-primary rounded-xl flex items-center justify-center">
+              <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M8.25 21v-4.875c0-.621.504-1.125 1.125-1.125h5.25c.621 0 1.125.504 1.125 1.125V21m0 0h4.5V3.545M12.75 21h7.5M10.5 21V8.121c0-.312.11-.611.308-.848l4.692-5.58a.75.75 0 0 1 1.149.024l4.469 5.404c.18.217.282.5.282.79V21m-14.4 0H3.75c-.621 0-1.125-.504-1.125-1.125v-6.75c0-.621.504-1.125 1.125-1.125h3.375" /></svg>
+            </div>
+          </div>
+          <p class="text-xs text-gray-500 font-medium">Across 5 categories</p>
+        </div>
+
+        <div class="bg-white border border-gray-100 shadow-sm rounded-2xl p-6">
+          <div class="flex justify-between items-start mb-4">
+            <div>
+              <p class="text-sm text-gray-500 mb-1">Available</p>
+              <h3 class="text-2xl font-poppins font-bold text-emerald-600">33</h3>
+            </div>
+            <div class="w-10 h-10 bg-emerald-50 text-emerald-600 rounded-xl flex items-center justify-center">
+              <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" /></svg>
+            </div>
+          </div>
+          <p class="text-xs text-emerald-600 font-medium">63% of total</p>
+        </div>
+
+        <div class="bg-white border border-gray-100 shadow-sm rounded-2xl p-6">
+          <div class="flex justify-between items-start mb-4">
+            <div>
+              <p class="text-sm text-gray-500 mb-1">Occupied</p>
+              <h3 class="text-2xl font-poppins font-bold text-amber-600">15</h3>
+            </div>
+            <div class="w-10 h-10 bg-amber-50 text-amber-600 rounded-xl flex items-center justify-center">
+              <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M3.75 21h16.5M4.5 3h15M5.25 3v18m13.5-18v18M9 6.75h1.5m-1.5 3h1.5m-1.5 3h1.5m3-6H15m-1.5 3H15m-1.5 3H15M9 21v-3.375c0-.621.504-1.125 1.125-1.125h3.75c.621 0 1.125.504 1.125 1.125V21" /></svg>
+            </div>
+          </div>
+          <p class="text-xs text-amber-600 font-medium">29% occupancy</p>
+        </div>
+
+        <div class="bg-white border border-gray-100 shadow-sm rounded-2xl p-6">
+          <div class="flex justify-between items-start mb-4">
+            <div>
+              <p class="text-sm text-gray-500 mb-1">Maintenance</p>
+              <h3 class="text-2xl font-poppins font-bold text-red-600">4</h3>
+            </div>
+            <div class="w-10 h-10 bg-red-50 text-red-600 rounded-xl flex items-center justify-center">
+              <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M11.42 15.17 17.25 21A2.652 2.652 0 0 0 21 17.25l-5.877-5.877M11.42 15.17l2.496-3.03c.317-.384.74-.626 1.208-.766M11.42 15.17l-4.655 5.653a2.548 2.548 0 1 1-3.586-3.586l6.837-5.63m5.108-.233c.55-.164 1.163-.188 1.743-.14a4.5 4.5 0 0 0 4.486-6.336l-3.276 3.277a3.004 3.004 0 0 1-2.25-2.25l3.276-3.276a4.5 4.5 0 0 0-6.336 4.486c.091 1.076-.071 2.264-.904 2.95l-.102.085m-1.745 1.437L5.909 7.5H4.5L2.25 3.75l1.5-1.5L7.5 4.5v1.409l4.26 4.26m-1.745 1.437 1.745-1.437m6.615 8.206L15.75 15.75M4.867 19.125h.008v.008h-.008v-.008Z" /></svg>
+            </div>
+          </div>
+          <p class="text-xs text-red-600 font-medium">8% of total</p>
+        </div>
+      </div>
+
+      <!-- Action Bar & Table -->
+      <div class="bg-white border border-gray-100 shadow-sm rounded-2xl overflow-hidden mb-8">
+        <div class="p-6 border-b border-gray-100 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+          <h2 class="font-poppins font-bold text-lg">Daftar Kamar</h2>
+          <div class="flex items-center gap-3">
+            <div class="relative">
+              <svg class="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" /></svg>
+              <input type="text" id="searchInput" placeholder="Cari kamar..." class="input pl-10 pr-4 py-2 text-sm w-64" oninput="filterRooms()" />
+            </div>
+            <select id="filterStatus" class="input py-2 text-sm w-40" onchange="filterRooms()">
+              <option value="">Semua Status</option>
+              <option value="available">Available</option>
+              <option value="occupied">Occupied</option>
+              <option value="maintenance">Maintenance</option>
+            </select>
+            <button onclick="openModal()" class="btn-primary text-sm px-4 py-2">
+              <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" /></svg>
+              Tambah Kamar
+            </button>
+          </div>
+        </div>
+        <div class="overflow-x-auto">
+          <table class="w-full text-left text-sm whitespace-nowrap" id="roomsTable">
+            <thead class="bg-gray-50 text-gray-500">
+              <tr>
+                <th class="py-3 px-6 font-medium">No</th>
+                <th class="py-3 px-6 font-medium">Image</th>
+                <th class="py-3 px-6 font-medium">Name</th>
+                <th class="py-3 px-6 font-medium">Slug</th>
+                <th class="py-3 px-6 font-medium">Size</th>
+                <th class="py-3 px-6 font-medium">Bed Type</th>
+                <th class="py-3 px-6 font-medium">Capacity</th>
+                <th class="py-3 px-6 font-medium">Price</th>
+                <th class="py-3 px-6 font-medium">Status</th>
+                <th class="py-3 px-6 font-medium text-center">Actions</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-gray-100" id="roomsBody">
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Laporan Section -->
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <!-- Room Type Summary -->
+        <div class="bg-white border border-gray-100 shadow-sm rounded-2xl p-6">
+          <h2 class="font-poppins font-bold text-lg mb-6">Laporan per Tipe Kamar</h2>
+          <div class="space-y-4" id="reportByType">
+          </div>
+        </div>
+
+        <!-- Price Range Report -->
+        <div class="bg-white border border-gray-100 shadow-sm rounded-2xl p-6">
+          <h2 class="font-poppins font-bold text-lg mb-6">Statistik Harga</h2>
+          <div class="space-y-4">
+            <div class="p-4 bg-gray-50 rounded-xl">
+              <p class="text-sm text-gray-500 mb-1">Harga Tertinggi</p>
+              <p class="text-xl font-poppins font-bold text-foreground" id="highestPrice">-</p>
+            </div>
+            <div class="p-4 bg-gray-50 rounded-xl">
+              <p class="text-sm text-gray-500 mb-1">Harga Terendah</p>
+              <p class="text-xl font-poppins font-bold text-foreground" id="lowestPrice">-</p>
+            </div>
+            <div class="p-4 bg-gray-50 rounded-xl">
+              <p class="text-sm text-gray-500 mb-1">Rata-rata Harga</p>
+              <p class="text-xl font-poppins font-bold text-foreground" id="avgPrice">-</p>
+            </div>
+            <div class="p-4 bg-gray-50 rounded-xl">
+              <p class="text-sm text-gray-500 mb-1">Total Nilai Inventaris</p>
+              <p class="text-xl font-poppins font-bold text-accent-700" id="totalValue">-</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Occupancy Report -->
+        <div class="bg-white border border-gray-100 shadow-sm rounded-2xl p-6">
+          <h2 class="font-poppins font-bold text-lg mb-6">Status Kamar</h2>
+          <div class="space-y-4" id="statusReport">
+          </div>
+          <div class="mt-6 pt-6 border-t border-gray-100">
+            <h3 class="text-sm font-medium text-gray-600 mb-3">Aksi Cepat</h3>
+            <div class="grid grid-cols-2 gap-3">
+              <button onclick="openModal()" class="p-3 border border-gray-200 rounded-xl text-sm font-medium hover:bg-gray-50 transition-colors flex flex-col items-center gap-2">
+                <svg class="w-5 h-5 text-gray-500" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" /></svg>
+                Tambah Kamar
+              </button>
+              <button onclick="exportReport()" class="p-3 border border-gray-200 rounded-xl text-sm font-medium hover:bg-gray-50 transition-colors flex flex-col items-center gap-2">
+                <svg class="w-5 h-5 text-gray-500" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75V16.5M16.5 12 12 16.5m0 0L7.5 12m4.5 4.5V3" /></svg>
+                Export Laporan
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <!-- Modal Tambah/Edit Kamar -->
+  <div id="roomModal" class="fixed inset-0 z-50 hidden">
+    <div class="absolute inset-0 bg-black/50 backdrop-blur-sm" onclick="closeModal()"></div>
+    <div class="absolute inset-4 md:inset-auto md:top-1/2 md:left-1/2 md:-translate-x-1/2 md:-translate-y-1/2 md:w-[700px] md:max-h-[90vh] bg-white rounded-2xl shadow-2xl flex flex-col">
+      <!-- Modal Header -->
+      <div class="flex items-center justify-between px-6 py-4 border-b border-gray-100 flex-shrink-0">
+        <h3 class="font-poppins font-bold text-lg" id="modalTitle">Tambah Kamar Baru</h3>
+        <button onclick="closeModal()" class="w-8 h-8 rounded-lg bg-gray-100 flex items-center justify-center text-gray-500 hover:bg-gray-200 hover:text-gray-700 transition-colors">
+          <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" /></svg>
+        </button>
+      </div>
+      <!-- Modal Body -->
+      <div class="flex-1 overflow-y-auto p-6">
+        <form id="roomForm" onsubmit="saveRoom(event)">
+          <input type="hidden" id="roomId" />
+          
+          <!-- Row: Name & Slug -->
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+            <div>
+              <label class="input-label">Name <span class="text-red-500">*</span></label>
+              <input type="text" id="roomName" class="input" placeholder="e.g. Deluxe Lake View" required />
+            </div>
+            <div>
+              <label class="input-label">Slug <span class="text-red-500">*</span></label>
+              <input type="text" id="roomSlug" class="input" placeholder="e.g. deluxe-lake-view" required />
+            </div>
+          </div>
+
+          <!-- Description -->
+          <div class="mb-4">
+            <label class="input-label">Description <span class="text-red-500">*</span></label>
+            <textarea id="roomDesc" class="input" rows="3" placeholder="Deskripsi singkat mengenai kamar..." required></textarea>
+          </div>
+
+          <!-- Row: Bed Type & Size -->
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+            <div>
+              <label class="input-label">Bed Type <span class="text-red-500">*</span></label>
+              <select id="roomBedType" class="input" required>
+                <option value="">Pilih tipe tempat tidur</option>
+                <option value="Single">Single</option>
+                <option value="Double">Double</option>
+                <option value="Twin">Twin</option>
+                <option value="Queen">Queen</option>
+                <option value="King">King</option>
+                <option value="Twin Double">Twin Double</option>
+              </select>
+            </div>
+            <div>
+              <label class="input-label">Size (m²) <span class="text-red-500">*</span></label>
+              <input type="number" id="roomSize" class="input" placeholder="e.g. 45" min="1" required />
+            </div>
+          </div>
+
+          <!-- Row: Capacity & Price -->
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+            <div>
+              <label class="input-label">Capacity (orang) <span class="text-red-500">*</span></label>
+              <input type="number" id="roomCapacity" class="input" placeholder="e.g. 2" min="1" required />
+            </div>
+            <div>
+              <label class="input-label">Price per Night (Rp) <span class="text-red-500">*</span></label>
+              <input type="number" id="roomPrice" class="input" placeholder="e.g. 1330000" min="0" required />
+            </div>
+          </div>
+
+          <!-- Row: Status & Image -->
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+            <div>
+              <label class="input-label">Status <span class="text-red-500">*</span></label>
+              <select id="roomStatus" class="input" required>
+                <option value="available">Available</option>
+                <option value="occupied">Occupied</option>
+                <option value="maintenance">Maintenance</option>
+              </select>
+            </div>
+            <div>
+              <label class="input-label">Image URL</label>
+              <input type="text" id="roomImage" class="input" placeholder="URL gambar kamar" />
+            </div>
+          </div>
+
+          <!-- Image Preview -->
+          <div id="imagePreviewWrap" class="mb-4 hidden">
+            <label class="input-label">Preview</label>
+            <img id="imagePreview" class="w-full h-48 object-cover rounded-xl border border-gray-200" alt="Preview" />
+          </div>
+
+          <!-- Modal Footer -->
+          <div class="flex justify-end gap-3 mt-6 pt-4 border-t border-gray-100">
+            <button type="button" onclick="closeModal()" class="px-5 py-2.5 text-sm font-medium text-gray-700 bg-gray-100 rounded-xl hover:bg-gray-200 transition-colors">Batal</button>
+            <button type="submit" class="btn-primary text-sm px-5 py-2.5" id="submitBtn">Simpan Kamar</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- Delete Confirmation Modal -->
+  <div id="deleteModal" class="fixed inset-0 z-50 hidden">
+    <div class="absolute inset-0 bg-black/50 backdrop-blur-sm" onclick="closeDeleteModal()"></div>
+    <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 bg-white rounded-2xl shadow-2xl p-6">
+      <div class="text-center">
+        <div class="w-14 h-14 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
+          <svg class="w-7 h-7 text-red-600" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" /></svg>
+        </div>
+        <h3 class="font-poppins font-bold text-lg mb-2">Hapus Kamar?</h3>
+        <p class="text-sm text-gray-500 mb-1">Anda yakin ingin menghapus kamar</p>
+        <p class="text-sm font-semibold text-foreground mb-6" id="deleteRoomName">-</p>
+        <div class="flex gap-3">
+          <button onclick="closeDeleteModal()" class="flex-1 px-4 py-2.5 text-sm font-medium text-gray-700 bg-gray-100 rounded-xl hover:bg-gray-200 transition-colors">Batal</button>
+          <button onclick="confirmDelete()" class="flex-1 px-4 py-2.5 text-sm font-medium text-white bg-red-600 rounded-xl hover:bg-red-700 transition-colors">Hapus</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast -->
+  <div id="toast" class="fixed top-6 right-6 z-[60] hidden">
+    <div class="flex items-center gap-3 px-5 py-3 bg-white border border-gray-200 shadow-lg rounded-xl">
+      <svg id="toastIcon" class="w-5 h-5 text-emerald-500" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" /></svg>
+      <span id="toastMessage" class="text-sm font-medium text-foreground"></span>
+    </div>
+  </div>
+
+  <script>
+    // ===== Data Store =====
+    const STORAGE_KEY = 'sitio_rooms';
+    const defaultRooms = [
+      { id: 1, name: 'Deluxe Lake View', slug: 'deluxe-lake-view', description: 'Kamar premium dengan pemandangan langsung ke Danau Toba. Dilengkapi balkon pribadi dan fasilitas modern.', capacity: 2, price: 1330000, status: 'available', bed_type: 'King', image: '../resources/assets/images/room-deluxe.png', size: 45 },
+      { id: 2, name: 'Superior Garden', slug: 'superior-garden', description: 'Kamar nyaman dengan pemandangan taman tropis. Cocok untuk pasangan yang mencari ketenangan.', capacity: 2, price: 940000, status: 'occupied', bed_type: 'Queen', image: '../resources/assets/images/room-superior.png', size: 35 },
+      { id: 3, name: 'Lake Villa', slug: 'lake-villa', description: 'Villa mewah tepi danau dengan private pool, ruang tamu, dan pemandangan spektakuler.', capacity: 4, price: 3870000, status: 'available', bed_type: 'King', image: '../resources/assets/images/room-villa.png', size: 85 },
+      { id: 4, name: 'Presidential Suite', slug: 'presidential-suite', description: 'Suite termewah dengan ruang terpisah, bathtub jacuzzi, butler service, dan panorama kaldera.', capacity: 2, price: 5500000, status: 'available', bed_type: 'King', image: '../resources/assets/images/room-deluxe.png', size: 120 },
+      { id: 5, name: 'Standard Twin', slug: 'standard-twin', description: 'Kamar praktis dengan dua tempat tidur single. Ideal untuk teman atau rekan perjalanan.', capacity: 2, price: 650000, status: 'available', bed_type: 'Twin', image: '../resources/assets/images/room-superior.png', size: 28 },
+      { id: 6, name: 'Family Room', slug: 'family-room', description: 'Kamar luas untuk keluarga dengan tempat tidur ekstra dan area bermain anak.', capacity: 4, price: 1750000, status: 'maintenance', bed_type: 'Twin Double', image: '../resources/assets/images/room-villa.png', size: 55 },
+      { id: 7, name: 'Honeymoon Suite', slug: 'honeymoon-suite', description: 'Suite romantis dengan dekorasi bunga, champagne welcome, dan jacuzzi outdoor.', capacity: 2, price: 2800000, status: 'occupied', bed_type: 'King', image: '../resources/assets/images/room-deluxe.png', size: 60 },
+      { id: 8, name: 'Economy Single', slug: 'economy-single', description: 'Kamar compact untuk solo traveler. Fasilitas dasar dengan kenyamanan optimal.', capacity: 1, price: 425000, status: 'available', bed_type: 'Single', image: '../resources/assets/images/room-superior.png', size: 20 },
+    ];
+
+    function loadRooms() {
+      const data = localStorage.getItem(STORAGE_KEY);
+      if (!data) {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(defaultRooms));
+        return [...defaultRooms];
+      }
+      return JSON.parse(data);
+    }
+
+    function saveRoomsToStorage(rooms) {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(rooms));
+    }
+
+    let rooms = loadRooms();
+    let deleteTargetId = null;
+
+    // ===== Render Table =====
+    function renderRooms(data) {
+      const tbody = document.getElementById('roomsBody');
+      if (data.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="10" class="py-12 text-center text-gray-400">Tidak ada kamar ditemukan.</td></tr>';
+        return;
+      }
+      tbody.innerHTML = data.map((r, i) => {
+        const statusBadge = r.status === 'available' 
+          ? '<span class="badge-success">Available</span>'
+          : r.status === 'occupied'
+          ? '<span class="badge-warning">Occupied</span>'
+          : '<span class="badge bg-red-50 text-red-600">Maintenance</span>';
+        const img = r.image || 'https://via.placeholder.com/80x56?text=No+Image';
+        return `<tr class="hover:bg-gray-50 transition-colors">
+          <td class="py-3 px-6 text-gray-500">${i + 1}</td>
+          <td class="py-3 px-6">
+            <img src="${img}" alt="${r.name}" class="w-16 h-11 object-cover rounded-lg border border-gray-200" onerror="this.src='https://via.placeholder.com/80x56?text=No+Image'" />
+          </td>
+          <td class="py-3 px-6 font-medium text-foreground">${r.name}</td>
+          <td class="py-3 px-6 text-gray-500">${r.slug}</td>
+          <td class="py-3 px-6">${r.size} m²</td>
+          <td class="py-3 px-6">${r.bed_type}</td>
+          <td class="py-3 px-6 text-center">${r.capacity}</td>
+          <td class="py-3 px-6 font-medium">Rp ${r.price.toLocaleString('id-ID')}</td>
+          <td class="py-3 px-6">${statusBadge}</td>
+          <td class="py-3 px-6 text-center">
+            <div class="flex items-center justify-center gap-2">
+              <button onclick="editRoom(${r.id})" class="w-8 h-8 rounded-lg bg-blue-50 text-blue-600 hover:bg-blue-100 flex items-center justify-center transition-colors" title="Edit">
+                <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10" /></svg>
+              </button>
+              <button onclick="deleteRoom(${r.id})" class="w-8 h-8 rounded-lg bg-red-50 text-red-600 hover:bg-red-100 flex items-center justify-center transition-colors" title="Hapus">
+                <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" /></svg>
+              </button>
+            </div>
+          </td>
+        </tr>`;
+      }).join('');
+    }
+
+    // ===== Filter =====
+    function filterRooms() {
+      const q = document.getElementById('searchInput').value.toLowerCase();
+      const status = document.getElementById('filterStatus').value;
+      let filtered = rooms.filter(r => {
+        const matchSearch = !q || r.name.toLowerCase().includes(q) || r.slug.toLowerCase().includes(q) || r.bed_type.toLowerCase().includes(q);
+        const matchStatus = !status || r.status === status;
+        return matchSearch && matchStatus;
+      });
+      renderRooms(filtered);
+    }
+
+    // ===== Auto-generate Slug =====
+    document.getElementById('roomName').addEventListener('input', function() {
+      if (!document.getElementById('roomId').value) {
+        document.getElementById('roomSlug').value = this.value
+          .toLowerCase()
+          .replace(/[^a-z0-9\s-]/g, '')
+          .replace(/\s+/g, '-')
+          .replace(/-+/g, '-')
+          .replace(/^-|-$/g, '');
+      }
+    });
+
+    // ===== Image Preview =====
+    document.getElementById('roomImage').addEventListener('input', function() {
+      const wrap = document.getElementById('imagePreviewWrap');
+      const img = document.getElementById('imagePreview');
+      if (this.value.trim()) {
+        img.src = this.value;
+        wrap.classList.remove('hidden');
+        img.onerror = () => wrap.classList.add('hidden');
+      } else {
+        wrap.classList.add('hidden');
+      }
+    });
+
+    // ===== Modal Open / Close =====
+    function openModal(id) {
+      document.getElementById('roomModal').classList.remove('hidden');
+      document.body.style.overflow = 'hidden';
+      if (!id) {
+        document.getElementById('modalTitle').textContent = 'Tambah Kamar Baru';
+        document.getElementById('submitBtn').textContent = 'Simpan Kamar';
+        document.getElementById('roomForm').reset();
+        document.getElementById('roomId').value = '';
+        document.getElementById('imagePreviewWrap').classList.add('hidden');
+      }
+    }
+
+    function closeModal() {
+      document.getElementById('roomModal').classList.add('hidden');
+      document.body.style.overflow = '';
+    }
+
+    // ===== Save (Add / Edit) =====
+    function saveRoom(e) {
+      e.preventDefault();
+      const id = document.getElementById('roomId').value;
+      const roomData = {
+        name: document.getElementById('roomName').value.trim(),
+        slug: document.getElementById('roomSlug').value.trim(),
+        description: document.getElementById('roomDesc').value.trim(),
+        capacity: parseInt(document.getElementById('roomCapacity').value),
+        price: parseInt(document.getElementById('roomPrice').value),
+        status: document.getElementById('roomStatus').value,
+        bed_type: document.getElementById('roomBedType').value,
+        image: document.getElementById('roomImage').value.trim(),
+        size: parseInt(document.getElementById('roomSize').value),
+      };
+
+      if (id) {
+        const idx = rooms.findIndex(r => r.id === parseInt(id));
+        if (idx !== -1) {
+          rooms[idx] = { ...rooms[idx], ...roomData };
+          showToast('Kamar berhasil diperbarui!');
+        }
+      } else {
+        const newId = rooms.length > 0 ? Math.max(...rooms.map(r => r.id)) + 1 : 1;
+        rooms.push({ id: newId, ...roomData });
+        showToast('Kamar baru berhasil ditambahkan!');
+      }
+
+      saveRoomsToStorage(rooms);
+      filterRooms();
+      updateReports();
+      closeModal();
+    }
+
+    // ===== Edit =====
+    function editRoom(id) {
+      const room = rooms.find(r => r.id === id);
+      if (!room) return;
+      document.getElementById('roomId').value = room.id;
+      document.getElementById('roomName').value = room.name;
+      document.getElementById('roomSlug').value = room.slug;
+      document.getElementById('roomDesc').value = room.description;
+      document.getElementById('roomCapacity').value = room.capacity;
+      document.getElementById('roomPrice').value = room.price;
+      document.getElementById('roomStatus').value = room.status;
+      document.getElementById('roomBedType').value = room.bed_type;
+      document.getElementById('roomImage').value = room.image || '';
+      document.getElementById('roomSize').value = room.size;
+      document.getElementById('modalTitle').textContent = 'Edit Kamar';
+      document.getElementById('submitBtn').textContent = 'Update Kamar';
+      openModal(id);
+      const imgWrap = document.getElementById('imagePreviewWrap');
+      const imgEl = document.getElementById('imagePreview');
+      if (room.image) {
+        imgEl.src = room.image;
+        imgWrap.classList.remove('hidden');
+      } else {
+        imgWrap.classList.add('hidden');
+      }
+    }
+
+    // ===== Delete =====
+    function deleteRoom(id) {
+      const room = rooms.find(r => r.id === id);
+      if (!room) return;
+      deleteTargetId = id;
+      document.getElementById('deleteRoomName').textContent = room.name;
+      document.getElementById('deleteModal').classList.remove('hidden');
+    }
+
+    function closeDeleteModal() {
+      document.getElementById('deleteModal').classList.add('hidden');
+      deleteTargetId = null;
+    }
+
+    function confirmDelete() {
+      if (deleteTargetId !== null) {
+        rooms = rooms.filter(r => r.id !== deleteTargetId);
+        saveRoomsToStorage(rooms);
+        filterRooms();
+        updateReports();
+        showToast('Kamar berhasil dihapus!');
+      }
+      closeDeleteModal();
+    }
+
+    // ===== Reports =====
+    function updateReports() {
+      // By type
+      const types = {};
+      rooms.forEach(r => {
+        if (!types[r.bed_type]) types[r.bed_type] = { total: 0, available: 0, occupied: 0, maintenance: 0 };
+        types[r.bed_type].total++;
+        types[r.bed_type][r.status]++;
+      });
+      const typeColors = { available: 'bg-emerald-500', occupied: 'bg-amber-500', maintenance: 'bg-red-500' };
+      document.getElementById('reportByType').innerHTML = Object.entries(types).map(([type, d]) => {
+        return `
+          <div>
+            <div class="flex justify-between text-sm mb-1">
+              <span class="text-gray-600 font-medium">${type}</span>
+              <span class="text-gray-500">${d.total} kamar</span>
+            </div>
+            <div class="flex gap-1 h-2 rounded-full overflow-hidden bg-gray-100">
+              ${d.available ? `<div class="${typeColors.available} rounded-full" style="width: ${(d.available/d.total)*100}%" title="Available: ${d.available}"></div>` : ''}
+              ${d.occupied ? `<div class="${typeColors.occupied} rounded-full" style="width: ${(d.occupied/d.total)*100}%" title="Occupied: ${d.occupied}"></div>` : ''}
+              ${d.maintenance ? `<div class="${typeColors.maintenance} rounded-full" style="width: ${(d.maintenance/d.total)*100}%" title="Maintenance: ${d.maintenance}"></div>` : ''}
+            </div>
+          </div>
+        `;
+      }).join('');
+
+      // Price stats
+      if (rooms.length > 0) {
+        const prices = rooms.map(r => r.price);
+        document.getElementById('highestPrice').textContent = 'Rp ' + Math.max(...prices).toLocaleString('id-ID');
+        document.getElementById('lowestPrice').textContent = 'Rp ' + Math.min(...prices).toLocaleString('id-ID');
+        document.getElementById('avgPrice').textContent = 'Rp ' + Math.round(prices.reduce((a, b) => a + b, 0) / prices.length).toLocaleString('id-ID');
+        document.getElementById('totalValue').textContent = 'Rp ' + prices.reduce((a, b) => a + b, 0).toLocaleString('id-ID');
+      }
+
+      // Status summary
+      const statusCounts = { available: 0, occupied: 0, maintenance: 0 };
+      rooms.forEach(r => statusCounts[r.status]++);
+      const total = rooms.length || 1;
+      document.getElementById('statusReport').innerHTML = `
+        <div>
+          <div class="flex justify-between text-sm mb-1">
+            <span class="text-gray-600">Available</span>
+            <span class="font-medium">${statusCounts.available}/${rooms.length}</span>
+          </div>
+          <div class="w-full bg-gray-100 rounded-full h-2">
+            <div class="bg-emerald-500 h-2 rounded-full transition-all" style="width: ${(statusCounts.available/total)*100}%"></div>
+          </div>
+        </div>
+        <div>
+          <div class="flex justify-between text-sm mb-1">
+            <span class="text-gray-600">Occupied</span>
+            <span class="font-medium">${statusCounts.occupied}/${rooms.length}</span>
+          </div>
+          <div class="w-full bg-gray-100 rounded-full h-2">
+            <div class="bg-amber-500 h-2 rounded-full transition-all" style="width: ${(statusCounts.occupied/total)*100}%"></div>
+          </div>
+        </div>
+        <div>
+          <div class="flex justify-between text-sm mb-1">
+            <span class="text-gray-600">Maintenance</span>
+            <span class="font-medium">${statusCounts.maintenance}/${rooms.length}</span>
+          </div>
+          <div class="w-full bg-gray-100 rounded-full h-2">
+            <div class="bg-red-500 h-2 rounded-full transition-all" style="width: ${(statusCounts.maintenance/total)*100}%"></div>
+          </div>
+        </div>
+      `;
+    }
+
+    // ===== Export =====
+    function exportReport() {
+      const prices = rooms.map(r => r.price);
+      const statusCounts = { available: 0, occupied: 0, maintenance: 0 };
+      rooms.forEach(r => statusCounts[r.status]++);
+
+      let csv = 'No,Name,Slug,Description,Size (m2),Bed Type,Capacity,Price,Status\n';
+      rooms.forEach((r, i) => {
+        csv += `${i+1},"${r.name}","${r.slug}","${r.description}",${r.size},"${r.bed_type}",${r.capacity},${r.price},"${r.status}"\n`;
+      });
+      csv += `\nSummary\nTotal Rooms,${rooms.length}\nAvailable,${statusCounts.available}\nOccupied,${statusCounts.occupied}\nMaintenance,${statusCounts.maintenance}\nHighest Price,${Math.max(...prices)}\nLowest Price,${Math.min(...prices)}\nAverage Price,${Math.round(prices.reduce((a,b)=>a+b,0)/prices.length)}\n`;
+
+      const blob = new Blob([csv], { type: 'text/csv' });
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = 'rooms-report.csv';
+      a.click();
+      showToast('Laporan berhasil di-export!');
+    }
+
+    // ===== Toast =====
+    function showToast(msg) {
+      const t = document.getElementById('toast');
+      document.getElementById('toastMessage').textContent = msg;
+      t.classList.remove('hidden');
+      setTimeout(() => t.classList.add('hidden'), 3000);
+    }
+
+    // ===== Init =====
+    renderRooms(rooms);
+    updateReports();
+  </script>
+
+</body>
+</html>

@@ -1,0 +1,90 @@
+# Langkah-Langkah Pembuatan Web Reservasi Hotel (Laravel 11, Livewire 3 & Midtrans)
+
+Berikut adalah to-do list lengkap dari awal pembuatan project hingga integrasi sistem pembayaran Midtrans menggunakan **Laravel Livewire 3** untuk interaktivitas yang reaktif tanpa harus reload halaman.
+
+## 1. Persiapan Awal (Setup Project)
+- [ ] **Install Laravel 11**: Jalankan `composer create-project laravel/laravel hotel-app`
+- [ ] **Setup Database**: Buat database di MySQL (misal: `hotel_db`).
+- [ ] **Konfigurasi `.env`**: Sesuaikan `DB_DATABASE`, `DB_USERNAME`, dan `DB_PASSWORD`.
+- [ ] **Install Livewire 3**: Jalankan `composer require livewire/livewire` lalu pasang `@livewireStyles` dan `@livewireScripts` (atau biarkan otomatis jika menggunakan fitur *auto-inject* Livewire 3).
+
+## 2. Pemodelan Database (Models & Migrations)
+Buat struktur tabel yang dibutuhkan.
+- [ ] **Tabel `users`**: Tambahkan kolom `role` (admin/customer) pada migration bawaan.
+- [ ] **Tabel `rooms`**: Menyimpan data kamar (nama, deskripsi, harga, kapasitas, gambar).
+- [ ] **Tabel `facilities`**: Menyimpan fasilitas hotel/kamar.
+- [ ] **Tabel `bookings` / `transactions`**: Menyimpan data pemesanan (user_id, room_id, check_in, check_out, total_price, status_pembayaran, order_id_midtrans).
+
+*Jalankan `php artisan migrate` setelah semua migration dibuat.*
+
+## 3. Sistem Autentikasi (Breeze + Livewire)
+- [ ] **Install Auth Package**: Gunakan Laravel Breeze dengan stack Livewire (Volt/Alpine). Jalankan: 
+  ```bash
+  composer require laravel/breeze --dev
+  php artisan breeze:install livewire
+  ```
+- [ ] **Middleware**: Buat middleware khusus untuk membatasi akses halaman Admin hanya untuk user dengan role admin.
+
+## 4. Integrasi Frontend ke Blade & Komponen Livewire
+Pindahkan desain HTML/JS Anda menjadi komponen reaktif Livewire.
+- [ ] **Setup Layout Utama**: Gunakan layout dari Breeze (`resources/views/layouts/app.blade.php`) dan pastikan struktur HTML Anda masuk ke sana.
+- [ ] **Pindahkan Asset**: Copy file CSS dan gambar ke folder `public/`.
+- [ ] **Konversi ke Komponen Livewire**: Ubah interaksi JS murni Anda (seperti filter kamar, modal) menjadi komponen Livewire (misal: `php artisan make:livewire RoomList`, `php artisan make:livewire RoomCard`).
+
+## 5. Pembuatan Fitur Inti dengan Livewire (CRUD & Logika)
+- [ ] **Admin Panel (Livewire Components)**: 
+  - Buat komponen `ManageRooms` (CRUD data kamar tanpa reload halaman).
+  - Buat komponen `ManageFacilities` (CRUD fasilitas).
+  - Buat komponen `TransactionList` (Melihat riwayat pemesanan secara *real-time*).
+- [ ] **Customer Area (Livewire Components)**:
+  - Komponen `SearchRooms`: Untuk user memfilter kamar berdasarkan ketersediaan tanggal.
+  - Komponen `RoomDetail`: Menampilkan detail.
+  - Komponen `BookingForm`: Form reservasi (memilih tanggal check-in & check-out) yang **langsung menghitung total harga secara dinamis/real-time** saat user mengubah tanggal.
+
+## 6. Integrasi Midtrans (Pembayaran) dengan Livewire
+- [ ] **Daftar Akun Midtrans**: Buat akun Midtrans Sandbox.
+- [ ] **Install Package**: Jalankan `composer require midtrans/midtrans-php`.
+- [ ] **Konfigurasi `.env`**:
+  ```env
+  MIDTRANS_MERCHANT_ID=isi_dengan_merchant_id
+  MIDTRANS_CLIENT_KEY=isi_dengan_client_key_sandbox
+  MIDTRANS_SERVER_KEY=isi_dengan_server_key_sandbox
+  MIDTRANS_IS_PRODUCTION=false
+  MIDTRANS_IS_SANITIZED=true
+  MIDTRANS_IS_3DS=true
+  ```
+- [ ] **Buat Aksi di Komponen BookingForm Livewire**: Saat tombol "Bayar" diklik:
+  - Validasi form (check_in, check_out).
+  - Simpan data `bookings` ke database dengan status `pending`.
+  - Set konfigurasi Midtrans (`\Midtrans\Config::$serverKey`, dll).
+  - Dapatkan **Snap Token** dari API Midtrans.
+  - Dispatch event Livewire (emit) ke frontend browser untuk memanggil script JS Snap Midtrans:
+    `$this->dispatch('trigger-midtrans-payment', snapToken: $snapToken);`
+- [ ] **Implementasi Snap.js di Frontend**:
+  - Tambahkan script Midtrans Snap di layout Anda: 
+    `<script src="https://app.sandbox.midtrans.com/snap/snap.js" data-client-key="{{ env('MIDTRANS_CLIENT_KEY') }}"></script>`
+  - Buat pendengar event di view Alpine.js atau Vanilla JS:
+    ```javascript
+    document.addEventListener('trigger-midtrans-payment', function (event) {
+        window.snap.pay(event.detail.snapToken);
+    });
+    ```
+
+## 7. Penanganan Webhook / Notifikasi Midtrans
+- [ ] **Buat Route Webhook**: Tambahkan route `POST` `/api/midtrans-callback` di `routes/api.php`.
+- [ ] **Buat Logika Callback Controller**:
+  - Cek signature key untuk keamanan.
+  - Jika pembayaran berhasil (`settlement`), update status database menjadi `paid`.
+  - *(Opsional: Livewire polling/event broadcasting dapat digunakan agar status booking di layar customer terupdate otomatis saat pembayaran sukses).*
+
+## 8. Testing & Deployment
+- [ ] **Uji Coba Transaksi Sandbox**: Lakukan booking dan bayar.
+- [ ] **Deploy Aplikasi**: Hosting aplikasi Laravel Anda.
+- [ ] **Go Live**: Ubah ke kunci Production di `.env`.
+
+---
+
+## User Review Required
+Rencana implementasi telah diperbarui untuk sepenuhnya mengadopsi **Laravel Livewire 3**. Penggunaan form, CRUD, perhitungan total harga, hingga integrasi pemanggilan Snap Midtrans akan diproses via komponen Livewire agar lebih *seamless*. 
+
+Jika setuju dengan revisi ini, kita bisa lanjut ke tahap pertama (pembuatan struktur *project* Laravel + Livewire). Apakah kita akan menginstal Laravel di dalam direktori `Hotel 2` ini?

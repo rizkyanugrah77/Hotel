@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>My Dashboard — Sitio Tio Resort</title>
+  <script type="module" src="/resources/js/main.js"></script>
+</head>
+<body class="bg-gray-50 text-foreground font-inter">
+
+  <!-- NAVBAR -->
+  <nav id="navbar" class="fixed top-0 left-0 right-0 z-50 bg-white shadow-soft transition-all duration-500">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex items-center justify-between h-20">
+        <a href="/" class="flex items-center gap-3">
+          <div class="w-10 h-10 bg-gradient-primary rounded-2xl flex items-center justify-center">
+            <svg class="w-6 h-6 text-white" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M8.25 21v-4.875c0-.621.504-1.125 1.125-1.125h5.25c.621 0 1.125.504 1.125 1.125V21m0 0h4.5V3.545M12.75 21h7.5M10.5 21V8.121c0-.312.11-.611.308-.848l4.692-5.58a.75.75 0 0 1 1.149.024l4.469 5.404c.18.217.282.5.282.79V21m-14.4 0H3.75c-.621 0-1.125-.504-1.125-1.125v-6.75c0-.621.504-1.125 1.125-1.125h3.375" /></svg>
+          </div>
+          <span class="text-xl font-poppins font-bold">Sitio Tio</span>
+        </a>
+        <div class="hidden lg:flex items-center gap-4">
+          <a href="/" class="text-sm font-medium text-gray-600 hover:text-primary transition-colors">Home</a>
+          <a href="/pages/rooms.html" class="text-sm font-medium text-gray-600 hover:text-primary transition-colors">Rooms</a>
+          <div class="w-px h-6 bg-gray-200"></div>
+          
+          <!-- User Profile Dropdown -->
+          <div class="relative group cursor-pointer">
+            <div class="flex items-center gap-3">
+              <div class="text-right">
+                <p class="text-sm font-medium text-foreground">John Doe</p>
+                <p class="text-xs text-gray-500">Gold Member</p>
+              </div>
+              <div class="w-10 h-10 rounded-full bg-gradient-accent text-white flex items-center justify-center font-bold font-poppins">
+                JD
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <button id="mobile-menu-toggle" class="lg:hidden p-2 text-gray-600 rounded-xl" aria-label="Open menu">
+          <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" /></svg>
+        </button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Mobile Menu Drawer (Simplified) -->
+  <div id="mobile-menu" class="fixed inset-y-0 right-0 w-64 bg-white shadow-2xl transform translate-x-full transition-transform duration-300 z-[60] lg:hidden">
+    <div class="p-6">
+      <button id="mobile-menu-close" class="mb-8"><svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg></button>
+      <a href="/" class="block py-2">Home</a>
+      <a href="/pages/rooms.html" class="block py-2">Rooms</a>
+      <a href="#" class="block py-2 text-primary font-bold">Sign Out</a>
+    </div>
+  </div>
+
+  <main class="pt-28 pb-16 px-4">
+    <div class="max-w-7xl mx-auto">
+      
+      <!-- Welcome Header -->
+      <div class="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-8">
+        <div>
+          <h1 class="text-3xl font-poppins font-bold text-foreground">Welcome back, John!</h1>
+          <p class="text-gray-500 mt-2">Here's an overview of your bookings and resort activity.</p>
+        </div>
+        <a href="/pages/rooms.html" class="btn-primary !px-6 !py-3">
+          <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" /></svg>
+          New Booking
+        </a>
+      </div>
+
+      <!-- Dashboard Stats -->
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
+        <div class="card p-6 bg-white border border-gray-100 flex items-center gap-4 group hover:border-primary/20">
+          <div class="w-14 h-14 bg-primary/10 rounded-2xl flex items-center justify-center text-primary group-hover:bg-primary group-hover:text-white transition-colors">
+            <svg class="w-7 h-7" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 0 1 2.25-2.25h13.5A2.25 2.25 0 0 1 21 7.5v11.25m-18 0A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75m-18 0v-7.5A2.25 2.25 0 0 1 5.25 9h13.5A2.25 2.25 0 0 1 21 11.25v7.5" /></svg>
+          </div>
+          <div>
+            <p class="text-sm text-gray-500 mb-1">Upcoming Stays</p>
+            <p class="text-2xl font-poppins font-bold text-foreground">1</p>
+          </div>
+        </div>
+        <div class="card p-6 bg-white border border-gray-100 flex items-center gap-4 group hover:border-primary/20">
+          <div class="w-14 h-14 bg-accent/10 rounded-2xl flex items-center justify-center text-accent-700 group-hover:bg-accent group-hover:text-white transition-colors">
+            <svg class="w-7 h-7" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M11.48 3.499a.562.562 0 0 1 1.04 0l2.125 5.111a.563.563 0 0 0 .475.345l5.518.442c.499.04.701.663.321.988l-4.204 3.602a.563.563 0 0 0-.182.557l1.285 5.385a.562.562 0 0 1-.84.61l-4.725-2.885a.562.562 0 0 0-.586 0L6.982 20.54a.562.562 0 0 1-.84-.61l1.285-5.386a.562.562 0 0 0-.182-.557l-4.204-3.602a.562.562 0 0 1 .321-.988l5.518-.442a.563.563 0 0 0 .475-.345L11.48 3.5Z" /></svg>
+          </div>
+          <div>
+            <p class="text-sm text-gray-500 mb-1">Loyalty Points</p>
+            <p class="text-2xl font-poppins font-bold text-foreground">2,450</p>
+          </div>
+        </div>
+        <div class="card p-6 bg-white border border-gray-100 flex items-center gap-4 group hover:border-primary/20">
+          <div class="w-14 h-14 bg-gray-100 rounded-2xl flex items-center justify-center text-gray-500 group-hover:bg-gray-200 transition-colors">
+            <svg class="w-7 h-7" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" /></svg>
+          </div>
+          <div>
+            <p class="text-sm text-gray-500 mb-1">Past Stays</p>
+            <p class="text-2xl font-poppins font-bold text-foreground">4</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Main Layout -->
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        
+        <!-- Left Column: Bookings -->
+        <div class="lg:col-span-2 space-y-8">
+          
+          <!-- Upcoming Booking -->
+          <div>
+            <h2 class="text-xl font-poppins font-bold text-foreground mb-4">Upcoming Stay</h2>
+            <div class="card overflow-hidden border border-gray-200 bg-white">
+              <div class="grid md:grid-cols-3">
+                <div class="md:col-span-1 h-48 md:h-auto">
+                  <img src="/resources/assets/images/room-deluxe.png" alt="Room" class="w-full h-full object-cover" />
+                </div>
+                <div class="md:col-span-2 p-6">
+                  <div class="flex justify-between items-start mb-4">
+                    <div>
+                      <span class="badge-warning mb-2">Upcoming in 14 days</span>
+                      <h3 class="text-lg font-poppins font-bold text-foreground">Deluxe Lake View</h3>
+                      <p class="text-sm text-gray-500">Ref: STR-847291</p>
+                    </div>
+                    <button class="p-2 text-gray-400 hover:text-primary transition-colors">
+                      <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6.75a.75.75 0 1 1 0-1.5.75.75 0 0 1 0 1.5ZM12 12.75a.75.75 0 1 1 0-1.5.75.75 0 0 1 0 1.5ZM12 18.75a.75.75 0 1 1 0-1.5.75.75 0 0 1 0 1.5Z" /></svg>
+                    </button>
+                  </div>
+                  
+                  <div class="grid grid-cols-2 gap-4 text-sm mb-6 pb-6 border-b border-gray-100">
+                    <div>
+                      <p class="text-gray-500 text-xs">Check In</p>
+                      <p class="font-medium">12 Oct 2026, 14:00</p>
+                    </div>
+                    <div>
+                      <p class="text-gray-500 text-xs">Check Out</p>
+                      <p class="font-medium">14 Oct 2026, 12:00</p>
+                    </div>
+                  </div>
+
+                  <div class="flex flex-wrap gap-3">
+                    <button class="btn-outline text-sm !px-4 !py-2">Modify Booking</button>
+                    <button class="btn-ghost text-sm !px-4 !py-2 text-gray-500 hover:bg-gray-100 border border-gray-200">Cancel</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Past Bookings -->
+          <div>
+            <h2 class="text-xl font-poppins font-bold text-foreground mb-4">Past Bookings</h2>
+            <div class="card border border-gray-100 bg-white overflow-hidden">
+              <div class="overflow-x-auto">
+                <table class="w-full text-left text-sm">
+                  <thead class="bg-gray-50 border-b border-gray-100">
+                    <tr>
+                      <th class="py-4 px-6 font-medium text-gray-600">Room & Ref</th>
+                      <th class="py-4 px-6 font-medium text-gray-600">Dates</th>
+                      <th class="py-4 px-6 font-medium text-gray-600">Status</th>
+                      <th class="py-4 px-6 text-right font-medium text-gray-600">Action</th>
+                    </tr>
+                  </thead>
+                  <tbody class="divide-y divide-gray-100">
+                    <tr class="hover:bg-gray-50">
+                      <td class="py-4 px-6">
+                        <p class="font-medium text-foreground">Superior Garden</p>
+                        <p class="text-xs text-gray-500">STR-551029</p>
+                      </td>
+                      <td class="py-4 px-6 text-gray-600">10 Mar - 12 Mar 2026</td>
+                      <td class="py-4 px-6"><span class="badge-success">Completed</span></td>
+                      <td class="py-4 px-6 text-right"><a href="#" class="text-primary font-medium hover:underline">Book Again</a></td>
+                    </tr>
+                    <tr class="hover:bg-gray-50">
+                      <td class="py-4 px-6">
+                        <p class="font-medium text-foreground">Lake Villa</p>
+                        <p class="text-xs text-gray-500">STR-102948</p>
+                      </td>
+                      <td class="py-4 px-6 text-gray-600">15 Dec - 20 Dec 2025</td>
+                      <td class="py-4 px-6"><span class="badge-success">Completed</span></td>
+                      <td class="py-4 px-6 text-right"><a href="#" class="text-primary font-medium hover:underline">Book Again</a></td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Right Column: Profile & Offers -->
+        <div class="space-y-8">
+          
+          <!-- Profile Summary -->
+          <div class="card p-6 border border-gray-100 bg-white">
+            <h3 class="font-poppins font-bold text-lg mb-4">My Profile</h3>
+            <div class="space-y-4">
+              <div class="flex justify-between pb-4 border-b border-gray-100">
+                <span class="text-gray-500 text-sm">Name</span>
+                <span class="font-medium text-sm text-foreground">John Doe</span>
+              </div>
+              <div class="flex justify-between pb-4 border-b border-gray-100">
+                <span class="text-gray-500 text-sm">Email</span>
+                <span class="font-medium text-sm text-foreground">john@example.com</span>
+              </div>
+              <div class="flex justify-between pb-4 border-b border-gray-100">
+                <span class="text-gray-500 text-sm">Phone</span>
+                <span class="font-medium text-sm text-foreground">+62 812 3456 7890</span>
+              </div>
+            </div>
+            <button class="w-full mt-6 text-center text-primary font-medium text-sm hover:underline">Edit Profile</button>
+          </div>
+
+          <!-- Promo Banner -->
+          <div class="rounded-3xl bg-gradient-primary text-white p-6 relative overflow-hidden shadow-red">
+            <div class="absolute inset-0 batak-pattern opacity-10"></div>
+            <div class="relative z-10">
+              <h3 class="font-poppins font-bold text-lg mb-2">Exclusive Member Offer</h3>
+              <p class="text-sm text-white/80 mb-4">Get 20% off Spa Treatments during your upcoming stay.</p>
+              <button class="px-4 py-2 bg-white text-primary rounded-xl text-sm font-semibold w-full">Claim Offer</button>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </main>
+
+</body>
+</html>

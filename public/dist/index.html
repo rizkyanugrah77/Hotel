@@ -1,0 +1,877 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sitio Tio Resort — Luxury Lakeside Retreat in Samosir</title>
+  <meta name="description" content="Experience the beauty of Lake Toba at Sitio Tio Resort. Premium accommodations, traditional Batak Samosir hospitality, infinity pool, spa, and breathtaking caldera views." />
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ctext y='28' font-size='28'%3E🏨%3C/text%3E%3C/svg%3E" />
+  <script type="module" src="/resources/js/main.js"></script>
+</head>
+<body class="bg-background text-foreground font-inter">
+
+  <!-- ===================================
+       NAVBAR
+       =================================== -->
+  <nav id="navbar" class="fixed top-0 left-0 right-0 z-50 bg-transparent transition-all duration-500">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex items-center justify-between h-20">
+        <!-- Logo -->
+        <a href="/" class="flex items-center gap-3 group" aria-label="Sitio Tio Resort Home">
+          <div class="w-10 h-10 bg-gradient-primary rounded-2xl flex items-center justify-center shadow-red group-hover:scale-110 transition-transform duration-300">
+            <svg class="w-6 h-6 text-white" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 21v-4.875c0-.621.504-1.125 1.125-1.125h5.25c.621 0 1.125.504 1.125 1.125V21m0 0h4.5V3.545M12.75 21h7.5M10.5 21V8.121c0-.312.11-.611.308-.848l4.692-5.58a.75.75 0 0 1 1.149.024l4.469 5.404c.18.217.282.5.282.79V21m-14.4 0H3.75c-.621 0-1.125-.504-1.125-1.125v-6.75c0-.621.504-1.125 1.125-1.125h3.375" />
+            </svg>
+          </div>
+          <div>
+            <span class="text-xl font-poppins font-bold text-white group-hover:text-accent transition-colors">Sitio Tio</span>
+            <span class="block text-[10px] font-inter uppercase tracking-[3px] text-white/70">Resort & Spa</span>
+          </div>
+        </a>
+
+        <!-- Desktop Navigation -->
+        <div class="hidden lg:flex items-center gap-1">
+          <a href="/" class="px-4 py-2 text-sm font-medium text-white hover:text-accent transition-colors rounded-xl hover:bg-white/10" aria-current="page">Home</a>
+          <a href="/pages/rooms.html" class="px-4 py-2 text-sm font-medium text-white/80 hover:text-accent transition-colors rounded-xl hover:bg-white/10">Rooms</a>
+          <a href="/pages/booking.html" class="px-4 py-2 text-sm font-medium text-white/80 hover:text-accent transition-colors rounded-xl hover:bg-white/10">Booking</a>
+          <a href="/pages/dashboard.html" class="px-4 py-2 text-sm font-medium text-white/80 hover:text-accent transition-colors rounded-xl hover:bg-white/10">My Bookings</a>
+          <div class="w-px h-6 bg-white/20 mx-2"></div>
+          <a href="/pages/booking.html" class="btn-accent text-sm !px-5 !py-2.5">
+            <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 0 1 2.25-2.25h13.5A2.25 2.25 0 0 1 21 7.5v11.25m-18 0A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75m-18 0v-7.5A2.25 2.25 0 0 1 5.25 9h13.5A2.25 2.25 0 0 1 21 11.25v7.5" />
+            </svg>
+            Book Now
+          </a>
+        </div>
+
+        <!-- Mobile Menu Toggle -->
+        <button id="mobile-menu-toggle" class="lg:hidden p-2 text-white hover:bg-white/10 rounded-xl transition-colors" aria-label="Open navigation menu">
+          <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
+          </svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- Mobile Menu Overlay -->
+    <div id="mobile-menu-overlay" class="fixed inset-0 bg-black/50 backdrop-blur-sm opacity-0 pointer-events-none transition-opacity duration-300 lg:hidden"></div>
+
+    <!-- Mobile Menu Drawer -->
+    <div id="mobile-menu" class="fixed top-0 right-0 h-full w-80 max-w-[85vw] bg-white shadow-2xl translate-x-full transition-transform duration-300 ease-out lg:hidden">
+      <div class="p-6">
+        <div class="flex items-center justify-between mb-8">
+          <div class="flex items-center gap-2">
+            <div class="w-8 h-8 bg-gradient-primary rounded-xl flex items-center justify-center">
+              <svg class="w-5 h-5 text-white" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 21v-4.875c0-.621.504-1.125 1.125-1.125h5.25c.621 0 1.125.504 1.125 1.125V21m0 0h4.5V3.545M12.75 21h7.5M10.5 21V8.121c0-.312.11-.611.308-.848l4.692-5.58a.75.75 0 0 1 1.149.024l4.469 5.404c.18.217.282.5.282.79V21m-14.4 0H3.75c-.621 0-1.125-.504-1.125-1.125v-6.75c0-.621.504-1.125 1.125-1.125h3.375" />
+              </svg>
+            </div>
+            <span class="font-poppins font-bold text-foreground">Sitio Tio</span>
+          </div>
+          <button id="mobile-menu-close" class="p-2 hover:bg-gray-100 rounded-xl transition-colors" aria-label="Close navigation menu">
+            <svg class="w-5 h-5 text-gray-500" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
+            </svg>
+          </button>
+        </div>
+
+        <nav class="space-y-1" aria-label="Mobile navigation">
+          <a href="/" class="flex items-center gap-3 px-4 py-3 text-primary bg-primary/5 rounded-2xl font-medium" aria-current="page">
+            <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="m2.25 12 8.954-8.955a1.126 1.126 0 0 1 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25" /></svg>
+            Home
+          </a>
+          <a href="/pages/rooms.html" class="flex items-center gap-3 px-4 py-3 text-gray-600 hover:text-primary hover:bg-primary/5 rounded-2xl transition-colors">
+            <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M3.75 21h16.5M4.5 3h15M5.25 3v18m13.5-18v18M9 6.75h1.5m-1.5 3h1.5m-1.5 3h1.5m3-6H15m-1.5 3H15m-1.5 3H15M9 21v-3.375c0-.621.504-1.125 1.125-1.125h3.75c.621 0 1.125.504 1.125 1.125V21" /></svg>
+            Rooms
+          </a>
+          <a href="/pages/booking.html" class="flex items-center gap-3 px-4 py-3 text-gray-600 hover:text-primary hover:bg-primary/5 rounded-2xl transition-colors">
+            <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 0 1 2.25-2.25h13.5A2.25 2.25 0 0 1 21 7.5v11.25m-18 0A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75m-18 0v-7.5A2.25 2.25 0 0 1 5.25 9h13.5A2.25 2.25 0 0 1 21 11.25v7.5" /></svg>
+            Booking
+          </a>
+          <a href="/pages/dashboard.html" class="flex items-center gap-3 px-4 py-3 text-gray-600 hover:text-primary hover:bg-primary/5 rounded-2xl transition-colors">
+            <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z" /></svg>
+            My Bookings
+          </a>
+        </nav>
+
+        <div class="mt-8 pt-6 border-t border-gray-100">
+          <a href="/pages/booking.html" class="btn-primary w-full text-center">
+            <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 0 1 2.25-2.25h13.5A2.25 2.25 0 0 1 21 7.5v11.25m-18 0A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75m-18 0v-7.5A2.25 2.25 0 0 1 5.25 9h13.5A2.25 2.25 0 0 1 21 11.25v7.5" /></svg>
+            Book Now
+          </a>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+
+  <!-- ===================================
+       HERO SECTION
+       =================================== -->
+  <section id="hero" class="relative min-h-screen flex items-center overflow-hidden">
+    <!-- Background Image -->
+    <div class="absolute inset-0">
+      <img src="/resources/assets/images/hero.png" alt="Sitio Tio Resort overlooking Lake Toba" class="w-full h-full object-cover" loading="eager" />
+      <div class="absolute inset-0 bg-gradient-hero"></div>
+    </div>
+
+    <!-- Floating Batak Pattern -->
+    <div class="absolute inset-0 batak-pattern opacity-20"></div>
+
+    <!-- Content -->
+    <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-32 lg:py-0 w-full">
+      <div class="max-w-3xl">
+        <!-- Badge -->
+        <div class="inline-flex items-center gap-2 px-4 py-2 bg-white/10 backdrop-blur-sm rounded-full border border-white/20 mb-8 animate-fade-in">
+          <span class="w-2 h-2 bg-accent rounded-full animate-pulse-soft"></span>
+          <span class="text-sm text-white/90 font-inter">Samosir Island's Premier Retreat</span>
+        </div>
+
+        <!-- Headline -->
+        <h1 class="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-poppins font-bold text-white leading-[1.1] mb-6 animate-fade-in" style="animation-delay: 0.15s;">
+          Where Batak
+          <span class="text-gradient-accent block mt-2">Heritage Meets</span>
+          Luxury
+        </h1>
+
+        <!-- Subtitle -->
+        <p class="text-lg sm:text-xl text-white/80 font-inter leading-relaxed max-w-xl mb-10 animate-fade-in" style="animation-delay: 0.3s;">
+          Nestled on the shores of Lake Toba, Sitio Tio Resort offers an unforgettable blend of traditional Batak Samosir hospitality and modern luxury.
+        </p>
+
+        <!-- CTA Buttons -->
+        <div class="flex flex-col sm:flex-row gap-4 animate-fade-in" style="animation-delay: 0.45s;">
+          <a href="/pages/rooms.html" class="btn-accent text-base !px-8 !py-4">
+            <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />
+            </svg>
+            Explore Rooms
+          </a>
+          <a href="#about" class="inline-flex items-center justify-center gap-2 px-8 py-4 border-2 border-white/30 text-white font-poppins font-semibold rounded-2xl transition-all duration-300 hover:bg-white/10 hover:border-white/50 backdrop-blur-sm">
+            <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" d="m11.25 11.25.041-.02a.75.75 0 0 1 1.063.852l-.708 2.836a.75.75 0 0 0 1.063.853l.041-.021M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9-3.75h.008v.008H12V8.25Z" />
+            </svg>
+            Learn More
+          </a>
+        </div>
+
+        <!-- Stats -->
+        <div class="grid grid-cols-3 gap-6 mt-16 max-w-md animate-fade-in" style="animation-delay: 0.6s;">
+          <div class="text-center">
+            <div class="text-2xl sm:text-3xl font-poppins font-bold text-white" data-counter="150">0</div>
+            <div class="text-xs sm:text-sm text-white/60 mt-1">Luxury Rooms</div>
+          </div>
+          <div class="text-center border-x border-white/20">
+            <div class="text-2xl sm:text-3xl font-poppins font-bold text-accent" data-counter="4800">0</div>
+            <div class="text-xs sm:text-sm text-white/60 mt-1">Happy Guests</div>
+          </div>
+          <div class="text-center">
+            <div class="text-2xl sm:text-3xl font-poppins font-bold text-white" data-counter="15">0</div>
+            <div class="text-xs sm:text-sm text-white/60 mt-1">Awards Won</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Scroll Down Indicator -->
+    <a href="#booking-search" class="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 text-white/60 hover:text-white transition-colors animate-bounce-soft" aria-label="Scroll to booking search">
+      <span class="text-xs font-inter uppercase tracking-widest">Scroll</span>
+      <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />
+      </svg>
+    </a>
+  </section>
+
+
+  <!-- ===================================
+       BOOKING SEARCH SECTION
+       =================================== -->
+  <section id="booking-search" class="relative -mt-20 z-20 px-4">
+    <div class="max-w-5xl mx-auto">
+      <div class="glass rounded-3xl p-6 md:p-8 shadow-soft-xl border border-white/30">
+        <h2 class="text-lg font-poppins font-semibold text-foreground mb-6 flex items-center gap-2">
+          <svg class="w-5 h-5 text-primary" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />
+          </svg>
+          Find Your Perfect Stay
+        </h2>
+        <form class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4 items-end" aria-label="Booking search form">
+          <div>
+            <label for="checkin" class="input-label">Check In</label>
+            <input type="date" id="checkin" class="input" />
+          </div>
+          <div>
+            <label for="checkout" class="input-label">Check Out</label>
+            <input type="date" id="checkout" class="input" />
+          </div>
+          <div>
+            <label for="guests" class="input-label">Guests</label>
+            <select id="guests" class="input">
+              <option>1 Guest</option>
+              <option>2 Guests</option>
+              <option>3 Guests</option>
+              <option>4+ Guests</option>
+            </select>
+          </div>
+          <div>
+            <label for="room-type" class="input-label">Room Type</label>
+            <select id="room-type" class="input">
+              <option>All Types</option>
+              <option>Deluxe Room</option>
+              <option>Superior Room</option>
+              <option>Lake Villa</option>
+              <option>Presidential Suite</option>
+            </select>
+          </div>
+          <button type="submit" class="btn-primary !py-3 w-full">
+            <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />
+            </svg>
+            Search
+          </button>
+        </form>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ===================================
+       ABOUT SECTION
+       =================================== -->
+  <section id="about" class="section">
+    <div class="max-w-7xl mx-auto">
+      <div class="grid lg:grid-cols-2 gap-12 lg:gap-20 items-center">
+        <!-- Image -->
+        <div class="animate-on-scroll-left relative">
+          <div class="rounded-3xl overflow-hidden shadow-soft-xl">
+            <img src="/resources/assets/images/restaurant.png" alt="Open-air dining at Sitio Tio Resort" class="w-full h-[400px] lg:h-[500px] object-cover" loading="lazy" />
+          </div>
+          <!-- Floating accent card -->
+          <div class="absolute -bottom-6 -right-6 bg-white rounded-3xl p-5 shadow-soft-lg hidden md:block animate-float">
+            <div class="flex items-center gap-3">
+              <div class="w-12 h-12 bg-accent/10 rounded-2xl flex items-center justify-center">
+                <svg class="w-6 h-6 text-accent" fill="currentColor" viewBox="0 0 24 24">
+                  <path d="M11.48 3.499a.562.562 0 0 1 1.04 0l2.125 5.111a.563.563 0 0 0 .475.345l5.518.442c.499.04.701.663.321.988l-4.204 3.602a.563.563 0 0 0-.182.557l1.285 5.385a.562.562 0 0 1-.84.61l-4.725-2.885a.562.562 0 0 0-.586 0L6.982 20.54a.562.562 0 0 1-.84-.61l1.285-5.386a.562.562 0 0 0-.182-.557l-4.204-3.602a.562.562 0 0 1 .321-.988l5.518-.442a.563.563 0 0 0 .475-.345L11.48 3.5Z" />
+                </svg>
+              </div>
+              <div>
+                <div class="text-xl font-poppins font-bold text-foreground">4.9</div>
+                <div class="text-xs text-gray-500">Guest Rating</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Content -->
+        <div class="animate-on-scroll-right">
+          <div class="gold-line mb-4"></div>
+          <h2 class="section-title">A Paradise Rooted in <span class="text-gradient-primary">Batak Heritage</span></h2>
+          <p class="section-subtitle mt-4">
+            Sitio Tio Resort is more than a hotel — it's a cultural journey. Inspired by the rich traditions of the Batak Samosir people, every corner tells a story of heritage, warmth, and connection.
+          </p>
+          <div class="grid grid-cols-2 gap-4 mt-8">
+            <div class="flex items-start gap-3">
+              <div class="w-10 h-10 bg-primary/10 rounded-xl flex items-center justify-center flex-shrink-0 mt-0.5">
+                <svg class="w-5 h-5 text-primary" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M15 10.5a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1 1 15 0Z" />
+                </svg>
+              </div>
+              <div>
+                <h3 class="font-poppins font-semibold text-foreground text-sm">Lakeside Location</h3>
+                <p class="text-xs text-gray-500 mt-1">Direct access to Lake Toba shores</p>
+              </div>
+            </div>
+            <div class="flex items-start gap-3">
+              <div class="w-10 h-10 bg-accent/10 rounded-xl flex items-center justify-center flex-shrink-0 mt-0.5">
+                <svg class="w-5 h-5 text-accent-700" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M12 8.25v-1.5m0 1.5c-1.355 0-2.697.056-4.024.166C6.845 8.51 6 9.473 6 10.608v2.513m6-4.871c1.355 0 2.697.056 4.024.166C17.155 8.51 18 9.473 18 10.608v2.513M15 8.25v-1.5m-6 1.5v-1.5m12 9.75-1.5.75a3.354 3.354 0 0 1-3 0 3.354 3.354 0 0 0-3 0 3.354 3.354 0 0 1-3 0 3.354 3.354 0 0 0-3 0 3.354 3.354 0 0 1-3 0L3 16.5m15-3.379a48.474 48.474 0 0 0-6-.371c-2.032 0-4.034.126-6 .371m12 0c.39.049.777.102 1.163.16 1.07.16 1.837 1.094 1.837 2.175v5.169c0 .621-.504 1.125-1.125 1.125H4.125A1.125 1.125 0 0 1 3 20.625v-5.17c0-1.08.768-2.014 1.837-2.174A47.78 47.78 0 0 1 6 13.12" />
+                </svg>
+              </div>
+              <div>
+                <h3 class="font-poppins font-semibold text-foreground text-sm">Cultural Cuisine</h3>
+                <p class="text-xs text-gray-500 mt-1">Authentic Batak & international dishes</p>
+              </div>
+            </div>
+            <div class="flex items-start gap-3">
+              <div class="w-10 h-10 bg-primary/10 rounded-xl flex items-center justify-center flex-shrink-0 mt-0.5">
+                <svg class="w-5 h-5 text-primary" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M9.813 15.904 9 18.75l-.813-2.846a4.5 4.5 0 0 0-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 0 0 3.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 0 0 3.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 0 0-3.09 3.09ZM18.259 8.715 18 9.75l-.259-1.035a3.375 3.375 0 0 0-2.455-2.456L14.25 6l1.036-.259a3.375 3.375 0 0 0 2.455-2.456L18 2.25l.259 1.035a3.375 3.375 0 0 0 2.456 2.456L21.75 6l-1.035.259a3.375 3.375 0 0 0-2.456 2.456ZM16.894 20.567 16.5 21.75l-.394-1.183a2.25 2.25 0 0 0-1.423-1.423L13.5 18.75l1.183-.394a2.25 2.25 0 0 0 1.423-1.423l.394-1.183.394 1.183a2.25 2.25 0 0 0 1.423 1.423l1.183.394-1.183.394a2.25 2.25 0 0 0-1.423 1.423Z" />
+                </svg>
+              </div>
+              <div>
+                <h3 class="font-poppins font-semibold text-foreground text-sm">Premium Spa</h3>
+                <p class="text-xs text-gray-500 mt-1">Traditional healing treatments</p>
+              </div>
+            </div>
+            <div class="flex items-start gap-3">
+              <div class="w-10 h-10 bg-accent/10 rounded-xl flex items-center justify-center flex-shrink-0 mt-0.5">
+                <svg class="w-5 h-5 text-accent-700" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12Z" />
+                </svg>
+              </div>
+              <div>
+                <h3 class="font-poppins font-semibold text-foreground text-sm">Warm Hospitality</h3>
+                <p class="text-xs text-gray-500 mt-1">Horas! The Batak way of welcome</p>
+              </div>
+            </div>
+          </div>
+          <a href="#rooms" class="btn-outline mt-8 inline-flex">
+            Discover Our Rooms
+            <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3" />
+            </svg>
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ===================================
+       FEATURED ROOMS
+       =================================== -->
+  <section id="rooms" class="section bg-gray-50/80">
+    <div class="max-w-7xl mx-auto">
+      <!-- Header -->
+      <div class="text-center mb-14 animate-on-scroll">
+        <div class="gold-line-center mb-4"></div>
+        <h2 class="section-title">Our <span class="text-gradient-primary">Finest</span> Rooms</h2>
+        <p class="section-subtitle mx-auto mt-4">Each room is thoughtfully designed to immerse you in the beauty of Samosir while providing world-class comfort.</p>
+      </div>
+
+      <!-- Room Cards Grid -->
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+
+        <!-- Room Card 1 - Deluxe -->
+        <div class="card group animate-on-scroll stagger-1">
+          <div class="relative img-zoom rounded-t-3xl">
+            <img src="/resources/assets/images/room-deluxe.png" alt="Deluxe Room with lake view" class="w-full h-64 object-cover" loading="lazy" />
+            <div class="absolute top-4 left-4">
+              <span class="badge-accent">
+                <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 24 24"><path d="M11.48 3.499a.562.562 0 0 1 1.04 0l2.125 5.111a.563.563 0 0 0 .475.345l5.518.442c.499.04.701.663.321.988l-4.204 3.602a.563.563 0 0 0-.182.557l1.285 5.385a.562.562 0 0 1-.84.61l-4.725-2.885a.562.562 0 0 0-.586 0L6.982 20.54a.562.562 0 0 1-.84-.61l1.285-5.386a.562.562 0 0 0-.182-.557l-4.204-3.602a.562.562 0 0 1 .321-.988l5.518-.442a.563.563 0 0 0 .475-.345L11.48 3.5Z" /></svg>
+                Popular
+              </span>
+            </div>
+            <div class="absolute bottom-4 right-4 bg-white/90 backdrop-blur-sm rounded-2xl px-4 py-2">
+              <span class="text-xs text-gray-500">From</span>
+              <span class="text-lg font-poppins font-bold text-primary ml-1">Rp 1.2M</span>
+              <span class="text-xs text-gray-500">/night</span>
+            </div>
+          </div>
+          <div class="p-6">
+            <div class="flex items-center gap-1 mb-2">
+              <svg class="w-4 h-4 text-accent" fill="currentColor" viewBox="0 0 24 24"><path d="M11.48 3.499a.562.562 0 0 1 1.04 0l2.125 5.111a.563.563 0 0 0 .475.345l5.518.442c.499.04.701.663.321.988l-4.204 3.602a.563.563 0 0 0-.182.557l1.285 5.385a.562.562 0 0 1-.84.61l-4.725-2.885a.562.562 0 0 0-.586 0L6.982 20.54a.562.562 0 0 1-.84-.61l1.285-5.386a.562.562 0 0 0-.182-.557l-4.204-3.602a.562.562 0 0 1 .321-.988l5.518-.442a.563.563 0 0 0 .475-.345L11.48 3.5Z" /></svg>
+              <svg class="w-4 h-4 text-accent" fill="currentColor" viewBox="0 0 24 24"><path d="M11.48 3.499a.562.562 0 0 1 1.04 0l2.125 5.111a.563.563 0 0 0 .475.345l5.518.442c.499.04.701.663.321.988l-4.204 3.602a.563.563 0 0 0-.182.557l1.285 5.385a.562.562 0 0 1-.84.61l-4.725-2.885a.562.562 0 0 0-.586 0L6.982 20.54a.562.562 0 0 1-.84-.61l1.285-5.386a.562.562 0 0 0-.182-.557l-4.204-3.602a.562.562 0 0 1 .321-.988l5.518-.442a.563.563 0 0 0 .475-.345L11.48 3.5Z" /></svg>
+              <svg class="w-4 h-4 text-accent" fill="currentColor" viewBox="0 0 24 24"><path d="M11.48 3.499a.562.562 0 0 1 1.04 0l2.125 5.111a.563.563 0 0 0 .475.345l5.518.442c.499.04.701.663.321.988l-4.204 3.602a.563.563 0 0 0-.182.557l1.285 5.385a.562.562 0 0 1-.84.61l-4.725-2.885a.562.562 0 0 0-.586 0L6.982 20.54a.562.562 0 0 1-.84-.61l1.285-5.386a.562.562 0 0 0-.182-.557l-4.204-3.602a.562.562 0 0 1 .321-.988l5.518-.442a.563.563 0 0 0 .475-.345L11.48 3.5Z" /></svg>
+              <svg class="w-4 h-4 text-accent" fill="currentColor" viewBox="0 0 24 24"><path d="M11.48 3.499a.562.562 0 0 1 1.04 0l2.125 5.111a.563.563 0 0 0 .475.345l5.518.442c.499.04.701.663.321.988l-4.204 3.602a.563.563 0 0 0-.182.557l1.285 5.385a.562.562 0 0 1-.84.61l-4.725-2.885a.562.562 0 0 0-.586 0L6.982 20.54a.562.562 0 0 1-.84-.61l1.285-5.386a.562.562 0 0 0-.182-.557l-4.204-3.602a.562.562 0 0 1 .321-.988l5.518-.442a.563.563 0 0 0 .475-.345L11.48 3.5Z" /></svg>
+              <svg class="w-4 h-4 text-accent" fill="currentColor" viewBox="0 0 24 24"><path d="M11.48 3.499a.562.562 0 0 1 1.04 0l2.125 5.111a.563.563 0 0 0 .475.345l5.518.442c.499.04.701.663.321.988l-4.204 3.602a.563.563 0 0 0-.182.557l1.285 5.385a.562.562 0 0 1-.84.61l-4.725-2.885a.562.562 0 0 0-.586 0L6.982 20.54a.562.562 0 0 1-.84-.61l1.285-5.386a.562.562 0 0 0-.182-.557l-4.204-3.602a.562.562 0 0 1 .321-.988l5.518-.442a.563.563 0 0 0 .475-.345L11.48 3.5Z" /></svg>
+              <span class="text-xs text-gray-500 ml-1">(4.9)</span>
+            </div>
+            <h3 class="text-xl font-poppins font-bold text-foreground">Deluxe Lake View</h3>
+            <p class="text-sm text-gray-500 mt-2 line-clamp-2">Spacious room with panoramic views of Lake Toba, king-size bed, and private balcony.</p>
+            <div class="flex items-center gap-4 mt-4 text-xs text-gray-500">
+              <span class="flex items-center gap-1">
+                <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z" /></svg>
+                2 Guests
+              </span>
+              <span class="flex items-center gap-1">
+                <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M3.75 3.75v4.5m0-4.5h4.5m-4.5 0L9 9M3.75 20.25v-4.5m0 4.5h4.5m-4.5 0L9 15M20.25 3.75h-4.5m4.5 0v4.5m0-4.5L15 9m5.25 11.25h-4.5m4.5 0v-4.5m0 4.5L15 15" /></svg>
+                45 m²
+              </span>
+              <span class="flex items-center gap-1">
+                <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M8.288 15.038a5.25 5.25 0 0 1 7.424 0M5.106 11.856c3.807-3.808 9.98-3.808 13.788 0M1.924 8.674c5.565-5.565 14.587-5.565 20.152 0M12.53 18.22l-.53.53-.53-.53a.75.75 0 0 1 1.06 0Z" /></svg>
+                Free WiFi
+              </span>
+            </div>
+            <a href="/pages/room-detail.html" class="btn-outline w-full mt-6 text-sm !py-2.5">
+              View Details
+              <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3" /></svg>
+            </a>
+          </div>
+        </div>
+
+        <!-- Room Card 2 - Superior -->
+        <div class="card group animate-on-scroll stagger-2">
+          <div class="relative img-zoom rounded-t-3xl">
+            <img src="/resources/assets/images/room-superior.png" alt="Superior Room with mountain view" class="w-full h-64 object-cover" loading="lazy" />
+            <div class="absolute bottom-4 right-4 bg-white/90 backdrop-blur-sm rounded-2xl px-4 py-2">
+              <span class="text-xs text-gray-500">From</span>
+              <span class="text-lg font-poppins font-bold text-primary ml-1">Rp 850K</span>
+              <span class="text-xs text-gray-500">/night</span>
+            </div>
+          </div>
+          <div class="p-6">
+            <div class="flex items-center gap-1 mb-2">
+              <svg class="w-4 h-4 text-accent" fill="currentColor" viewBox="0 0 24 24"><path d="M11.48 3.499a.562.562 0 0 1 1.04 0l2.125 5.111a.563.563 0 0 0 .475.345l5.518.442c.499.04.701.663.321.988l-4.204 3.602a.563.563 0 0 0-.182.557l1.285 5.385a.562.562 0 0 1-.84.61l-4.725-2.885a.562.562 0 0 0-.586 0L6.982 20.54a.562.562 0 0 1-.84-.61l1.285-5.386a.562.562 0 0 0-.182-.557l-4.204-3.602a.562.562 0 0 1 .321-.988l5.518-.442a.563.563 0 0 0 .475-.345L11.48 3.5Z" /></svg>
+              <svg class="w-4 h-4 text-accent" fill="currentColor" viewBox="0 0 24 24"><path d="M11.48 3.499a.562.562 0 0 1 1.04 0l2.125 5.111a.563.563 0 0 0 .475.345l5.518.442c.499.04.701.663.321.988l-4.204 3.602a.563.563 0 0 0-.182.557l1.285 5.385a.562.562 0 0 1-.84.61l-4.725-2.885a.562.562 0 0 0-.586 0L6.982 20.54a.562.562 0 0 1-.84-.61l1.285-5.386a.562.562 0 0 0-.182-.557l-4.204-3.602a.562.562 0 0 1 .321-.988l5.518-.442a.563.563 0 0 0 .475-.345L11.48 3.5Z" /></svg>
+              <svg class="w-4 h-4 text-accent" fill="currentColor" viewBox="0 0 24 24"><path d="M11.48 3.499a.562.562 0 0 1 1.04 0l2.125 5.111a.563.563 0 0 0 .475.345l5.518.442c.499.04.701.663.321.988l-4.204 3.602a.563.563 0 0 0-.182.557l1.285 5.385a.562.562 0 0 1-.84.61l-4.725-2.885a.562.562 0 0 0-.586 0L6.982 20.54a.562.562 0 0 1-.84-.61l1.285-5.386a.562.562 0 0 0-.182-.557l-4.204-3.602a.562.562 0 0 1 .321-.988l5.518-.442a.563.563 0 0 0 .475-.345L11.48 3.5Z" /></svg>
+              <svg class="w-4 h-4 text-accent" fill="currentColor" viewBox="0 0 24 24"><path d="M11.48 3.499a.562.562 0 0 1 1.04 0l2.125 5.111a.563.563 0 0 0 .475.345l5.518.442c.499.04.701.663.321.988l-4.204 3.602a.563.563 0 0 0-.182.557l1.285 5.385a.562.562 0 0 1-.84.61l-4.725-2.885a.562.562 0 0 0-.586 0L6.982 20.54a.562.562 0 0 1-.84-.61l1.285-5.386a.562.562 0 0 0-.182-.557l-4.204-3.602a.562.562 0 0 1 .321-.988l5.518-.442a.563.563 0 0 0 .475-.345L11.48 3.5Z" /></svg>
+              <svg class="w-4 h-4 text-gray-300" fill="currentColor" viewBox="0 0 24 24"><path d="M11.48 3.499a.562.562 0 0 1 1.04 0l2.125 5.111a.563.563 0 0 0 .475.345l5.518.442c.499.04.701.663.321.988l-4.204 3.602a.563.563 0 0 0-.182.557l1.285 5.385a.562.562 0 0 1-.84.61l-4.725-2.885a.562.562 0 0 0-.586 0L6.982 20.54a.562.562 0 0 1-.84-.61l1.285-5.386a.562.562 0 0 0-.182-.557l-4.204-3.602a.562.562 0 0 1 .321-.988l5.518-.442a.563.563 0 0 0 .475-.345L11.48 3.5Z" /></svg>
+              <span class="text-xs text-gray-500 ml-1">(4.7)</span>
+            </div>
+            <h3 class="text-xl font-poppins font-bold text-foreground">Superior Garden</h3>
+            <p class="text-sm text-gray-500 mt-2 line-clamp-2">Cozy retreat surrounded by tropical gardens with twin beds and modern amenities.</p>
+            <div class="flex items-center gap-4 mt-4 text-xs text-gray-500">
+              <span class="flex items-center gap-1">
+                <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z" /></svg>
+                2 Guests
+              </span>
+              <span class="flex items-center gap-1">
+                <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M3.75 3.75v4.5m0-4.5h4.5m-4.5 0L9 9M3.75 20.25v-4.5m0 4.5h4.5m-4.5 0L9 15M20.25 3.75h-4.5m4.5 0v4.5m0-4.5L15 9m5.25 11.25h-4.5m4.5 0v-4.5m0 4.5L15 15" /></svg>
+                35 m²
+              </span>
+              <span class="flex items-center gap-1">
+                <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M8.288 15.038a5.25 5.25 0 0 1 7.424 0M5.106 11.856c3.807-3.808 9.98-3.808 13.788 0M1.924 8.674c5.565-5.565 14.587-5.565 20.152 0M12.53 18.22l-.53.53-.53-.53a.75.75 0 0 1 1.06 0Z" /></svg>
+                Free WiFi
+              </span>
+            </div>
+            <a href="/pages/room-detail.html" class="btn-outline w-full mt-6 text-sm !py-2.5">
+              View Details
+              <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3" /></svg>
+            </a>
+          </div>
+        </div>
+
+        <!-- Room Card 3 - Villa -->
+        <div class="card group animate-on-scroll stagger-3">
+          <div class="relative img-zoom rounded-t-3xl">
+            <img src="/resources/assets/images/room-villa.png" alt="Lakeside Villa with private pool" class="w-full h-64 object-cover" loading="lazy" />
+            <div class="absolute top-4 left-4">
+              <span class="badge bg-primary/90 text-white backdrop-blur-sm">
+                <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 24 24"><path d="M9.813 15.904 9 18.75l-.813-2.846a4.5 4.5 0 0 0-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 0 0 3.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 0 0 3.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 0 0-3.09 3.09ZM18.259 8.715 18 9.75l-.259-1.035a3.375 3.375 0 0 0-2.455-2.456L14.25 6l1.036-.259a3.375 3.375 0 0 0 2.455-2.456L18 2.25l.259 1.035a3.375 3.375 0 0 0 2.456 2.456L21.75 6l-1.035.259a3.375 3.375 0 0 0-2.456 2.456Z" /></svg>
+                Premium
+              </span>
+            </div>
+            <div class="absolute bottom-4 right-4 bg-white/90 backdrop-blur-sm rounded-2xl px-4 py-2">
+              <span class="text-xs text-gray-500">From</span>
+              <span class="text-lg font-poppins font-bold text-primary ml-1">Rp 3.5M</span>
+              <span class="text-xs text-gray-500">/night</span>
+            </div>
+          </div>
+          <div class="p-6">
+            <div class="flex items-center gap-1 mb-2">
+              <svg class="w-4 h-4 text-accent" fill="currentColor" viewBox="0 0 24 24"><path d="M11.48 3.499a.562.562 0 0 1 1.04 0l2.125 5.111a.563.563 0 0 0 .475.345l5.518.442c.499.04.701.663.321.988l-4.204 3.602a.563.563 0 0 0-.182.557l1.285 5.385a.562.562 0 0 1-.84.61l-4.725-2.885a.562.562 0 0 0-.586 0L6.982 20.54a.562.562 0 0 1-.84-.61l1.285-5.386a.562.562 0 0 0-.182-.557l-4.204-3.602a.562.562 0 0 1 .321-.988l5.518-.442a.563.563 0 0 0 .475-.345L11.48 3.5Z" /></svg>
+              <svg class="w-4 h-4 text-accent" fill="currentColor" viewBox="0 0 24 24"><path d="M11.48 3.499a.562.562 0 0 1 1.04 0l2.125 5.111a.563.563 0 0 0 .475.345l5.518.442c.499.04.701.663.321.988l-4.204 3.602a.563.563 0 0 0-.182.557l1.285 5.385a.562.562 0 0 1-.84.61l-4.725-2.885a.562.562 0 0 0-.586 0L6.982 20.54a.562.562 0 0 1-.84-.61l1.285-5.386a.562.562 0 0 0-.182-.557l-4.204-3.602a.562.562 0 0 1 .321-.988l5.518-.442a.563.563 0 0 0 .475-.345L11.48 3.5Z" /></svg>
+              <svg class="w-4 h-4 text-accent" fill="currentColor" viewBox="0 0 24 24"><path d="M11.48 3.499a.562.562 0 0 1 1.04 0l2.125 5.111a.563.563 0 0 0 .475.345l5.518.442c.499.04.701.663.321.988l-4.204 3.602a.563.563 0 0 0-.182.557l1.285 5.385a.562.562 0 0 1-.84.61l-4.725-2.885a.562.562 0 0 0-.586 0L6.982 20.54a.562.562 0 0 1-.84-.61l1.285-5.386a.562.562 0 0 0-.182-.557l-4.204-3.602a.562.562 0 0 1 .321-.988l5.518-.442a.563.563 0 0 0 .475-.345L11.48 3.5Z" /></svg>
+              <svg class="w-4 h-4 text-accent" fill="currentColor" viewBox="0 0 24 24"><path d="M11.48 3.499a.562.562 0 0 1 1.04 0l2.125 5.111a.563.563 0 0 0 .475.345l5.518.442c.499.04.701.663.321.988l-4.204 3.602a.563.563 0 0 0-.182.557l1.285 5.385a.562.562 0 0 1-.84.61l-4.725-2.885a.562.562 0 0 0-.586 0L6.982 20.54a.562.562 0 0 1-.84-.61l1.285-5.386a.562.562 0 0 0-.182-.557l-4.204-3.602a.562.562 0 0 1 .321-.988l5.518-.442a.563.563 0 0 0 .475-.345L11.48 3.5Z" /></svg>
+              <svg class="w-4 h-4 text-accent" fill="currentColor" viewBox="0 0 24 24"><path d="M11.48 3.499a.562.562 0 0 1 1.04 0l2.125 5.111a.563.563 0 0 0 .475.345l5.518.442c.499.04.701.663.321.988l-4.204 3.602a.563.563 0 0 0-.182.557l1.285 5.385a.562.562 0 0 1-.84.61l-4.725-2.885a.562.562 0 0 0-.586 0L6.982 20.54a.562.562 0 0 1-.84-.61l1.285-5.386a.562.562 0 0 0-.182-.557l-4.204-3.602a.562.562 0 0 1 .321-.988l5.518-.442a.563.563 0 0 0 .475-.345L11.48 3.5Z" /></svg>
+              <span class="text-xs text-gray-500 ml-1">(5.0)</span>
+            </div>
+            <h3 class="text-xl font-poppins font-bold text-foreground">Lake Villa</h3>
+            <p class="text-sm text-gray-500 mt-2 line-clamp-2">Exclusive villa with private infinity pool, traditional Batak-inspired architecture, and direct lake access.</p>
+            <div class="flex items-center gap-4 mt-4 text-xs text-gray-500">
+              <span class="flex items-center gap-1">
+                <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z" /></svg>
+                4 Guests
+              </span>
+              <span class="flex items-center gap-1">
+                <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M3.75 3.75v4.5m0-4.5h4.5m-4.5 0L9 9M3.75 20.25v-4.5m0 4.5h4.5m-4.5 0L9 15M20.25 3.75h-4.5m4.5 0v4.5m0-4.5L15 9m5.25 11.25h-4.5m4.5 0v-4.5m0 4.5L15 15" /></svg>
+                120 m²
+              </span>
+              <span class="flex items-center gap-1">
+                <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8.25v-1.5m0 1.5c-1.355 0-2.697.056-4.024.166C6.845 8.51 6 9.473 6 10.608v2.513m6-4.871c1.355 0 2.697.056 4.024.166C17.155 8.51 18 9.473 18 10.608v2.513M15 8.25v-1.5m-6 1.5v-1.5m12 9.75-1.5.75a3.354 3.354 0 0 1-3 0 3.354 3.354 0 0 0-3 0 3.354 3.354 0 0 1-3 0 3.354 3.354 0 0 0-3 0 3.354 3.354 0 0 1-3 0L3 16.5m15-3.379a48.474 48.474 0 0 0-6-.371c-2.032 0-4.034.126-6 .371m12 0c.39.049.777.102 1.163.16 1.07.16 1.837 1.094 1.837 2.175v5.169c0 .621-.504 1.125-1.125 1.125H4.125A1.125 1.125 0 0 1 3 20.625v-5.17c0-1.08.768-2.014 1.837-2.174A47.78 47.78 0 0 1 6 13.12" /></svg>
+                Pool
+              </span>
+            </div>
+            <a href="/pages/room-detail.html" class="btn-primary w-full mt-6 text-sm !py-2.5">
+              View Details
+              <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3" /></svg>
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <!-- View All -->
+      <div class="text-center mt-12 animate-on-scroll">
+        <a href="/pages/rooms.html" class="btn-ghost text-base">
+          View All Rooms
+          <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3" /></svg>
+        </a>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ===================================
+       FACILITIES
+       =================================== -->
+  <section id="facilities" class="section">
+    <div class="max-w-7xl mx-auto">
+      <!-- Header -->
+      <div class="text-center mb-14 animate-on-scroll">
+        <div class="gold-line-center mb-4"></div>
+        <h2 class="section-title">World-Class <span class="text-gradient-accent">Facilities</span></h2>
+        <p class="section-subtitle mx-auto mt-4">Everything you need for an extraordinary stay, from wellness to adventure.</p>
+      </div>
+
+      <!-- Facilities Grid -->
+      <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 md:gap-6">
+        <!-- Infinity Pool -->
+        <div class="card text-center p-6 group hover:border-primary/20 border border-transparent animate-on-scroll stagger-1">
+          <div class="w-14 h-14 bg-primary/10 rounded-2xl flex items-center justify-center mx-auto mb-4 group-hover:bg-primary group-hover:text-white transition-all duration-300">
+            <svg class="w-7 h-7 text-primary group-hover:text-white transition-colors" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8.25v-1.5m0 1.5c-1.355 0-2.697.056-4.024.166C6.845 8.51 6 9.473 6 10.608v2.513m6-4.871c1.355 0 2.697.056 4.024.166C17.155 8.51 18 9.473 18 10.608v2.513M15 8.25v-1.5m-6 1.5v-1.5m12 9.75-1.5.75a3.354 3.354 0 0 1-3 0 3.354 3.354 0 0 0-3 0 3.354 3.354 0 0 1-3 0 3.354 3.354 0 0 0-3 0 3.354 3.354 0 0 1-3 0L3 16.5m15-3.379a48.474 48.474 0 0 0-6-.371c-2.032 0-4.034.126-6 .371m12 0c.39.049.777.102 1.163.16 1.07.16 1.837 1.094 1.837 2.175v5.169c0 .621-.504 1.125-1.125 1.125H4.125A1.125 1.125 0 0 1 3 20.625v-5.17c0-1.08.768-2.014 1.837-2.174A47.78 47.78 0 0 1 6 13.12" /></svg>
+          </div>
+          <h3 class="font-poppins font-semibold text-sm text-foreground">Infinity Pool</h3>
+          <p class="text-xs text-gray-500 mt-1">Lake Toba views</p>
+        </div>
+
+        <!-- Spa -->
+        <div class="card text-center p-6 group hover:border-primary/20 border border-transparent animate-on-scroll stagger-2">
+          <div class="w-14 h-14 bg-accent/10 rounded-2xl flex items-center justify-center mx-auto mb-4 group-hover:bg-accent group-hover:text-white transition-all duration-300">
+            <svg class="w-7 h-7 text-accent-700 group-hover:text-white transition-colors" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M9.813 15.904 9 18.75l-.813-2.846a4.5 4.5 0 0 0-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 0 0 3.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 0 0 3.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 0 0-3.09 3.09ZM18.259 8.715 18 9.75l-.259-1.035a3.375 3.375 0 0 0-2.455-2.456L14.25 6l1.036-.259a3.375 3.375 0 0 0 2.455-2.456L18 2.25l.259 1.035a3.375 3.375 0 0 0 2.456 2.456L21.75 6l-1.035.259a3.375 3.375 0 0 0-2.456 2.456Z" /></svg>
+          </div>
+          <h3 class="font-poppins font-semibold text-sm text-foreground">Luxury Spa</h3>
+          <p class="text-xs text-gray-500 mt-1">Batak wellness</p>
+        </div>
+
+        <!-- Restaurant -->
+        <div class="card text-center p-6 group hover:border-primary/20 border border-transparent animate-on-scroll stagger-3">
+          <div class="w-14 h-14 bg-primary/10 rounded-2xl flex items-center justify-center mx-auto mb-4 group-hover:bg-primary group-hover:text-white transition-all duration-300">
+            <svg class="w-7 h-7 text-primary group-hover:text-white transition-colors" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8.25v-1.5m0 1.5c-1.355 0-2.697.056-4.024.166C6.845 8.51 6 9.473 6 10.608v2.513m6-4.871c1.355 0 2.697.056 4.024.166C17.155 8.51 18 9.473 18 10.608v2.513" /><path stroke-linecap="round" stroke-linejoin="round" d="M6 13.5V21m6-7.5V21m6-7.5V21" /></svg>
+          </div>
+          <h3 class="font-poppins font-semibold text-sm text-foreground">Fine Dining</h3>
+          <p class="text-xs text-gray-500 mt-1">Local & international</p>
+        </div>
+
+        <!-- WiFi -->
+        <div class="card text-center p-6 group hover:border-primary/20 border border-transparent animate-on-scroll stagger-4">
+          <div class="w-14 h-14 bg-accent/10 rounded-2xl flex items-center justify-center mx-auto mb-4 group-hover:bg-accent group-hover:text-white transition-all duration-300">
+            <svg class="w-7 h-7 text-accent-700 group-hover:text-white transition-colors" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M8.288 15.038a5.25 5.25 0 0 1 7.424 0M5.106 11.856c3.807-3.808 9.98-3.808 13.788 0M1.924 8.674c5.565-5.565 14.587-5.565 20.152 0M12.53 18.22l-.53.53-.53-.53a.75.75 0 0 1 1.06 0Z" /></svg>
+          </div>
+          <h3 class="font-poppins font-semibold text-sm text-foreground">Free WiFi</h3>
+          <p class="text-xs text-gray-500 mt-1">High speed</p>
+        </div>
+
+        <!-- Parking -->
+        <div class="card text-center p-6 group hover:border-primary/20 border border-transparent animate-on-scroll stagger-5">
+          <div class="w-14 h-14 bg-primary/10 rounded-2xl flex items-center justify-center mx-auto mb-4 group-hover:bg-primary group-hover:text-white transition-all duration-300">
+            <svg class="w-7 h-7 text-primary group-hover:text-white transition-colors" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M8.25 18.75a1.5 1.5 0 0 1-3 0m3 0a1.5 1.5 0 0 0-3 0m3 0h6m-9 0H3.375a1.125 1.125 0 0 1-1.125-1.125V14.25m17.25 4.5a1.5 1.5 0 0 1-3 0m3 0a1.5 1.5 0 0 0-3 0m3 0h1.125c.621 0 1.129-.504 1.09-1.124a17.902 17.902 0 0 0-3.213-9.193 2.056 2.056 0 0 0-1.58-.86H14.25M16.5 18.75h-2.25m0-11.177v-.958c0-.568-.422-1.048-.987-1.106a48.554 48.554 0 0 0-10.026 0 1.106 1.106 0 0 0-.987 1.106v7.635m12-6.677v6.677m0 4.5v-4.5m0 0h-12" /></svg>
+          </div>
+          <h3 class="font-poppins font-semibold text-sm text-foreground">Parking</h3>
+          <p class="text-xs text-gray-500 mt-1">Free & secure</p>
+        </div>
+
+        <!-- Gym -->
+        <div class="card text-center p-6 group hover:border-primary/20 border border-transparent animate-on-scroll stagger-6">
+          <div class="w-14 h-14 bg-accent/10 rounded-2xl flex items-center justify-center mx-auto mb-4 group-hover:bg-accent group-hover:text-white transition-all duration-300">
+            <svg class="w-7 h-7 text-accent-700 group-hover:text-white transition-colors" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12Z" /></svg>
+          </div>
+          <h3 class="font-poppins font-semibold text-sm text-foreground">Fitness</h3>
+          <p class="text-xs text-gray-500 mt-1">24/7 gym access</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ===================================
+       GALLERY
+       =================================== -->
+  <section id="gallery" class="section bg-gray-50/80">
+    <div class="max-w-7xl mx-auto">
+      <!-- Header -->
+      <div class="text-center mb-14 animate-on-scroll">
+        <div class="gold-line-center mb-4"></div>
+        <h2 class="section-title">Resort <span class="text-gradient-accent">Gallery</span></h2>
+        <p class="section-subtitle mx-auto mt-4">Take a visual journey through our stunning resort and its breathtaking surroundings.</p>
+      </div>
+
+      <!-- Gallery Grid (Masonry-style) -->
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+        <div class="md:col-span-2 md:row-span-2 rounded-3xl overflow-hidden shadow-soft cursor-pointer group animate-on-scroll-scale" data-gallery-item>
+          <div class="relative h-full min-h-[300px] md:min-h-[400px]">
+            <img src="/resources/assets/images/hero.png" alt="Aerial view of Sitio Tio Resort" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" loading="lazy" />
+            <div class="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+            <div class="absolute bottom-4 left-4 text-white opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+              <p class="font-poppins font-semibold">Resort Overview</p>
+              <p class="text-sm text-white/80">Aerial view of the resort</p>
+            </div>
+          </div>
+        </div>
+        <div class="rounded-3xl overflow-hidden shadow-soft cursor-pointer group animate-on-scroll-scale stagger-1" data-gallery-item>
+          <div class="relative h-48 md:h-full">
+            <img src="/resources/assets/images/pool.png" alt="Infinity Pool at sunset" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" loading="lazy" />
+            <div class="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+          </div>
+        </div>
+        <div class="rounded-3xl overflow-hidden shadow-soft cursor-pointer group animate-on-scroll-scale stagger-2" data-gallery-item>
+          <div class="relative h-48 md:h-full">
+            <img src="/resources/assets/images/room-deluxe.png" alt="Deluxe Room Interior" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" loading="lazy" />
+            <div class="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+          </div>
+        </div>
+        <div class="rounded-3xl overflow-hidden shadow-soft cursor-pointer group animate-on-scroll-scale stagger-3" data-gallery-item>
+          <div class="relative h-48 md:h-full">
+            <img src="/resources/assets/images/restaurant.png" alt="Open Air Restaurant" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" loading="lazy" />
+            <div class="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+          </div>
+        </div>
+        <div class="rounded-3xl overflow-hidden shadow-soft cursor-pointer group animate-on-scroll-scale stagger-4" data-gallery-item>
+          <div class="relative h-48 md:h-full">
+            <img src="/resources/assets/images/room-villa.png" alt="Lake Villa Exterior" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" loading="lazy" />
+            <div class="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Lightbox -->
+    <div id="gallery-lightbox" class="fixed inset-0 z-50 bg-black/90 backdrop-blur-sm flex items-center justify-center opacity-0 pointer-events-none transition-opacity duration-300">
+      <button id="lightbox-close" class="absolute top-6 right-6 text-white hover:text-accent transition-colors" aria-label="Close lightbox">
+        <svg class="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" /></svg>
+      </button>
+      <img id="lightbox-img" src="" alt="Gallery image expanded" class="max-w-[90vw] max-h-[85vh] object-contain rounded-2xl shadow-2xl" />
+    </div>
+  </section>
+
+
+  <!-- ===================================
+       TESTIMONIALS
+       =================================== -->
+  <section id="testimonials" class="section overflow-hidden">
+    <div class="max-w-7xl mx-auto">
+      <!-- Header -->
+      <div class="text-center mb-14 animate-on-scroll">
+        <div class="gold-line-center mb-4"></div>
+        <h2 class="section-title">What Our <span class="text-gradient-primary">Guests</span> Say</h2>
+        <p class="section-subtitle mx-auto mt-4">Heartfelt reviews from guests who experienced the magic of Sitio Tio Resort.</p>
+      </div>
+
+      <!-- Carousel -->
+      <div class="relative">
+        <div class="overflow-hidden rounded-3xl">
+          <div id="testimonial-track" class="flex transition-transform duration-500 ease-out">
+            <!-- Testimonial 1 -->
+            <div class="min-w-full px-4">
+              <div class="max-w-3xl mx-auto glass rounded-3xl p-8 md:p-12 text-center">
+                <div class="flex justify-center gap-1 mb-6">
+                  <svg class="w-5 h-5 text-accent" fill="currentColor" viewBox="0 0 24 24"><path d="M11.48 3.499a.562.562 0 0 1 1.04 0l2.125 5.111a.563.563 0 0 0 .475.345l5.518.442c.499.04.701.663.321.988l-4.204 3.602a.563.563 0 0 0-.182.557l1.285 5.385a.562.562 0 0 1-.84.61l-4.725-2.885a.562.562 0 0 0-.586 0L6.982 20.54a.562.562 0 0 1-.84-.61l1.285-5.386a.562.562 0 0 0-.182-.557l-4.204-3.602a.562.562 0 0 1 .321-.988l5.518-.442a.563.563 0 0 0 .475-.345L11.48 3.5Z" /></svg>
+                  <svg class="w-5 h-5 text-accent" fill="currentColor" viewBox="0 0 24 24"><path d="M11.48 3.499a.562.562 0 0 1 1.04 0l2.125 5.111a.563.563 0 0 0 .475.345l5.518.442c.499.04.701.663.321.988l-4.204 3.602a.563.563 0 0 0-.182.557l1.285 5.385a.562.562 0 0 1-.84.61l-4.725-2.885a.562.562 0 0 0-.586 0L6.982 20.54a.562.562 0 0 1-.84-.61l1.285-5.386a.562.562 0 0 0-.182-.557l-4.204-3.602a.562.562 0 0 1 .321-.988l5.518-.442a.563.563 0 0 0 .475-.345L11.48 3.5Z" /></svg>
+                  <svg class="w-5 h-5 text-accent" fill="currentColor" viewBox="0 0 24 24"><path d="M11.48 3.499a.562.562 0 0 1 1.04 0l2.125 5.111a.563.563 0 0 0 .475.345l5.518.442c.499.04.701.663.321.988l-4.204 3.602a.563.563 0 0 0-.182.557l1.285 5.385a.562.562 0 0 1-.84.61l-4.725-2.885a.562.562 0 0 0-.586 0L6.982 20.54a.562.562 0 0 1-.84-.61l1.285-5.386a.562.562 0 0 0-.182-.557l-4.204-3.602a.562.562 0 0 1 .321-.988l5.518-.442a.563.563 0 0 0 .475-.345L11.48 3.5Z" /></svg>
+                  <svg class="w-5 h-5 text-accent" fill="currentColor" viewBox="0 0 24 24"><path d="M11.48 3.499a.562.562 0 0 1 1.04 0l2.125 5.111a.563.563 0 0 0 .475.345l5.518.442c.499.04.701.663.321.988l-4.204 3.602a.563.563 0 0 0-.182.557l1.285 5.385a.562.562 0 0 1-.84.61l-4.725-2.885a.562.562 0 0 0-.586 0L6.982 20.54a.562.562 0 0 1-.84-.61l1.285-5.386a.562.562 0 0 0-.182-.557l-4.204-3.602a.562.562 0 0 1 .321-.988l5.518-.442a.563.563 0 0 0 .475-.345L11.48 3.5Z" /></svg>
+                  <svg class="w-5 h-5 text-accent" fill="currentColor" viewBox="0 0 24 24"><path d="M11.48 3.499a.562.562 0 0 1 1.04 0l2.125 5.111a.563.563 0 0 0 .475.345l5.518.442c.499.04.701.663.321.988l-4.204 3.602a.563.563 0 0 0-.182.557l1.285 5.385a.562.562 0 0 1-.84.61l-4.725-2.885a.562.562 0 0 0-.586 0L6.982 20.54a.562.562 0 0 1-.84-.61l1.285-5.386a.562.562 0 0 0-.182-.557l-4.204-3.602a.562.562 0 0 1 .321-.988l5.518-.442a.563.563 0 0 0 .475-.345L11.48 3.5Z" /></svg>
+                </div>
+                <blockquote class="text-lg md:text-xl text-foreground font-inter leading-relaxed italic">
+                  "An absolutely magical experience. Waking up to Lake Toba every morning, the warmth of the Batak hospitality, and the stunning infinity pool — Sitio Tio is truly a paradise on earth."
+                </blockquote>
+                <div class="mt-8">
+                  <div class="w-14 h-14 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-3">
+                    <span class="text-xl font-poppins font-bold text-primary">SA</span>
+                  </div>
+                  <p class="font-poppins font-semibold text-foreground">Sarah Anderson</p>
+                  <p class="text-sm text-gray-500">Jakarta, Indonesia</p>
+                </div>
+              </div>
+            </div>
+
+            <!-- Testimonial 2 -->
+            <div class="min-w-full px-4">
+              <div class="max-w-3xl mx-auto glass rounded-3xl p-8 md:p-12 text-center">
+                <div class="flex justify-center gap-1 mb-6">
+                  <svg class="w-5 h-5 text-accent" fill="currentColor" viewBox="0 0 24 24"><path d="M11.48 3.499a.562.562 0 0 1 1.04 0l2.125 5.111a.563.563 0 0 0 .475.345l5.518.442c.499.04.701.663.321.988l-4.204 3.602a.563.563 0 0 0-.182.557l1.285 5.385a.562.562 0 0 1-.84.61l-4.725-2.885a.562.562 0 0 0-.586 0L6.982 20.54a.562.562 0 0 1-.84-.61l1.285-5.386a.562.562 0 0 0-.182-.557l-4.204-3.602a.562.562 0 0 1 .321-.988l5.518-.442a.563.563 0 0 0 .475-.345L11.48 3.5Z" /></svg>
+                  <svg class="w-5 h-5 text-accent" fill="currentColor" viewBox="0 0 24 24"><path d="M11.48 3.499a.562.562 0 0 1 1.04 0l2.125 5.111a.563.563 0 0 0 .475.345l5.518.442c.499.04.701.663.321.988l-4.204 3.602a.563.563 0 0 0-.182.557l1.285 5.385a.562.562 0 0 1-.84.61l-4.725-2.885a.562.562 0 0 0-.586 0L6.982 20.54a.562.562 0 0 1-.84-.61l1.285-5.386a.562.562 0 0 0-.182-.557l-4.204-3.602a.562.562 0 0 1 .321-.988l5.518-.442a.563.563 0 0 0 .475-.345L11.48 3.5Z" /></svg>
+                  <svg class="w-5 h-5 text-accent" fill="currentColor" viewBox="0 0 24 24"><path d="M11.48 3.499a.562.562 0 0 1 1.04 0l2.125 5.111a.563.563 0 0 0 .475.345l5.518.442c.499.04.701.663.321.988l-4.204 3.602a.563.563 0 0 0-.182.557l1.285 5.385a.562.562 0 0 1-.84.61l-4.725-2.885a.562.562 0 0 0-.586 0L6.982 20.54a.562.562 0 0 1-.84-.61l1.285-5.386a.562.562 0 0 0-.182-.557l-4.204-3.602a.562.562 0 0 1 .321-.988l5.518-.442a.563.563 0 0 0 .475-.345L11.48 3.5Z" /></svg>
+                  <svg class="w-5 h-5 text-accent" fill="currentColor" viewBox="0 0 24 24"><path d="M11.48 3.499a.562.562 0 0 1 1.04 0l2.125 5.111a.563.563 0 0 0 .475.345l5.518.442c.499.04.701.663.321.988l-4.204 3.602a.563.563 0 0 0-.182.557l1.285 5.385a.562.562 0 0 1-.84.61l-4.725-2.885a.562.562 0 0 0-.586 0L6.982 20.54a.562.562 0 0 1-.84-.61l1.285-5.386a.562.562 0 0 0-.182-.557l-4.204-3.602a.562.562 0 0 1 .321-.988l5.518-.442a.563.563 0 0 0 .475-.345L11.48 3.5Z" /></svg>
+                  <svg class="w-5 h-5 text-accent" fill="currentColor" viewBox="0 0 24 24"><path d="M11.48 3.499a.562.562 0 0 1 1.04 0l2.125 5.111a.563.563 0 0 0 .475.345l5.518.442c.499.04.701.663.321.988l-4.204 3.602a.563.563 0 0 0-.182.557l1.285 5.385a.562.562 0 0 1-.84.61l-4.725-2.885a.562.562 0 0 0-.586 0L6.982 20.54a.562.562 0 0 1-.84-.61l1.285-5.386a.562.562 0 0 0-.182-.557l-4.204-3.602a.562.562 0 0 1 .321-.988l5.518-.442a.563.563 0 0 0 .475-.345L11.48 3.5Z" /></svg>
+                </div>
+                <blockquote class="text-lg md:text-xl text-foreground font-inter leading-relaxed italic">
+                  "The Lake Villa exceeded all expectations. Private pool overlooking the caldera, personalized butler service, and the most authentic Batak cuisine we've ever tasted. Will definitely return!"
+                </blockquote>
+                <div class="mt-8">
+                  <div class="w-14 h-14 bg-accent/10 rounded-full flex items-center justify-center mx-auto mb-3">
+                    <span class="text-xl font-poppins font-bold text-accent-700">MK</span>
+                  </div>
+                  <p class="font-poppins font-semibold text-foreground">Michael & Karen</p>
+                  <p class="text-sm text-gray-500">Singapore</p>
+                </div>
+              </div>
+            </div>
+
+            <!-- Testimonial 3 -->
+            <div class="min-w-full px-4">
+              <div class="max-w-3xl mx-auto glass rounded-3xl p-8 md:p-12 text-center">
+                <div class="flex justify-center gap-1 mb-6">
+                  <svg class="w-5 h-5 text-accent" fill="currentColor" viewBox="0 0 24 24"><path d="M11.48 3.499a.562.562 0 0 1 1.04 0l2.125 5.111a.563.563 0 0 0 .475.345l5.518.442c.499.04.701.663.321.988l-4.204 3.602a.563.563 0 0 0-.182.557l1.285 5.385a.562.562 0 0 1-.84.61l-4.725-2.885a.562.562 0 0 0-.586 0L6.982 20.54a.562.562 0 0 1-.84-.61l1.285-5.386a.562.562 0 0 0-.182-.557l-4.204-3.602a.562.562 0 0 1 .321-.988l5.518-.442a.563.563 0 0 0 .475-.345L11.48 3.5Z" /></svg>
+                  <svg class="w-5 h-5 text-accent" fill="currentColor" viewBox="0 0 24 24"><path d="M11.48 3.499a.562.562 0 0 1 1.04 0l2.125 5.111a.563.563 0 0 0 .475.345l5.518.442c.499.04.701.663.321.988l-4.204 3.602a.563.563 0 0 0-.182.557l1.285 5.385a.562.562 0 0 1-.84.61l-4.725-2.885a.562.562 0 0 0-.586 0L6.982 20.54a.562.562 0 0 1-.84-.61l1.285-5.386a.562.562 0 0 0-.182-.557l-4.204-3.602a.562.562 0 0 1 .321-.988l5.518-.442a.563.563 0 0 0 .475-.345L11.48 3.5Z" /></svg>
+                  <svg class="w-5 h-5 text-accent" fill="currentColor" viewBox="0 0 24 24"><path d="M11.48 3.499a.562.562 0 0 1 1.04 0l2.125 5.111a.563.563 0 0 0 .475.345l5.518.442c.499.04.701.663.321.988l-4.204 3.602a.563.563 0 0 0-.182.557l1.285 5.385a.562.562 0 0 1-.84.61l-4.725-2.885a.562.562 0 0 0-.586 0L6.982 20.54a.562.562 0 0 1-.84-.61l1.285-5.386a.562.562 0 0 0-.182-.557l-4.204-3.602a.562.562 0 0 1 .321-.988l5.518-.442a.563.563 0 0 0 .475-.345L11.48 3.5Z" /></svg>
+                  <svg class="w-5 h-5 text-accent" fill="currentColor" viewBox="0 0 24 24"><path d="M11.48 3.499a.562.562 0 0 1 1.04 0l2.125 5.111a.563.563 0 0 0 .475.345l5.518.442c.499.04.701.663.321.988l-4.204 3.602a.563.563 0 0 0-.182.557l1.285 5.385a.562.562 0 0 1-.84.61l-4.725-2.885a.562.562 0 0 0-.586 0L6.982 20.54a.562.562 0 0 1-.84-.61l1.285-5.386a.562.562 0 0 0-.182-.557l-4.204-3.602a.562.562 0 0 1 .321-.988l5.518-.442a.563.563 0 0 0 .475-.345L11.48 3.5Z" /></svg>
+                  <svg class="w-5 h-5 text-accent" fill="currentColor" viewBox="0 0 24 24"><path d="M11.48 3.499a.562.562 0 0 1 1.04 0l2.125 5.111a.563.563 0 0 0 .475.345l5.518.442c.499.04.701.663.321.988l-4.204 3.602a.563.563 0 0 0-.182.557l1.285 5.385a.562.562 0 0 1-.84.61l-4.725-2.885a.562.562 0 0 0-.586 0L6.982 20.54a.562.562 0 0 1-.84-.61l1.285-5.386a.562.562 0 0 0-.182-.557l-4.204-3.602a.562.562 0 0 1 .321-.988l5.518-.442a.563.563 0 0 0 .475-.345L11.48 3.5Z" /></svg>
+                </div>
+                <blockquote class="text-lg md:text-xl text-foreground font-inter leading-relaxed italic">
+                  "We celebrated our anniversary here and it was unforgettable. The staff prepared a special Batak ceremony for us by the lake. The attention to detail and cultural immersion is truly world-class."
+                </blockquote>
+                <div class="mt-8">
+                  <div class="w-14 h-14 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-3">
+                    <span class="text-xl font-poppins font-bold text-primary">RN</span>
+                  </div>
+                  <p class="font-poppins font-semibold text-foreground">Rizal & Nadia</p>
+                  <p class="text-sm text-gray-500">Medan, Indonesia</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Navigation -->
+        <div class="flex items-center justify-center gap-4 mt-8">
+          <button id="testimonial-prev" class="w-10 h-10 rounded-full border border-gray-200 flex items-center justify-center hover:bg-primary hover:border-primary hover:text-white transition-all duration-300 text-gray-500" aria-label="Previous testimonial">
+            <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5 8.25 12l7.5-7.5" /></svg>
+          </button>
+          <div class="flex gap-2">
+            <button data-testimonial-dot class="w-8 h-3 bg-primary rounded-full transition-all duration-300" aria-label="Go to testimonial 1"></button>
+            <button data-testimonial-dot class="w-3 h-3 bg-gray-300 rounded-full transition-all duration-300" aria-label="Go to testimonial 2"></button>
+            <button data-testimonial-dot class="w-3 h-3 bg-gray-300 rounded-full transition-all duration-300" aria-label="Go to testimonial 3"></button>
+          </div>
+          <button id="testimonial-next" class="w-10 h-10 rounded-full border border-gray-200 flex items-center justify-center hover:bg-primary hover:border-primary hover:text-white transition-all duration-300 text-gray-500" aria-label="Next testimonial">
+            <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" /></svg>
+          </button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ===================================
+       CTA SECTION
+       =================================== -->
+  <section class="relative py-24 md:py-32 overflow-hidden">
+    <div class="absolute inset-0">
+      <img src="/resources/assets/images/pool.png" alt="" class="w-full h-full object-cover" loading="lazy" aria-hidden="true" />
+      <div class="absolute inset-0 bg-gradient-hero"></div>
+    </div>
+    <div class="absolute inset-0 batak-pattern opacity-10"></div>
+
+    <div class="relative z-10 max-w-4xl mx-auto px-4 text-center animate-on-scroll">
+      <div class="inline-flex items-center gap-2 px-4 py-2 bg-white/10 backdrop-blur-sm rounded-full border border-white/20 mb-6">
+        <svg class="w-4 h-4 text-accent" fill="currentColor" viewBox="0 0 24 24"><path d="M11.48 3.499a.562.562 0 0 1 1.04 0l2.125 5.111a.563.563 0 0 0 .475.345l5.518.442c.499.04.701.663.321.988l-4.204 3.602a.563.563 0 0 0-.182.557l1.285 5.385a.562.562 0 0 1-.84.61l-4.725-2.885a.562.562 0 0 0-.586 0L6.982 20.54a.562.562 0 0 1-.84-.61l1.285-5.386a.562.562 0 0 0-.182-.557l-4.204-3.602a.562.562 0 0 1 .321-.988l5.518-.442a.563.563 0 0 0 .475-.345L11.48 3.5Z" /></svg>
+        <span class="text-sm text-white/90">Limited Time Offer</span>
+      </div>
+      <h2 class="text-3xl md:text-5xl lg:text-6xl font-poppins font-bold text-white leading-tight">
+        Your Dream Lakeside <br class="hidden sm:block" />
+        <span class="text-gradient-accent">Escape Awaits</span>
+      </h2>
+      <p class="text-lg text-white/80 mt-6 max-w-2xl mx-auto">
+        Book your stay today and enjoy 20% off for early reservations. Experience the magic of Samosir Island with world-class luxury.
+      </p>
+      <div class="flex flex-col sm:flex-row justify-center gap-4 mt-10">
+        <a href="/pages/booking.html" class="btn-accent text-base !px-10 !py-4">
+          Book Now — Save 20%
+          <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3" /></svg>
+        </a>
+        <a href="/pages/rooms.html" class="inline-flex items-center justify-center gap-2 px-10 py-4 border-2 border-white/30 text-white font-poppins font-semibold rounded-2xl transition-all duration-300 hover:bg-white/10 backdrop-blur-sm">
+          View Rooms
+        </a>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ===================================
+       FOOTER
+       =================================== -->
+  <footer class="bg-gradient-dark text-white">
+    <!-- Batak Ornament Border -->
+    <div class="batak-ornament w-full"></div>
+
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12">
+        <!-- About -->
+        <div>
+          <div class="flex items-center gap-3 mb-6">
+            <div class="w-10 h-10 bg-gradient-primary rounded-2xl flex items-center justify-center">
+              <svg class="w-6 h-6 text-white" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 21v-4.875c0-.621.504-1.125 1.125-1.125h5.25c.621 0 1.125.504 1.125 1.125V21m0 0h4.5V3.545M12.75 21h7.5M10.5 21V8.121c0-.312.11-.611.308-.848l4.692-5.58a.75.75 0 0 1 1.149.024l4.469 5.404c.18.217.282.5.282.79V21m-14.4 0H3.75c-.621 0-1.125-.504-1.125-1.125v-6.75c0-.621.504-1.125 1.125-1.125h3.375" />
+              </svg>
+            </div>
+            <div>
+              <span class="text-xl font-poppins font-bold">Sitio Tio</span>
+              <span class="block text-[10px] uppercase tracking-[3px] text-white/50">Resort & Spa</span>
+            </div>
+          </div>
+          <p class="text-white/60 text-sm leading-relaxed">
+            A luxury lakeside resort on Samosir Island, blending Batak cultural heritage with modern comfort and world-class hospitality.
+          </p>
+          <div class="flex gap-3 mt-6">
+            <a href="#" class="w-9 h-9 bg-white/10 rounded-xl flex items-center justify-center hover:bg-accent transition-colors" aria-label="Facebook">
+              <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z" /></svg>
+            </a>
+            <a href="#" class="w-9 h-9 bg-white/10 rounded-xl flex items-center justify-center hover:bg-accent transition-colors" aria-label="Instagram">
+              <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z" /></svg>
+            </a>
+            <a href="#" class="w-9 h-9 bg-white/10 rounded-xl flex items-center justify-center hover:bg-accent transition-colors" aria-label="Twitter">
+              <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" /></svg>
+            </a>
+          </div>
+        </div>
+
+        <!-- Quick Links -->
+        <div>
+          <h3 class="font-poppins font-semibold text-lg mb-6">Quick Links</h3>
+          <ul class="space-y-3">
+            <li><a href="/" class="text-white/60 hover:text-accent transition-colors text-sm">Home</a></li>
+            <li><a href="/pages/rooms.html" class="text-white/60 hover:text-accent transition-colors text-sm">Our Rooms</a></li>
+            <li><a href="/pages/booking.html" class="text-white/60 hover:text-accent transition-colors text-sm">Book a Stay</a></li>
+            <li><a href="#facilities" class="text-white/60 hover:text-accent transition-colors text-sm">Facilities</a></li>
+            <li><a href="#gallery" class="text-white/60 hover:text-accent transition-colors text-sm">Gallery</a></li>
+            <li><a href="#testimonials" class="text-white/60 hover:text-accent transition-colors text-sm">Reviews</a></li>
+          </ul>
+        </div>
+
+        <!-- Contact -->
+        <div>
+          <h3 class="font-poppins font-semibold text-lg mb-6">Contact Us</h3>
+          <ul class="space-y-4">
+            <li class="flex items-start gap-3 text-sm text-white/60">
+              <svg class="w-5 h-5 text-accent flex-shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M15 10.5a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" /><path stroke-linecap="round" stroke-linejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1 1 15 0Z" /></svg>
+              Jl. Samosir No. 88, Tuktuk Siadong, Samosir, Sumatera Utara 22395
+            </li>
+            <li class="flex items-center gap-3 text-sm text-white/60">
+              <svg class="w-5 h-5 text-accent flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 6.75c0 8.284 6.716 15 15 15h2.25a2.25 2.25 0 0 0 2.25-2.25v-1.372c0-.516-.351-.966-.852-1.091l-4.423-1.106c-.44-.11-.902.055-1.173.417l-.97 1.293c-.282.376-.769.542-1.21.38a12.035 12.035 0 0 1-7.143-7.143c-.162-.441.004-.928.38-1.21l1.293-.97c.363-.271.527-.734.417-1.173L6.963 3.102a1.125 1.125 0 0 0-1.091-.852H4.5A2.25 2.25 0 0 0 2.25 4.5v2.25Z" /></svg>
+              +62 632 123 4567
+            </li>
+            <li class="flex items-center gap-3 text-sm text-white/60">
+              <svg class="w-5 h-5 text-accent flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 0 1-2.25 2.25h-15a2.25 2.25 0 0 1-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0 0 19.5 4.5h-15a2.25 2.25 0 0 0-2.25 2.25m19.5 0v.243a2.25 2.25 0 0 1-1.07 1.916l-7.5 4.615a2.25 2.25 0 0 1-2.36 0L3.32 8.91a2.25 2.25 0 0 1-1.07-1.916V6.75" /></svg>
+              hello@sitiotio.com
+            </li>
+          </ul>
+        </div>
+
+        <!-- Newsletter -->
+        <div>
+          <h3 class="font-poppins font-semibold text-lg mb-6">Stay Updated</h3>
+          <p class="text-white/60 text-sm mb-4">Subscribe for exclusive offers and Samosir travel tips.</p>
+          <form class="space-y-3" aria-label="Newsletter subscription">
+            <input type="email" placeholder="Your email address" class="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-2xl text-white placeholder:text-white/40 focus:outline-none focus:ring-2 focus:ring-accent/50 focus:border-accent transition-all text-sm" />
+            <button type="submit" class="btn-accent w-full text-sm !py-2.5">
+              Subscribe
+              <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M6 12 3.269 3.125A59.769 59.769 0 0 1 21.485 12 59.768 59.768 0 0 1 3.27 20.875L5.999 12Zm0 0h7.5" /></svg>
+            </button>
+          </form>
+        </div>
+      </div>
+
+      <!-- Bottom bar -->
+      <div class="border-t border-white/10 mt-12 pt-8 flex flex-col md:flex-row items-center justify-between gap-4">
+        <p class="text-white/40 text-sm">© 2026 Sitio Tio Resort. All rights reserved.</p>
+        <div class="flex gap-6 text-sm text-white/40">
+          <a href="#" class="hover:text-accent transition-colors">Privacy Policy</a>
+          <a href="#" class="hover:text-accent transition-colors">Terms of Service</a>
+          <a href="#" class="hover:text-accent transition-colors">Sitemap</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+
+  <!-- ===================================
+       BACK TO TOP
+       =================================== -->
+  <button id="back-to-top" class="fixed bottom-6 right-6 z-40 w-12 h-12 bg-primary text-white rounded-2xl shadow-red flex items-center justify-center opacity-0 pointer-events-none translate-y-4 transition-all duration-300 hover:bg-secondary hover:-translate-y-1" aria-label="Back to top">
+    <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+      <path stroke-linecap="round" stroke-linejoin="round" d="m4.5 15.75 7.5-7.5 7.5 7.5" />
+    </svg>
+  </button>
+
+</body>
+</html>
