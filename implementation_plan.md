@@ -64,7 +64,7 @@ Pindahkan aset HTML murni Anda agar bisa dipakai oleh Livewire.
   - Buat komponen layout tambahan: `resources/views/livewire/layout/navigation.blade.php` (header) dan `footer.blade.php`.
 - [+] **Penyusunan Asset Publik**: 
   - Pindahkan semua CSS, JS pendukung, dan gambar statis ke direktori `public/assets/`.
-- [ ] **Ubah Elemen UI ke Blade Component/Livewire**: 
+- [+] **Ubah Elemen UI ke Blade Component/Livewire**: 
   - Jadikan *Card Kamar* sebagai komponen Livewire terpisah agar interaktif saat ditambah ke keranjang.
 
 ## 5. Pembuatan Fitur Inti dengan Livewire (CRUD & Bisnis Logik)

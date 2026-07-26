@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\FacilityController;
 use App\Http\Controllers\RoomController;
 use Illuminate\Support\Facades\Route;
 
@@ -15,8 +16,9 @@ Route::view('profile', 'profile')
 
 // ROLE ADMIN
 Route::middleware(['auth', 'isAdmin'])->group(function () {
-    Route::view('dashboard', 'dashboard')->name('dashboard');
-    Route::get('/rooms-admin', [RoomController::class, 'index'])->name('rooms-admin');
+    Route::view('admin/dashboard', 'admin.dashboard')->name('dashboard');
+    Route::get('/admin/rooms-manager', [RoomController::class, 'index'])->name('rooms.manager');
+    Route::get('/admin/facilities-manager', [FacilityController::class, 'index'])->name('facilities.manager');
 });
 
 require __DIR__.'/auth.php';

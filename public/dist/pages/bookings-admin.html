@@ -1,0 +1,762 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Kelola Bookings — Sitio Tio Resort Admin</title>
+  <script type="module" src="/resources/js/main.js"></script>
+</head>
+<body class="bg-gray-100 text-foreground font-inter h-screen overflow-hidden flex">
+
+  <!-- Sidebar -->
+  <aside class="w-64 bg-gradient-dark text-white flex-shrink-0 hidden md:flex flex-col">
+    <div class="h-20 flex items-center gap-3 px-6 border-b border-white/10">
+      <div class="w-8 h-8 bg-gradient-primary rounded-lg flex items-center justify-center">
+        <svg class="w-5 h-5 text-white" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M8.25 21v-4.875c0-.621.504-1.125 1.125-1.125h5.25c.621 0 1.125.504 1.125 1.125V21m0 0h4.5V3.545M12.75 21h7.5M10.5 21V8.121c0-.312.11-.611.308-.848l4.692-5.58a.75.75 0 0 1 1.149.024l4.469 5.404c.18.217.282.5.282.79V21m-14.4 0H3.75c-.621 0-1.125-.504-1.125-1.125v-6.75c0-.621.504-1.125 1.125-1.125h3.375" /></svg>
+      </div>
+      <span class="font-poppins font-bold tracking-wide">Sitio Tio Admin</span>
+    </div>
+    
+    <nav class="flex-1 py-6 px-4 space-y-2 overflow-y-auto">
+      <a href="admin.html" class="flex items-center gap-3 px-4 py-3 text-white/60 hover:text-white hover:bg-white/5 rounded-xl transition-colors">
+        <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6A2.25 2.25 0 0 1 6 3.75h2.25A2.25 2.25 0 0 1 10.5 6v2.25a2.25 2.25 0 0 1-2.25 2.25H6a2.25 2.25 0 0 1-2.25-2.25V6ZM3.75 15.75A2.25 2.25 0 0 1 6 13.5h2.25a2.25 2.25 0 0 1 2.25 2.25V18a2.25 2.25 0 0 1-2.25 2.25H6A2.25 2.25 0 0 1 3.75 18v-2.25ZM13.5 6a2.25 2.25 0 0 1 2.25-2.25H18A2.25 2.25 0 0 1 20.25 6v2.25A2.25 2.25 0 0 1 18 10.5h-2.25a2.25 2.25 0 0 1-2.25-2.25V6ZM13.5 15.75a2.25 2.25 0 0 1 2.25-2.25H18a2.25 2.25 0 0 1 2.25 2.25V18A2.25 2.25 0 0 1 18 20.25h-2.25a2.25 2.25 0 0 1-2.25-2.25v-2.25Z" /></svg>
+        Dashboard
+      </a>
+      <a href="bookings-admin.html" class="flex items-center gap-3 px-4 py-3 bg-white/10 text-white rounded-xl font-medium">
+        <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 0 1 2.25-2.25h13.5A2.25 2.25 0 0 1 21 7.5v11.25m-18 0A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75m-18 0v-7.5A2.25 2.25 0 0 1 5.25 9h13.5A2.25 2.25 0 0 1 21 11.25v7.5" /></svg>
+        Bookings
+      </a>
+      <a href="#" class="flex items-center gap-3 px-4 py-3 text-white/60 hover:text-white hover:bg-white/5 rounded-xl transition-colors">
+        <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z" /></svg>
+        Guests
+      </a>
+      <a href="rooms-admin.html" class="flex items-center gap-3 px-4 py-3 text-white/60 hover:text-white hover:bg-white/5 rounded-xl transition-colors">
+        <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M8.25 21v-4.875c0-.621.504-1.125 1.125-1.125h5.25c.621 0 1.125.504 1.125 1.125V21m0 0h4.5V3.545M12.75 21h7.5M10.5 21V8.121c0-.312.11-.611.308-.848l4.692-5.58a.75.75 0 0 1 1.149.024l4.469 5.404c.18.217.282.5.282.79V21m-14.4 0H3.75c-.621 0-1.125-.504-1.125-1.125v-6.75c0-.621.504-1.125 1.125-1.125h3.375" /></svg>
+        Rooms
+      </a>
+      <a href="galleries-admin.html" class="flex items-center gap-3 px-4 py-3 text-white/60 hover:text-white hover:bg-white/5 rounded-xl transition-colors">
+        <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="m2.25 15.75 5.159-5.159a2.25 2.25 0 0 1 3.182 0l5.159 5.159m-1.5-1.5 1.409-1.409a2.25 2.25 0 0 1 3.182 0l2.909 2.909m-18 3.75h16.5a1.5 1.5 0 0 0 1.5-1.5V6a1.5 1.5 0 0 0-1.5-1.5H3.75A1.5 1.5 0 0 0 2.25 6v12a1.5 1.5 0 0 0 1.5 1.5Zm10.5-11.25h.008v.008h-.008V8.25Zm.375 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Z" /></svg>
+        Galleries
+      </a>
+      <a href="#" class="flex items-center gap-3 px-4 py-3 text-white/60 hover:text-white hover:bg-white/5 rounded-xl transition-colors">
+        <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6v12m-3-2.818.879.659c1.171.879 3.07.879 4.242 0 1.172-.879 1.172-2.303 0-3.182C13.536 12.219 12.768 12 12 12c-.725 0-1.45-.22-2.003-.659-1.106-.879-1.106-2.303 0-3.182s2.9-.879 4.006 0l.415.33M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" /></svg>
+        Finance
+      </a>
+    </nav>
+    <div class="p-4 border-t border-white/10">
+      <a href="/" class="flex items-center gap-3 px-4 py-3 text-white/60 hover:text-white rounded-xl transition-colors text-sm">
+        <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0 0 13.5 3h-6a2.25 2.25 0 0 0-2.25 2.25v13.5A2.25 2.25 0 0 0 7.5 21h6a2.25 2.25 0 0 0 2.25-2.25V15M12 9l-3 3m0 0 3 3m-3-3h12.75" /></svg>
+        Sign Out
+      </a>
+    </div>
+  </aside>
+
+  <!-- Main Content Area -->
+  <div class="flex-1 flex flex-col h-screen overflow-hidden">
+    
+    <!-- Topbar -->
+    <header class="h-20 bg-white border-b border-gray-200 flex items-center justify-between px-8 flex-shrink-0">
+      <h1 class="text-xl font-poppins font-bold text-foreground">Kelola Bookings</h1>
+      <div class="flex items-center gap-4">
+        <button class="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center text-gray-600 hover:bg-gray-200 relative">
+          <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M14.857 17.082a23.848 23.848 0 0 0 5.454-1.31A8.967 8.967 0 0 1 18 9.75V9A6 6 0 0 0 6 9v.75a8.967 8.967 0 0 1-2.312 6.022c1.733.64 3.56 1.085 5.455 1.31m5.714 0a24.255 24.255 0 0 1-5.714 0m5.714 0a3 3 0 1 1-5.714 0" /></svg>
+          <span class="absolute top-2 right-2 w-2 h-2 bg-primary rounded-full"></span>
+        </button>
+        <div class="flex items-center gap-2">
+          <div class="w-10 h-10 rounded-full bg-primary text-white flex items-center justify-center font-bold">A</div>
+        </div>
+      </div>
+    </header>
+
+    <!-- Content -->
+    <main class="flex-1 overflow-y-auto p-8">
+      
+      <!-- KPI Cards -->
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+        <div class="bg-white border border-gray-100 shadow-sm rounded-2xl p-6">
+          <div class="flex justify-between items-start mb-4">
+            <div>
+              <p class="text-sm text-gray-500 mb-1">Total Bookings</p>
+              <h3 class="text-2xl font-poppins font-bold text-foreground" id="kpiTotal">0</h3>
+            </div>
+            <div class="w-10 h-10 bg-primary/10 text-primary rounded-xl flex items-center justify-center">
+              <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M16.5 6v.75m0 3v.75m0 3v.75m0 3V18m-9-5.25h5.25M7.5 15h3M3.375 5.25c-.621 0-1.125.504-1.125 1.125v3.026a2.999 2.999 0 0 1 0 5.198v3.026c0 .621.504 1.125 1.125 1.125h17.25c.621 0 1.125-.504 1.125-1.125v-3.026a2.999 2.999 0 0 1 0-5.198V6.375c0-.621-.504-1.125-1.125-1.125H3.375Z" /></svg>
+            </div>
+          </div>
+          <p class="text-xs text-gray-500 font-medium" id="kpiTotalSub">Semua booking</p>
+        </div>
+
+        <div class="bg-white border border-gray-100 shadow-sm rounded-2xl p-6">
+          <div class="flex justify-between items-start mb-4">
+            <div>
+              <p class="text-sm text-gray-500 mb-1">Confirmed</p>
+              <h3 class="text-2xl font-poppins font-bold text-emerald-600" id="kpiConfirmed">0</h3>
+            </div>
+            <div class="w-10 h-10 bg-emerald-50 text-emerald-600 rounded-xl flex items-center justify-center">
+              <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" /></svg>
+            </div>
+          </div>
+          <p class="text-xs text-emerald-600 font-medium" id="kpiConfirmedSub">Booking aktif</p>
+        </div>
+
+        <div class="bg-white border border-gray-100 shadow-sm rounded-2xl p-6">
+          <div class="flex justify-between items-start mb-4">
+            <div>
+              <p class="text-sm text-gray-500 mb-1">Pending</p>
+              <h3 class="text-2xl font-poppins font-bold text-amber-600" id="kpiPending">0</h3>
+            </div>
+            <div class="w-10 h-10 bg-amber-50 text-amber-600 rounded-xl flex items-center justify-center">
+              <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" /></svg>
+            </div>
+          </div>
+          <p class="text-xs text-amber-600 font-medium" id="kpiPendingSub">Menunggu konfirmasi</p>
+        </div>
+
+        <div class="bg-white border border-gray-100 shadow-sm rounded-2xl p-6">
+          <div class="flex justify-between items-start mb-4">
+            <div>
+              <p class="text-sm text-gray-500 mb-1">Total Revenue</p>
+              <h3 class="text-2xl font-poppins font-bold text-accent-700" id="kpiRevenue">Rp 0</h3>
+            </div>
+            <div class="w-10 h-10 bg-accent/10 text-accent-700 rounded-xl flex items-center justify-center">
+              <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 18 9 11.25l4.306 4.306a11.95 11.95 0 0 1 5.814-5.518l2.74-1.22m0 0-5.94-2.281m5.94 2.28-2.28 5.941" /></svg>
+            </div>
+          </div>
+          <p class="text-xs text-accent-600 font-medium" id="kpiRevenueSub">Dari confirmed booking</p>
+        </div>
+      </div>
+
+      <!-- Action Bar & Table -->
+      <div class="bg-white border border-gray-100 shadow-sm rounded-2xl overflow-hidden mb-8">
+        <div class="p-6 border-b border-gray-100 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+          <h2 class="font-poppins font-bold text-lg">Daftar Booking</h2>
+          <div class="flex items-center gap-3 flex-wrap">
+            <div class="relative">
+              <svg class="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" /></svg>
+              <input type="text" id="searchInput" placeholder="Cari booking code, user..." class="input pl-10 pr-4 py-2 text-sm w-64" oninput="filterBookings()" />
+            </div>
+            <select id="filterStatus" class="input py-2 text-sm w-40" onchange="filterBookings()">
+              <option value="">Semua Status</option>
+              <option value="confirmed">Confirmed</option>
+              <option value="pending">Pending</option>
+              <option value="checked_in">Checked In</option>
+              <option value="checked_out">Checked Out</option>
+              <option value="cancelled">Cancelled</option>
+            </select>
+            <select id="filterRoom" class="input py-2 text-sm w-44" onchange="filterBookings()">
+              <option value="">Semua Room</option>
+            </select>
+            <button onclick="openModal()" class="btn-primary text-sm px-4 py-2">
+              <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" /></svg>
+              Tambah Booking
+            </button>
+          </div>
+        </div>
+        <div class="overflow-x-auto">
+          <table class="w-full text-left text-sm whitespace-nowrap" id="bookingsTable">
+            <thead class="bg-gray-50 text-gray-500">
+              <tr>
+                <th class="py-3 px-6 font-medium">No</th>
+                <th class="py-3 px-6 font-medium">Booking Code</th>
+                <th class="py-3 px-6 font-medium">Room</th>
+                <th class="py-3 px-6 font-medium">User ID</th>
+                <th class="py-3 px-6 font-medium">Check In</th>
+                <th class="py-3 px-6 font-medium">Check Out</th>
+                <th class="py-3 px-6 font-medium">Guests</th>
+                <th class="py-3 px-6 font-medium">Total Price</th>
+                <th class="py-3 px-6 font-medium">Status</th>
+                <th class="py-3 px-6 font-medium text-center">Actions</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-gray-100" id="bookingsBody">
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Reports Section -->
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <!-- Booking per Room -->
+        <div class="bg-white border border-gray-100 shadow-sm rounded-2xl p-6">
+          <h2 class="font-poppins font-bold text-lg mb-6">Booking per Room</h2>
+          <div class="space-y-4" id="reportByRoom">
+          </div>
+        </div>
+
+        <!-- Revenue Statistics -->
+        <div class="bg-white border border-gray-100 shadow-sm rounded-2xl p-6">
+          <h2 class="font-poppins font-bold text-lg mb-6">Statistik Revenue</h2>
+          <div class="space-y-4">
+            <div class="p-4 bg-gray-50 rounded-xl">
+              <p class="text-sm text-gray-500 mb-1">Total Revenue (Confirmed)</p>
+              <p class="text-xl font-poppins font-bold text-accent-700" id="statRevenue">Rp 0</p>
+            </div>
+            <div class="p-4 bg-gray-50 rounded-xl">
+              <p class="text-sm text-gray-500 mb-1">Rata-rata per Booking</p>
+              <p class="text-xl font-poppins font-bold text-foreground" id="statAvgPrice">Rp 0</p>
+            </div>
+            <div class="p-4 bg-gray-50 rounded-xl">
+              <p class="text-sm text-gray-500 mb-1">Booking Tertinggi</p>
+              <p class="text-xl font-poppins font-bold text-primary" id="statHighest">Rp 0</p>
+            </div>
+            <div class="p-4 bg-gray-50 rounded-xl">
+              <p class="text-sm text-gray-500 mb-1">Total Tamu</p>
+              <p class="text-xl font-poppins font-bold text-blue-600" id="statTotalGuests">0</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Status Summary & Quick Actions -->
+        <div class="bg-white border border-gray-100 shadow-sm rounded-2xl p-6">
+          <h2 class="font-poppins font-bold text-lg mb-6">Status Booking</h2>
+          <div class="space-y-4" id="statusReport">
+          </div>
+          <div class="mt-6 pt-6 border-t border-gray-100">
+            <h3 class="text-sm font-medium text-gray-600 mb-3">Aksi Cepat</h3>
+            <div class="grid grid-cols-2 gap-3">
+              <button onclick="openModal()" class="p-3 border border-gray-200 rounded-xl text-sm font-medium hover:bg-gray-50 transition-colors flex flex-col items-center gap-2">
+                <svg class="w-5 h-5 text-gray-500" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" /></svg>
+                Tambah Booking
+              </button>
+              <button onclick="exportReport()" class="p-3 border border-gray-200 rounded-xl text-sm font-medium hover:bg-gray-50 transition-colors flex flex-col items-center gap-2">
+                <svg class="w-5 h-5 text-gray-500" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75V16.5M16.5 12 12 16.5m0 0L7.5 12m4.5 4.5V3" /></svg>
+                Export Laporan
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <!-- Modal Tambah/Edit Booking -->
+  <div id="bookingModal" class="fixed inset-0 z-50 hidden">
+    <div class="absolute inset-0 bg-black/50 backdrop-blur-sm" onclick="closeModal()"></div>
+    <div class="absolute inset-4 md:inset-auto md:top-1/2 md:left-1/2 md:-translate-x-1/2 md:-translate-y-1/2 md:w-[700px] md:max-h-[90vh] bg-white rounded-2xl shadow-2xl flex flex-col">
+      <!-- Modal Header -->
+      <div class="flex items-center justify-between px-6 py-4 border-b border-gray-100 flex-shrink-0">
+        <h3 class="font-poppins font-bold text-lg" id="modalTitle">Tambah Booking Baru</h3>
+        <button onclick="closeModal()" class="w-8 h-8 rounded-lg bg-gray-100 flex items-center justify-center text-gray-500 hover:bg-gray-200 hover:text-gray-700 transition-colors">
+          <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" /></svg>
+        </button>
+      </div>
+      <!-- Modal Body -->
+      <div class="flex-1 overflow-y-auto p-6">
+        <form id="bookingForm" onsubmit="saveBooking(event)">
+          <input type="hidden" id="bookingId" />
+          
+          <!-- Row: Booking Code & User ID -->
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+            <div>
+              <label class="input-label">Booking Code <span class="text-red-500">*</span></label>
+              <input type="text" id="bookingCode" class="input" placeholder="e.g. STR-847291" required />
+              <p class="text-xs text-gray-400 mt-1">Otomatis di-generate jika dikosongkan</p>
+            </div>
+            <div>
+              <label class="input-label">User ID <span class="text-red-500">*</span></label>
+              <input type="number" id="bookingUserId" class="input" placeholder="e.g. 1" min="1" required />
+            </div>
+          </div>
+
+          <!-- Room -->
+          <div class="mb-4">
+            <label class="input-label">Room <span class="text-red-500">*</span></label>
+            <select id="bookingRoomId" class="input" required>
+              <option value="">Pilih Room</option>
+            </select>
+          </div>
+
+          <!-- Row: Check In & Check Out -->
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+            <div>
+              <label class="input-label">Check In <span class="text-red-500">*</span></label>
+              <input type="date" id="bookingCheckIn" class="input" required />
+            </div>
+            <div>
+              <label class="input-label">Check Out <span class="text-red-500">*</span></label>
+              <input type="date" id="bookingCheckOut" class="input" required />
+            </div>
+          </div>
+
+          <!-- Row: Total Guest & Total Price -->
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+            <div>
+              <label class="input-label">Total Guest <span class="text-red-500">*</span></label>
+              <input type="number" id="bookingTotalGuest" class="input" placeholder="e.g. 2" min="1" required />
+            </div>
+            <div>
+              <label class="input-label">Total Price (Rp) <span class="text-red-500">*</span></label>
+              <input type="number" id="bookingTotalPrice" class="input" placeholder="e.g. 2660000" min="0" required />
+            </div>
+          </div>
+
+          <!-- Status -->
+          <div class="mb-4">
+            <label class="input-label">Status <span class="text-red-500">*</span></label>
+            <select id="bookingStatus" class="input" required>
+              <option value="pending">Pending</option>
+              <option value="confirmed">Confirmed</option>
+              <option value="checked_in">Checked In</option>
+              <option value="checked_out">Checked Out</option>
+              <option value="cancelled">Cancelled</option>
+            </select>
+          </div>
+
+          <!-- Duration Info -->
+          <div id="durationInfo" class="mb-4 hidden">
+            <div class="p-4 bg-blue-50 rounded-xl border border-blue-100">
+              <div class="flex items-center gap-2 text-blue-700 text-sm font-medium">
+                <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="m11.25 11.25.041-.02a.75.75 0 0 1 1.063.852l-.708 2.836a.75.75 0 0 0 1.063.853l.041-.021M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9-3.75h.008v.008H12V8.25Z" /></svg>
+                <span id="durationText">-</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Modal Footer -->
+          <div class="flex justify-end gap-3 mt-6 pt-4 border-t border-gray-100">
+            <button type="button" onclick="closeModal()" class="px-5 py-2.5 text-sm font-medium text-gray-700 bg-gray-100 rounded-xl hover:bg-gray-200 transition-colors">Batal</button>
+            <button type="submit" class="btn-primary text-sm px-5 py-2.5" id="submitBtn">Simpan Booking</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- Delete Confirmation Modal -->
+  <div id="deleteModal" class="fixed inset-0 z-50 hidden">
+    <div class="absolute inset-0 bg-black/50 backdrop-blur-sm" onclick="closeDeleteModal()"></div>
+    <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 bg-white rounded-2xl shadow-2xl p-6">
+      <div class="text-center">
+        <div class="w-14 h-14 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
+          <svg class="w-7 h-7 text-red-600" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" /></svg>
+        </div>
+        <h3 class="font-poppins font-bold text-lg mb-2">Hapus Booking?</h3>
+        <p class="text-sm text-gray-500 mb-1">Anda yakin ingin menghapus booking</p>
+        <p class="text-sm font-semibold text-foreground mb-6" id="deleteBookingName">-</p>
+        <div class="flex gap-3">
+          <button onclick="closeDeleteModal()" class="flex-1 px-4 py-2.5 text-sm font-medium text-gray-700 bg-gray-100 rounded-xl hover:bg-gray-200 transition-colors">Batal</button>
+          <button onclick="confirmDelete()" class="flex-1 px-4 py-2.5 text-sm font-medium text-white bg-red-600 rounded-xl hover:bg-red-700 transition-colors">Hapus</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast -->
+  <div id="toast" class="fixed top-6 right-6 z-[60] hidden">
+    <div class="flex items-center gap-3 px-5 py-3 bg-white border border-gray-200 shadow-lg rounded-xl">
+      <svg id="toastIcon" class="w-5 h-5 text-emerald-500" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" /></svg>
+      <span id="toastMessage" class="text-sm font-medium text-foreground"></span>
+    </div>
+  </div>
+
+  <script>
+    // ===== Data Store =====
+    const BOOKING_KEY = 'sitio_bookings';
+    const ROOMS_KEY = 'sitio_rooms';
+
+    function loadRooms() {
+      const data = localStorage.getItem(ROOMS_KEY);
+      if (!data) return [];
+      return JSON.parse(data);
+    }
+
+    const defaultBookings = [
+      { id: 1, booking_code: 'STR-847291', room_id: 1, user_id: 1, check_in: '2026-07-28', check_out: '2026-07-30', total_guest: 2, total_price: 2660000, status: 'confirmed' },
+      { id: 2, booking_code: 'STR-736219', room_id: 2, user_id: 2, check_in: '2026-07-29', check_out: '2026-07-31', total_guest: 2, total_price: 1880000, status: 'pending' },
+      { id: 3, booking_code: 'STR-625108', room_id: 3, user_id: 3, check_in: '2026-08-01', check_out: '2026-08-04', total_guest: 4, total_price: 11610000, status: 'confirmed' },
+      { id: 4, booking_code: 'STR-514097', room_id: 1, user_id: 4, check_in: '2026-07-25', check_out: '2026-07-27', total_guest: 2, total_price: 2660000, status: 'checked_out' },
+      { id: 5, booking_code: 'STR-403986', room_id: 4, user_id: 5, check_in: '2026-08-05', check_out: '2026-08-08', total_guest: 2, total_price: 16500000, status: 'confirmed' },
+      { id: 6, booking_code: 'STR-292875', room_id: 7, user_id: 6, check_in: '2026-07-30', check_out: '2026-08-02', total_guest: 2, total_price: 8400000, status: 'pending' },
+      { id: 7, booking_code: 'STR-181764', room_id: 5, user_id: 7, check_in: '2026-07-27', check_out: '2026-07-28', total_guest: 1, total_price: 650000, status: 'checked_in' },
+      { id: 8, booking_code: 'STR-070653', room_id: 6, user_id: 8, check_in: '2026-08-10', check_out: '2026-08-13', total_guest: 4, total_price: 5250000, status: 'cancelled' },
+      { id: 9, booking_code: 'STR-959542', room_id: 8, user_id: 9, check_in: '2026-07-26', check_out: '2026-07-27', total_guest: 1, total_price: 425000, status: 'checked_in' },
+      { id: 10, booking_code: 'STR-848431', room_id: 3, user_id: 10, check_in: '2026-08-15', check_out: '2026-08-18', total_guest: 3, total_price: 11610000, status: 'pending' },
+    ];
+
+    function loadBookings() {
+      const data = localStorage.getItem(BOOKING_KEY);
+      if (!data) {
+        localStorage.setItem(BOOKING_KEY, JSON.stringify(defaultBookings));
+        return [...defaultBookings];
+      }
+      return JSON.parse(data);
+    }
+
+    function saveBookingsToStorage(bookings) {
+      localStorage.setItem(BOOKING_KEY, JSON.stringify(bookings));
+    }
+
+    let bookings = loadBookings();
+    let rooms = loadRooms();
+    let deleteTargetId = null;
+
+    // Helper: get room name by id
+    function getRoomName(roomId) {
+      const room = rooms.find(r => r.id === roomId);
+      return room ? room.name : `Room #${roomId}`;
+    }
+
+    // Helper: format currency
+    function formatRp(amount) {
+      return 'Rp ' + amount.toLocaleString('id-ID');
+    }
+
+    // Helper: format date display
+    function formatDate(dateStr) {
+      if (!dateStr) return '-';
+      const d = new Date(dateStr);
+      return d.toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' });
+    }
+
+    // Helper: generate booking code
+    function generateCode() {
+      return 'STR-' + Math.floor(100000 + Math.random() * 900000);
+    }
+
+    // Helper: status badge
+    function getStatusBadge(status) {
+      const badges = {
+        confirmed: '<span class="badge-success">Confirmed</span>',
+        pending: '<span class="badge-warning">Pending</span>',
+        checked_in: '<span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-xs font-medium bg-blue-50 text-blue-700">Checked In</span>',
+        checked_out: '<span class="badge bg-gray-100 text-gray-600">Checked Out</span>',
+        cancelled: '<span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-xs font-medium bg-red-50 text-red-600">Cancelled</span>',
+      };
+      return badges[status] || `<span class="badge bg-gray-100 text-gray-600">${status}</span>`;
+    }
+
+    // ===== Populate Room Selects =====
+    function populateRoomSelects() {
+      const filterSelect = document.getElementById('filterRoom');
+      const formSelect = document.getElementById('bookingRoomId');
+      const roomOpts = rooms.map(r => `<option value="${r.id}">${r.name}</option>`).join('');
+      filterSelect.innerHTML = '<option value="">Semua Room</option>' + roomOpts;
+      formSelect.innerHTML = '<option value="">Pilih Room</option>' + roomOpts;
+    }
+
+    // ===== Render Table =====
+    function renderBookings(data) {
+      const tbody = document.getElementById('bookingsBody');
+      if (data.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="10" class="py-12 text-center text-gray-400">Tidak ada booking ditemukan.</td></tr>';
+        return;
+      }
+      tbody.innerHTML = data.map((b, i) => {
+        const roomName = getRoomName(b.room_id);
+        return `<tr class="hover:bg-gray-50 transition-colors">
+          <td class="py-3 px-6 text-gray-500">${i + 1}</td>
+          <td class="py-3 px-6">
+            <span class="inline-flex items-center gap-1.5 font-mono text-sm font-semibold text-primary">
+              <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M5.25 8.25h15m-16.5 7.5h15m-1.8-13.5-3.9 19.5m-2.1-19.5-3.9 19.5" /></svg>
+              ${b.booking_code}
+            </span>
+          </td>
+          <td class="py-3 px-6">
+            <div class="font-medium text-foreground">${roomName}</div>
+            <div class="text-xs text-gray-500">ID: ${b.room_id}</div>
+          </td>
+          <td class="py-3 px-6">
+            <div class="flex items-center gap-2">
+              <div class="w-7 h-7 rounded-full bg-primary/10 text-primary flex items-center justify-center text-xs font-bold">U${b.user_id}</div>
+              <span class="text-gray-600">#${b.user_id}</span>
+            </div>
+          </td>
+          <td class="py-3 px-6">${formatDate(b.check_in)}</td>
+          <td class="py-3 px-6">${formatDate(b.check_out)}</td>
+          <td class="py-3 px-6 text-center">
+            <span class="inline-flex items-center gap-1 text-gray-700">
+              <svg class="w-3.5 h-3.5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z" /></svg>
+              ${b.total_guest}
+            </span>
+          </td>
+          <td class="py-3 px-6 font-medium">${formatRp(b.total_price)}</td>
+          <td class="py-3 px-6">${getStatusBadge(b.status)}</td>
+          <td class="py-3 px-6 text-center">
+            <div class="flex items-center justify-center gap-2">
+              <button onclick="editBooking(${b.id})" class="w-8 h-8 rounded-lg bg-blue-50 text-blue-600 hover:bg-blue-100 flex items-center justify-center transition-colors" title="Edit">
+                <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10" /></svg>
+              </button>
+              <button onclick="deleteBooking(${b.id})" class="w-8 h-8 rounded-lg bg-red-50 text-red-600 hover:bg-red-100 flex items-center justify-center transition-colors" title="Hapus">
+                <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" /></svg>
+              </button>
+            </div>
+          </td>
+        </tr>`;
+      }).join('');
+    }
+
+    // ===== Filter =====
+    function filterBookings() {
+      const q = document.getElementById('searchInput').value.toLowerCase();
+      const status = document.getElementById('filterStatus').value;
+      const roomFilter = document.getElementById('filterRoom').value;
+      let filtered = bookings.filter(b => {
+        const roomName = getRoomName(b.room_id).toLowerCase();
+        const matchSearch = !q || b.booking_code.toLowerCase().includes(q) || roomName.includes(q) || String(b.user_id).includes(q);
+        const matchStatus = !status || b.status === status;
+        const matchRoom = !roomFilter || b.room_id === parseInt(roomFilter);
+        return matchSearch && matchStatus && matchRoom;
+      });
+      renderBookings(filtered);
+    }
+
+    // ===== Duration Calculator =====
+    function updateDuration() {
+      const checkIn = document.getElementById('bookingCheckIn').value;
+      const checkOut = document.getElementById('bookingCheckOut').value;
+      const infoDiv = document.getElementById('durationInfo');
+      const textEl = document.getElementById('durationText');
+      if (checkIn && checkOut) {
+        const d1 = new Date(checkIn);
+        const d2 = new Date(checkOut);
+        const nights = Math.round((d2 - d1) / (1000 * 60 * 60 * 24));
+        if (nights > 0) {
+          textEl.textContent = `Durasi menginap: ${nights} malam (${formatDate(checkIn)} → ${formatDate(checkOut)})`;
+          infoDiv.classList.remove('hidden');
+        } else {
+          textEl.textContent = 'Check Out harus setelah Check In';
+          infoDiv.classList.remove('hidden');
+        }
+      } else {
+        infoDiv.classList.add('hidden');
+      }
+    }
+    document.getElementById('bookingCheckIn').addEventListener('change', updateDuration);
+    document.getElementById('bookingCheckOut').addEventListener('change', updateDuration);
+
+    // ===== Modal Open / Close =====
+    function openModal(id) {
+      document.getElementById('bookingModal').classList.remove('hidden');
+      document.body.style.overflow = 'hidden';
+      if (!id) {
+        document.getElementById('modalTitle').textContent = 'Tambah Booking Baru';
+        document.getElementById('submitBtn').textContent = 'Simpan Booking';
+        document.getElementById('bookingForm').reset();
+        document.getElementById('bookingId').value = '';
+        document.getElementById('bookingCode').value = generateCode();
+        document.getElementById('durationInfo').classList.add('hidden');
+      }
+    }
+
+    function closeModal() {
+      document.getElementById('bookingModal').classList.add('hidden');
+      document.body.style.overflow = '';
+    }
+
+    // ===== Save (Add / Edit) =====
+    function saveBooking(e) {
+      e.preventDefault();
+      const id = document.getElementById('bookingId').value;
+      const checkIn = document.getElementById('bookingCheckIn').value;
+      const checkOut = document.getElementById('bookingCheckOut').value;
+
+      // Validate dates
+      if (new Date(checkOut) <= new Date(checkIn)) {
+        showToast('Check Out harus setelah Check In!');
+        return;
+      }
+
+      const bookingData = {
+        booking_code: document.getElementById('bookingCode').value.trim() || generateCode(),
+        room_id: parseInt(document.getElementById('bookingRoomId').value),
+        user_id: parseInt(document.getElementById('bookingUserId').value),
+        check_in: checkIn,
+        check_out: checkOut,
+        total_guest: parseInt(document.getElementById('bookingTotalGuest').value),
+        total_price: parseInt(document.getElementById('bookingTotalPrice').value),
+        status: document.getElementById('bookingStatus').value,
+      };
+
+      if (id) {
+        const idx = bookings.findIndex(b => b.id === parseInt(id));
+        if (idx !== -1) {
+          bookings[idx] = { ...bookings[idx], ...bookingData };
+          showToast('Booking berhasil diperbarui!');
+        }
+      } else {
+        const newId = bookings.length > 0 ? Math.max(...bookings.map(b => b.id)) + 1 : 1;
+        bookings.push({ id: newId, ...bookingData });
+        showToast('Booking baru berhasil ditambahkan!');
+      }
+
+      saveBookingsToStorage(bookings);
+      filterBookings();
+      updateKPIs();
+      updateReports();
+      closeModal();
+    }
+
+    // ===== Edit =====
+    function editBooking(id) {
+      const booking = bookings.find(b => b.id === id);
+      if (!booking) return;
+      document.getElementById('bookingId').value = booking.id;
+      document.getElementById('bookingCode').value = booking.booking_code;
+      document.getElementById('bookingRoomId').value = booking.room_id;
+      document.getElementById('bookingUserId').value = booking.user_id;
+      document.getElementById('bookingCheckIn').value = booking.check_in;
+      document.getElementById('bookingCheckOut').value = booking.check_out;
+      document.getElementById('bookingTotalGuest').value = booking.total_guest;
+      document.getElementById('bookingTotalPrice').value = booking.total_price;
+      document.getElementById('bookingStatus').value = booking.status;
+      document.getElementById('modalTitle').textContent = 'Edit Booking';
+      document.getElementById('submitBtn').textContent = 'Update Booking';
+      openModal(id);
+      updateDuration();
+    }
+
+    // ===== Delete =====
+    function deleteBooking(id) {
+      const booking = bookings.find(b => b.id === id);
+      if (!booking) return;
+      deleteTargetId = id;
+      document.getElementById('deleteBookingName').textContent = booking.booking_code + ' — ' + getRoomName(booking.room_id);
+      document.getElementById('deleteModal').classList.remove('hidden');
+    }
+
+    function closeDeleteModal() {
+      document.getElementById('deleteModal').classList.add('hidden');
+      deleteTargetId = null;
+    }
+
+    function confirmDelete() {
+      if (deleteTargetId !== null) {
+        bookings = bookings.filter(b => b.id !== deleteTargetId);
+        saveBookingsToStorage(bookings);
+        filterBookings();
+        updateKPIs();
+        updateReports();
+        showToast('Booking berhasil dihapus!');
+      }
+      closeDeleteModal();
+    }
+
+    // ===== KPIs =====
+    function updateKPIs() {
+      const total = bookings.length;
+      const confirmed = bookings.filter(b => b.status === 'confirmed').length;
+      const pending = bookings.filter(b => b.status === 'pending').length;
+      const revenue = bookings.filter(b => b.status === 'confirmed' || b.status === 'checked_in' || b.status === 'checked_out').reduce((sum, b) => sum + b.total_price, 0);
+
+      document.getElementById('kpiTotal').textContent = total;
+      document.getElementById('kpiConfirmed').textContent = confirmed;
+      document.getElementById('kpiPending').textContent = pending;
+      document.getElementById('kpiRevenue').textContent = formatRp(revenue);
+
+      const checkedIn = bookings.filter(b => b.status === 'checked_in').length;
+      document.getElementById('kpiTotalSub').textContent = `${checkedIn} sedang check-in`;
+      document.getElementById('kpiConfirmedSub').textContent = `${total > 0 ? Math.round((confirmed / total) * 100) : 0}% dari total`;
+      document.getElementById('kpiPendingSub').textContent = `Perlu ditindaklanjuti`;
+      document.getElementById('kpiRevenueSub').textContent = `Dari ${bookings.filter(b => ['confirmed', 'checked_in', 'checked_out'].includes(b.status)).length} booking aktif`;
+    }
+
+    // ===== Reports =====
+    function updateReports() {
+      // By room
+      const byRoom = {};
+      bookings.forEach(b => {
+        const name = getRoomName(b.room_id);
+        if (!byRoom[name]) byRoom[name] = { total: 0, revenue: 0 };
+        byRoom[name].total++;
+        if (['confirmed', 'checked_in', 'checked_out'].includes(b.status)) {
+          byRoom[name].revenue += b.total_price;
+        }
+      });
+
+      const maxBookings = Math.max(...Object.values(byRoom).map(d => d.total), 1);
+      document.getElementById('reportByRoom').innerHTML = Object.entries(byRoom)
+        .sort((a, b) => b[1].total - a[1].total)
+        .map(([name, d]) => {
+          return `
+            <div>
+              <div class="flex justify-between text-sm mb-1">
+                <span class="text-gray-600 font-medium">${name}</span>
+                <span class="text-gray-500">${d.total} booking</span>
+              </div>
+              <div class="w-full bg-gray-100 rounded-full h-2">
+                <div class="bg-primary h-2 rounded-full transition-all" style="width: ${(d.total / maxBookings) * 100}%"></div>
+              </div>
+              <p class="text-xs text-gray-400 mt-1">${formatRp(d.revenue)} revenue</p>
+            </div>
+          `;
+        }).join('');
+
+      // Revenue stats
+      const activePrices = bookings.filter(b => ['confirmed', 'checked_in', 'checked_out'].includes(b.status)).map(b => b.total_price);
+      const allPrices = bookings.map(b => b.total_price);
+      document.getElementById('statRevenue').textContent = formatRp(activePrices.reduce((a, b) => a + b, 0));
+      document.getElementById('statAvgPrice').textContent = allPrices.length > 0 ? formatRp(Math.round(allPrices.reduce((a, b) => a + b, 0) / allPrices.length)) : 'Rp 0';
+      document.getElementById('statHighest').textContent = allPrices.length > 0 ? formatRp(Math.max(...allPrices)) : 'Rp 0';
+      document.getElementById('statTotalGuests').textContent = bookings.reduce((sum, b) => sum + b.total_guest, 0) + ' orang';
+
+      // Status report
+      const statusCounts = { confirmed: 0, pending: 0, checked_in: 0, checked_out: 0, cancelled: 0 };
+      bookings.forEach(b => { if (statusCounts.hasOwnProperty(b.status)) statusCounts[b.status]++; });
+      const total = bookings.length || 1;
+      const statusColors = {
+        confirmed: 'bg-emerald-500',
+        pending: 'bg-amber-500',
+        checked_in: 'bg-blue-500',
+        checked_out: 'bg-gray-400',
+        cancelled: 'bg-red-500',
+      };
+      const statusLabels = {
+        confirmed: 'Confirmed',
+        pending: 'Pending',
+        checked_in: 'Checked In',
+        checked_out: 'Checked Out',
+        cancelled: 'Cancelled',
+      };
+      document.getElementById('statusReport').innerHTML = Object.entries(statusCounts).map(([key, count]) => {
+        return `
+          <div>
+            <div class="flex justify-between text-sm mb-1">
+              <span class="text-gray-600">${statusLabels[key]}</span>
+              <span class="font-medium">${count}/${bookings.length}</span>
+            </div>
+            <div class="w-full bg-gray-100 rounded-full h-2">
+              <div class="${statusColors[key]} h-2 rounded-full transition-all" style="width: ${(count / total) * 100}%"></div>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    // ===== Export =====
+    function exportReport() {
+      let csv = 'No,Booking Code,Room ID,Room Name,User ID,Check In,Check Out,Total Guest,Total Price,Status\n';
+      bookings.forEach((b, i) => {
+        csv += `${i + 1},"${b.booking_code}",${b.room_id},"${getRoomName(b.room_id)}",${b.user_id},"${b.check_in}","${b.check_out}",${b.total_guest},${b.total_price},"${b.status}"\n`;
+      });
+
+      const statusCounts = { confirmed: 0, pending: 0, checked_in: 0, checked_out: 0, cancelled: 0 };
+      bookings.forEach(b => { if (statusCounts.hasOwnProperty(b.status)) statusCounts[b.status]++; });
+      const revenue = bookings.filter(b => ['confirmed', 'checked_in', 'checked_out'].includes(b.status)).reduce((sum, b) => sum + b.total_price, 0);
+
+      csv += `\nSummary\nTotal Bookings,${bookings.length}\nConfirmed,${statusCounts.confirmed}\nPending,${statusCounts.pending}\nChecked In,${statusCounts.checked_in}\nChecked Out,${statusCounts.checked_out}\nCancelled,${statusCounts.cancelled}\nTotal Revenue,${revenue}\nTotal Guests,${bookings.reduce((s, b) => s + b.total_guest, 0)}\n`;
+
+      const blob = new Blob([csv], { type: 'text/csv' });
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = 'bookings-report.csv';
+      a.click();
+      showToast('Laporan berhasil di-export!');
+    }
+
+    // ===== Toast =====
+    function showToast(msg) {
+      const t = document.getElementById('toast');
+      document.getElementById('toastMessage').textContent = msg;
+      t.classList.remove('hidden');
+      setTimeout(() => t.classList.add('hidden'), 3000);
+    }
+
+    // ===== Init =====
+    populateRoomSelects();
+    renderBookings(bookings);
+    updateKPIs();
+    updateReports();
+  </script>
+
+</body>
+</html>

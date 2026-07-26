@@ -12,7 +12,9 @@ class FacilityController extends Controller
      */
     public function index()
     {
-        //
+        return view('admin.facility-manager', [
+            'facilities' => Facility::all(),
+        ]);
     }
 
     /**

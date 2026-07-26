@@ -16,23 +16,26 @@
     @vite(['resources/css/app.css', 'resources/js/app.js', 'resources/js/main.js'])
 </head>
 
-<body class="bg-gray-100 text-foreground font-inter h-screen overflow-hidden flex">
+<body class="bg-gray-100 text-foreground font-inter h-screen overflow-hidden flex relative">
 
     <livewire:layout.sidebar />
+    <div class="flex-1 flex flex-col">
+        <livewire:layout.navigation />
 
-    <div class="flex-1 flex flex-col h-screen overflow-hidden m-2">
-        @if (isset($header))
-            {{ $header }}
-        @endif
 
-        <!-- Page Content -->
-        <main>
-            {{ $slot }}
+        <div class="flex-1 flex flex-col overflow-y-scroll">
 
-            @livewireScriptConfig
-        </main>
+            @if (isset($header))
+                {{ $header }}
+            @endif
+
+            <!-- Page Content -->
+            <main>
+                {{ $slot }}
+            </main>
+        </div>
     </div>
-
+    @livewireScriptConfig
     @stack('scripts')
 </body>
 

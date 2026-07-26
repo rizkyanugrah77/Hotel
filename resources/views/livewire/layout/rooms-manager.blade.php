@@ -1,5 +1,6 @@
 <div x-data="{
     showRoomModal: false,
+    showDeleteModal: false,
     toast: { show: false, message: '' },
     openRoomModal() {
         this.showRoomModal = true;
@@ -15,34 +16,48 @@
         window.setTimeout(() => this.toast.show = false, 3000);
     }
 }" x-on:room-saved.window="closeRoomModal(); showToast($event.detail.message)"
-    class="flex-1 overflow-y-auto p-8">
-
+    x-on:room-deleted.window="showDeleteModal = false; showToast($event.detail.message)"
+    x-on:room-editing.window="openRoomModal()" x-on:room-delete-confirmation.window="showDeleteModal = true"
+    class="min-w-0 flex-1 overflow-y-auto p-4 sm:p-6 lg:p-8">
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-        <div class="bg-white border border-gray-100 shadow-sm rounded-2xl p-6">
-            <p class="text-sm text-gray-500 mb-1">Total Kamar</p>
-            <h3 class="text-2xl font-poppins font-bold text-foreground">{{ $roomStats['total'] }}</h3>
+        <div class="card bg-white border border-gray-100 shadow-sm rounded-2xl p-6">
+            <div class="flex items-start justify-between">
+                <div>
+                    <p class="mb-1 text-sm text-gray-500">Total Kamar</p>
+                    <h3 class="text-2xl font-poppins font-bold text-foreground">{{ $roomStats['total'] }}</h3>
+                </div>
+                <div class="flex h-10 w-10 items-center justify-center rounded-xl bg-primary/10 text-primary">
+                    <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 21h19.5M3.75 21V9.75m0 0 2.07-5.175A1.5 1.5 0 0 1 7.214 3.75h9.572a1.5 1.5 0 0 1 1.394.925l2.07 5.175m0 0V21m-12-7.5h.008v.008H8.25V13.5Zm3.75 0h.008v.008H12V13.5Zm3.75 0h.008v.008H15.75V13.5Z" /></svg>
+                </div>
+            </div>
         </div>
-        <div class="bg-white border border-gray-100 shadow-sm rounded-2xl p-6">
-            <p class="text-sm text-gray-500 mb-1">Available</p>
-            <h3 class="text-2xl font-poppins font-bold text-emerald-600">{{ $roomStats['available'] }}</h3>
+        <div class="card bg-white border border-gray-100 shadow-sm rounded-2xl p-6">
+            <div class="flex items-start justify-between">
+                <div><p class="mb-1 text-sm text-gray-500">Available</p><h3 class="text-2xl font-poppins font-bold text-emerald-600">{{ $roomStats['available'] }}</h3></div>
+                <div class="flex h-10 w-10 items-center justify-center rounded-xl bg-emerald-50 text-emerald-600"><svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="m4.5 12.75 4.5 4.5 10.5-10.5" /></svg></div>
+            </div>
         </div>
-        <div class="bg-white border border-gray-100 shadow-sm rounded-2xl p-6">
-            <p class="text-sm text-gray-500 mb-1">Occupied</p>
-            <h3 class="text-2xl font-poppins font-bold text-amber-600">{{ $roomStats['occupied'] }}</h3>
+        <div class="card bg-white border border-gray-100 shadow-sm rounded-2xl p-6">
+            <div class="flex items-start justify-between">
+                <div><p class="mb-1 text-sm text-gray-500">Occupied</p><h3 class="text-2xl font-poppins font-bold text-amber-600">{{ $roomStats['occupied'] }}</h3></div>
+                <div class="flex h-10 w-10 items-center justify-center rounded-xl bg-amber-50 text-amber-600"><svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.5 20.118a7.5 7.5 0 0 1 15 0" /></svg></div>
+            </div>
         </div>
-        <div class="bg-white border border-gray-100 shadow-sm rounded-2xl p-6">
-            <p class="text-sm text-gray-500 mb-1">Maintenance</p>
-            <h3 class="text-2xl font-poppins font-bold text-red-600">{{ $roomStats['maintenance'] }}</h3>
+        <div class="card bg-white border border-gray-100 shadow-sm rounded-2xl p-6">
+            <div class="flex items-start justify-between">
+                <div><p class="mb-1 text-sm text-gray-500">Maintenance</p><h3 class="text-2xl font-poppins font-bold text-red-600">{{ $roomStats['maintenance'] }}</h3></div>
+                <div class="flex h-10 w-10 items-center justify-center rounded-xl bg-red-50 text-red-600"><svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6.75v5.25m0 3.75h.008v.008H12v-.008ZM10.29 3.86 2.82 16.36A1.5 1.5 0 0 0 4.107 18.6h15.786a1.5 1.5 0 0 0 1.287-2.24L13.71 3.86a1.5 1.5 0 0 0-2.574 0Z" /></svg></div>
+            </div>
         </div>
     </div>
 
-    <div class="bg-white border border-gray-100 shadow-sm rounded-2xl overflow-hidden">
+    <div class=" bg-white border border-gray-100 shadow-sm rounded-2xl grid grid-cols-1 ">
         <div
-            class="p-6 border-b border-gray-100 flex flex-col lg:flex-row justify-between items-start lg:items-center gap-4">
+            class="p-3 lg:p-6 border-b border-gray-100 flex flex-col lg:flex-row justify-between items-start lg:items-center gap-4">
             <h2 class="font-poppins font-bold text-lg">Daftar Kamar</h2>
             <div class="flex flex-col sm:flex-row w-full lg:w-auto items-stretch sm:items-center gap-3">
                 <input type="search" wire:model.live.debounce.300ms="search" placeholder="Cari nama kamar..."
-                    class="input py-2 text-sm sm:w-64">
+                    class="input py-2 text-sm sm:w-32 xl:w-60 ">
                 <select wire:model.live="filterStatus" class="input py-2 text-sm sm:w-40">
                     <option value="">Semua Status</option>
                     <option value="available">Available</option>
@@ -56,8 +71,8 @@
             </div>
         </div>
 
-        <div class="overflow-x-auto">
-            <table class="w-full text-left text-sm whitespace-nowrap">
+        <div class="w-full overflow-auto">
+            <table class=" w-full text-left text-sm whitespace-nowrap ">
                 <thead class="bg-gray-50 text-gray-500">
                     <tr>
                         <th class="py-3 px-6 font-medium">No</th>
@@ -69,6 +84,7 @@
                         <th class="py-3 px-6 font-medium">Kapasitas</th>
                         <th class="py-3 px-6 font-medium">Harga/Malam</th>
                         <th class="py-3 px-6 font-medium">Status</th>
+                        <th class="py-3 px-6 font-medium">Aksi</th>
                     </tr>
                 </thead>
                 <tbody class="divide-y divide-gray-100">
@@ -78,14 +94,14 @@
                             <td class="py-3 px-6">
                                 @if ($room->image)
                                     <img src="{{ asset('storage/assets/img/rooms/' . $room->image) }}"
-                                        class="w-16 h-12 object-cover rounded-lg">
+                                        class="h-12 w-16 rounded-lg object-cover">
                                 @else
                                     <span class="text-gray-400">-</span>
                                 @endif
                             </td>
                             <td class="py-3 px-6 font-medium">{{ $room->name }}</td>
                             <td class="py-3 px-6">{{ $room->slug }}</td>
-                            <td class="py-3 px-6">{{ $room->size }} m²</td>
+                            <td class="py-3 px-6">{{ $room->size }} m&sup2;</td>
                             <td class="py-3 px-6">{{ $room->bed_type }}</td>
                             <td class="py-3 px-6">{{ $room->capacity }} orang</td>
                             <td class="py-3 px-6">Rp{{ number_format($room->price, 0, ',', '.') }}</td>
@@ -99,11 +115,31 @@
                                     {{ ucfirst($room->status) }}
                                 </span>
                             </td>
+                            <td class="px-6 py-3">
+                                <div class="flex items-center gap-2">
+                                <button type="button" wire:click="edit({{ $room->id }})"
+                                    class="inline-flex h-9 w-9 items-center justify-center rounded-lg text-primary transition-colors hover:bg-primary/10"
+                                    aria-label="Ubah kamar {{ $room->name }}" title="Ubah"> <svg
+                                        xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none"
+                                        viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                        <path stroke-linecap="round" stroke-linejoin="round"
+                                            d="M16.862 3.487a2.25 2.25 0 113.182 3.182L8.25 18.463 3 20.25l1.787-5.25L16.862 3.487z" />
+                                    </svg></button>
+                                <button type="button" wire:click="confirmDelete({{ $room->id }})"
+                                    class="inline-flex h-9 w-9 items-center justify-center rounded-lg text-red-600 transition-colors hover:bg-red-50"
+                                    aria-label="Hapus kamar {{ $room->name }}" title="Hapus"> <svg
+                                        xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none"
+                                        viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                        <path stroke-linecap="round" stroke-linejoin="round"
+                                            d="M6 7h12M9 7V4h6v3m-8 0l1 13h8l1-13M10 11v6m4-6v6" />
+                                    </svg></button>
+                                </div>
+                            </td>
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="9" class="py-12 text-center text-gray-500">
-                                Belum ada kamar. Klik “Tambah Kamar” untuk menambahkan kamar baru.
+                            <td colspan="10" class="py-12 text-center text-gray-500">
+                                Belum ada kamar. Klik &ldquo;Tambah Kamar&rdquo; untuk menambahkan kamar baru.
                             </td>
                         </tr>
                     @endforelse
@@ -112,19 +148,21 @@
         </div>
     </div>
 
-    <div x-show="showRoomModal" x-cloak class="fixed inset-0 z-50 flex items-center justify-center p-4"
+    <div x-show="showRoomModal" x-cloak
+        class="fixed inset-0 z-50 flex items-end justify-center sm:items-center sm:p-4"
         @keydown.escape.window="closeRoomModal()">
         <div class="absolute inset-0 bg-black/50 backdrop-blur-sm" @click="closeRoomModal()"></div>
 
-        <div class="relative bg-white rounded-2xl shadow-2xl w-full max-w-3xl max-h-[90vh] flex flex-col" @click.stop>
-            <div class="flex items-center justify-between px-6 py-4 border-b">
-                <h3 class="text-lg font-bold">Tambah Kamar</h3>
+        <div class="relative flex max-h-[92dvh] w-full max-w-3xl flex-col overflow-hidden rounded-t-2xl bg-white shadow-2xl sm:max-h-[90vh] sm:rounded-2xl"
+            @click.stop>
+            <div class="flex shrink-0 items-center justify-between border-b px-4 py-4 sm:px-6">
+                <h3 class="text-lg font-bold">{{ $editingRoomId ? 'Ubah Kamar' : 'Tambah Kamar' }}</h3>
                 <button type="button" @click="closeRoomModal()"
                     class="w-8 h-8 flex items-center justify-center rounded-lg hover:bg-gray-100"
-                    aria-label="Tutup">×</button>
+                    aria-label="Tutup">&times;</button>
             </div>
 
-            <form wire:submit="save" class="overflow-y-auto p-6 flex-1">
+            <form wire:submit="save" class="min-h-0 flex-1 overflow-y-auto p-4 sm:p-6">
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
                     <div>
                         <label for="room-name" class="input-label">Nama <span class="text-red-500">*</span></label>
@@ -208,7 +246,10 @@
                 </div>
 
                 <div>
-                    <label for="room-image" class="input-label">Gambar Kamar</label>
+                    <label for="room-image" class="input-label">Gambar Kamar @if (!$editingRoomId)
+                            <span class="text-red-500">*</span>
+                        @endif
+                    </label>
                     <input id="room-image" type="file" wire:model="image" class="input" accept="image/*">
 
                     <div wire:loading wire:target="image" class="text-sm text-gray-500 mt-2">
@@ -220,16 +261,36 @@
                     @enderror
                 </div>
 
-                <div class="flex justify-end gap-3 mt-6 pt-4 border-t border-gray-100">
+                <div class="mt-6 flex flex-col-reverse gap-3 border-t border-gray-100 pt-4 sm:flex-row sm:justify-end">
                     <button type="button" @click="closeRoomModal()"
-                        class="px-5 py-2.5 text-sm font-medium text-gray-700 bg-gray-100 rounded-xl hover:bg-gray-200">Batal</button>
+                        class="w-full rounded-xl bg-gray-100 px-5 py-2.5 text-sm font-medium text-gray-700 hover:bg-gray-200 sm:w-auto">Batal</button>
                     <button type="submit" wire:loading.attr="disabled" wire:target="save"
-                        class="btn-primary text-sm px-5 py-2.5">
-                        <span wire:loading.remove wire:target="save">Simpan Kamar</span>
+                        class="btn-primary w-full px-5 py-2.5 text-sm sm:w-auto">
+                        <span wire:loading.remove
+                            wire:target="save">{{ $editingRoomId ? 'Simpan Perubahan' : 'Simpan Kamar' }}</span>
                         <span wire:loading wire:target="save">Menyimpan...</span>
                     </button>
                 </div>
             </form>
+        </div>
+    </div>
+
+    <div x-show="showDeleteModal" x-cloak
+        class="fixed inset-0 z-[60] flex items-end justify-center sm:items-center sm:p-4"
+        @keydown.escape.window="showDeleteModal = false">
+        <div class="absolute inset-0 bg-black/50" @click="showDeleteModal = false"></div>
+        <div class="relative w-full max-w-md rounded-t-2xl bg-white p-4 shadow-2xl sm:rounded-2xl sm:p-6" @click.stop>
+            <h3 class="text-lg font-bold text-gray-900">Hapus kamar?</h3>
+            <p class="mt-2 text-sm text-gray-600">Tindakan ini akan menghapus kamar beserta data booking terkait.</p>
+            <div class="mt-6 flex flex-col-reverse gap-3 sm:flex-row sm:justify-end">
+                <button type="button" @click="showDeleteModal = false"
+                    class="w-full rounded-xl bg-gray-100 px-5 py-2.5 text-sm font-medium text-gray-700 hover:bg-gray-200 sm:w-auto">Batal</button>
+                <button type="button" wire:click="delete" wire:loading.attr="disabled" wire:target="delete"
+                    class="w-full rounded-xl bg-red-600 px-5 py-2.5 text-sm font-medium text-white hover:bg-red-700 sm:w-auto">
+                    <span wire:loading.remove wire:target="delete">Hapus</span>
+                    <span wire:loading wire:target="delete">Menghapus...</span>
+                </button>
+            </div>
         </div>
     </div>
 

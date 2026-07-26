@@ -1,0 +1,669 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Kelola Galleries — Sitio Tio Resort Admin</title>
+  <script type="module" src="/resources/js/main.js"></script>
+</head>
+<body class="bg-gray-100 text-foreground font-inter h-screen overflow-hidden flex">
+
+  <!-- Sidebar -->
+  <aside class="w-64 bg-gradient-dark text-white flex-shrink-0 hidden md:flex flex-col">
+    <div class="h-20 flex items-center gap-3 px-6 border-b border-white/10">
+      <div class="w-8 h-8 bg-gradient-primary rounded-lg flex items-center justify-center">
+        <svg class="w-5 h-5 text-white" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M8.25 21v-4.875c0-.621.504-1.125 1.125-1.125h5.25c.621 0 1.125.504 1.125 1.125V21m0 0h4.5V3.545M12.75 21h7.5M10.5 21V8.121c0-.312.11-.611.308-.848l4.692-5.58a.75.75 0 0 1 1.149.024l4.469 5.404c.18.217.282.5.282.79V21m-14.4 0H3.75c-.621 0-1.125-.504-1.125-1.125v-6.75c0-.621.504-1.125 1.125-1.125h3.375" /></svg>
+      </div>
+      <span class="font-poppins font-bold tracking-wide">Sitio Tio Admin</span>
+    </div>
+    
+    <nav class="flex-1 py-6 px-4 space-y-2 overflow-y-auto">
+      <a href="admin.html" class="flex items-center gap-3 px-4 py-3 text-white/60 hover:text-white hover:bg-white/5 rounded-xl transition-colors">
+        <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6A2.25 2.25 0 0 1 6 3.75h2.25A2.25 2.25 0 0 1 10.5 6v2.25a2.25 2.25 0 0 1-2.25 2.25H6a2.25 2.25 0 0 1-2.25-2.25V6ZM3.75 15.75A2.25 2.25 0 0 1 6 13.5h2.25a2.25 2.25 0 0 1 2.25 2.25V18a2.25 2.25 0 0 1-2.25 2.25H6A2.25 2.25 0 0 1 3.75 18v-2.25ZM13.5 6a2.25 2.25 0 0 1 2.25-2.25H18A2.25 2.25 0 0 1 20.25 6v2.25A2.25 2.25 0 0 1 18 10.5h-2.25a2.25 2.25 0 0 1-2.25-2.25V6ZM13.5 15.75a2.25 2.25 0 0 1 2.25-2.25H18a2.25 2.25 0 0 1 2.25 2.25V18A2.25 2.25 0 0 1 18 20.25h-2.25a2.25 2.25 0 0 1-2.25-2.25v-2.25Z" /></svg>
+        Dashboard
+      </a>
+      <a href="#" class="flex items-center gap-3 px-4 py-3 text-white/60 hover:text-white hover:bg-white/5 rounded-xl transition-colors">
+        <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 0 1 2.25-2.25h13.5A2.25 2.25 0 0 1 21 7.5v11.25m-18 0A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75m-18 0v-7.5A2.25 2.25 0 0 1 5.25 9h13.5A2.25 2.25 0 0 1 21 11.25v7.5" /></svg>
+        Bookings
+      </a>
+      <a href="#" class="flex items-center gap-3 px-4 py-3 text-white/60 hover:text-white hover:bg-white/5 rounded-xl transition-colors">
+        <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z" /></svg>
+        Guests
+      </a>
+      <a href="rooms-admin.html" class="flex items-center gap-3 px-4 py-3 text-white/60 hover:text-white hover:bg-white/5 rounded-xl transition-colors">
+        <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M8.25 21v-4.875c0-.621.504-1.125 1.125-1.125h5.25c.621 0 1.125.504 1.125 1.125V21m0 0h4.5V3.545M12.75 21h7.5M10.5 21V8.121c0-.312.11-.611.308-.848l4.692-5.58a.75.75 0 0 1 1.149.024l4.469 5.404c.18.217.282.5.282.79V21m-14.4 0H3.75c-.621 0-1.125-.504-1.125-1.125v-6.75c0-.621.504-1.125 1.125-1.125h3.375" /></svg>
+        Rooms
+      </a>
+      <a href="galleries-admin.html" class="flex items-center gap-3 px-4 py-3 bg-white/10 text-white rounded-xl font-medium">
+        <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="m2.25 15.75 5.159-5.159a2.25 2.25 0 0 1 3.182 0l5.159 5.159m-1.5-1.5 1.409-1.409a2.25 2.25 0 0 1 3.182 0l2.909 2.909m-18 3.75h16.5a1.5 1.5 0 0 0 1.5-1.5V6a1.5 1.5 0 0 0-1.5-1.5H3.75A1.5 1.5 0 0 0 2.25 6v12a1.5 1.5 0 0 0 1.5 1.5Zm10.5-11.25h.008v.008h-.008V8.25Zm.375 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Z" /></svg>
+        Galleries
+      </a>
+      <a href="#" class="flex items-center gap-3 px-4 py-3 text-white/60 hover:text-white hover:bg-white/5 rounded-xl transition-colors">
+        <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6v12m-3-2.818.879.659c1.171.879 3.07.879 4.242 0 1.172-.879 1.172-2.303 0-3.182C13.536 12.219 12.768 12 12 12c-.725 0-1.45-.22-2.003-.659-1.106-.879-1.106-2.303 0-3.182s2.9-.879 4.006 0l.415.33M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" /></svg>
+        Finance
+      </a>
+    </nav>
+    <div class="p-4 border-t border-white/10">
+      <a href="/" class="flex items-center gap-3 px-4 py-3 text-white/60 hover:text-white rounded-xl transition-colors text-sm">
+        <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0 0 13.5 3h-6a2.25 2.25 0 0 0-2.25 2.25v13.5A2.25 2.25 0 0 0 7.5 21h6a2.25 2.25 0 0 0 2.25-2.25V15M12 9l-3 3m0 0 3 3m-3-3h12.75" /></svg>
+        Sign Out
+      </a>
+    </div>
+  </aside>
+
+  <!-- Main Content Area -->
+  <div class="flex-1 flex flex-col h-screen overflow-hidden">
+    
+    <!-- Topbar -->
+    <header class="h-20 bg-white border-b border-gray-200 flex items-center justify-between px-8 flex-shrink-0">
+      <h1 class="text-xl font-poppins font-bold text-foreground">Kelola Galleries</h1>
+      <div class="flex items-center gap-4">
+        <button class="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center text-gray-600 hover:bg-gray-200 relative">
+          <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M14.857 17.082a23.848 23.848 0 0 0 5.454-1.31A8.967 8.967 0 0 1 18 9.75V9A6 6 0 0 0 6 9v.75a8.967 8.967 0 0 1-2.312 6.022c1.733.64 3.56 1.085 5.455 1.31m5.714 0a24.255 24.255 0 0 1-5.714 0m5.714 0a3 3 0 1 1-5.714 0" /></svg>
+          <span class="absolute top-2 right-2 w-2 h-2 bg-primary rounded-full"></span>
+        </button>
+        <div class="flex items-center gap-2">
+          <div class="w-10 h-10 rounded-full bg-primary text-white flex items-center justify-center font-bold">A</div>
+        </div>
+      </div>
+    </header>
+
+    <!-- Content -->
+    <main class="flex-1 overflow-y-auto p-8">
+      
+      <!-- KPI Cards -->
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+        <div class="bg-white border border-gray-100 shadow-sm rounded-2xl p-6">
+          <div class="flex justify-between items-start mb-4">
+            <div>
+              <p class="text-sm text-gray-500 mb-1">Total Gambar</p>
+              <h3 class="text-2xl font-poppins font-bold text-foreground" id="kpiTotal">0</h3>
+            </div>
+            <div class="w-10 h-10 bg-primary/10 text-primary rounded-xl flex items-center justify-center">
+              <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="m2.25 15.75 5.159-5.159a2.25 2.25 0 0 1 3.182 0l5.159 5.159m-1.5-1.5 1.409-1.409a2.25 2.25 0 0 1 3.182 0l2.909 2.909m-18 3.75h16.5a1.5 1.5 0 0 0 1.5-1.5V6a1.5 1.5 0 0 0-1.5-1.5H3.75A1.5 1.5 0 0 0 2.25 6v12a1.5 1.5 0 0 0 1.5 1.5Zm10.5-11.25h.008v.008h-.008V8.25Zm.375 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Z" /></svg>
+            </div>
+          </div>
+          <p class="text-xs text-gray-500 font-medium" id="kpiTotalSub">Di seluruh kamar</p>
+        </div>
+
+        <div class="bg-white border border-gray-100 shadow-sm rounded-2xl p-6">
+          <div class="flex justify-between items-start mb-4">
+            <div>
+              <p class="text-sm text-gray-500 mb-1">Featured</p>
+              <h3 class="text-2xl font-poppins font-bold text-accent-600" id="kpiFeatured">0</h3>
+            </div>
+            <div class="w-10 h-10 bg-accent/10 text-accent-700 rounded-xl flex items-center justify-center">
+              <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M11.48 3.499a.562.562 0 0 1 1.04 0l2.125 5.111a.563.563 0 0 0 .475.345l5.518.442c.499.04.701.663.321.988l-4.204 3.602a.563.563 0 0 0-.182.557l1.285 5.385a.562.562 0 0 1-.84.61l-4.725-2.885a.562.562 0 0 0-.586 0L6.982 20.54a.562.562 0 0 1-.84-.61l1.285-5.386a.562.562 0 0 0-.182-.557l-4.204-3.602a.562.562 0 0 1 .321-.988l5.518-.442a.563.563 0 0 0 .475-.345L11.48 3.5Z" /></svg>
+            </div>
+          </div>
+          <p class="text-xs text-accent-600 font-medium" id="kpiFeaturedSub">Gambar unggulan</p>
+        </div>
+
+        <div class="bg-white border border-gray-100 shadow-sm rounded-2xl p-6">
+          <div class="flex justify-between items-start mb-4">
+            <div>
+              <p class="text-sm text-gray-500 mb-1">Rooms Linked</p>
+              <h3 class="text-2xl font-poppins font-bold text-blue-600" id="kpiRooms">0</h3>
+            </div>
+            <div class="w-10 h-10 bg-blue-50 text-blue-600 rounded-xl flex items-center justify-center">
+              <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M13.19 8.688a4.5 4.5 0 0 1 1.242 7.244l-4.5 4.5a4.5 4.5 0 0 1-6.364-6.364l1.757-1.757m13.35-.622 1.757-1.757a4.5 4.5 0 0 0-6.364-6.364l-4.5 4.5a4.5 4.5 0 0 0 1.242 7.244" /></svg>
+            </div>
+          </div>
+          <p class="text-xs text-blue-600 font-medium" id="kpiRoomsSub">Kamar terhubung</p>
+        </div>
+
+        <div class="bg-white border border-gray-100 shadow-sm rounded-2xl p-6">
+          <div class="flex justify-between items-start mb-4">
+            <div>
+              <p class="text-sm text-gray-500 mb-1">Non-Featured</p>
+              <h3 class="text-2xl font-poppins font-bold text-gray-600" id="kpiRegular">0</h3>
+            </div>
+            <div class="w-10 h-10 bg-gray-100 text-gray-500 rounded-xl flex items-center justify-center">
+              <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6A2.25 2.25 0 0 1 6 3.75h2.25A2.25 2.25 0 0 1 10.5 6v2.25a2.25 2.25 0 0 1-2.25 2.25H6a2.25 2.25 0 0 1-2.25-2.25V6ZM3.75 15.75A2.25 2.25 0 0 1 6 13.5h2.25a2.25 2.25 0 0 1 2.25 2.25V18a2.25 2.25 0 0 1-2.25 2.25H6A2.25 2.25 0 0 1 3.75 18v-2.25ZM13.5 6a2.25 2.25 0 0 1 2.25-2.25H18A2.25 2.25 0 0 1 20.25 6v2.25A2.25 2.25 0 0 1 18 10.5h-2.25a2.25 2.25 0 0 1-2.25-2.25V6ZM13.5 15.75a2.25 2.25 0 0 1 2.25-2.25H18a2.25 2.25 0 0 1 2.25 2.25V18A2.25 2.25 0 0 1 18 20.25h-2.25a2.25 2.25 0 0 1-2.25-2.25v-2.25Z" /></svg>
+            </div>
+          </div>
+          <p class="text-xs text-gray-500 font-medium">Gambar reguler</p>
+        </div>
+      </div>
+
+      <!-- Action Bar & Table -->
+      <div class="bg-white border border-gray-100 shadow-sm rounded-2xl overflow-hidden mb-8">
+        <div class="p-6 border-b border-gray-100 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+          <h2 class="font-poppins font-bold text-lg">Daftar Gallery</h2>
+          <div class="flex items-center gap-3">
+            <div class="relative">
+              <svg class="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" /></svg>
+              <input type="text" id="searchInput" placeholder="Cari gambar..." class="input pl-10 pr-4 py-2 text-sm w-64" oninput="filterGalleries()" />
+            </div>
+            <select id="filterFeatured" class="input py-2 text-sm w-40" onchange="filterGalleries()">
+              <option value="">Semua Status</option>
+              <option value="true">Featured</option>
+              <option value="false">Non-Featured</option>
+            </select>
+            <select id="filterRoom" class="input py-2 text-sm w-44" onchange="filterGalleries()">
+              <option value="">Semua Room</option>
+            </select>
+            <button onclick="openModal()" class="btn-primary text-sm px-4 py-2">
+              <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" /></svg>
+              Tambah Gambar
+            </button>
+          </div>
+        </div>
+        <div class="overflow-x-auto">
+          <table class="w-full text-left text-sm whitespace-nowrap" id="galleriesTable">
+            <thead class="bg-gray-50 text-gray-500">
+              <tr>
+                <th class="py-3 px-6 font-medium">No</th>
+                <th class="py-3 px-6 font-medium">Preview</th>
+                <th class="py-3 px-6 font-medium">Room</th>
+                <th class="py-3 px-6 font-medium">Image Path</th>
+                <th class="py-3 px-6 font-medium">Caption</th>
+                <th class="py-3 px-6 font-medium">Featured</th>
+                <th class="py-3 px-6 font-medium text-center">Actions</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-gray-100" id="galleriesBody">
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Reports Section -->
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <!-- Gallery per Room -->
+        <div class="bg-white border border-gray-100 shadow-sm rounded-2xl p-6">
+          <h2 class="font-poppins font-bold text-lg mb-6">Gambar per Room</h2>
+          <div class="space-y-4" id="reportByRoom">
+          </div>
+        </div>
+
+        <!-- Featured Statistics -->
+        <div class="bg-white border border-gray-100 shadow-sm rounded-2xl p-6">
+          <h2 class="font-poppins font-bold text-lg mb-6">Statistik Featured</h2>
+          <div class="space-y-4">
+            <div class="p-4 bg-gray-50 rounded-xl">
+              <p class="text-sm text-gray-500 mb-1">Total Featured</p>
+              <p class="text-xl font-poppins font-bold text-accent-700" id="statFeatured">0</p>
+            </div>
+            <div class="p-4 bg-gray-50 rounded-xl">
+              <p class="text-sm text-gray-500 mb-1">Total Non-Featured</p>
+              <p class="text-xl font-poppins font-bold text-foreground" id="statNonFeatured">0</p>
+            </div>
+            <div class="p-4 bg-gray-50 rounded-xl">
+              <p class="text-sm text-gray-500 mb-1">Rasio Featured</p>
+              <p class="text-xl font-poppins font-bold text-primary" id="statRatio">0%</p>
+            </div>
+            <div class="p-4 bg-gray-50 rounded-xl">
+              <p class="text-sm text-gray-500 mb-1">Room Paling Banyak Gambar</p>
+              <p class="text-xl font-poppins font-bold text-blue-600" id="statTopRoom">-</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Quick Actions -->
+        <div class="bg-white border border-gray-100 shadow-sm rounded-2xl p-6">
+          <h2 class="font-poppins font-bold text-lg mb-6">Status Galeri</h2>
+          <div class="space-y-4" id="statusReport">
+          </div>
+          <div class="mt-6 pt-6 border-t border-gray-100">
+            <h3 class="text-sm font-medium text-gray-600 mb-3">Aksi Cepat</h3>
+            <div class="grid grid-cols-2 gap-3">
+              <button onclick="openModal()" class="p-3 border border-gray-200 rounded-xl text-sm font-medium hover:bg-gray-50 transition-colors flex flex-col items-center gap-2">
+                <svg class="w-5 h-5 text-gray-500" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" /></svg>
+                Tambah Gambar
+              </button>
+              <button onclick="exportReport()" class="p-3 border border-gray-200 rounded-xl text-sm font-medium hover:bg-gray-50 transition-colors flex flex-col items-center gap-2">
+                <svg class="w-5 h-5 text-gray-500" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75V16.5M16.5 12 12 16.5m0 0L7.5 12m4.5 4.5V3" /></svg>
+                Export Laporan
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <!-- Modal Tambah/Edit Gallery -->
+  <div id="galleryModal" class="fixed inset-0 z-50 hidden">
+    <div class="absolute inset-0 bg-black/50 backdrop-blur-sm" onclick="closeModal()"></div>
+    <div class="absolute inset-4 md:inset-auto md:top-1/2 md:left-1/2 md:-translate-x-1/2 md:-translate-y-1/2 md:w-[600px] md:max-h-[90vh] bg-white rounded-2xl shadow-2xl flex flex-col">
+      <!-- Modal Header -->
+      <div class="flex items-center justify-between px-6 py-4 border-b border-gray-100 flex-shrink-0">
+        <h3 class="font-poppins font-bold text-lg" id="modalTitle">Tambah Gambar Baru</h3>
+        <button onclick="closeModal()" class="w-8 h-8 rounded-lg bg-gray-100 flex items-center justify-center text-gray-500 hover:bg-gray-200 hover:text-gray-700 transition-colors">
+          <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" /></svg>
+        </button>
+      </div>
+      <!-- Modal Body -->
+      <div class="flex-1 overflow-y-auto p-6">
+        <form id="galleryForm" onsubmit="saveGallery(event)">
+          <input type="hidden" id="galleryId" />
+          
+          <!-- Room ID -->
+          <div class="mb-4">
+            <label class="input-label">Room <span class="text-red-500">*</span></label>
+            <select id="galleryRoomId" class="input" required>
+              <option value="">Pilih Room</option>
+            </select>
+          </div>
+
+          <!-- Image Path -->
+          <div class="mb-4">
+            <label class="input-label">Image Path <span class="text-red-500">*</span></label>
+            <input type="text" id="galleryImagePath" class="input" placeholder="e.g. ../resources/assets/images/gallery-1.jpg" required />
+          </div>
+
+          <!-- Image Preview -->
+          <div id="imagePreviewWrap" class="mb-4 hidden">
+            <label class="input-label">Preview</label>
+            <img id="imagePreview" class="w-full h-48 object-cover rounded-xl border border-gray-200" alt="Preview" />
+          </div>
+
+          <!-- Caption -->
+          <div class="mb-4">
+            <label class="input-label">Caption <span class="text-red-500">*</span></label>
+            <textarea id="galleryCaption" class="input" rows="3" placeholder="Deskripsi singkat gambar..." required></textarea>
+          </div>
+
+          <!-- Is Featured -->
+          <div class="mb-4">
+            <label class="input-label">Featured</label>
+            <div class="flex items-center gap-3 mt-2">
+              <label class="relative inline-flex items-center cursor-pointer">
+                <input type="checkbox" id="galleryIsFeatured" class="sr-only peer" />
+                <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-primary/20 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
+              </label>
+              <span class="text-sm text-gray-600" id="featuredLabel">Non-Featured</span>
+            </div>
+          </div>
+
+          <!-- Modal Footer -->
+          <div class="flex justify-end gap-3 mt-6 pt-4 border-t border-gray-100">
+            <button type="button" onclick="closeModal()" class="px-5 py-2.5 text-sm font-medium text-gray-700 bg-gray-100 rounded-xl hover:bg-gray-200 transition-colors">Batal</button>
+            <button type="submit" class="btn-primary text-sm px-5 py-2.5" id="submitBtn">Simpan Gambar</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- Delete Confirmation Modal -->
+  <div id="deleteModal" class="fixed inset-0 z-50 hidden">
+    <div class="absolute inset-0 bg-black/50 backdrop-blur-sm" onclick="closeDeleteModal()"></div>
+    <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 bg-white rounded-2xl shadow-2xl p-6">
+      <div class="text-center">
+        <div class="w-14 h-14 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
+          <svg class="w-7 h-7 text-red-600" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" /></svg>
+        </div>
+        <h3 class="font-poppins font-bold text-lg mb-2">Hapus Gambar?</h3>
+        <p class="text-sm text-gray-500 mb-1">Anda yakin ingin menghapus gambar</p>
+        <p class="text-sm font-semibold text-foreground mb-6" id="deleteGalleryName">-</p>
+        <div class="flex gap-3">
+          <button onclick="closeDeleteModal()" class="flex-1 px-4 py-2.5 text-sm font-medium text-gray-700 bg-gray-100 rounded-xl hover:bg-gray-200 transition-colors">Batal</button>
+          <button onclick="confirmDelete()" class="flex-1 px-4 py-2.5 text-sm font-medium text-white bg-red-600 rounded-xl hover:bg-red-700 transition-colors">Hapus</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast -->
+  <div id="toast" class="fixed top-6 right-6 z-[60] hidden">
+    <div class="flex items-center gap-3 px-5 py-3 bg-white border border-gray-200 shadow-lg rounded-xl">
+      <svg id="toastIcon" class="w-5 h-5 text-emerald-500" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" /></svg>
+      <span id="toastMessage" class="text-sm font-medium text-foreground"></span>
+    </div>
+  </div>
+
+  <script>
+    // ===== Data Store =====
+    const GALLERY_KEY = 'sitio_galleries';
+    const ROOMS_KEY = 'sitio_rooms';
+
+    // Load rooms from localStorage (shared with rooms-admin)
+    function loadRooms() {
+      const data = localStorage.getItem(ROOMS_KEY);
+      if (!data) return [];
+      return JSON.parse(data);
+    }
+
+    const defaultGalleries = [
+      { id: 1, room_id: 1, image_path: '../resources/assets/images/room-deluxe.png', caption: 'Pemandangan Danau Toba dari balkon kamar Deluxe', is_featured: true },
+      { id: 2, room_id: 1, image_path: '../resources/assets/images/room-superior.png', caption: 'Interior kamar Deluxe Lake View dengan dekorasi modern', is_featured: false },
+      { id: 3, room_id: 2, image_path: '../resources/assets/images/room-superior.png', caption: 'Taman tropis yang asri di depan kamar Superior Garden', is_featured: true },
+      { id: 4, room_id: 3, image_path: '../resources/assets/images/room-villa.png', caption: 'Lake Villa dengan private pool menghadap danau', is_featured: true },
+      { id: 5, room_id: 3, image_path: '../resources/assets/images/room-deluxe.png', caption: 'Ruang tamu mewah Lake Villa', is_featured: false },
+      { id: 6, room_id: 3, image_path: '../resources/assets/images/room-villa.png', caption: 'Sunset view dari teras Lake Villa', is_featured: true },
+      { id: 7, room_id: 4, image_path: '../resources/assets/images/room-deluxe.png', caption: 'Presidential Suite dengan panorama kaldera', is_featured: true },
+      { id: 8, room_id: 5, image_path: '../resources/assets/images/room-superior.png', caption: 'Standard Twin room yang praktis dan nyaman', is_featured: false },
+      { id: 9, room_id: 6, image_path: '../resources/assets/images/room-villa.png', caption: 'Family Room dengan area bermain anak', is_featured: false },
+      { id: 10, room_id: 7, image_path: '../resources/assets/images/room-deluxe.png', caption: 'Honeymoon Suite dengan jacuzzi outdoor romantis', is_featured: true },
+    ];
+
+    function loadGalleries() {
+      const data = localStorage.getItem(GALLERY_KEY);
+      if (!data) {
+        localStorage.setItem(GALLERY_KEY, JSON.stringify(defaultGalleries));
+        return [...defaultGalleries];
+      }
+      return JSON.parse(data);
+    }
+
+    function saveGalleriesToStorage(galleries) {
+      localStorage.setItem(GALLERY_KEY, JSON.stringify(galleries));
+    }
+
+    let galleries = loadGalleries();
+    let rooms = loadRooms();
+    let deleteTargetId = null;
+
+    // Helper: get room name by id
+    function getRoomName(roomId) {
+      const room = rooms.find(r => r.id === roomId);
+      return room ? room.name : `Room #${roomId}`;
+    }
+
+    // ===== Populate Room Selects =====
+    function populateRoomSelects() {
+      const filterSelect = document.getElementById('filterRoom');
+      const formSelect = document.getElementById('galleryRoomId');
+
+      // Filter select
+      const filterOpts = '<option value="">Semua Room</option>' + rooms.map(r =>
+        `<option value="${r.id}">${r.name}</option>`
+      ).join('');
+      filterSelect.innerHTML = filterOpts;
+
+      // Form select
+      const formOpts = '<option value="">Pilih Room</option>' + rooms.map(r =>
+        `<option value="${r.id}">${r.name}</option>`
+      ).join('');
+      formSelect.innerHTML = formOpts;
+    }
+
+    // ===== Render Table =====
+    function renderGalleries(data) {
+      const tbody = document.getElementById('galleriesBody');
+      if (data.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="7" class="py-12 text-center text-gray-400">Tidak ada gambar ditemukan.</td></tr>';
+        return;
+      }
+      tbody.innerHTML = data.map((g, i) => {
+        const img = g.image_path || 'https://via.placeholder.com/80x56?text=No+Image';
+        const roomName = getRoomName(g.room_id);
+        const featuredBadge = g.is_featured
+          ? '<span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-xs font-medium bg-accent/10 text-accent-700"><svg class="w-3 h-3" fill="currentColor" viewBox="0 0 24 24"><path d="M11.48 3.499a.562.562 0 0 1 1.04 0l2.125 5.111a.563.563 0 0 0 .475.345l5.518.442c.499.04.701.663.321.988l-4.204 3.602a.563.563 0 0 0-.182.557l1.285 5.385a.562.562 0 0 1-.84.61l-4.725-2.885a.562.562 0 0 0-.586 0L6.982 20.54a.562.562 0 0 1-.84-.61l1.285-5.386a.562.562 0 0 0-.182-.557l-4.204-3.602a.562.562 0 0 1 .321-.988l5.518-.442a.563.563 0 0 0 .475-.345L11.48 3.5Z" /></svg>Featured</span>'
+          : '<span class="badge bg-gray-100 text-gray-600">Regular</span>';
+        const captionShort = g.caption.length > 40 ? g.caption.substring(0, 40) + '...' : g.caption;
+        const pathShort = g.image_path.length > 35 ? '...' + g.image_path.slice(-32) : g.image_path;
+        return `<tr class="hover:bg-gray-50 transition-colors">
+          <td class="py-3 px-6 text-gray-500">${i + 1}</td>
+          <td class="py-3 px-6">
+            <img src="${img}" alt="${g.caption}" class="w-16 h-11 object-cover rounded-lg border border-gray-200" onerror="this.src='https://via.placeholder.com/80x56?text=No+Image'" />
+          </td>
+          <td class="py-3 px-6">
+            <div class="font-medium text-foreground">${roomName}</div>
+            <div class="text-xs text-gray-500">ID: ${g.room_id}</div>
+          </td>
+          <td class="py-3 px-6 text-gray-500 text-xs font-mono" title="${g.image_path}">${pathShort}</td>
+          <td class="py-3 px-6" title="${g.caption}">${captionShort}</td>
+          <td class="py-3 px-6">${featuredBadge}</td>
+          <td class="py-3 px-6 text-center">
+            <div class="flex items-center justify-center gap-2">
+              <button onclick="editGallery(${g.id})" class="w-8 h-8 rounded-lg bg-blue-50 text-blue-600 hover:bg-blue-100 flex items-center justify-center transition-colors" title="Edit">
+                <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10" /></svg>
+              </button>
+              <button onclick="deleteGallery(${g.id})" class="w-8 h-8 rounded-lg bg-red-50 text-red-600 hover:bg-red-100 flex items-center justify-center transition-colors" title="Hapus">
+                <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" /></svg>
+              </button>
+            </div>
+          </td>
+        </tr>`;
+      }).join('');
+    }
+
+    // ===== Filter =====
+    function filterGalleries() {
+      const q = document.getElementById('searchInput').value.toLowerCase();
+      const featured = document.getElementById('filterFeatured').value;
+      const roomFilter = document.getElementById('filterRoom').value;
+      let filtered = galleries.filter(g => {
+        const roomName = getRoomName(g.room_id).toLowerCase();
+        const matchSearch = !q || g.caption.toLowerCase().includes(q) || g.image_path.toLowerCase().includes(q) || roomName.includes(q);
+        const matchFeatured = !featured || String(g.is_featured) === featured;
+        const matchRoom = !roomFilter || g.room_id === parseInt(roomFilter);
+        return matchSearch && matchFeatured && matchRoom;
+      });
+      renderGalleries(filtered);
+    }
+
+    // ===== Image Preview =====
+    document.getElementById('galleryImagePath').addEventListener('input', function() {
+      const wrap = document.getElementById('imagePreviewWrap');
+      const img = document.getElementById('imagePreview');
+      if (this.value.trim()) {
+        img.src = this.value;
+        wrap.classList.remove('hidden');
+        img.onerror = () => wrap.classList.add('hidden');
+      } else {
+        wrap.classList.add('hidden');
+      }
+    });
+
+    // ===== Featured Toggle Label =====
+    document.getElementById('galleryIsFeatured').addEventListener('change', function() {
+      document.getElementById('featuredLabel').textContent = this.checked ? 'Featured' : 'Non-Featured';
+    });
+
+    // ===== Modal Open / Close =====
+    function openModal(id) {
+      document.getElementById('galleryModal').classList.remove('hidden');
+      document.body.style.overflow = 'hidden';
+      if (!id) {
+        document.getElementById('modalTitle').textContent = 'Tambah Gambar Baru';
+        document.getElementById('submitBtn').textContent = 'Simpan Gambar';
+        document.getElementById('galleryForm').reset();
+        document.getElementById('galleryId').value = '';
+        document.getElementById('imagePreviewWrap').classList.add('hidden');
+        document.getElementById('featuredLabel').textContent = 'Non-Featured';
+      }
+    }
+
+    function closeModal() {
+      document.getElementById('galleryModal').classList.add('hidden');
+      document.body.style.overflow = '';
+    }
+
+    // ===== Save (Add / Edit) =====
+    function saveGallery(e) {
+      e.preventDefault();
+      const id = document.getElementById('galleryId').value;
+      const galleryData = {
+        room_id: parseInt(document.getElementById('galleryRoomId').value),
+        image_path: document.getElementById('galleryImagePath').value.trim(),
+        caption: document.getElementById('galleryCaption').value.trim(),
+        is_featured: document.getElementById('galleryIsFeatured').checked,
+      };
+
+      if (id) {
+        const idx = galleries.findIndex(g => g.id === parseInt(id));
+        if (idx !== -1) {
+          galleries[idx] = { ...galleries[idx], ...galleryData };
+          showToast('Gambar berhasil diperbarui!');
+        }
+      } else {
+        const newId = galleries.length > 0 ? Math.max(...galleries.map(g => g.id)) + 1 : 1;
+        galleries.push({ id: newId, ...galleryData });
+        showToast('Gambar baru berhasil ditambahkan!');
+      }
+
+      saveGalleriesToStorage(galleries);
+      filterGalleries();
+      updateKPIs();
+      updateReports();
+      closeModal();
+    }
+
+    // ===== Edit =====
+    function editGallery(id) {
+      const gallery = galleries.find(g => g.id === id);
+      if (!gallery) return;
+      document.getElementById('galleryId').value = gallery.id;
+      document.getElementById('galleryRoomId').value = gallery.room_id;
+      document.getElementById('galleryImagePath').value = gallery.image_path;
+      document.getElementById('galleryCaption').value = gallery.caption;
+      document.getElementById('galleryIsFeatured').checked = gallery.is_featured;
+      document.getElementById('featuredLabel').textContent = gallery.is_featured ? 'Featured' : 'Non-Featured';
+      document.getElementById('modalTitle').textContent = 'Edit Gambar';
+      document.getElementById('submitBtn').textContent = 'Update Gambar';
+      openModal(id);
+      const imgWrap = document.getElementById('imagePreviewWrap');
+      const imgEl = document.getElementById('imagePreview');
+      if (gallery.image_path) {
+        imgEl.src = gallery.image_path;
+        imgWrap.classList.remove('hidden');
+      } else {
+        imgWrap.classList.add('hidden');
+      }
+    }
+
+    // ===== Delete =====
+    function deleteGallery(id) {
+      const gallery = galleries.find(g => g.id === id);
+      if (!gallery) return;
+      deleteTargetId = id;
+      document.getElementById('deleteGalleryName').textContent = gallery.caption.length > 50 ? gallery.caption.substring(0, 50) + '...' : gallery.caption;
+      document.getElementById('deleteModal').classList.remove('hidden');
+    }
+
+    function closeDeleteModal() {
+      document.getElementById('deleteModal').classList.add('hidden');
+      deleteTargetId = null;
+    }
+
+    function confirmDelete() {
+      if (deleteTargetId !== null) {
+        galleries = galleries.filter(g => g.id !== deleteTargetId);
+        saveGalleriesToStorage(galleries);
+        filterGalleries();
+        updateKPIs();
+        updateReports();
+        showToast('Gambar berhasil dihapus!');
+      }
+      closeDeleteModal();
+    }
+
+    // ===== KPIs =====
+    function updateKPIs() {
+      const total = galleries.length;
+      const featured = galleries.filter(g => g.is_featured).length;
+      const uniqueRooms = [...new Set(galleries.map(g => g.room_id))].length;
+      const regular = total - featured;
+
+      document.getElementById('kpiTotal').textContent = total;
+      document.getElementById('kpiFeatured').textContent = featured;
+      document.getElementById('kpiRooms').textContent = uniqueRooms;
+      document.getElementById('kpiRegular').textContent = regular;
+      document.getElementById('kpiTotalSub').textContent = `Di ${uniqueRooms} kamar`;
+      document.getElementById('kpiFeaturedSub').textContent = `${total > 0 ? Math.round((featured/total)*100) : 0}% dari total`;
+      document.getElementById('kpiRoomsSub').textContent = `Dari ${rooms.length} total kamar`;
+    }
+
+    // ===== Reports =====
+    function updateReports() {
+      // By room
+      const byRoom = {};
+      galleries.forEach(g => {
+        const name = getRoomName(g.room_id);
+        if (!byRoom[name]) byRoom[name] = { total: 0, featured: 0 };
+        byRoom[name].total++;
+        if (g.is_featured) byRoom[name].featured++;
+      });
+
+      const maxImages = Math.max(...Object.values(byRoom).map(d => d.total), 1);
+      document.getElementById('reportByRoom').innerHTML = Object.entries(byRoom).map(([name, d]) => {
+        return `
+          <div>
+            <div class="flex justify-between text-sm mb-1">
+              <span class="text-gray-600 font-medium">${name}</span>
+              <span class="text-gray-500">${d.total} gambar (${d.featured} featured)</span>
+            </div>
+            <div class="flex gap-1 h-2 rounded-full overflow-hidden bg-gray-100">
+              ${d.featured ? `<div class="bg-accent rounded-full" style="width: ${(d.featured/maxImages)*100}%" title="Featured: ${d.featured}"></div>` : ''}
+              ${(d.total - d.featured) ? `<div class="bg-primary/40 rounded-full" style="width: ${((d.total - d.featured)/maxImages)*100}%" title="Regular: ${d.total - d.featured}"></div>` : ''}
+            </div>
+          </div>
+        `;
+      }).join('');
+
+      // Stats
+      const total = galleries.length || 1;
+      const featured = galleries.filter(g => g.is_featured).length;
+      const nonFeatured = galleries.length - featured;
+      document.getElementById('statFeatured').textContent = featured;
+      document.getElementById('statNonFeatured').textContent = nonFeatured;
+      document.getElementById('statRatio').textContent = Math.round((featured / total) * 100) + '%';
+
+      // Top room
+      if (Object.keys(byRoom).length > 0) {
+        const topRoom = Object.entries(byRoom).sort((a, b) => b[1].total - a[1].total)[0];
+        document.getElementById('statTopRoom').textContent = `${topRoom[0]} (${topRoom[1].total})`;
+      }
+
+      // Status report (featured vs non-featured breakdown)
+      document.getElementById('statusReport').innerHTML = `
+        <div>
+          <div class="flex justify-between text-sm mb-1">
+            <span class="text-gray-600">Featured</span>
+            <span class="font-medium">${featured}/${galleries.length}</span>
+          </div>
+          <div class="w-full bg-gray-100 rounded-full h-2">
+            <div class="bg-accent h-2 rounded-full transition-all" style="width: ${(featured/total)*100}%"></div>
+          </div>
+        </div>
+        <div>
+          <div class="flex justify-between text-sm mb-1">
+            <span class="text-gray-600">Non-Featured</span>
+            <span class="font-medium">${nonFeatured}/${galleries.length}</span>
+          </div>
+          <div class="w-full bg-gray-100 rounded-full h-2">
+            <div class="bg-gray-400 h-2 rounded-full transition-all" style="width: ${(nonFeatured/total)*100}%"></div>
+          </div>
+        </div>
+      `;
+    }
+
+    // ===== Export =====
+    function exportReport() {
+      let csv = 'No,Room ID,Room Name,Image Path,Caption,Is Featured\n';
+      galleries.forEach((g, i) => {
+        csv += `${i+1},${g.room_id},"${getRoomName(g.room_id)}","${g.image_path}","${g.caption}",${g.is_featured}\n`;
+      });
+
+      const featured = galleries.filter(g => g.is_featured).length;
+      csv += `\nSummary\nTotal Images,${galleries.length}\nFeatured,${featured}\nNon-Featured,${galleries.length - featured}\nRooms Linked,${[...new Set(galleries.map(g => g.room_id))].length}\n`;
+
+      const blob = new Blob([csv], { type: 'text/csv' });
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = 'galleries-report.csv';
+      a.click();
+      showToast('Laporan berhasil di-export!');
+    }
+
+    // ===== Toast =====
+    function showToast(msg) {
+      const t = document.getElementById('toast');
+      document.getElementById('toastMessage').textContent = msg;
+      t.classList.remove('hidden');
+      setTimeout(() => t.classList.add('hidden'), 3000);
+    }
+
+    // ===== Init =====
+    populateRoomSelects();
+    renderGalleries(galleries);
+    updateKPIs();
+    updateReports();
+  </script>
+
+</body>
+</html>

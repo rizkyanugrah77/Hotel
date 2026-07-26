@@ -6,6 +6,6 @@ class RoomController extends Controller
 {
     public function index()
     {
-        return view('rooms-admin');
+        return view('admin.rooms-manager');
     }
 }
