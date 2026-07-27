@@ -6,5 +6,5 @@
         </div>
     </x-slot>
 
-    <livewire:layout.facility-manager />
+    <livewire:admin.facility-manager />
 </x-app-layout>
