@@ -16,7 +16,7 @@
         <a href="{{ route('dashboard') }}" wire:navigate @class([
             'flex items-center gap-3 px-4 py-3 rounded-xl font-medium transition-colors',
             'bg-white/10 text-white' => request()->routeIs('dashboard'),
-            'text-white/60 hover:text-white hover:bg-white/5' => !request()->routeIs(
+            'text-white/80 hover:text-white hover:bg-white/5' => !request()->routeIs(
                 'dashboard'),
         ])>
             <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
@@ -26,8 +26,12 @@
             Dashboard
         </a>
 
-        <a href="#"
-            class="flex items-center gap-3 px-4 py-3 text-white/80 hover:text-white hover:bg-white/5 rounded-xl transition-colors">
+        <a href="{{ route('bookings.manager') }}" wire:navigate @class([
+            'flex items-center gap-3 px-4 py-3 rounded-xl font-medium transition-colors',
+            'bg-white/10 text-white' => request()->routeIs('bookings.manager'),
+            'text-white/80 hover:text-white hover:bg-white/5' => !request()->routeIs(
+                'bookings.manager'),
+        ])>
             <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round"
                     d="M8.25 3.75H6a2.25 2.25 0 0 0-2.25 2.25v12A2.25 2.25 0 0 0 6 20.25h12A2.25 2.25 0 0 0 20.25 18V6A2.25 2.25 0 0 0 18 3.75h-2.25M8.25 3.75A2.25 2.25 0 0 1 10.5 1.5h3a2.25 2.25 0 0 1 2.25 2.25m-7.5 0a2.25 2.25 0 0 0 2.25 2.25h3a2.25 2.25 0 0 0 2.25-2.25m-6 8.25h6m-6 3h6" />
@@ -47,7 +51,7 @@
         <a href="{{ route('rooms.manager') }}" wire:navigate @class([
             'flex items-center gap-3 px-4 py-3 rounded-xl font-medium transition-colors',
             'bg-white/10 text-white' => request()->routeIs('rooms.manager'),
-            'text-white/60 hover:text-white hover:bg-white/5' => !request()->routeIs(
+            'text-white/80 hover:text-white hover:bg-white/5' => !request()->routeIs(
                 'rooms.manager'),
         ])>
             <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">

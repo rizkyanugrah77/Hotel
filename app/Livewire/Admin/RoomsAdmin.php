@@ -2,6 +2,7 @@
 
 namespace App\Livewire\Admin;
 
+use App\Models\Facility;
 use App\Models\Room;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
@@ -36,6 +37,8 @@ class RoomsAdmin extends Component
 
     public ?int $roomToDelete = null;
 
+    public array $selectedFacilities = [];
+
     public function save(): void
     {
         $validated = $this->validate();
@@ -53,13 +56,15 @@ class RoomsAdmin extends Component
             if ($room->name !== $attributes['name']) {
                 $attributes['slug'] = $this->uniqueSlug($attributes['name'], $room->id);
             }
-
+            $room->facilities()->sync($this->selectedFacilities);
             $room->update($attributes);
+
         } else {
-            Room::create([
+            $room = Room::create([
                 ...$attributes,
                 'slug' => $this->uniqueSlug($attributes['name']),
             ]);
+            $room->facilities()->sync($this->selectedFacilities);
         }
 
         $this->resetForm();
@@ -80,6 +85,10 @@ class RoomsAdmin extends Component
         $this->price = (string) $room->price;
         $this->status = $room->status ?? 'available';
         $this->image = null;
+        $this->selectedFacilities = $room
+            ->facilities
+            ->pluck('id')
+            ->toArray();
         $this->resetValidation();
 
         $this->dispatch('room-editing');
@@ -104,7 +113,7 @@ class RoomsAdmin extends Component
 
     public function resetForm(): void
     {
-        $this->reset(['name', 'description', 'bed_type', 'size', 'capacity', 'price', 'image']);
+        $this->reset(['name', 'description', 'bed_type', 'size', 'capacity', 'price', 'image', 'selectedFacilities']);
         $this->status = 'available';
         $this->editingRoomId = null;
         $this->resetValidation();
@@ -125,6 +134,7 @@ class RoomsAdmin extends Component
 
         return view('livewire.layout.rooms-manager', [
             'rooms' => $rooms,
+            'facilities' => Facility::orderBy('name')->get(),
             'roomStats' => [
                 'total' => Room::query()->count(),
                 'available' => Room::query()->where('status', 'available')->count(),
@@ -145,6 +155,8 @@ class RoomsAdmin extends Component
             'price' => ['required', 'integer', 'min:0'],
             'status' => ['required', Rule::in(['available', 'occupied', 'maintenance'])],
             'image' => [$this->editingRoomId ? 'nullable' : 'required', 'file', 'mimes:png,jpg,jpeg', 'max:2048'],
+            'selectedFacilities' => ['nullable', 'array'],
+            'selectedFacilities.*' => ['exists:facilities,id'],
         ];
     }
 
