@@ -1,13 +1,15 @@
 <div x-data="{
-    toast: { show: false, message: '' },
-    showToast(message) {
+    toast: { show: false, message: '', type: 'success' },
+    showToast(message, type) {
         this.toast.message = message;
         this.toast.show = true;
+        this.toast.type = type;
         window.setTimeout(() => this.toast.show = false, 3000);
     }
 }"
-    x-on:room-saved.window="$dispatch('close-modal', 'manage-room'); showToast($event.detail.message)"
-    x-on:room-deleted.window="$dispatch('close-modal', 'delete-room'); showToast($event.detail.message)"
+    x-on:room-saved.window="$dispatch('close-modal', 'manage-room'); showToast($event.detail.message, 'success')"
+    x-on:room-deleted.window="$dispatch('close-modal', 'delete-room'); showToast($event.detail.message, 'success')"
+    x-on:room-error.window="$dispatch('close-modal', 'manage-room'); showToast($event.detail.message, 'error')"
     x-on:room-editing.window="$dispatch('open-modal', 'manage-room')"
     x-on:room-delete-confirmation.window="$dispatch('open-modal', 'delete-room')"
     class="min-w-0 flex-1 overflow-y-auto p-4 sm:p-6 lg:p-8">
@@ -188,9 +190,7 @@
                     <label for="room-name" class="input-label">Nama <span class="text-red-500">*</span></label>
                     <input id="room-name" type="text" wire:model="name" class="input"
                         placeholder="Contoh: Deluxe Lake View" required>
-                    @error('name')
-                        <span class="error">{{ $message }}</span>
-                    @enderror
+                    <x-input-error name="name" />
                 </div>
                 <div>
                     <label for="room-bed-type" class="input-label">Tipe Tempat Tidur <span
@@ -204,9 +204,7 @@
                         <option value="King">King</option>
                         <option value="Twin Double">Twin Double</option>
                     </select>
-                    @error('bed_type')
-                        <span class="error">{{ $message }}</span>
-                    @enderror
+                    <x-input-error name="bed_type" />
                 </div>
             </div>
 
@@ -235,9 +233,7 @@
                         class="text-red-500">*</span></label>
                 <textarea id="room-description" wire:model="description" class="input" rows="3"
                     placeholder="Deskripsi singkat mengenai kamar..." required></textarea>
-                @error('description')
-                    <span class="error">{{ $message }}</span>
-                @enderror
+                <x-input-error name="description" />
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
@@ -245,18 +241,14 @@
                     <label for="room-size" class="input-label">Ukuran (m²) <span
                             class="text-red-500">*</span></label>
                     <input id="room-size" type="number" wire:model="size" class="input" min="1" required>
-                    @error('size')
-                        <span class="error">{{ $message }}</span>
-                    @enderror
+                    <x-input-error name="size" />
                 </div>
                 <div>
                     <label for="room-capacity" class="input-label">Kapasitas (orang) <span
                             class="text-red-500">*</span></label>
                     <input id="room-capacity" type="number" wire:model="capacity" class="input" min="1"
                         required>
-                    @error('capacity')
-                        <span class="error">{{ $message }}</span>
-                    @enderror
+                    <x-input-error name="capacity" />
                 </div>
             </div>
 
@@ -266,9 +258,7 @@
                             class="text-red-500">*</span></label>
                     <input id="room-price" type="number" wire:model="price" class="input" min="0"
                         required>
-                    @error('price')
-                        <span class="error">{{ $message }}</span>
-                    @enderror
+                    <x-input-error name="price" />
                 </div>
                 <div>
                     <label for="room-status" class="input-label">Status <span class="text-red-500">*</span></label>
@@ -277,9 +267,7 @@
                         <option value="occupied">Occupied</option>
                         <option value="maintenance">Maintenance</option>
                     </select>
-                    @error('status')
-                        <span class="error">{{ $message }}</span>
-                    @enderror
+                    <x-input-error name="status" />
                 </div>
             </div>
 
@@ -288,15 +276,18 @@
                         <span class="text-red-500">*</span>
                     @endif
                 </label>
-                <input id="room-image" type="file" wire:model="image" class="input" accept="image/*">
+                <span class="text-sm text-red-500">Ukuran maksimal foto 2MB dan file JPG, JPEG, atau PNG</span>
+                <input id="room-image" type="file" wire:model.live="image" class="input" accept="image/*">
 
                 <div wire:loading wire:target="image" class="text-sm text-gray-500 mt-2">
                     Mengupload gambar...
                 </div>
 
-                @error('image')
-                    <span class="error">{{ $message }}</span>
-                @enderror
+                @if ($image?->temporaryUrl())
+                    <img src="{{ $image->temporaryUrl() }}" alt="{{ $name }}"
+                        class="w-20 h-20 object-cover mt-4 mb-2 rounded-2xl">
+                @endif
+                <x-input-error name="image" />
             </div>
 
             <div class="mt-6 flex flex-col-reverse gap-3 border-t border-gray-100 pt-4 sm:flex-row sm:justify-end">

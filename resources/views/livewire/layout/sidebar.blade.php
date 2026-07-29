@@ -26,6 +26,22 @@
             Dashboard
         </a>
 
+        <a href="{{ route('gallery.manager') }}" wire:navigate @class([
+            'flex items-center gap-3 px-4 py-3 rounded-xl font-medium transition-colors',
+            'bg-white/10 text-white' => request()->routeIs('gallery.manager'),
+            'text-white/80 hover:text-white hover:bg-white/5' => !request()->routeIs(
+                'gallery.manager'),
+        ])>
+            <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round"
+                    d="M2.25 15.75l5.159-5.159a2.25 2.25 0 0 1 3.182 0l4.684 4.683a2.25 2.25 0 0 0 3.182 0l3.748-3.748"
+                    class="text-white" />
+                <path stroke-linecap="round" stroke-linejoin="round"
+                    d="M11.5 5.25a3.375 3.375 0 1 1-6.75 0 3.375 3.375 0 0 1 6.75 0Z" class="text-white" />
+            </svg>
+            Gallery
+        </a>
+
         <a href="{{ route('bookings.manager') }}" wire:navigate @class([
             'flex items-center gap-3 px-4 py-3 rounded-xl font-medium transition-colors',
             'bg-white/10 text-white' => request()->routeIs('bookings.manager'),

@@ -70,15 +70,15 @@ Pindahkan aset HTML murni Anda agar bisa dipakai oleh Livewire.
 ## 5. Pembuatan Fitur Inti dengan Livewire (CRUD & Bisnis Logik)
 Gunakan command `php artisan make:livewire NamaKomponen`.
 - [ ] **Admin Panel (Livewire Components)**:
-  - `Admin\RoomManager`: Menampilkan datatable Livewire untuk CRUD kamar (upload foto kamar langsung tersimpan ke Storage).
-  - `Admin\FacilityManager`: CRUD fasilitas.
+  + `Admin\RoomManager`: Menampilkan datatable Livewire untuk CRUD kamar (upload foto kamar langsung tersimpan ke Storage).
+  + `Admin\FacilityManager`: CRUD fasilitas.
   - `Admin\GalleryManager`: Upload multi-foto ke tabel `galleries`.
-  - `Admin\BookingList`: Tabel real-time melihat daftar pemesanan masuk.
+  - `Admin\BookingList`: Tabel real-time melihat daftar pemesanan masu`k.
   - `Admin\TestimonialModeration`: Menyetujui (`is_approved = true`) testimoni dari user agar tampil di halaman depan.
 - [ ] **Customer Area (Livewire Components)**:
   - `Home\LandingPage`: Menampilkan kamar unggulan, galeri (Carousel), dan daftar testimoni yang sudah disetujui.
   - `Room\SearchFilter`: Menampilkan input kalender check-in/check-out. Memiliki fungsi `$watch` yang langsung memfilter kamar tersedia dari database secara *real-time*.
-  - `Room\Detail`: Menampilkan detail kamar, list fasilitas (dari relasi pivot), galeri khusus kamar tersebut.
+  - `Room\Detail`: Menampilkan detail kamar, list fasilitas (dari relasi pivot), galeri khusus kamar tersebut. 
   - `Booking\CheckoutForm`:
     - Validasi tanggal dan jumlah tamu.
     - Kalkulasi harga *real-time* (Harga Kamar x Jumlah Malam).

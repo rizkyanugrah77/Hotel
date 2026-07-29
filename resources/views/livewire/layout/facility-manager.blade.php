@@ -1,18 +1,20 @@
 <div x-data="{
-    toast: { show: false, message: '' },
-    showToast(message) {
+    toast: { show: false, message: '', type: 'success' },
+    showToast(message, type) {
         this.toast.message = message;
         this.toast.show = true;
+        this.toast.type = type;
         window.setTimeout(() => this.toast.show = false, 3000);
     }
 }"
-    x-on:facility-saved.window="$dispatch('close-modal', 'manage-facility'); showToast($event.detail.message)"
-    x-on:facility-deleted.window="$dispatch('close-modal', 'delete-facility'); showToast($event.detail.message)"
+    x-on:facility-saved.window="$dispatch('close-modal', 'manage-facility'); showToast($event.detail.message, $event.detail.type)"
+    x-on:facility-deleted.window="$dispatch('close-modal', 'delete-facility'); showToast($event.detail.message, $event.detail.type)"
+    x-on:facility-updated.window="$dispatch('close-modal', 'manage-facility'); showToast($event.detail.message, $event.detail.type)"
+    x-on:facility-error.window="showToast($event.detail.message, $event.detail.type); $dispatch('close-modal', 'manage-facility')"
     x-on:facility-editing.window="$dispatch('open-modal', 'manage-facility')"
     x-on:facility-delete-confirmation.window="$dispatch('open-modal', 'delete-facility')">
 
     <div class="min-w-0 flex-1 overflow-y-auto p-4 sm:p-6 lg:p-8">
-
         {{-- Toast Notification --}}
         <x-toast />
 

@@ -39,6 +39,8 @@ class RoomsAdmin extends Component
 
     public array $selectedFacilities = [];
 
+    public ?string $oldImage = null;
+
     public function save(): void
     {
         $validated = $this->validate();
@@ -50,6 +52,7 @@ class RoomsAdmin extends Component
             $imageName = Str::uuid().'.'.$this->image->getClientOriginalExtension();
             $this->image->storeAs('assets/img/rooms', $imageName, 'public');
             $attributes['image'] = $imageName;
+
         }
 
         if ($room) {
@@ -60,16 +63,27 @@ class RoomsAdmin extends Component
             $room->update($attributes);
 
         } else {
-            $room = Room::create([
-                ...$attributes,
-                'slug' => $this->uniqueSlug($attributes['name']),
-            ]);
-            $room->facilities()->sync($this->selectedFacilities);
+
+            try {
+                $room = Room::create([
+                    ...$attributes,
+                    'slug' => $this->uniqueSlug($attributes['name']),
+                ]);
+                $room->facilities()->sync($this->selectedFacilities);
+            } catch (\Exception $e) {
+                $this->dispatch('room-error', message: 'Kamar gagal ditambahkan.', type: 'error');
+
+                return;
+            }
         }
 
         $this->resetForm();
+        $this->dispatch('room-saved', message: $room ? 'Kamar berhasil diperbarui.' : 'Kamar berhasil ditambahkan.', type: 'success');
+    }
 
-        $this->dispatch('room-saved', message: $room ? 'Kamar berhasil diperbarui.' : 'Kamar berhasil ditambahkan.');
+    public function updatedImage(): void
+    {
+        $this->resetValidation('image');
     }
 
     public function edit(int $roomId): void
@@ -147,8 +161,11 @@ class RoomsAdmin extends Component
     protected function rules(): array
     {
         return [
-            'name' => ['required', 'string', 'max:255'],
-            'description' => ['required', 'string', 'max:3000'],
+            'name' => [
+                'required',
+                Rule::unique('rooms', 'name')->ignore($this->editingRoomId),
+            ],
+            'description' => ['required', 'string', 'max:255'],
             'bed_type' => ['required', 'string', 'max:100'],
             'size' => ['required', 'integer', 'min:1', 'max:10000'],
             'capacity' => ['required', 'integer', 'min:1', 'max:1000'],
