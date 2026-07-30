@@ -151,22 +151,8 @@
                             </td>
                             <td class="px-6 py-3">
                                 <div class="flex items-center gap-2">
-                                    <button type="button" wire:click="edit({{ $room->id }})"
-                                        class="inline-flex h-9 w-9 items-center justify-center rounded-lg text-primary transition-colors hover:bg-primary/10"
-                                        aria-label="Ubah kamar {{ $room->name }}" title="Ubah"> <svg
-                                            xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none"
-                                            viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                                            <path stroke-linecap="round" stroke-linejoin="round"
-                                                d="M16.862 3.487a2.25 2.25 0 113.182 3.182L8.25 18.463 3 20.25l1.787-5.25L16.862 3.487z" />
-                                        </svg></button>
-                                    <button type="button" wire:click="confirmDelete({{ $room->id }})"
-                                        class="inline-flex h-9 w-9 items-center justify-center rounded-lg text-red-600 transition-colors hover:bg-red-50"
-                                        aria-label="Hapus kamar {{ $room->name }}" title="Hapus"> <svg
-                                            xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none"
-                                            viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                                            <path stroke-linecap="round" stroke-linejoin="round"
-                                                d="M6 7h12M9 7V4h6v3m-8 0l1 13h8l1-13M10 11v6m4-6v6" />
-                                        </svg></button>
+                                    <x-edit-button :item="$room" action="edit" />
+                                    <x-delete-button :item="$room" confirmDelete="confirmDelete " />
                                 </div>
                             </td>
                         </tr>

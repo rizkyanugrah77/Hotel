@@ -42,7 +42,7 @@ new #[Layout('layouts.auth')] class extends Component {
             <x-input-label for="name" :value="__('Name')" />
             <x-text-input wire:model="name" id="name" class="block mt-1 w-full" type="text" name="name" required
                 autofocus autocomplete="name" />
-            <x-input-error :messages="$errors->get('name')" class="mt-2" />
+            <x-input-error :name="$errors->get('name')" class="mt-2" />
         </div>
 
         <!-- Email Address -->
@@ -50,7 +50,7 @@ new #[Layout('layouts.auth')] class extends Component {
             <x-input-label for="email" :value="__('Email')" />
             <x-text-input wire:model="email" id="email" class="block mt-1 w-full" type="email" name="email"
                 required autocomplete="username" />
-            <x-input-error :messages="$errors->get('email')" class="mt-2" />
+            <x-input-error :name="$errors->get('email')" class="mt-2" />
         </div>
 
         <!-- Password -->
@@ -60,7 +60,7 @@ new #[Layout('layouts.auth')] class extends Component {
             <x-text-input wire:model="password" id="password" class="block mt-1 w-full" type="password" name="password"
                 required autocomplete="new-password" />
 
-            <x-input-error :messages="$errors->get('password')" class="mt-2" />
+            <x-input-error :name="$errors->get('password')" class="mt-2" />
         </div>
 
         <!-- Confirm Password -->
@@ -70,7 +70,7 @@ new #[Layout('layouts.auth')] class extends Component {
             <x-text-input wire:model="password_confirmation" id="password_confirmation" class="block mt-1 w-full"
                 type="password" name="password_confirmation" required autocomplete="new-password" />
 
-            <x-input-error :messages="$errors->get('password_confirmation')" class="mt-2" />
+            <x-input-error :name="$errors->get('password_confirmation')" class="mt-2" />
         </div>
 
         <div class="flex items-center justify-end mt-4">

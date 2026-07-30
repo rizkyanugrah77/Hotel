@@ -72,7 +72,7 @@ Gunakan command `php artisan make:livewire NamaKomponen`.
 - [ ] **Admin Panel (Livewire Components)**:
   + `Admin\RoomManager`: Menampilkan datatable Livewire untuk CRUD kamar (upload foto kamar langsung tersimpan ke Storage).
   + `Admin\FacilityManager`: CRUD fasilitas.
-  - `Admin\GalleryManager`: Upload multi-foto ke tabel `galleries`.
+  + `Admin\GalleryManager`: Upload multi-foto ke tabel `galleries`.
   - `Admin\BookingList`: Tabel real-time melihat daftar pemesanan masu`k.
   - `Admin\TestimonialModeration`: Menyetujui (`is_approved = true`) testimoni dari user agar tampil di halaman depan.
 - [ ] **Customer Area (Livewire Components)**:

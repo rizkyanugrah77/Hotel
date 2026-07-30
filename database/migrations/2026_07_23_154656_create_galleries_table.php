@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('galleries', function (Blueprint $table) {
             $table->id();
             $table->foreignId('room_id')->constrained('rooms')->cascadeOnDelete();
-            $table->string('image');
+            $table->string('image')->nullable();
             $table->string('caption')->nullable();
             $table->boolean('is_featured')->default(false);
             $table->timestamps();

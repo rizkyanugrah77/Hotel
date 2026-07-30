@@ -29,7 +29,6 @@ class FacilityManager extends Component
         $this->validate();
 
         $isEditing = (bool) $this->editingFacilityId;
-
         $attributes = [
             'name' => $this->name,
             'icon' => $this->icon,
@@ -45,10 +44,7 @@ class FacilityManager extends Component
 
         $this->resetForm();
 
-        $this->dispatch('facility-saved',
-            message: $isEditing
-                ? 'Fasilitas berhasil diperbarui.'
-                : 'Fasilitas berhasil ditambahkan.'
+        $this->dispatch('facility-saved', message: $isEditing ? 'Fasilitas berhasil diperbarui.' : 'Fasilitas berhasil ditambahkan.', type: $isEditing ? 'success' : 'success'
         );
     }
 
@@ -79,7 +75,7 @@ class FacilityManager extends Component
         Facility::findOrFail($this->facilityToDelete)->delete();
         $this->facilityToDelete = null;
 
-        $this->dispatch('facility-deleted', message: 'Fasilitas berhasil dihapus.');
+        $this->dispatch('facility-deleted', message: 'Fasilitas berhasil dihapus.', type: 'success');
     }
 
     public function resetForm(): void

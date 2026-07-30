@@ -33,7 +33,7 @@ new #[Layout('layouts.auth')] class extends Component {
             <x-input-label for="email" :value="__('Email')" />
             <x-text-input wire:model="form.email" id="email" class="block mt-1 w-full" type="email" name="email"
                 required autofocus autocomplete="username" />
-            <x-input-error :messages="$errors->get('form.email')" class="mt-2" />
+            <x-input-error :name="$errors->get('form.email')" class="mt-2" />
         </div>
 
         <!-- Password -->
@@ -42,12 +42,12 @@ new #[Layout('layouts.auth')] class extends Component {
 
             <x-text-input wire:model="form.password" id="password" class="block mt-1 w-full" type="password"
                 name="password" required autocomplete="current-password" />
-
-            <x-input-error :messages="$errors->get('form.password')" class="mt-2" />
+            <x-input-error :name="$errors->get('form.password')" class="mt-2" />
         </div>
 
         <!-- Remember Me -->
         <div class="block mt-4">
+
             <label for="remember" class="inline-flex items-center">
                 <input wire:model="form.remember" id="remember" type="checkbox"
                     class="rounded border-gray-300 text-indigo-600 shadow-sm focus:ring-indigo-500" name="remember">

@@ -31,23 +31,25 @@ class GalleryManager extends Component
     public function save()
     {
         $validated = $this->validate();
-        $galleries = new Gallery;
-        $galleries->room_id = $validated['room_id'];
-        $galleries->caption = $validated['caption'];
-        $galleries->is_featured = $validated['is_featured'];
 
-        $imageName = 'no-image.jpg';
+        $gallery = $this->editingGalleryId ? Gallery::findOrFail($this->editingGalleryId) : null;
+        $attributes = collect($validated)->except('image')->all();
+
         if ($this->image) {
             $imageName = Str::uuid().'.'.$this->image->getClientOriginalExtension();
             $this->image->storeAs('assets/img/gallery', $imageName, 'public');
+            $attributes['image'] = $imageName;
         }
-        $galleries->image = $imageName;
-        try {
-            $galleries->save();
-            $this->dispatch('gallery-created', message: 'Gallery berhasil ditambahkan.', type: 'success');
-        } catch (\Exception $e) {
-            $this->dispatch('gallery-error', message: 'Gallery gagal ditambahkan.'.$e->getMessage(), type: 'error');
+
+        if ($gallery) {
+            $attributes['id'] = $gallery->id;
+            $gallery->update($attributes);
+        } else {
+            Gallery::create($attributes);
         }
+        $this->resetForm();
+        $this->dispatch('gallery-saved', message: $gallery ? 'Gallery berhasil diperbarui.' : 'Gallery berhasil ditambahkan.', type: 'success');
+
     }
 
     public function edit(int $galleryId): void
@@ -55,7 +57,7 @@ class GalleryManager extends Component
         $gallery = Gallery::findOrFail($galleryId);
 
         $this->editingGalleryId = $gallery->id;
-        $this->image = $gallery->image;
+        $this->image = null;
         $this->room_id = $gallery->room_id;
         $this->caption = $gallery->caption;
         $this->is_featured = $gallery->is_featured;
@@ -69,8 +71,13 @@ class GalleryManager extends Component
         $this->validate();
         $gallery = Gallery::findOrFail($this->editingGalleryId);
         $this->editingGalleryId = $gallery->id;
+        if ($this->image) {
+            $imageName = Str::uuid().'.'.$this->image->getClientOriginalExtension();
+            $this->image->storeAs('assets/img/gallery', $imageName, 'public');
+            $gallery->image = $imageName;
+        }
+
         $gallery->update([
-            'image' => $this->image,
             'room_id' => $this->room_id,
             'caption' => $this->caption,
             'is_featured' => $this->is_featured,
@@ -78,21 +85,36 @@ class GalleryManager extends Component
 
         $this->resetForm();
 
-        $this->dispatch('gallery-updated', message: 'Gallery berhasil diperbarui.');
+        $this->dispatch('manage-gallery', message: 'Gallery berhasil diperbarui.', type: 'success');
+    }
+
+    public function confirmDelete(int $galleryId): void
+    {
+        $gallery = Gallery::findOrFail($galleryId);
+        $this->editingGalleryId = $gallery->id;
+        $this->dispatch('gallery-delete-confirmation');
+    }
+
+    public function delete(): void
+    {
+        $gallery = Gallery::findOrFail($this->editingGalleryId);
+        $gallery->delete();
+        $this->resetForm();
+        $this->dispatch('gallery-deleted', message: 'Gallery berhasil dihapus.', type: 'success');
     }
 
     public function resetForm()
     {
-        $this->reset(['image', 'room_id', 'caption', 'is_featured']);
+        $this->reset(['image', 'room_id', 'caption', 'is_featured', 'editingGalleryId']);
         $this->resetValidation();
     }
 
     public function rules()
     {
         return [
-            'image' => 'required|image|mimes:jpg,png,jpeg|unique:galleries,image,'.$this->editingGalleryId.',id,deleted_at,NULL',
-            'room_id' => 'required|exists:rooms,id|unique:galleries,room_id,'.$this->editingGalleryId.',id,deleted_at,NULL',
-            'caption' => 'required|max:200|string',
+            'image' => [$this->editingGalleryId ? 'nullable' : 'required', 'file', 'mimes:png,jpg,jpeg', 'max:2048'],
+            'room_id' => 'required|exists:rooms,id',
+            'caption' => 'nullable|max:200|string',
             'is_featured' => 'required|in:0,1',
         ];
     }
@@ -101,6 +123,12 @@ class GalleryManager extends Component
     {
         return view('livewire.layout.gallery-manager', [
             'galleries' => Gallery::with('room')->paginate($this->perPage),
+            'galleryStats' => [
+                'total' => Gallery::query()->count(),
+                'featured' => Gallery::query()->where('is_featured', 1)->count(),
+                'rooms' => Gallery::query()->where('room_id', '!=', null)->count(),
+                'regular' => Gallery::query()->where('is_featured', 0)->count(),
+            ],
             'rooms' => Room::all(),
         ]);
     }
