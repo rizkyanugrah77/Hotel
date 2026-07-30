@@ -237,27 +237,23 @@
         <form wire:submit="save">
             <!-- Room ID -->
             <div class="mb-4">
-                <label class="input-label">Room <span class="text-red-500">*</span></label>
+                <x-input-label for="room_id" :value="__('Room') . ' *'" />
                 <select wire:model="room_id" class="input" required>
                     <option value="">Pilih Room</option>
                     @foreach ($rooms as $room)
                         <option value="{{ $room->id }}">{{ $room->name }}</option>
                     @endforeach
                 </select>
-                <x-input-error name="room_id" />
+                <x-input-error name="room_id" class="mt-2" />
             </div>
 
             <!-- Image Path -->
             <div class="mb-4">
 
-                <x-input-label for="gallery-image" class="input-label">Gambar Kamar @if (!$editingGalleryId)
-                        <span class="text-red-500">*</span>
-                    @endif
-                </x-input-label>
-                <span class="t9+69` qwertgc/+ext-sm text-red-500">Ukuran maksimal foto 2MB dan file JPG, JPEG, atau
-                    PNG</span>
-
-                <input id="gallery-image" type="file" wire:model.live="image" class="input" accept="image/*">
+                <x-input-label :value="__('Gambar Kamar') . ' *'" for="gallery-image" />
+                <span class="text-red-500 text-sm">Ukuran maksimal foto 2MB dan file JPG, JPEG, atau PNG</span>
+                <x-text-input id="gallery-image" type="file" wire:model.live="image" class="input"
+                    accept="image/*" />
 
                 <div wire:loading wire:target="image" class="text-sm text-gray-500 mt-2">
                     Mengupload gambar...
@@ -269,19 +265,19 @@
                             class="mt-2 w-full h-48 object-cover rounded-xl">
                     @endif
                 @endif
-                <x-input-error name="image" />
+                <x-input-error name="image" class="mt-2" />
             </div>
 
             <!-- Caption -->
             <div class="mb-4">
-                <label class="input-label">Caption <span class="text-red-500">*</span></label>
+                <x-input-label for="caption" :value="__('Caption') . ' *'" />
                 <textarea class="input" rows="3" placeholder="Deskripsi singkat gambar..." wire:model="caption" required></textarea>
-                <x-input-error name="caption" />
+                <x-input-error name="caption" class="mt-2" />
             </div>
 
             <!-- Is Featured -->
             <div class="mb-4">
-                <label class="input-label">Featured</label>
+                <x-input-label for="is_featured" :value="__('Featured')" />
                 <div class="flex items-center gap-3 mt-2">
                     <label class="relative inline-flex items-center cursor-pointer">
                         <input type="checkbox" id="galleryIsFeatured" class="sr-only peer"
@@ -292,14 +288,19 @@
                     </label>
                     <span class="text-sm text-gray-600" id="featuredLabel">Non-Featured</span>
                 </div>
-                <x-input-error name="is_featured" />
+                <x-input-error name="is_featured" class="mt-2" />
             </div>
 
             <!-- Modal Footer -->
             <div class="flex justify-end gap-3 mt-6 pt-4 border-t border-gray-100">
-                <button type="button" onclick="closeModal()"
+                <button type="button" @click="$dispatch('close-modal', 'manage-gallery')"
                     class="px-5 py-2.5 text-sm font-medium text-gray-700 bg-gray-100 rounded-xl hover:bg-gray-200 transition-colors">Batal</button>
-                <button type="submit" class="btn-primary text-sm px-5 py-2.5">Simpan Gambar</button>
+                <x-primary-button wire:loading.attr="disabled" type="submit">
+                    <span wire:loading.remove wire:target="save">
+                        {{ $editingGalleryId ? 'Simpan Perubahan' : 'Simpan Gambar' }}
+                    </span>
+                    <span wire:loading wire:target="save">Menyimpan...</span>
+                </x-primary-button>
             </div>
         </form>
     </x-modal-2>
@@ -311,11 +312,10 @@
         <div class="flex justify-end gap-3 mt-6 pt-4 border-t border-gray-100">
             <button @click="$dispatch('close-modal', 'gallery-delete-confirmation')"
                 class="flex-1 px-4 py-2.5 text-sm font-medium text-gray-700 bg-gray-100 rounded-xl hover:bg-gray-200 transition-colors">Batal</button>
-            <button wire:click="delete"
-                class="flex-1 px-4 py-2.5 text-sm font-medium text-white bg-red-600 rounded-xl hover:bg-red-700 transition-colors">
+            <x-danger-button wire:click="delete" type="button">
                 <span wire:loading.remove wire:target="delete">Hapus</span>
                 <span wire:loading wire:target="delete">Menghapus...</span>
-            </button>
+            </x-danger-button>
         </div>
     </x-modal-2>
-</div>a
+</div>

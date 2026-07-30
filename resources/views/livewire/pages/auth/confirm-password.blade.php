@@ -47,7 +47,7 @@ new #[Layout('layouts.auth')] class extends Component {
             <x-text-input wire:model="password" id="password" class="block mt-1 w-full" type="password" name="password"
                 required autocomplete="current-password" />
 
-            <x-input-error :name="$errors->get('password')" class="mt-2" />
+            <x-input-error name="password" class="mt-2" />
         </div>
 
         <div class="flex justify-end mt-4">

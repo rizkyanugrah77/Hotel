@@ -9,7 +9,6 @@
 }"
     x-on:facility-saved.window="$dispatch('close-modal', 'manage-facility'); showToast($event.detail.message, $event.detail.type)"
     x-on:facility-deleted.window="$dispatch('close-modal', 'delete-facility'); showToast($event.detail.message, $event.detail.type)"
-    x-on:facility-updated.window="$dispatch('close-modal', 'manage-facility'); showToast($event.detail.message, $event.detail.type)"
     x-on:facility-error.window="showToast($event.detail.message, $event.detail.type); $dispatch('close-modal', 'manage-facility')"
     x-on:facility-editing.window="$dispatch('open-modal', 'manage-facility')"
     x-on:facility-delete-confirmation.window="$dispatch('open-modal', 'delete-facility')">
@@ -176,62 +175,46 @@
     <x-modal-2 name="manage-facility" :title="$editingFacilityId ? 'Edit Fasilitas' : 'Tambah Fasilitas'">
         <form wire:submit="save">
             <div class="mb-4">
-                <label class="input-label">Nama Fasilitas <span class="text-red-500">*</span></label>
+                <x-input-label for="name" value="Nama Fasilitas" :required="true" />
                 <input type="text" wire:model="name" class="input" placeholder="e.g. Kolam Renang" />
-                @error('name')
-                    <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
-                @enderror
+                <x-input-error name="name" class="mt-2" />
             </div>
 
             <div class="mb-4">
-                <label class="input-label">Ikon SVG (Kode/Tag SVG)</label>
+                <x-input-label for="icon" value="Ikon SVG" :required="true" />
                 <textarea wire:model="icon" class="input font-mono text-xs" rows="3" placeholder="<svg>...</svg>"></textarea>
-                @error('icon')
-                    <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
-                @enderror
+                <x-input-error name="icon" class="mt-2" />
             </div>
 
             <div class="mb-4">
-                <label class="input-label">Deskripsi</label>
+                <x-input-label for="description" value="Deskripsi" :required="true" />
                 <textarea wire:model="description" class="input" rows="4" placeholder="Deskripsi mengenai fasilitas..."></textarea>
-                @error('description')
-                    <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
-                @enderror
+                <x-input-error name="description" class="mt-2" />
             </div>
 
             {{-- Footer --}}
             <div class="flex justify-end gap-3 mt-6 pt-4 border-t border-gray-100">
                 <button type="button" @click="$dispatch('close-modal', 'manage-facility'); $wire.resetForm()"
                     class="px-5 py-2.5 text-sm font-medium text-gray-700 bg-gray-100 rounded-xl hover:bg-gray-200 transition-colors">Batal</button>
-                <button type="submit" class="btn-primary text-sm px-5 py-2.5">
-                    <span wire:loading.remove wire:target="save">Simpan Fasilitas</span>
+                <x-primary-button wire:loading.attr="disabled" wire:target="save">
+                    <span wire:loading.remove
+                        wire:target="save">{{ $editingFacilityId ? 'Edit Fasilitas' : 'Tambah Fasilitas' }}</span>
                     <span wire:loading wire:target="save">Menyimpan...</span>
-                </button>
+                </x-primary-button>
             </div>
         </form>
     </x-modal-2>
 
     {{-- Delete Confirmation Modal --}}
-    <x-modal name="delete-facility" title="Hapus Fasilitas?" maxWidth="md">
-        <div class="text-center p-4">
-            <div class="w-14 h-14 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                <svg class="w-7 h-7 text-red-600" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-                    stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round"
-                        d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" />
-                </svg>
-            </div>
-            <p class="text-sm text-gray-500 mb-6">Anda yakin ingin menghapus fasilitas ini? Tindakan ini tidak bisa
-                dibatalkan.</p>
-            <div class="flex gap-3">
-                <button @click="$dispatch('close-modal', 'delete-facility')"
-                    class="flex-1 px-4 py-2.5 text-sm font-medium text-gray-700 bg-gray-100 rounded-xl hover:bg-gray-200 transition-colors">Batal</button>
-                <button wire:click="delete"
-                    class="flex-1 px-4 py-2.5 text-sm font-medium text-white bg-red-600 rounded-xl hover:bg-red-700 transition-colors">
-                    <span wire:loading.remove wire:target="delete">Hapus</span>
-                    <span wire:loading wire:target="delete">Menghapus...</span>
-                </button>
-            </div>
+    <x-modal-2 name="delete-facility" title="Hapus Fasilitas?">
+        <p class="text-sm text-gray-600">Apakah Anda yakin ingin menghapus fasilitas ini?</p>
+        <div class="flex justify-end gap-3 mt-6 pt-4 border-t border-gray-100">
+            <button @click="$dispatch('close-modal', 'delete-facility')"
+                class="btn-second text-sm px-5 py-2.5">Batal</button>
+            <x-danger-button wire:click="delete" type="button">
+                <span wire:loading.remove wire:target="delete">Hapus</span>
+                <span wire:loading wire:target="delete">Menghapus...</span>
+            </x-danger-button>
         </div>
-    </x-modal>
+    </x-modal-2>
 </div>

@@ -4,6 +4,7 @@ namespace App\Livewire\Admin;
 
 use App\Models\Gallery;
 use App\Models\Room;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Livewire\Component;
 use Livewire\WithFileUploads;
@@ -34,21 +35,26 @@ class GalleryManager extends Component
 
         $gallery = $this->editingGalleryId ? Gallery::findOrFail($this->editingGalleryId) : null;
         $attributes = collect($validated)->except('image')->all();
+        try {
+            if ($this->image) {
+                $imageName = Str::uuid().'.'.$this->image->getClientOriginalExtension();
+                $this->image->storeAs('assets/img/gallery', $imageName, 'public');
+                $attributes['image'] = $imageName;
+            }
 
-        if ($this->image) {
-            $imageName = Str::uuid().'.'.$this->image->getClientOriginalExtension();
-            $this->image->storeAs('assets/img/gallery', $imageName, 'public');
-            $attributes['image'] = $imageName;
+            if ($gallery) {
+                if ($this->image) {
+                    Storage::disk('public')->delete('assets/img/gallery/'.$gallery->image);
+                }
+                $gallery->update($attributes);
+            } else {
+                Gallery::create($attributes);
+            }
+            $this->resetForm();
+            $this->dispatch('gallery-saved', message: $gallery ? 'Gallery berhasil diperbarui.' : 'Gallery berhasil ditambahkan.', type: 'success');
+        } catch (\Throwable $th) {
+            $this->dispatch('gallery-error', message: $th->getMessage(), type: 'error');
         }
-
-        if ($gallery) {
-            $attributes['id'] = $gallery->id;
-            $gallery->update($attributes);
-        } else {
-            Gallery::create($attributes);
-        }
-        $this->resetForm();
-        $this->dispatch('gallery-saved', message: $gallery ? 'Gallery berhasil diperbarui.' : 'Gallery berhasil ditambahkan.', type: 'success');
 
     }
 
@@ -98,6 +104,9 @@ class GalleryManager extends Component
     public function delete(): void
     {
         $gallery = Gallery::findOrFail($this->editingGalleryId);
+        if ($gallery->image) {
+            Storage::disk('public')->delete('assets/img/gallery/'.$gallery->image);
+        }
         $gallery->delete();
         $this->resetForm();
         $this->dispatch('gallery-deleted', message: 'Gallery berhasil dihapus.', type: 'success');
@@ -106,6 +115,7 @@ class GalleryManager extends Component
     public function resetForm()
     {
         $this->reset(['image', 'room_id', 'caption', 'is_featured', 'editingGalleryId']);
+        $this->editingGalleryId = null;
         $this->resetValidation();
     }
 

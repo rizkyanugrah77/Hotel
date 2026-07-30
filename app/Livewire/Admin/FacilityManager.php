@@ -35,17 +35,21 @@ class FacilityManager extends Component
             'description' => $this->description,
         ];
 
-        if ($isEditing) {
-            Facility::findOrFail($this->editingFacilityId)->update($attributes);
-        } else {
-            Facility::create($attributes);
+        try {
+            if ($isEditing) {
+                Facility::findOrFail($this->editingFacilityId)->update($attributes);
+            } else {
+                Facility::create($attributes);
 
+            }
+            $this->resetForm();
+
+            $this->dispatch('facility-saved', message: $isEditing ? 'Fasilitas berhasil diperbarui.' : 'Fasilitas berhasil ditambahkan.', type: $isEditing ? 'success' : 'success'
+            );
+        } catch (\Throwable $th) {
+            $this->dispatch('facility-error', message: $th->getMessage(), type: 'error');
         }
 
-        $this->resetForm();
-
-        $this->dispatch('facility-saved', message: $isEditing ? 'Fasilitas berhasil diperbarui.' : 'Fasilitas berhasil ditambahkan.', type: $isEditing ? 'success' : 'success'
-        );
     }
 
     public function edit(int $facilityId): void

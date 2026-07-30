@@ -173,14 +173,13 @@
         <form wire:submit="save">
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
                 <div>
-                    <label for="room-name" class="input-label">Nama <span class="text-red-500">*</span></label>
-                    <input id="room-name" type="text" wire:model="name" class="input"
-                        placeholder="Contoh: Deluxe Lake View" required>
-                    <x-input-error name="name" />
+                    <x-input-label for="room-name" :value="__('Nama') . ' *'" />
+                    <x-text-input wire:model="name" id="room-name" class="input"
+                        placeholder="Contoh: Deluxe Lake View" required />
+                    <x-input-error name="name" class="mt-2" />
                 </div>
                 <div>
-                    <label for="room-bed-type" class="input-label">Tipe Tempat Tidur <span
-                            class="text-red-500">*</span></label>
+                    <x-input-label for="room-bed-type" :value="__('Tipe Tempat Tidur') . ' *'" />
                     <select id="room-bed-type" wire:model="bed_type" class="input" required>
                         <option value="">Pilih tipe tempat tidur</option>
                         <option value="Single">Single</option>
@@ -190,80 +189,76 @@
                         <option value="King">King</option>
                         <option value="Twin Double">Twin Double</option>
                     </select>
-                    <x-input-error name="bed_type" />
+                    <x-input-error name="bed_type" class="mt-2" />
                 </div>
             </div>
+            <div class="mb-2">
+                <label class="label">Fasilitas</label>
+                <div class="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 gap-3">
 
-            <div class="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 gap-3">
-                @foreach ($facilities as $facility)
-                    <label
-                        class="border-2 rounded-lg p-3 cursor-pointer flex flex-col items-center justify-center gap-2 transition-all duration-200 has-[:checked]:border-blue-500 has-[:checked]:bg-blue-50 hover:border-gray-400">
+                    @foreach ($facilities as $facility)
+                        <label
+                            class="border-2 rounded-lg p-3 cursor-pointer flex flex-col items-center justify-center gap-2 transition-all duration-200 has-[:checked]:border-blue-500 has-[:checked]:bg-blue-50 hover:border-gray-400">
+                            <input type="checkbox" class="hidden peer" value="{{ $facility->id }}"
+                                wire:model="selectedFacilities">
 
-                        <input type="checkbox" class="hidden peer" value="{{ $facility->id }}"
-                            wire:model="selectedFacilities">
+                            <div
+                                class="w-8 h-8 text-gray-600 peer-checked:text-blue-600 [&>svg]:w-full [&>svg]:h-full">
+                                {!! $facility->icon !!}
+                            </div>
 
-                        <div class="w-8 h-8 text-gray-600 peer-checked:text-blue-600 [&>svg]:w-full [&>svg]:h-full">
-                            {!! $facility->icon !!}
-                        </div>
+                            <span class="text-xs text-center text-gray-700 peer-checked:text-blue-700 font-medium">
+                                {{ $facility->name }}
+                            </span>
 
-                        <span class="text-xs text-center text-gray-700 peer-checked:text-blue-700 font-medium">
-                            {{ $facility->name }}
-                        </span>
-
-                    </label>
-                @endforeach
+                        </label>
+                    @endforeach
+                </div>
+                <x-input-error name="selectedFacilities" class="mt-2" />
             </div>
 
             <div class="mb-4">
-                <label for="room-description" class="input-label">Deskripsi <span
-                        class="text-red-500">*</span></label>
+                <x-input-label for="room-description" :value="__('Deskripsi') . ' *'" />
                 <textarea id="room-description" wire:model="description" class="input" rows="3"
                     placeholder="Deskripsi singkat mengenai kamar..." required></textarea>
-                <x-input-error name="description" />
+                <x-input-error name="description" class="mt-2" />
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
                 <div>
-                    <label for="room-size" class="input-label">Ukuran (m²) <span
-                            class="text-red-500">*</span></label>
-                    <input id="room-size" type="number" wire:model="size" class="input" min="1" required>
-                    <x-input-error name="size" />
+                    <x-input-label for="room-size" :value="__('Ukuran (m²)') . ' *'" />
+                    <x-text-input wire:model="size" id="room-size" class="input" min="1" required />
+                    <x-input-error name="size" class="mt-2" />
                 </div>
                 <div>
-                    <label for="room-capacity" class="input-label">Kapasitas (orang) <span
-                            class="text-red-500">*</span></label>
-                    <input id="room-capacity" type="number" wire:model="capacity" class="input" min="1"
-                        required>
-                    <x-input-error name="capacity" />
+                    <x-input-label for="room-capacity" :value="__('Kapasitas (orang)') . ' *'" />
+                    <x-text-input wire:model="capacity" id="room-capacity" class="input" min="1" required />
+                    <x-input-error name="capacity" class="mt-2" />
                 </div>
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
                 <div>
-                    <label for="room-price" class="input-label">Harga per Malam (Rp) <span
-                            class="text-red-500">*</span></label>
-                    <input id="room-price" type="number" wire:model="price" class="input" min="0"
-                        required>
-                    <x-input-error name="price" />
+                    <x-input-label for="room-price" :value="__('Harga per Malam (Rp)') . ' *'" />
+                    <x-text-input wire:model="price" id="room-price" class="input" min="0" required />
+                    <x-input-error name="price" class="mt-2" />
                 </div>
                 <div>
-                    <label for="room-status" class="input-label">Status <span class="text-red-500">*</span></label>
+                    <x-input-label for="room-status" :value="__('Status') . ' *'" />
                     <select id="room-status" wire:model="status" class="input" required>
                         <option value="available">Available</option>
                         <option value="occupied">Occupied</option>
                         <option value="maintenance">Maintenance</option>
                     </select>
-                    <x-input-error name="status" />
+                    <x-input-error name="status" class="mt-2" />
                 </div>
             </div>
 
             <div>
-                <label for="room-image" class="input-label">Gambar Kamar @if (!$editingRoomId)
-                        <span class="text-red-500">*</span>
-                    @endif
-                </label>
+                <x-input-label for="room-image" :value="__('Gambar Kamar') . ' ' . (!$editingRoomId ? '*' : '')" />
                 <span class="text-sm text-red-500">Ukuran maksimal foto 2MB dan file JPG, JPEG, atau PNG</span>
-                <input id="room-image" type="file" wire:model.live="image" class="input" accept="image/*">
+                <x-text-input wire:model.live="image" type="file" id="room-image" class="input"
+                    accept="image/jpg,image/jpeg,image/png" />
 
                 <div wire:loading wire:target="image" class="text-sm text-gray-500 mt-2">
                     Mengupload gambar...
@@ -279,12 +274,12 @@
             <div class="mt-6 flex flex-col-reverse gap-3 border-t border-gray-100 pt-4 sm:flex-row sm:justify-end">
                 <button type="button" @click="$dispatch('close-modal', 'manage-room')"
                     class="flex-1 px-4 py-2.5 text-sm font-medium text-gray-700 bg-gray-100 rounded-xl hover:bg-gray-200 transition-colors">Batal</button>
-                <button type="submit" wire:loading.attr="disabled" wire:target="save"
-                    class="flex-1 px-4 py-2.5 text-sm font-medium text-white bg-red-600 rounded-xl hover:bg-red-700 transition-colors">
-                    <span wire:loading.remove
-                        wire:target="save">{{ $editingRoomId ? 'Simpan Perubahan' : 'Simpan Kamar' }}</span>
+                <x-primary-button wire:loading.attr="disabled" wire:target="save">
+                    <span wire:loading.remove wire:target="save">
+                        {{ $editingRoomId ? 'Simpan Perubahan' : 'Simpan Kamar' }}
+                    </span>
                     <span wire:loading wire:target="save">Menyimpan...</span>
-                </button>
+                </x-primary-button>
             </div>
         </form>
     </x-modal-2>
@@ -295,11 +290,10 @@
         <div class="mt-6 flex flex-col-reverse gap-3 sm:flex-row sm:justify-end">
             <button @click="$dispatch('close-modal', 'delete-room')"
                 class="flex-1 px-4 py-2.5 text-sm font-medium text-gray-700 bg-gray-100 rounded-xl hover:bg-gray-200 transition-colors">Batal</button>
-            <button wire:click="delete"
-                class="flex-1 px-4 py-2.5 text-sm font-medium text-white bg-red-600 rounded-xl hover:bg-red-700 transition-colors">
+            <x-danger-button wire:click="delete" wire:loading.attr="disabled" type="button">
                 <span wire:loading.remove wire:target="delete">Hapus</span>
                 <span wire:loading wire:target="delete">Menghapus...</span>
-            </button>
+            </x-danger-button>
         </div>
     </x-modal-2>
 

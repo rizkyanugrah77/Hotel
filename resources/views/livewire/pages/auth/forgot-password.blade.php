@@ -47,7 +47,7 @@ new #[Layout('layouts.auth')] class extends Component {
             <x-input-label for="email" :value="__('Email')" />
             <x-text-input wire:model="email" id="email" class="block mt-1 w-full" type="email" name="email" required
                 autofocus />
-            <x-input-error :name="$errors->get('email')" class="mt-2" />
+            <x-input-error name="email" class="mt-2" />
         </div>
 
         <div class="flex items-center justify-end mt-4">

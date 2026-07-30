@@ -4,6 +4,7 @@ namespace App\Livewire\Admin;
 
 use App\Models\Facility;
 use App\Models\Room;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
 use Livewire\Component;
@@ -55,30 +56,55 @@ class RoomsAdmin extends Component
 
         }
 
-        if ($room) {
-            if ($room->name !== $attributes['name']) {
-                $attributes['slug'] = $this->uniqueSlug($attributes['name'], $room->id);
-            }
-            $room->facilities()->sync($this->selectedFacilities);
-            $room->update($attributes);
-
-        } else {
-
-            try {
+        try {
+            if ($room) {
+                if ($room->name !== $attributes['name']) {
+                    $attributes['slug'] = $this->uniqueSlug($attributes['name'], $room->id);
+                }
+                $room->facilities()->sync($this->selectedFacilities);
+                $room->update($attributes);
+                if ($this->image) {
+                    Storage::disk('public')->delete('assets/img/rooms/'.$room->image);
+                }
+            } else {
                 $room = Room::create([
                     ...$attributes,
                     'slug' => $this->uniqueSlug($attributes['name']),
                 ]);
                 $room->facilities()->sync($this->selectedFacilities);
-            } catch (\Exception $e) {
-                $this->dispatch('room-error', message: 'Kamar gagal ditambahkan.', type: 'error');
-
-                return;
             }
+
+            $this->resetForm();
+            $this->dispatch('room-saved', message: $room ? 'Kamar berhasil diperbarui.' : 'Kamar berhasil ditambahkan.', type: 'success');
+        } catch (\Throwable $th) {
+            $this->dispatch('room-error', message: $th->getMessage(), type: 'error');
+
         }
 
-        $this->resetForm();
-        $this->dispatch('room-saved', message: $room ? 'Kamar berhasil diperbarui.' : 'Kamar berhasil ditambahkan.', type: 'success');
+        // if ($room) {
+        //     if ($room->name !== $attributes['name']) {
+        //         $attributes['slug'] = $this->uniqueSlug($attributes['name'], $room->id);
+        //     }
+        //     $room->facilities()->sync($this->selectedFacilities);
+        //     $room->update($attributes);
+        //     if ($this->image) {
+        //         Storage::disk('public')->delete('assets/img/rooms/'.$room->image);
+        //     }
+        // } else {
+
+        //     try {
+        //         $room = Room::create([
+        //             ...$attributes,
+        //             'slug' => $this->uniqueSlug($attributes['name']),
+        //         ]);
+        //         $room->facilities()->sync($this->selectedFacilities);
+        //     } catch (\Exception $e) {
+        //         $this->dispatch('room-error', message: 'Kamar gagal ditambahkan.', type: 'error');
+
+        //         return;
+        //     }
+        // }
+
     }
 
     public function updatedImage(): void
@@ -119,10 +145,14 @@ class RoomsAdmin extends Component
     {
         abort_unless($this->roomToDelete, 404);
 
-        Room::findOrFail($this->roomToDelete)->delete();
+        $room = Room::findOrFail($this->roomToDelete);
+        if ($room->image) {
+            Storage::disk('public')->delete('assets/img/rooms/'.$room->image);
+        }
+        $room->delete();
         $this->roomToDelete = null;
 
-        $this->dispatch('room-deleted', message: 'Kamar berhasil dihapus.');
+        $this->dispatch('room-deleted', message: 'Kamar berhasil dihapus.', type: 'success');
     }
 
     public function resetForm(): void
