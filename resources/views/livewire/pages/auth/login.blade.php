@@ -63,10 +63,11 @@ new #[Layout('layouts.auth')] class extends Component {
                 </a>
             @endif
 
-            <x-primary-button class="ms-3">
-                <span wire:loading wire.target="login" wire:key="login-spinner" class="loading"></span>
-                <span wire:loading.remove wire.target="login"></span>{{ __('Log in') }}</span>
-            </x-primary-button>
+            <button type="submit" wire:loading.attr="disabled"
+                class="group relative inline-flex items-center justify-center rounded-lg px-8 py-2.5 font-bold text-white transition-all duration-200 bg-primary">
+                <span wire:loading.remove wire:target="login" class="relative">Log in</span>
+                <span wire:loading wire:target="login" class="loading">Login in...</span>
+            </button>
         </div>
     </form>
 </div>

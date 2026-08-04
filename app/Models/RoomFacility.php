@@ -13,11 +13,11 @@ class RoomFacility extends Model
 
     public function room()
     {
-        return $this->belongsTo(Room::class);
+        return $this->belongsTo(Room::class)->cascadeOnDelete();
     }
 
     public function facility()
     {
-        return $this->belongsTo(Facility::class);
+        return $this->belongsTo(Facility::class)->cascadeOnDelete();
     }
 }

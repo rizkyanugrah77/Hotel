@@ -6,5 +6,5 @@
         </div>
     </x-slot>
 
-    <livewire:layout.bookings-manager />
+    <livewire:Admin.BookingManager />
 </x-app-layout>

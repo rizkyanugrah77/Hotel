@@ -16,10 +16,10 @@ return new class extends Migration
             $table->string('booking_code')->unique();
             $table->foreignId('room_id')->constrained('rooms')->cascadeOnDelete();
             $table->foreignId('user_id')->constrained('users')->cascadeOnDelete();
-            $table->date('check_in');
-            $table->date('check_out');
+            $table->dateTime('check_in');
+            $table->dateTime('check_out');
             $table->integer('total_guests');
-            $table->decimal('total_price', 10, 2);
+            $table->unsignedBigInteger('total_price');
             $table->enum('status', ['pending', 'paid', 'cancelled', 'completed'])->default('pending');
             $table->timestamps();
         });

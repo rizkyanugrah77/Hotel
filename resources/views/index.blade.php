@@ -87,12 +87,11 @@
         </a>
     </section>
 
-
     <!-- ===================================
        BOOKING SEARCH SECTION
        =================================== -->
     <section id="booking-search" class="relative -mt-20 z-20 px-4">
-        @livewire('welcome.booking-form')
+        <livewire:welcome.booking-form />
     </section>
 
 
@@ -100,7 +99,7 @@
        ABOUT SECTION
        =================================== -->
     <section id="about" class="section">
-        @livewire('welcome.about')
+        <livewire:welcome.about />
     </section>
 
 
@@ -108,7 +107,7 @@
        FEATURED ROOMS
        =================================== -->
     <section id="rooms" class="section bg-gray-50/80">
-        @livewire('welcome.rooms')
+        <livewire:welcome.rooms />
     </section>
 
 
@@ -116,16 +115,14 @@
        FACILITIES
        =================================== -->
     <section id="facilities" class="section">
-        @livewire('welcome.facilities')
-
+        <livewire:welcome.facilities />
     </section>
-
 
     <!-- ===================================
        GALLERY
        =================================== -->
     <section id="gallery" class="section bg-gray-50/80">
-        @livewire('welcome.galleries')
+        <livewire:welcome.galleries />
 
         <!-- Lightbox -->
         <div id="gallery-lightbox"
@@ -147,7 +144,7 @@
        TESTIMONIALS
        =================================== -->
     <section id="testimonials" class="section overflow-hidden">
-        @livewire('welcome.testimonial')
+        <livewire:welcome.testimonial />
     </section>
 
 

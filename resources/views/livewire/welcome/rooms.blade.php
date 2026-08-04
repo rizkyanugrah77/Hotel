@@ -118,7 +118,8 @@ new class extends Component {
                         @endforeach
 
                     </div>
-                    <a href="/pages/room-detail.html" class="btn-outline w-full mt-6 text-sm !py-2.5">
+                    <a href="{{ route('room-detail-preview', $room->slug) }}"
+                        class="btn-outline w-full mt-6 text-sm !py-2.5">
                         View Details
                         <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round"

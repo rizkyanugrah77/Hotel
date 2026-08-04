@@ -23,7 +23,7 @@ class Room extends Model
     ];
 
     protected $casts = [
-        'price' => 'integer',
+        'price' => 'decimal:2',
     ];
 
     public function bookings(): HasMany

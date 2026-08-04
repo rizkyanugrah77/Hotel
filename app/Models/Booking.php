@@ -21,8 +21,8 @@ class Booking extends Model
     ];
 
     protected $casts = [
-        'check_in' => 'date',
-        'check_out' => 'date',
+        'check_in' => 'datetime:Y-m-d, H:m:s',
+        'check_out' => 'datetime:Y-m-d, H:m:s',
         'total_price' => 'decimal:2',
     ];
 

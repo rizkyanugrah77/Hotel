@@ -17,7 +17,7 @@ return new class extends Migration
             $table->string('slug');
             $table->text('description')->nullable();
             $table->integer('capacity')->nullable();
-            $table->unsignedInteger('price')->default(0);
+            $table->unsignedBigInteger('price')->default(0);
             $table->enum('status', ['available', 'occupied', 'maintenance'])->nullable();
             $table->string('bed_type')->nullable();
             $table->string('image')->nullable();
