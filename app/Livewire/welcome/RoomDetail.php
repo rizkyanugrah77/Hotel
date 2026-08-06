@@ -13,6 +13,8 @@ class RoomDetail extends Component
 {
     public $room;
 
+    public ?int $booking_id = null;
+
     public string $booking_code = '';
 
     public ?int $room_id = null;
@@ -37,6 +39,7 @@ class RoomDetail extends Component
         $this->check_in = now('Asia/Jakarta')->toDateString();
         $this->check_out = now('Asia/Jakarta')->addDay()->toDateString();
         $this->total_guests = 1;
+        $this->booking_id = request('booking');
         $this->calculatePrice();
     }
 
@@ -98,15 +101,17 @@ class RoomDetail extends Component
         $attributes['check_out'] = Carbon::parse($this->check_out)->setTimezone('Asia/Jakarta')->setTime(12, 0, 0)->format('Y-m-d H:i:s');
         $attributes['status'] = $this->status;
 
-        $booking = Booking::create($attributes);
+        $booking = Booking::updateOrCreate(['booking_code' => $this->booking_code], $attributes);
         if ($booking) {
             $this->dispatch('room-detail-saved', message: 'Booking berhasil ditambahkan.', type: 'success');
+            $bookingCode = $booking->booking_code;
             $this->resetForm();
 
-            return redirect()->route('payment', ['bookingCode' => $booking->booking_code]);
+            return redirect()->route('payment', $bookingCode);
         } else {
             $this->dispatch('room-detail-error', message: 'Booking gagal ditambahkan.', type: 'error');
         }
+
     }
 
     public function generateBookingCode(): string

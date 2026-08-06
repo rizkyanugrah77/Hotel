@@ -67,9 +67,11 @@
 
                         <form wire:submit="pay">
                             <div class="flex justify-center">
-                                <button type="submit"
+                                <button type="submit" wire:loading.attr="disabled"
                                     class="btn-primary !px-8 text-lg w-full md:w-auto flex items-center justify-center gap-2 shadow-lg shadow-primary/30">
-                                    Proceed to Payment
+                                    <span wire:loading.remove wire:target="pay" class="relative">Proceed to
+                                        Payment</span>
+                                    <span wire:loading wire:target="pay" class="loading">Loading...</span>
                                 </button>
                             </div>
                         </form>
@@ -82,7 +84,7 @@
                         <h3 class="font-poppins font-bold text-lg mb-4">Order Summary</h3>
                         <div class="flex gap-4 items-center mb-6 pb-6 border-b border-gray-100">
                             <img src="{{ asset('assets/img/rooms/' . $bookings->room->image) }}"
-                                class="w-20 h-20 rounded-xl object-cover" alt="" />
+                                class="w-20 h-20 rounded-xl object-cover" alt="{{ $bookings->room->name }}" />
                             <div>
                                 <p class="font-medium text-sm">{{ $bookings->room->name }}</p>
                                 <p class="text-xs text-gray-500 mt-1">

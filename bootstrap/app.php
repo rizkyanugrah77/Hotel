@@ -15,7 +15,10 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->alias([
             'isAdmin' => IsAdmin::class,
         ]);
-    })
-    ->withExceptions(function (Exceptions $exceptions) {
+
+        $middleware->validateCsrfTokens(except: [
+            'midtrans/*',
+        ]);
+    })->withExceptions(function (Exceptions $exceptions) {
         //
     })->create();

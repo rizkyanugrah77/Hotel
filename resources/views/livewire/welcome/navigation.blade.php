@@ -20,8 +20,8 @@
 </nav> --}}
 
 <nav id="navbar" x-data="{ scrolled: false }" @scroll.window="scrolled = window.scrollY > 80"
-    :class="scrolled ? 'shadow-lg  backdrop-blur-md' : 'bg-trasparent backdrop-blur-md bg-red-600/90'"
-    class="fixed top-0 left-0 right-0 z-50 transition-all duration-300">
+    :class="scrolled ? 'shadow-lg  backdrop-blur-md' : 'bg-trasparent backdrop-blur-md '"
+    class="fixed top-0 left-0 right-0 z-50 transition-all duration-300 bg-red-600/90">
     <div class=" max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 ">
         <div class="flex items-center justify-between h-20">
             <!-- Logo -->

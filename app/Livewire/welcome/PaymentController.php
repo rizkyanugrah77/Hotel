@@ -54,7 +54,7 @@ class PaymentController extends Component
         Config::$is3ds = config('midtrans.is3ds');
 
         // 2. Prepare transaction details
-        $orderId = 'PAY-'.Str::uuid()->toString();
+        $orderId = 'INV-'.Str::uuid()->toString();
         $grossAmount = (int) $this->bookings->total_price;
 
         $midtrans_parameter = [
@@ -65,6 +65,9 @@ class PaymentController extends Component
             'customer_details' => [
                 'first_name' => $this->bookings->user->name,
                 'email' => $this->bookings->user->email,
+            ],
+            'callbacks' => [
+                'finish' => route('payment-check') . '?order_id=' . $orderId,
             ],
         ];
 
@@ -87,14 +90,18 @@ class PaymentController extends Component
 
             // 5. Redirect user to Midtrans payment page
             return redirect()->away($snap->redirect_url);
+
         } catch (\Exception $e) {
             session()->flash('error', 'Payment initialization failed: '.$e->getMessage());
         }
+
+        // return redirect()->back();
+
     }
 
     public function render()
     {
-        return view('livewire.welcome.payment', [
+        return view('livewire.welcome.payments.payment', [
             'booking' => $this->bookings,
         ])->layout('layouts.guest');
     }

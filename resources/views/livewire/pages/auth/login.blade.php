@@ -55,7 +55,7 @@ new #[Layout('layouts.auth')] class extends Component {
             </label>
         </div>
 
-        <div class="flex items-center justify-end mt-4">
+        <div class="flex items-center justify-end mt-4 gap-2">
             @if (Route::has('password.request'))
                 <a class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
                     href="{{ route('password.request') }}" wire:navigate>
@@ -65,8 +65,8 @@ new #[Layout('layouts.auth')] class extends Component {
 
             <button type="submit" wire:loading.attr="disabled"
                 class="group relative inline-flex items-center justify-center rounded-lg px-8 py-2.5 font-bold text-white transition-all duration-200 bg-primary">
-                <span wire:loading.remove wire:target="login" class="relative">Log in</span>
-                <span wire:loading wire:target="login" class="loading">Login in...</span>
+                <span wire:loading.remove wire:target="login" class="relative">{{ __('Login') }}</span>
+                <span wire:loading wire:target="login" class="loading">{{ __('Logging in...') }}</span>
             </button>
         </div>
     </form>

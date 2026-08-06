@@ -1,4 +1,4 @@
-<x-guest-layout>
+<div>
 
     <!-- ===================================
        HERO SECTION
@@ -91,7 +91,7 @@
        BOOKING SEARCH SECTION
        =================================== -->
     <section id="booking-search" class="relative -mt-20 z-20 px-4">
-        <livewire:welcome.booking-form />
+        @include('welcome.booking-form')
     </section>
 
 
@@ -99,7 +99,7 @@
        ABOUT SECTION
        =================================== -->
     <section id="about" class="section">
-        <livewire:welcome.about />
+        @include('welcome.about')
     </section>
 
 
@@ -107,7 +107,8 @@
        FEATURED ROOMS
        =================================== -->
     <section id="rooms" class="section bg-gray-50/80">
-        <livewire:welcome.rooms />
+        @include('welcome.rooms')
+
     </section>
 
 
@@ -115,14 +116,14 @@
        FACILITIES
        =================================== -->
     <section id="facilities" class="section">
-        <livewire:welcome.facilities />
+        @include('welcome.facilities')
     </section>
 
     <!-- ===================================
        GALLERY
        =================================== -->
     <section id="gallery" class="section bg-gray-50/80">
-        <livewire:welcome.galleries />
+        @include('welcome.galleries')
 
         <!-- Lightbox -->
         <div id="gallery-lightbox"
@@ -346,4 +347,4 @@
     </button>
 
 
-</x-guest-layout>
+</div>

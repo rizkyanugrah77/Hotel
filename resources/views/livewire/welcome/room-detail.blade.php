@@ -189,7 +189,7 @@
                             <span class="text-sm text-gray-500 mb-1">/ night</span>
                         </div>
 
-                        <form wire:submit="save" class="space-y-4">
+                        <form wire:submit.prevent="save" class="space-y-4">
                             <div class="grid grid-cols-2 gap-4">
                                 <div>
                                     <label class="input-label text-xs">Check In</label>
@@ -244,8 +244,11 @@
                                 </div>
                             </div>
 
-                            <button type="submit" wire:target="save" class="btn-primary w-full mt-6">Reserve
-                                Now</button>
+                            <button type="submit" wire:loading.attr="disabled" class="btn-primary w-full mt-6">
+                                <span wire:loading.remove wire:target="save" class="relative">Reserve Now</span>
+                                <span wire:loading wire:target="save" class="loading">Loading...</span>
+                            </button>
+
 
                             <p class="text-xs text-center text-gray-500 mt-3">You won't be charged yet</p>
                         </form>

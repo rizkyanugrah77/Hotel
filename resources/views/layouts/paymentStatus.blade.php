@@ -19,6 +19,7 @@
 
 <body class="bg-background text-foreground font-inter">
     <livewire:welcome.navigation />
+
     <main>
         {{ $slot }}
     </main>

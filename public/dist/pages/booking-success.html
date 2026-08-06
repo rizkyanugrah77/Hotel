@@ -89,26 +89,5 @@
     </div>
   </main>
 
-  <script>
-    // Simple confetti effect for success page
-    const colors = ['#A61B1B', '#D4AF37', '#ffffff'];
-    for(let i = 0; i < 50; i++) {
-      const conf = document.createElement('div');
-      conf.style.position = 'fixed';
-      conf.style.width = '10px';
-      conf.style.height = '10px';
-      conf.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
-      conf.style.left = Math.random() * 100 + 'vw';
-      conf.style.top = '-10px';
-      conf.style.borderRadius = Math.random() > 0.5 ? '50%' : '0';
-      conf.style.zIndex = '100';
-      conf.style.transition = 'transform 3s linear, opacity 3s linear';
-      conf.style.transform = `translateY(${window.innerHeight}px) rotate(${Math.random() * 360}deg)`;
-      document.body.appendChild(conf);
-      
-      // Cleanup
-      setTimeout(() => conf.remove(), 3000);
-    }
-  </script>
 </body>
 </html>

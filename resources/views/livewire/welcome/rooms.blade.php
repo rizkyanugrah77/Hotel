@@ -1,18 +1,3 @@
-<?php
-
-use App\Models\Room;
-use Livewire\Volt\Component;
-
-new class extends Component {
-    public function with(): array
-    {
-        $rooms = Room::with('facilities')->get();
-        return [
-            'rooms' => $rooms,
-        ];
-    }
-}; ?>
-
 <div class="max-w-7xl mx-auto">
     <!-- Header -->
     <div class="text-center mb-14 animate-on-scroll">
@@ -42,7 +27,8 @@ new class extends Component {
                         </div>
                         <div class="absolute bottom-4 right-4 bg-white/90 backdrop-blur-sm rounded-2xl px-4 py-2">
                             <span class="text-xs text-gray-500">From</span>
-                            <span class="text-lg font-poppins font-bold text-primary ml-1">Rp {{ $room->price }}</span>
+                            <span class="text-lg font-poppins font-bold text-primary ml-1">
+                                {{ 'Rp ' . number_format($room->price, 0, ',', '.') }}</span>
                             <span class="text-xs text-gray-500">/night</span>
                         </div>
                     </div>
@@ -118,7 +104,7 @@ new class extends Component {
                         @endforeach
 
                     </div>
-                    <a href="{{ route('room-detail-preview', $room->slug) }}"
+                    <a href="{{ route('room-detail-preview', $room->slug) }}" wire:navigate
                         class="btn-outline w-full mt-6 text-sm !py-2.5">
                         View Details
                         <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
