@@ -9,14 +9,15 @@ class Index extends Component
 {
     public $rooms;
 
-    public function mount()
-    {
-        $this->rooms = Room::with('galleries', 'facilities', 'bookings')->latest()->get();
+    // public function mount()
+    // {
 
-    }
+    // }
 
     public function render()
     {
+        $this->rooms = Room::with('galleries', 'facilities', 'bookings')->latest()->get();
+
         return view('index', [
             'rooms' => $this->rooms,
         ])->layout('layouts.guest');

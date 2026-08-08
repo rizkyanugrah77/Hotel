@@ -24,7 +24,7 @@ class RoomsAdmin extends Component
 
     public string $capacity = '';
 
-    public string $price = '';
+    public int $price = 0;
 
     public string $status = 'available';
 
@@ -122,7 +122,7 @@ class RoomsAdmin extends Component
         $this->bed_type = $room->bed_type ?? '';
         $this->size = (string) $room->size;
         $this->capacity = (string) $room->capacity;
-        $this->price = (string) $room->price;
+        $this->price = (int) $room->price;
         $this->status = $room->status ?? 'available';
         $this->image = null;
         $this->selectedFacilities = $room

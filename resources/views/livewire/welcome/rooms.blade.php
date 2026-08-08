@@ -95,11 +95,12 @@
                             </svg>
                             {{ $room->capacity }}
                         </span>
-                        @foreach ($room->facilities as $facility)
-                            <span class="flex items-center gap-1">
+                        @foreach ($room->facilities->take(2) as $facility)
+                            <span
+                                class="flex items-center gap-1 overflow-hidden text-ellipsis whitespace-nowrap min-w-0">
                                 <span
                                     class="[&>svg]:w-4 [&>svg]:h-4 [&>svg]:text-gray-500 [ [&>svg]:fill-current">{!! $facility->icon !!}</span>
-                                {{ $facility->name }}
+                                <span class="truncate">{{ $facility->name }}</span>
                             </span>
                         @endforeach
 

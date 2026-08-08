@@ -36,23 +36,39 @@ class PaymentStatus extends Component
             if ($status == 'capture') {
                 if ($type == 'credit_card') {
                     $payment->transaction_status = ($fraud == 'challenge') ? 'CHALLENGE' : 'SUCCESS';
+                } elseif ($status == 'settlement') {
+                    $payment->transaction_status = 'SUCCESS';
+                    $payment->booking->update([
+                        'status' => 'paid',
+                    ]);
+                } elseif ($status == 'pending') {
+                    $payment->transaction_status = 'PENDING';
+                    $payment->booking->update([
+                        'status' => 'pending',
+                    ]);
+                } elseif ($status == 'deny') {
+                    $payment->transaction_status = 'FAILED';
+                    $payment->booking->update([
+                        'status' => 'pending',
+                    ]);
+                } elseif ($status == 'expire') {
+                    $payment->transaction_status = 'EXPIRED';
+                    $payment->booking->update([
+                        'status' => 'pending',
+                    ]);
+                } elseif ($status == 'cancel') {
+                    $payment->transaction_status = 'CANCEL';
+                    $payment->booking->update([
+                        'status' => 'cancelled',
+                    ]);
                 }
-            } elseif ($status == 'settlement') {
-                $payment->transaction_status = 'SUCCESS';
-            } elseif ($status == 'pending') {
-                $payment->transaction_status = 'PENDING';
-            } elseif ($status == 'deny') {
-                $payment->transaction_status = 'FAILED';
-            } elseif ($status == 'expire') {
-                $payment->transaction_status = 'EXPIRED';
-            } elseif ($status == 'cancel') {
-                $payment->transaction_status = 'CANCEL';
-            }
 
-            if ($type) {
-                $payment->payment_type = $type;
+                if ($type) {
+                    $payment->payment_type = $type;
+                }
+                $payment->save();
+
             }
-            $payment->save();
         } catch (\Exception $e) {
             session()->flash('error', 'Payment status check failed: '.$e->getMessage());
         }

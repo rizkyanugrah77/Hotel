@@ -42,7 +42,7 @@ class MidtransController extends Controller
                 ], 403);
             }
 
-            $payment = Payment::where('order_id', $orderId)->first();
+            $payment = Payment::with('booking')->where('order_id', $orderId)->first();
 
             if (! $payment) {
                 return response()->json([
@@ -67,22 +67,37 @@ class MidtransController extends Controller
 
                 case 'settlement':
                     $payment->transaction_status = 'SUCCESS';
+                    $payment->booking()->update([
+                        'status' => 'paid',
+                    ]);
                     break;
 
                 case 'pending':
                     $payment->transaction_status = 'PENDING';
+                    $payment->booking()->update([
+                        'status' => 'pending',
+                    ]);
                     break;
 
                 case 'deny':
                     $payment->transaction_status = 'FAILED';
+                    $payment->booking()->update([
+                        'status' => 'cancelled',
+                    ]);
                     break;
 
                 case 'expire':
                     $payment->transaction_status = 'EXPIRED';
+                    $payment->booking()->update([
+                        'status' => 'cancelled',
+                    ]);
                     break;
 
                 case 'cancel':
                     $payment->transaction_status = 'CANCEL';
+                    $payment->booking()->update([
+                        'status' => 'cancelled',
+                    ]);
                     break;
             }
 

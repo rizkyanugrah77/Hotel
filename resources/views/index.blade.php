@@ -15,14 +15,14 @@
         <div class="absolute inset-0 batak-pattern opacity-20"></div>
 
         <!-- Content -->
-        <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-32 lg:py-0 w-full">
+        {{-- <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-32 lg:py-0 w-full">
             <div class="max-w-3xl pt-10">
                 <!-- Badge -->
-                {{-- <div
+                <div
                     class="inline-flex items-center gap-2 px-4 py-2 bg-white/10 backdrop-blur-sm rounded-full border border-white/20 mb-8 animate-fade-in">
                     <span class="w-2 h-2 bg-accent rounded-full animate-pulse-soft"></span>
                     <span class="text-sm text-white/90 font-inter">Samosir Island's Premier Retreat</span>
-                </div> --}}
+                </div>
 
                 <!-- Headline -->
                 <h1 class="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-poppins font-bold text-white leading-[1.1] mb-6 animate-fade-in"
@@ -32,12 +32,12 @@
                     Like Never Before
                 </h1>
 
-                {{-- <!-- Subtitle -->
+                <!-- Subtitle -->
                 <p class="text-lg sm:text-xl text-white/80 font-inter leading-relaxed max-w-xl mb-10 animate-fade-in"
                     style="animation-delay: 0.3s;">
                     Nestled on the shores of Lake Toba, Sitio Tio Resort offers an unforgettable blend of traditional
                     Batak Samosir hospitality and modern luxury.
-                </p> --}}
+                </p>
 
                 <!-- CTA Buttons -->
                 <div class="flex flex-col sm:flex-row gap-4 animate-fade-in" style="animation-delay: 0.45s;">
@@ -74,7 +74,7 @@
                     </div>
                 </div>
             </div>
-        </div>
+        </div> --}}
 
         <!-- Scroll Down Indicator -->
         <a href="#booking-search"
@@ -181,8 +181,7 @@
                 <a href="/pages/booking.html" class="btn-accent text-base !px-10 !py-4">
                     Book Now — Save 20%
                     <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round"
-                            d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3" />
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3" />
                     </svg>
                 </a>
                 <a href="/pages/rooms.html"

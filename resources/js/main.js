@@ -66,33 +66,59 @@ export function initMobileNav() {
   if (overlay) overlay.addEventListener('click', closeMenu);
 
   // Close on escape key
-  document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape') closeMenu();
-  });
+  if (!window._mobileNavKeydownInitialized) {
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        const activeMenu = document.getElementById('mobile-menu');
+        if (activeMenu && !activeMenu.classList.contains('translate-x-full')) {
+          activeMenu.classList.add('translate-x-full');
+          const activeOverlay = document.getElementById('mobile-menu-overlay');
+          if (activeOverlay) {
+            activeOverlay.classList.remove('opacity-100');
+            activeOverlay.classList.add('opacity-0', 'pointer-events-none');
+          }
+          document.body.style.overflow = '';
+        }
+      }
+    });
+    window._mobileNavKeydownInitialized = true;
+  }
 }
 
 // ===================================
 // Navbar Scroll Effect
 // ===================================
 export function initNavbarScroll() {
+  if (window._navbarScrollInitialized) {
+    // Just trigger it once for the new page state
+    window.dispatchEvent(new Event('scroll'));
+    return;
+  }
+
   const navbar = document.getElementById('navbar');
-  if (!navbar) return;
+  // We can't return early if !navbar because the navbar might be on a different page.
+  // We need to attach the listener to the window regardless.
 
   let lastScroll = 0;
 
   window.addEventListener('scroll', () => {
+    const currentNavbar = document.getElementById('navbar');
+    if (!currentNavbar) return;
     const currentScroll = window.pageYOffset;
 
     if (currentScroll > 50) {
-      navbar.classList.add('bg-white/95', 'backdrop-blur-md', 'shadow-soft');
-      navbar.classList.remove('bg-transparent');
+      currentNavbar.classList.add('bg-white/95', 'backdrop-blur-md', 'shadow-soft');
+      currentNavbar.classList.remove('bg-transparent');
     } else {
-      navbar.classList.remove('bg-white/95', 'backdrop-blur-md', 'shadow-soft');
-      navbar.classList.add('bg-transparent');
+      currentNavbar.classList.remove('bg-white/95', 'backdrop-blur-md', 'shadow-soft');
+      currentNavbar.classList.add('bg-transparent');
     }
 
     lastScroll = currentScroll;
   });
+
+  window._navbarScrollInitialized = true;
+  window.dispatchEvent(new Event('scroll'));
 }
 
 // ===================================
@@ -114,10 +140,15 @@ export function initSmoothScroll() {
 // Back to Top Button
 // ===================================
 export function initBackToTop() {
-  const btn = document.getElementById('back-to-top');
-  if (!btn) return;
+  if (window._backToTopInitialized) {
+    window.dispatchEvent(new Event('scroll'));
+    return;
+  }
 
   window.addEventListener('scroll', () => {
+    const btn = document.getElementById('back-to-top');
+    if (!btn) return;
+
     if (window.pageYOffset > 400) {
       btn.classList.remove('opacity-0', 'pointer-events-none', 'translate-y-4');
       btn.classList.add('opacity-100', 'translate-y-0');
@@ -127,9 +158,16 @@ export function initBackToTop() {
     }
   });
 
-  btn.addEventListener('click', () => {
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+  // Attach a global click listener for back-to-top so it works across navigations
+  document.addEventListener('click', (e) => {
+    const btn = e.target.closest('#back-to-top');
+    if (btn) {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
   });
+
+  window._backToTopInitialized = true;
+  window.dispatchEvent(new Event('scroll'));
 }
 
 // ===================================
@@ -164,11 +202,14 @@ export function initTestimonialCarousel() {
   dots.forEach((dot, i) => dot.addEventListener('click', () => goToSlide(i)));
 
   // Auto-play
-  let autoPlay = setInterval(() => goToSlide(currentIndex + 1), 5000);
+  if (window._testimonialInterval) {
+    clearInterval(window._testimonialInterval);
+  }
+  window._testimonialInterval = setInterval(() => goToSlide(currentIndex + 1), 5000);
 
-  track.parentElement.addEventListener('mouseenter', () => clearInterval(autoPlay));
+  track.parentElement.addEventListener('mouseenter', () => clearInterval(window._testimonialInterval));
   track.parentElement.addEventListener('mouseleave', () => {
-    autoPlay = setInterval(() => goToSlide(currentIndex + 1), 5000);
+    window._testimonialInterval = setInterval(() => goToSlide(currentIndex + 1), 5000);
   });
 }
 
@@ -196,8 +237,11 @@ export function initGalleryLightbox() {
   });
 
   const closeLightbox = () => {
-    lightbox.classList.remove('opacity-100');
-    lightbox.classList.add('opacity-0', 'pointer-events-none');
+    const activeLightbox = document.getElementById('gallery-lightbox');
+    if (activeLightbox) {
+      activeLightbox.classList.remove('opacity-100');
+      activeLightbox.classList.add('opacity-0', 'pointer-events-none');
+    }
     document.body.style.overflow = '';
   };
 
@@ -205,9 +249,20 @@ export function initGalleryLightbox() {
   lightbox.addEventListener('click', (e) => {
     if (e.target === lightbox) closeLightbox();
   });
-  document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape') closeLightbox();
-  });
+  
+  if (!window._lightboxKeydownInitialized) {
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        const activeLightbox = document.getElementById('gallery-lightbox');
+        if (activeLightbox && !activeLightbox.classList.contains('opacity-0')) {
+          activeLightbox.classList.remove('opacity-100');
+          activeLightbox.classList.add('opacity-0', 'pointer-events-none');
+          document.body.style.overflow = '';
+        }
+      }
+    });
+    window._lightboxKeydownInitialized = true;
+  }
 }
 
 // ===================================
@@ -287,3 +342,6 @@ export function initAll() {
 
 // Auto-init on DOM ready
 document.addEventListener('DOMContentLoaded', initAll);
+
+// Re-initialize on Livewire navigation
+document.addEventListener('livewire:navigated', initAll);

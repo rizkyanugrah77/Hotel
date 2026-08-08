@@ -126,13 +126,13 @@
                             <td class="py-3 px-6">{{ $room->bed_type }}</td>
                             <td class="py-3 px-6">{{ $room->capacity }} orang</td>
                             <td class="py-3 px-6">Rp{{ number_format($room->price, 0, ',', '.') }}</td>
-                            <td class="py-3 px-6">
-                                <div class="flex items-center gap-1">
+                            <td class="py-3 px-6 max-w-52">
+                                <div class="flex flex-wrap gap-1">
                                     @forelse($room->facilities as $facility)
                                         <span
-                                            class="inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium bg-emerald-100 text-emerald-700 [&>svg]:w-4 [&>svg]:h-4 [&>svg]:text-emerald-700 [&>svg]:mr-1 [&>svg]:fill-current">
+                                            class="inline-flex w-fit items-center rounded-full px-2.5 py-0.5 text-xs font-medium bg-emerald-100 text-emerald-700 [&>svg]:w-4 [&>svg]:h-4 [&>svg]:text-emerald-700 [&>svg]:mr-1 [&>svg]:fill-current">
                                             {!! $facility->icon !!}
-                                            {!! $facility->name !!}
+                                            {{ $facility->name }}
                                         </span>
                                     @empty
                                         <span class="text-gray-400">-</span>

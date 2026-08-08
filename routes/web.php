@@ -11,19 +11,16 @@ use App\Livewire\Welcome\RoomDetail;
 use Illuminate\Support\Facades\Route;
 
 // Route::view('/', 'index')->name('index');
-Route::get('/', Index::class)->name('index');
+
 // Route::view('dashboard', 'dashboard')
 //     ->middleware(['auth', 'verified'])
 //     ->name('dashboard');
 
-Route::view('profile', 'profile')
-    ->middleware(['auth'])
-    ->name('profile');
-
+Route::get('/', Index::class)->name('index');
 Route::get('/room/{slug}', RoomDetail::class)->name('room-detail-preview');
 
 // ROLE ADMIN
-Route::middleware(['auth', 'isAdmin'])->group(function () {
+Route::middleware(['auth', 'isAdmin', 'verified'])->group(function () {
     Route::view('admin/dashboard', 'admin.dashboard')->name('dashboard');
     Route::get('/admin/rooms-manager', [RoomController::class, 'index'])->name('rooms.manager');
     Route::get('/admin/facilities-manager', [FacilityController::class, 'index'])->name('facilities.manager');
@@ -35,6 +32,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/payment/{bookingCode}', PaymentController::class)->name('payment');
     Route::get('/payment-success/{orderId}', PaymentStatus::class)->name('payment-success');
     Route::view('/payment-check', 'livewire.welcome.payments.payment-redirect')->name('payment-check');
+    Route::view('profile', 'profile')->name('profile');
 });
-Route::post('/midtrans/callback', [MidtransController::class, 'callback']);
+Route::post('/midtrans/callback', [MidtransController::class, 'callback'])->name('midtrans.callback');
 require __DIR__.'/auth.php';

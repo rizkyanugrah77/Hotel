@@ -109,74 +109,14 @@
                     <!-- Amenities -->
                     <h2 class="text-xl font-poppins font-bold text-foreground mb-6">Room Amenities</h2>
                     <div class="grid grid-cols-2 md:grid-cols-3 gap-y-6 gap-x-4 mb-12">
-                        <div class="flex items-center gap-3">
-                            <div
-                                class="w-10 h-10 bg-primary/10 rounded-xl flex items-center justify-center text-primary">
-                                <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-                                    stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round"
-                                        d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z" />
-                                </svg>
+                        @foreach ($room->facilities as $facility)
+                            <div class="flex items-center gap-3">
+                                <div class="w-10 h-10 bg-primary/10 rounded-xl flex items-center justify-center">
+                                    {!! $facility->icon !!}
+                                </div>
+                                <span class="text-sm font-medium">{{ $facility->name }}</span>
                             </div>
-                            <span class="text-sm font-medium">{{ $room->bed_type }}</span>
-                        </div>
-                        <div class="flex items-center gap-3">
-                            <div
-                                class="w-10 h-10 bg-primary/10 rounded-xl flex items-center justify-center text-primary">
-                                <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-                                    stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round"
-                                        d="M8.288 15.038a5.25 5.25 0 0 1 7.424 0M5.106 11.856c3.807-3.808 9.98-3.808 13.788 0M1.924 8.674c5.565-5.565 14.587-5.565 20.152 0M12.53 18.22l-.53.53-.53-.53a.75.75 0 0 1 1.06 0Z" />
-                                </svg>
-                            </div>
-                            <span class="text-sm font-medium">Free High-Speed WiFi</span>
-                        </div>
-                        <div class="flex items-center gap-3">
-                            <div
-                                class="w-10 h-10 bg-primary/10 rounded-xl flex items-center justify-center text-primary">
-                                <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-                                    stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round"
-                                        d="M6 20.25h12m-7.5-3v3m3-3v3m-10.125-3h17.25c.621 0 1.125-.504 1.125-1.125V4.875c0-.621-.504-1.125-1.125-1.125H3.375c-.621 0-1.125.504-1.125 1.125v11.25c0 .621.504 1.125 1.125 1.125Z" />
-                                </svg>
-                            </div>
-                            <span class="text-sm font-medium">55" Smart TV</span>
-                        </div>
-                        <div class="flex items-center gap-3">
-                            <div
-                                class="w-10 h-10 bg-primary/10 rounded-xl flex items-center justify-center text-primary">
-                                <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-                                    stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round"
-                                        d="M15 10.5a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
-                                    <path stroke-linecap="round" stroke-linejoin="round"
-                                        d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1 1 15 0Z" />
-                                </svg>
-                            </div>
-                            <span class="text-sm font-medium">Private Balcony</span>
-                        </div>
-                        <div class="flex items-center gap-3">
-                            <div
-                                class="w-10 h-10 bg-primary/10 rounded-xl flex items-center justify-center text-primary">
-                                <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-                                    stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round"
-                                        d="m20.25 7.5-.625 10.632a2.25 2.25 0 0 1-2.247 2.118H6.622a2.25 2.25 0 0 1-2.247-2.118L3.75 7.5M10 11.25h4M3.375 7.5h17.25c.621 0 1.125-.504 1.125-1.125v-1.5c0-.621-.504-1.125-1.125-1.125H3.375c-.621 0-1.125.504-1.125 1.125v1.5c0 .621.504 1.125 1.125 1.125Z" />
-                                </svg>
-                            </div>
-                            <span class="text-sm font-medium">Minibar</span>
-                        </div>
-                        <div class="flex items-center gap-3">
-                            <div
-                                class="w-10 h-10 bg-primary/10 rounded-xl flex items-center justify-center text-primary">
-                                <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-                                    stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round"
-                                        d="M14.25 9.75v-4.5m0 4.5h4.5m-4.5 0 6-6m-3 18c-8.284 0-15-6.716-15-15V4.5A2.25 2.25 0 0 1 4.5 2.25h1.372c.516 0 .966.351 1.091.852l1.106 4.423c.11.44-.055.902-.417 1.173l-1.293.97a1.062 1.062 0 0 0-.38 1.21 12.035 12.035 0 0 0 7.143 7.143c.441.162.928-.004 1.21-.38l.97-1.293a1.125 1.125 0 0 1 1.173-.417l4.423 1.106c.5.125.852.575.852 1.091V19.5a2.25 2.25 0 0 1-2.25 2.25h-2.25Z" />
-                                </svg>
-                            </div>
-                            <span class="text-sm font-medium">Room Service</span>
-                        </div>
+                        @endforeach
                     </div>
                 </div>
 
@@ -193,14 +133,13 @@
                             <div class="grid grid-cols-2 gap-4">
                                 <div>
                                     <label class="input-label text-xs">Check In</label>
-                                    <input type="date" class="input !py-2 !px-3 text-sm"
-                                        wire:model.live="check_in" min="{{ now()->toDateString() }}" required />
+                                    <input type="date" class="input !py-2 !px-3 text-sm" wire:model.live="check_in"
+                                        min="{{ now()->toDateString() }}" required />
                                 </div>
                                 <div>
                                     <label class="input-label text-xs">Check Out</label>
-                                    <input type="date" class="input !py-2 !px-3 text-sm"
-                                        wire:model.live="check_out" min="{{ $check_in ?: now()->toDateString() }}"
-                                        required />
+                                    <input type="date" class="input !py-2 !px-3 text-sm" wire:model.live="check_out"
+                                        min="{{ $check_in ?: now()->toDateString() }}" required />
                                 </div>
                             </div>
 

@@ -19,7 +19,7 @@ new #[Layout('layouts.auth')] class extends Component {
 
         Session::regenerate();
 
-        $this->redirectIntended(default: route('index', absolute: true), navigate: true);
+        $this->redirect(route('index', absolute: true), navigate: true);
     }
 }; ?>
 

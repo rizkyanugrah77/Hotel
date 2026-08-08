@@ -86,7 +86,7 @@ class RoomDetail extends Component
     {
         $user = Auth::user();
         if (! $user) {
-            return redirect()->route('login');
+            $this->redirect(route('login', absolute: true), navigate: true);
         }
 
         $this->user_id = $user->id;
@@ -107,7 +107,8 @@ class RoomDetail extends Component
             $bookingCode = $booking->booking_code;
             $this->resetForm();
 
-            return redirect()->route('payment', $bookingCode);
+            // return redirect()->route('payment', $bookingCode);
+            $this->redirect(route('payment', $bookingCode), navigate: true);
         } else {
             $this->dispatch('room-detail-error', message: 'Booking gagal ditambahkan.', type: 'error');
         }

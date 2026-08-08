@@ -67,7 +67,7 @@ class PaymentController extends Component
                 'email' => $this->bookings->user->email,
             ],
             'callbacks' => [
-                'finish' => route('payment-check') . '?order_id=' . $orderId,
+                'finish' => route('payment-check').'?order_id='.$orderId,
             ],
         ];
 

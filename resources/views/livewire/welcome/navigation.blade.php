@@ -20,8 +20,8 @@
 </nav> --}}
 
 <nav id="navbar" x-data="{ scrolled: false }" @scroll.window="scrolled = window.scrollY > 80"
-    :class="scrolled ? 'shadow-lg  backdrop-blur-md' : 'bg-trasparent backdrop-blur-md '"
-    class="fixed top-0 left-0 right-0 z-50 transition-all duration-300 bg-red-600/90">
+    :class="scrolled ? 'shadow-lg  backdrop-blur-md bg-red-600/90 ' : 'bg-transparent backdrop-blur-md  backdrop-brightness-50'"
+    class="fixed top-0 left-0 right-0 z-50 transition-all duration-300 ">
     <div class=" max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 ">
         <div class="flex items-center justify-between h-20">
             <!-- Logo -->
@@ -45,14 +45,14 @@
 
             <!-- Desktop Navigation -->
             <div class="hidden lg:flex items-center gap-1">
-                <a href="/"
+                <a href="/" wire:navigate
                     class="px-4 py-2 text-sm font-medium text-white hover:text-red-600 transition-colors rounded-xl hover:bg-white"
                     aria-current="page">Home</a>
-                <a href="/pages/rooms.html"
+                <a href="/pages/rooms.html" wire:navigate
                     class="px-4 py-2 text-sm font-medium text-white/80 hover:text-red-600 transition-colors rounded-xl hover:bg-white">Rooms</a>
-                <a href="/pages/booking.html"
+                <a href="/pages/booking.html" wire:navigate
                     class="px-4 py-2 text-sm font-medium text-white/80 hover:text-red-600 transition-colors rounded-xl hover:bg-white">Booking</a>
-                <a href="/pages/dashboard.html"
+                <a href="/pages/dashboard.html" wire:navigate
                     class="px-4 py-2 text-sm font-medium text-white/80 hover:text-red-600 transition-colors rounded-xl hover:bg-white">My
                     Bookings</a>
                 <div class="w-px h-6 bg-white/20 mx-2"></div>
