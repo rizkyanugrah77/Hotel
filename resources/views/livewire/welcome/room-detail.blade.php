@@ -27,15 +27,17 @@
 
             <!-- Image Gallery -->
             <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-12 h-auto md:h-[500px]">
-                <div class="md:col-span-3  max-h-[520px] md:h-full rounded-3xl overflow-hidden cursor-pointer group"
+                <div class="md:col-span-3  max-h-[530px] md:h-full rounded-3xl overflow-hidden cursor-pointer group"
                     data-gallery-item>
                     <img src="{{ asset('storage/assets/img/rooms/' . $room->image) }}" alt="Deluxe Room main view"
                         class="w-full  h-full object-cover transition-transform duration-700 group-hover:scale-105" />
                 </div>
+
                 <div class="grid grid-cols-2 md:grid-cols-1 gap-4 md:col-span-1 h-[150px] md:h-full">
                     @if ($room->galleries)
                         @foreach ($room->galleries->where('is_featured', 1)->take(3) as $galleri)
-                            <div class="rounded-3xl overflow-hidden cursor-pointer group h-full" data-gallery-item>
+                            <div class="rounded-3xl overflow-hidden cursor-pointer group h-full md:max-h-[160px]"
+                                data-gallery-item>
                                 <img src="{{ asset('storage/assets/img/gallery/' . $galleri->image) }}"
                                     alt="Room details"
                                     class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
@@ -53,6 +55,7 @@
                         </div>
                     @endif --}}
                 </div>
+
             </div>
 
             <!-- Main Content Grid -->
@@ -60,15 +63,15 @@
                 <!-- Left Column: Details -->
                 <div class="lg:col-span-2">
                     <!-- Title & Badges -->
-                    <div class="flex flex-wrap items-center gap-3 mb-4 ml-4">
+                    <div class="flex flex-wrap items-center gap-3 mb-4">
                         <span class="badge-accent">Popular</span>
                         <span class="badge bg-gray-100 text-gray-700">{{ $room->size }} m²</span>
                         {{-- <span class="badge bg-gray-100 text-gray-700"></span> --}}
                     </div>
-                    <h1 class="text-3xl md:text-4xl font-poppins font-bold text-red-600 mb-4 ml-4">{{ $room->name }}
+                    <h1 class="text-3xl md:text-4xl font-poppins font-bold text-red-600 mb-4">{{ $room->name }}
                     </h1>
 
-                    <div class="flex items-center gap-1 text-sm text-gray-600 mb-8">
+                    {{-- <div class="flex items-center gap-1 text-sm text-gray-600 mb-8">
                         <div class="flex text-accent">
                             <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
                                 <path
@@ -93,18 +96,15 @@
                             </svg>
                         </div>
                         <span class="font-medium text-foreground ml-1">4.9</span> (128 reviews)
-                    </div>
+                    </div> --}}
 
                     <!-- Description -->
-                    <div class="prose prose-gray max-w-none mb-10">
-                        <p>Immerse yourself in the breathtaking beauty of Samosir Island from our Deluxe Lake View
-                            Room. Featuring floor-to-ceiling windows and a private balcony, this room offers
-                            uninterrupted panoramic views of the magnificent Lake Toba.</p>
-                        <p>The interior blends modern luxury with subtle Batak cultural touches, including handwoven
-                            ulos textile accents and local woodwork. The spacious 45 sqm room comes equipped with a
-                            king-size premium bed, a plush seating area, and a marble bathroom with a rain shower.
-                        </p>
+                    <div class="mb-10">
+                        <h2 class="text-xl font-poppins font-bold text-foreground mb-6">Description</h2>
+                        <p>{!! $room->description !!}</p>
                     </div>
+
+                    <hr class="border-gray-500 mb-10">
 
                     <!-- Amenities -->
                     <h2 class="text-xl font-poppins font-bold text-foreground mb-6">Room Amenities</h2>

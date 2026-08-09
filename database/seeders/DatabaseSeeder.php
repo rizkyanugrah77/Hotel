@@ -19,15 +19,15 @@ class DatabaseSeeder extends Seeder
         // User::factory(10)->create();
 
         User::factory()->create([
-            'name' => 'Test User',
-            'email' => 'test@example.com',
-            'password' => bcrypt('pasword123'),
+            'name' => 'Rizky Anugrah',
+            'email' => 'rizky123@mail.com',
+            'password' => bcrypt('rizky123'),
             'role' => 'customer',
         ]);
         User::factory()->create([
-            'name' => 'Test Admin',
+            'name' => 'Admin',
             'email' => 'asterixkun560@gmail.com',
-            'password' => bcrypt('pasword123'),
+            'password' => bcrypt('rizky123'),
             'role' => 'admin',
         ]);
 
@@ -57,20 +57,12 @@ class DatabaseSeeder extends Seeder
                 'description' => 'Free high-speed Wi-Fi throughout the property',
             ],
             [
-                'icon'=> '<svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-                                    stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round"
-                                        d="M20.25 7.5l-.625-1.659a1.875 1.875 0 0 0-1.282-1.282L15 5.25 14.205 3.61c-.164-.468-.63-.808-1.122-.808-.492 0-.958.34-.124.808L12.75 7.5M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
-                                </svg>',
+                'icon'=> '<svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 48 48"><title xmlns="">air-conditioning</title><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="4"><rect width="40" height="20" x="4" y="8" rx="2"/><path d="M12 20h24v8H12zm20-6h4M24 34v6m-8-4v2m16-2v2"/></g></svg>',
                 'name' => 'Air Conditioning',
                 'description' => 'Stay cool with our individually controlled air conditioning system',
             ],
             [
-                'icon'=> '<svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-                                    stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round"
-                                        d="M15.362 5.174a4.3 4.3 0 0 0-5.941 0M4 8v11a2 2 0 0 0 2 2h6l2-3V9a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2Zm3 2v5l1 1 1-1V9l-1-1-1 1zM21 15a2 2 0 0 1-2 2H17l-2-3v-3l2.5-2.5A2.002 2.002 0 0 1 21 12v3z" />
-                                </svg>',
+                'icon'=> '<svg xmlns="http://www.w3.org/2000/svg" width="1.25em" height="1em" viewBox="0 0 1920 1536"><title xmlns="">television</title><path fill="currentColor" d="M1792 1120V160q0-13-9.5-22.5T1760 128H160q-13 0-22.5 9.5T128 160v960q0 13 9.5 22.5t22.5 9.5h1600q13 0 22.5-9.5t9.5-22.5m128-960v960q0 66-47 113t-113 47h-736v128h352q14 0 23 9t9 23v64q0 14-9 23t-23 9H544q-14 0-23-9t-9-23v-64q0-14 9-23t23-9h352v-128H160q-66 0-113-47T0 1120V160Q0 94 47 47T160 0h1600q66 0 113 47t47 113"/></svg>',
                 'name' => 'Television',
                 'description' => 'Flat-screen TV with premium cable channels and streaming access',
             ],
@@ -86,36 +78,28 @@ class DatabaseSeeder extends Seeder
                 'description' => 'A compact refrigerator to keep your drinks and snacks cool',
             ],
             [
-                'icon'=> '<svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-                                    stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round"
-                                        d="M4.5 12.75l6 6 9-13.5" />
-                                </svg>',
+                'icon'=> '<svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 512 512"><title xmlns="">bathroom</title><path fill="currentColor" d="M464 280H80V100a51.26 51.26 0 0 1 15.113-36.485l.4-.4a51.69 51.69 0 0 1 58.6-10.162a79.1 79.1 0 0 0 11.778 96.627l10.951 10.951l-20.157 20.158l22.626 22.626l20.157-20.157L311.157 71.471l20.157-20.157l-22.627-22.627l-20.158 20.157l-10.951-10.951a79.086 79.086 0 0 0-100.929-8.976A83.61 83.61 0 0 0 72.887 40.485l-.4.4A83.05 83.05 0 0 0 48 100v180H16v32h32v30.7a24 24 0 0 0 1.232 7.589L79 439.589A23.97 23.97 0 0 0 101.766 456h12.9L103 496h33.333L148 456h208.1l12 40h33.4l-12-40h20.73A23.97 23.97 0 0 0 433 439.589l29.766-89.3A24 24 0 0 0 464 342.7V312h32v-32ZM188.52 60.52a47.025 47.025 0 0 1 66.431 0L265.9 71.471L199.471 137.9l-10.951-10.949a47.027 47.027 0 0 1 0-66.431M432 341.4L404.468 424H107.532L80 341.4V312h352Z"/></svg>',
                 'name' => 'Private Bathroom',
                 'description' => 'En-suite bathroom with complimentary toiletries and fresh towels',
             ],
             [
-                'icon'=> '  <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-                                    stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round"
-                                        d="m20.25 7.5-.625 10.632a2.25 2.25 0 0 1-2.247 2.118H6.622a2.25 2.25 0 0 1-2.247-2.118L3.75 7.5M10 11.25h4M3.375 7.5h17.25c.621 0 1.125-.504 1.125-1.125v-1.5c0-.621-.504-1.125-1.125-1.125H3.375c-.621 0-1.125.504-1.125 1.125v1.5c0 .621.504 1.125 1.125 1.125Z" />
-                                </svg>',
+                'icon'=> ' <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 32 32"><title xmlns="">bar</title><path fill="currentColor" d="M25 11H15a1 1 0 0 0-1 1v4a6.005 6.005 0 0 0 5 5.91V28h-3v2h8v-2h-3v-6.09A6.005 6.005 0 0 0 26 16v-4a1 1 0 0 0-1-1m-1 5a4 4 0 0 1-8 0v-3h8Z"/><path fill="currentColor" d="M15 1h-5a1 1 0 0 0-1 1v7.37A6.09 6.09 0 0 0 6 15v14a1 1 0 0 0 1 1h5v-2H8V15c0-3.187 2.231-4.02 2.316-4.051L11 10.72V3h3v5h2V2a1 1 0 0 0-1-1"/></svg>',
                 'name' => 'Minibar',
                 'description' => 'A compact refrigerator stocked with your favorite drinks and snacks, available upon request.',
            
             ],
-            [
-                'icon'=> '<svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-                                    stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round"
-                                        d="M15 10.5a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
-                                    <path stroke-linecap="round" stroke-linejoin="round"
-                                        d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1 1 15 0Z" />
-                                </svg>',
+            [   
+                'icon'=> '<svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24"><title xmlns="">balcony</title><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 13v8m4-8v8m8-8v8m-4-8v8m8-8v8M2 21h20M2 13h20m-4-3V3.6a.6.6 0 0 0-.6-.6H6.6a.6.6 0 0 0-.6.6V10"/></svg>',
                 'name' => 'Private Balcony',
                 'description' => 'Enjoy the fresh air and scenic views from your private balcony',
               
             ],
+            [
+                'icon'=> '<svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 64 64"><title xmlns="">beach</title><circle cx="32" cy="32" r="30" fill="#fff"/><path fill="none" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 46c8-7 18-6 20 0m10-30L42 28m-10 10L32 42l-4-8m-10-10L14 28m12-10c-3 7-8 14-8 18M20 26c12-7 20 0 20-10"/><path fill="none" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M42 28l-4-8M32 42l-4-8m24 14V44m-48 0V44"/><circle cx="32" cy="24" r="5" fill="none" stroke="#000" stroke-width="2"/></svg>',
+                'name' => 'Beachfront',
+                'description' => 'Enjoy the fresh air and scenic views from your private balcony',
+            ],
+
  
         ];
         Facility::insert($facilities);

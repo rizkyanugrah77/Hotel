@@ -10,7 +10,7 @@
      <!-- Facilities Grid -->
      <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 md:gap-6">
 
-         @foreach ($rooms->flatMap(fn($room) => $room->facilities)->unique()->take(8) as $facility)
+         @foreach ($rooms->flatMap(fn($room) => $room->facilities)->unique()->take(6) as $facility)
              <div
                  class="card text-center p-6 group hover:border-primary/20 border border-transparent animate-on-scroll stagger-1">
                  <div

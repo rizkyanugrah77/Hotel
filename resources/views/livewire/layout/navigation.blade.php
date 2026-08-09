@@ -46,13 +46,15 @@ new class extends Component {
 
             <!-- Settings Dropdown -->
             <div class="hidden sm:flex sm:items-center sm:ms-6">
-                <div class="w-10 h-10 rounded-full bg-primary text-white flex items-center justify-center font-bold">
-                    A</div>
-                <x-dropdown align="right" width="48">
 
+                <x-dropdown align="right" width="48">
                     <x-slot name="trigger">
                         <button
-                            class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 bg-white hover:text-gray-700 focus:outline-none transition ease-in-out duration-150">
+                            class="inline-flex items-center px-3 py-1 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 bg-white hover:text-gray-700 focus:outline-none transition ease-in-out duration-150">
+                            <div
+                                class="w-8 h-8 rounded-full bg-primary text-white flex items-center justify-center font-bold mr-2">
+                                {{ auth()->user()->name[0] }}
+                            </div>
                             <div x-data="{{ json_encode(['name' => auth()->user()->name]) }}" x-text="name"
                                 x-on:profile-updated.window="name = $event.detail.name"></div>
 

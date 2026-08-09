@@ -4,8 +4,7 @@
 
             <!-- Loading Icon -->
             <div class="relative w-24 h-24 mx-auto mb-8">
-                <div
-                    class="relative w-full h-full bg-primary/10 rounded-full flex items-center justify-center">
+                <div class="relative w-full h-full bg-primary/10 rounded-full flex items-center justify-center">
                     <svg class="w-12 h-12 text-primary animate-spin" fill="none" viewBox="0 0 24 24">
                         <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor"
                             stroke-width="4"></circle>

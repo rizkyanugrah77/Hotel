@@ -55,6 +55,10 @@
                     <p class="font-medium text-sm">{{ $payment->booking->user->name }}</p>
                     <p class="text-xs text-gray-400">{{ $payment->booking->user->phone }}</p>
                 </div>
+                <div>
+                    <p class="text-xs text-gray-500 mb-1">Payment Method</p>
+                    <p class="font-medium text-sm capitalize">{{ $payment->payment_method }}</p>
+                </div>
             </div>
         </div>
 
@@ -67,12 +71,27 @@
                 </svg>
                 Go to My Dashboard
             </a>
-            <button class="btn-outline">
-                <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+            <button type="button" wire:click="downloadReceipt" wire:loading.attr="disabled" class="btn-outline">
+                <svg wire:loading.remove class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke-width="2"
+                    stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round"
                         d="M3 16.5v2.25A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75V16.5M16.5 12 12 16.5m0 0L7.5 12m4.5 4.5V3" />
                 </svg>
-                Download Receipt
+
+                <svg wire:loading class="w-5 h-5 animate-spin" fill="none" viewBox="0 0 24 24">
+                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor"
+                        stroke-width="4"></circle>
+
+                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"></path>
+                </svg>
+
+                <span wire:loading.remove>
+                    Download Receipt
+                </span>
+
+                <span wire:loading>
+                    Generating PDF...
+                </span>
             </button>
         </div>
 

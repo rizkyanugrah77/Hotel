@@ -19,6 +19,8 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', Index::class)->name('index');
 Route::get('/room/{slug}', RoomDetail::class)->name('room-detail-preview');
+Route::post('/midtrans/callback', [MidtransController::class, 'callback'])->name('midtrans.callback');
+
 
 // ROLE ADMIN
 Route::middleware(['auth', 'isAdmin', 'verified'])->group(function () {
@@ -36,5 +38,4 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::view('/payment-check', 'livewire.welcome.payments.payment-redirect')->name('payment-check');
     Route::view('profile', 'profile')->name('profile');
 });
-Route::post('/midtrans/callback', [MidtransController::class, 'callback'])->name('midtrans.callback');
 require __DIR__.'/auth.php';

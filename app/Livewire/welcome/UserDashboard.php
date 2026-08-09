@@ -3,6 +3,7 @@
 namespace App\Livewire\Welcome;
 
 use App\Models\Booking;
+use App\Models\Payment;
 use Illuminate\Support\Carbon;
 use Livewire\Component;
 
@@ -12,11 +13,12 @@ class UserDashboard extends Component
     {
         $user = auth()->user();
         $now = Carbon::now();
+        $orderId = $payments->order_id ?? null;
 
         // Active bookings (pending or confirmed, check_out in the future)
         $activeBookings = Booking::with('room')
             ->where('user_id', $user->id)
-            ->whereIn('status', ['pending', 'confirmed'])
+            ->whereIn('status', ['pending', 'paid'])
             ->where('check_out', '>=', $now)
             ->orderBy('check_in', 'asc')
             ->get();
@@ -24,16 +26,19 @@ class UserDashboard extends Component
         // Upcoming check-ins within the next 3 days
         $upcomingCheckins = Booking::with('room')
             ->where('user_id', $user->id)
-            ->whereIn('status', ['pending', 'confirmed'])
+            ->whereIn('status', ['pending', 'paid'])
             ->whereBetween('check_in', [$now, $now->copy()->addDays(3)])
             ->orderBy('check_in', 'asc')
             ->get();
 
         // All bookings (history) — most recent first
-        $allBookings = Booking::with('room')
+        $allBookings = Booking::with('room',)
             ->where('user_id', $user->id)
             ->orderBy('created_at', 'desc')
             ->get();
+
+        $payments = Payment::with('booking')->whereIn('booking_id', $allBookings->pluck('id'))->get();
+     
 
         // Stats
         $totalBookings = $allBookings->count();
@@ -50,6 +55,7 @@ class UserDashboard extends Component
             'totalSpent' => $totalSpent,
             'activeCount' => $activeCount,
             'upcomingCount' => $upcomingCount,
+            'payments' => $payments,
         ])->layout('layouts.user');
     }
 }

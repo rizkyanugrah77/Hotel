@@ -345,3 +345,4 @@ document.addEventListener('DOMContentLoaded', initAll);
 
 // Re-initialize on Livewire navigation
 document.addEventListener('livewire:navigated', initAll);
+

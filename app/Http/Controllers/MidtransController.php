@@ -53,6 +53,7 @@ class MidtransController extends Controller
             $transaction = $notification->transaction_status;
             $type = $notification->payment_type;
             $fraud = $notification->fraud_status ?? null;
+            $acquirer = $notification->acquirer;
 
             switch ($transaction) {
 
@@ -68,7 +69,7 @@ class MidtransController extends Controller
                 case 'settlement':
                     $payment->transaction_status = 'SUCCESS';
                     $payment->booking()->update([
-                        'status' => 'paid',
+                        'status' => 'paid',    
                     ]);
                     break;
 
@@ -83,6 +84,7 @@ class MidtransController extends Controller
                     $payment->transaction_status = 'FAILED';
                     $payment->booking()->update([
                         'status' => 'cancelled',
+                        'payment_method'=> $acquirer,
                     ]);
                     break;
 
@@ -103,6 +105,7 @@ class MidtransController extends Controller
 
             $payment->payment_type = $type;
             $payment->transaction_id = $notification->transaction_id;
+            $payment->payment_method = $acquirer;
             $payment->save();
 
             Log::info('Midtrans Callback', [
