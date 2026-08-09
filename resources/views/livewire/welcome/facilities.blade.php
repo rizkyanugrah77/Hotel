@@ -3,13 +3,30 @@
      <div class="text-center mb-14 animate-on-scroll">
          <div class="gold-line-center mb-4"></div>
          <h2 class="section-title">World-Class <span class="text-gradient-accent">Facilities</span></h2>
-         <p class="section-subtitle mx-auto mt-4">Everything you need for an extraordinary stay, from wellness
-             to adventure.</p>
+         {{-- <p class="section-subtitle mx-auto mt-4">Everything you need for an extraordinary stay, from wellness
+             to adventure.</p> --}}
      </div>
 
      <!-- Facilities Grid -->
      <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 md:gap-6">
-         <!-- Infinity Pool -->
+
+         @foreach ($rooms->flatMap(fn($room) => $room->facilities)->unique()->take(8) as $facility)
+             <div
+                 class="card text-center p-6 group hover:border-primary/20 border border-transparent animate-on-scroll stagger-1">
+                 <div
+                     class="w-14 h-14 bg-primary/10 rounded-2xl flex items-center justify-center mx-auto mb-4 group-hover:bg-primary group-hover:text-white transition-all duration-300">
+                     <div
+                         class="text-2xl text-primary group-hover:text-white transition-colors [&svg]:text-primary [&svg]:group-hover:text-white">
+                         {!! $facility->icon !!}
+                     </div>
+                     {{-- <i class="fa-solid fa-{{ $facility->icon }} fa-2x text-primary group-hover:text-white transition-colors"></i> --}}
+                 </div>
+                 <h3 class="font-poppins font-semibold text-sm text-foreground">{{ $facility->name }}</h3>
+                 <p class="text-xs text-gray-500 mt-1">{{ $facility->description }}</p>
+             </div>
+         @endforeach
+
+         {{-- <!-- Infinity Pool -->
          <div
              class="card text-center p-6 group hover:border-primary/20 border border-transparent animate-on-scroll stagger-1">
              <div
@@ -98,6 +115,6 @@
              </div>
              <h3 class="font-poppins font-semibold text-sm text-foreground">Fitness</h3>
              <p class="text-xs text-gray-500 mt-1">24/7 gym access</p>
-         </div>
+         </div> --}}
      </div>
  </div>

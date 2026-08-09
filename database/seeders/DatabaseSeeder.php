@@ -35,7 +35,16 @@ class DatabaseSeeder extends Seeder
             RoomSeeder::class,
         ]);
 
-      
+        $galleries = [
+            ['image' => 'hero.png', 'is_featured' => true, 'room_id' => 1, 'caption' => 'Hero Image'],
+            ['image' => 'restaurant.png', 'is_featured' => true, 'room_id' => 1, 'caption' => 'Restaurant'],
+            ['image' => 'pool.png', 'is_featured' => true, 'room_id' => 1, 'caption' => 'Pool'],
+            ['image' => 'room-deluxe.png', 'is_featured' => true, 'room_id' => 1, 'caption' => 'Deluxe Room'],
+            ['image' => 'room-superior.png', 'is_featured' => true, 'room_id' => 2, 'caption' => 'Superior Room'],
+            ['image' => 'room-villa.png', 'is_featured' => true, 'room_id' => 3, 'caption' => 'Villa'],
+        ];
+
+        Gallery::insert($galleries);
 
         $facilities = [
             [

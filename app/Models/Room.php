@@ -41,9 +41,9 @@ class Room extends Model
         );
     }
 
-    public function galleries(): HasMany
+    public function galleries()
     {
-        return $this->hasMany(Gallery::class);
+        return $this->hasMany(Gallery::class)->orderBy('is_featured', 'desc')->orderBy('created_at', 'desc');
     }
 
     public function getPriceFormattedAttribute()

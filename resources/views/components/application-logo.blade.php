@@ -8,6 +8,5 @@
    <div>
        <span class="text-xl font-poppins font-bold text-white group-hover:text-accent transition-colors">Sitio
            Tio</span>
-       <span class="block text-[10px] font-inter uppercase tracking-[3px] text-white/70">Resort &
-           Spa</span>
+       <span class="block text-[10px] font-inter uppercase tracking-[3px] text-white/70">Resort</span>
    </div>

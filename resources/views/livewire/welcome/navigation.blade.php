@@ -27,35 +27,29 @@
             <!-- Logo -->
             <a href="{{ route('index') }}" wire:navigate class="flex items-center gap-3 group"
                 aria-label="Sitio Tio Resort Home">
-                <div
-                    class="w-10 h-10 bg-gradient-primary rounded-2xl flex items-center justify-center shadow-red group-hover:scale-110 transition-transform duration-300">
-                    <svg class="w-6 h-6 text-white" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-                        stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round"
-                            d="M8.25 21v-4.875c0-.621.504-1.125 1.125-1.125h5.25c.621 0 1.125.504 1.125 1.125V21m0 0h4.5V3.545M12.75 21h7.5M10.5 21V8.121c0-.312.11-.611.308-.848l4.692-5.58a.75.75 0 0 1 1.149.024l4.469 5.404c.18.217.282.5.282.79V21m-14.4 0H3.75c-.621 0-1.125-.504-1.125-1.125v-6.75c0-.621.504-1.125 1.125-1.125h3.375" />
-                    </svg>
-                </div>
-                <div>
-                    <span
-                        class="text-xl font-poppins font-bold text-white group-hover:text-accent transition-colors">Sitio
-                        Tio</span>
-                    <span class="block text-[10px] font-inter uppercase tracking-[3px] text-white/70">Resort &
-                        Spa</span>
-                </div>
+                <x-application-logo />
             </a>
 
             <!-- Desktop Navigation -->
-            <div class="hidden lg:flex items-center gap-1">
-                <a href="/" wire:navigate
-                    class="px-4 py-2 text-sm font-medium text-white hover:text-red-600 transition-colors rounded-xl hover:bg-white"
-                    aria-current="page">Home</a>
-                <a href="/pages/rooms.html" wire:navigate
-                    class="px-4 py-2 text-sm font-medium text-white/80 hover:text-red-600 transition-colors rounded-xl hover:bg-white">Rooms</a>
-                <a href="/pages/booking.html" wire:navigate
-                    class="px-4 py-2 text-sm font-medium text-white/80 hover:text-red-600 transition-colors rounded-xl hover:bg-white">Booking</a>
-                <a href="/pages/dashboard.html" wire:navigate
-                    class="px-4 py-2 text-sm font-medium text-white/80 hover:text-red-600 transition-colors rounded-xl hover:bg-white">My
-                    Bookings</a>
+            <div class="hidden lg:flex items-center gap-1 text-white">
+                <a href="{{ route('index') }}" wire:navigate @class([
+                    'px-4 py-2 text-sm font-medium hover:text-red-600 transition-colors rounded-xl hover:bg-white',
+                    'bg-white text-red-600' => request()->routeIs('index'),
+                    'text-white/80 hover:text-red-600 hover:bg-white' => !request()->routeIs(
+                        'index'),
+                ])>Home</a>
+                <a href="#" wire:navigate @class([
+                    'px-4 py-2 text-sm font-medium hover:text-red-600 transition-colors rounded-xl hover:bg-white',
+                    'bg-white text-red-600' => request()->routeIs('rooms'),
+                    'text-white/80 hover:text-red-600 hover:bg-white ' => !request()->routeIs(
+                        'rooms'),
+                ])>Rooms</a>
+                <a href="#" wire:navigate @class([
+                    'px-4 py-2 text-sm font-medium hover:text-red-600 transition-colors rounded-xl hover:bg-white',
+                    'bg-white text-red-600' => request()->routeIs('booking'),
+                    'text-white/80 hover:text-red-600 hover:bg-white ' => !request()->routeIs(
+                        'booking'),
+                ])>My Booking</a>
                 <div class="w-px h-6 bg-white/20 mx-2"></div>
                 @auth
                     @if (auth()->user()->isAdmin())
@@ -139,8 +133,7 @@
                 </a>
                 <a href="/pages/rooms.html"
                     class="flex items-center gap-3 px-4 py-3 text-gray-600 hover:text-primary hover:bg-primary/5 rounded-2xl transition-colors">
-                    <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-                        stroke="currentColor">
+                    <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round"
                             d="M3.75 21h16.5M4.5 3h15M5.25 3v18m13.5-18v18M9 6.75h1.5m-1.5 3h1.5m-1.5 3h1.5m3-6H15m-1.5 3H15m-1.5 3H15M9 21v-3.375c0-.621.504-1.125 1.125-1.125h3.75c.621 0 1.125.504 1.125 1.125V21" />
                     </svg>

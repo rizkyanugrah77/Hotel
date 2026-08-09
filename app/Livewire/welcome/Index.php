@@ -9,11 +9,6 @@ class Index extends Component
 {
     public $rooms;
 
-    // public function mount()
-    // {
-
-    // }
-
     public function render()
     {
         $this->rooms = Room::with('galleries', 'facilities', 'bookings')->latest()->get();
