@@ -8,6 +8,7 @@ use App\Livewire\welcome\Index;
 use App\Livewire\welcome\PaymentController;
 use App\Livewire\welcome\PaymentStatus;
 use App\Livewire\Welcome\RoomDetail;
+use App\Livewire\Welcome\UserDashboard;
 use Illuminate\Support\Facades\Route;
 
 // Route::view('/', 'index')->name('index');
@@ -29,6 +30,7 @@ Route::middleware(['auth', 'isAdmin', 'verified'])->group(function () {
 });
 
 Route::middleware(['auth', 'verified'])->group(function () {
+    Route::get('/my-dashboard', UserDashboard::class)->name('user.dashboard');
     Route::get('/payment/{bookingCode}', PaymentController::class)->name('payment');
     Route::get('/payment-success/{orderId}', PaymentStatus::class)->name('payment-success');
     Route::view('/payment-check', 'livewire.welcome.payments.payment-redirect')->name('payment-check');

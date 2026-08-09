@@ -25,7 +25,8 @@
     <div class=" max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 ">
         <div class="flex items-center justify-between h-20">
             <!-- Logo -->
-            <a href="/" class="flex items-center gap-3 group" aria-label="Sitio Tio Resort Home">
+            <a href="{{ route('index') }}" wire:navigate class="flex items-center gap-3 group"
+                aria-label="Sitio Tio Resort Home">
                 <div
                     class="w-10 h-10 bg-gradient-primary rounded-2xl flex items-center justify-center shadow-red group-hover:scale-110 transition-transform duration-300">
                     <svg class="w-6 h-6 text-white" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
@@ -57,13 +58,23 @@
                     Bookings</a>
                 <div class="w-px h-6 bg-white/20 mx-2"></div>
                 @auth
-                    <a href="{{ route('dashboard') }}" wire:navigate class="btn-accent text-sm !px-5 !py-2.5">
-                        <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round"
-                                d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 0 1 2.25-2.25h13.5A2.25 2.25 0 0 1 21 7.5v11.25m-18 0A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75m-18 0v-7.5A2.25 2.25 0 0 1 5.25 9h13.5A2.25 2.25 0 0 1 21 11.25v7.5" />
-                        </svg>
-                        My Dashboard
-                    </a>
+                    @if (auth()->user()->isAdmin())
+                        <a href="{{ route('dashboard') }}" wire:navigate class="btn-accent text-sm !px-5 !py-2.5">
+                            <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round"
+                                    d="M3.75 6A2.25 2.25 0 0 1 6 3.75h2.25A2.25 2.25 0 0 1 10.5 6v2.25a2.25 2.25 0 0 1-2.25 2.25H6a2.25 2.25 0 0 1-2.25-2.25V6ZM3.75 15.75A2.25 2.25 0 0 1 6 13.5h2.25a2.25 2.25 0 0 1 2.25 2.25V18a2.25 2.25 0 0 1-2.25 2.25H6A2.25 2.25 0 0 1 3.75 18v-2.25ZM13.5 6a2.25 2.25 0 0 1 2.25-2.25H18A2.25 2.25 0 0 1 20.25 6v2.25A2.25 2.25 0 0 1 18 10.5h-2.25a2.25 2.25 0 0 1-2.25-2.25V6ZM13.5 15.75a2.25 2.25 0 0 1 2.25-2.25H18a2.25 2.25 0 0 1 2.25 2.25V18A2.25 2.25 0 0 1 18 20.25h-2.25a2.25 2.25 0 0 1-2.25-2.25v-2.25Z" />
+                            </svg>
+                            Admin Dashboard
+                        </a>
+                    @elseif (auth()->user()->isCustomer())
+                        <a href="{{ route('user.dashboard') }}" wire:navigate class="btn-accent text-sm !px-5 !py-2.5">
+                            <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round"
+                                    d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 0 1 2.25-2.25h13.5A2.25 2.25 0 0 1 21 7.5v11.25m-18 0A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75m-18 0v-7.5A2.25 2.25 0 0 1 5.25 9h13.5A2.25 2.25 0 0 1 21 11.25v7.5" />
+                            </svg>
+                            My Dashboard
+                        </a>
+                    @endif
                 @else
                     <a href="{{ route('login') }}" wire:navigate class="btn-accent text-sm !px-5 !py-2.5">
                         <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
@@ -128,7 +139,8 @@
                 </a>
                 <a href="/pages/rooms.html"
                     class="flex items-center gap-3 px-4 py-3 text-gray-600 hover:text-primary hover:bg-primary/5 rounded-2xl transition-colors">
-                    <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                    <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                        stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round"
                             d="M3.75 21h16.5M4.5 3h15M5.25 3v18m13.5-18v18M9 6.75h1.5m-1.5 3h1.5m-1.5 3h1.5m3-6H15m-1.5 3H15m-1.5 3H15M9 21v-3.375c0-.621.504-1.125 1.125-1.125h3.75c.621 0 1.125.504 1.125 1.125V21" />
                     </svg>

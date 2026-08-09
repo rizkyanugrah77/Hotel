@@ -5,6 +5,7 @@ namespace Database\Seeders;
 use App\Models\Facility;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use App\Models\Gallery;
+use App\Models\RoomFacility;
 use App\Models\User;
 use Illuminate\Database\Seeder;
 
@@ -109,6 +110,31 @@ class DatabaseSeeder extends Seeder
  
         ];
         Facility::insert($facilities);
+
+        $facilityRoom = [
+        ['room_id' => 1, 'facility_id' => 1,],
+        ['room_id' => 1, 'facility_id' => 2,],
+        ['room_id' => 1, 'facility_id' => 3,],
+        ['room_id' => 1, 'facility_id' => 4,],
+        ['room_id' => 1, 'facility_id' => 5,],
+        ['room_id' => 1, 'facility_id' => 6,],
+        ['room_id' => 1, 'facility_id' => 7,],
+        ['room_id' => 2, 'facility_id' => 1,],
+        ['room_id' => 2, 'facility_id' => 2,],
+        ['room_id' => 2, 'facility_id' => 3,],
+        ['room_id' => 2, 'facility_id' => 4,],
+        ['room_id' => 2, 'facility_id' => 5,],
+        ['room_id' => 2, 'facility_id' => 6,],
+        ['room_id' => 2, 'facility_id' => 7,],
+        ['room_id' => 3, 'facility_id' => 1,],
+        ['room_id' => 3, 'facility_id' => 2,],
+        ['room_id' => 3, 'facility_id' => 3,],
+        ['room_id' => 3, 'facility_id' => 4,],
+        ['room_id' => 3, 'facility_id' => 5,],
+        ['room_id' => 3, 'facility_id' => 6,],
+        ['room_id' => 3, 'facility_id' => 7,],
+        ];
+        RoomFacility::insert($facilityRoom);
 
     }
 }

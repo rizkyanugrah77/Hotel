@@ -1,12 +1,6 @@
 <aside
     class="h-screen w-64 bg-gradient-to-br from-slate-800 via-rose-950 to-rose-900 text-white flex-shrink-0 hidden md:flex flex-col ">
-    <div class="h-20 flex items-center gap-3 px-6 border-b border-white/10v">
-        <div class="w-8 h-8 bg-gradient-primary rounded-lg flex items-center justify-center">
-            <svg class="w-5 h-5 text-white" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round"
-                    d="M8.25 21v-4.875c0-.621.504-1.125 1.125-1.125h5.25c.621 0 1.125.504 1.125 1.125V21m0 0h4.5V3.545M12.75 21h7.5M10.5 21V8.121c0-.312.11-.611.308-.848l4.692-5.58a.75.75 0 0 1 1.149.024l4.469 5.404c.18.217.282.5.282.79V21m-14.4 0H3.75c-.621 0-1.125-.504-1.125-1.125v-6.75c0-.621.504-1.125 1.125-1.125h3.375" />
-            </svg>
-        </div>
+    <div class="h-16 flex items-center gap-3 px-6 border-b border-white/10v">
         <span class="font-poppins font-bold tracking-wide">Sitio Tio Admin</span>
     </div>
 
