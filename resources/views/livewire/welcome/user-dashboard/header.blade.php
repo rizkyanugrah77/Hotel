@@ -7,7 +7,7 @@
              {{ \Carbon\Carbon::now()->translatedFormat('l, d F Y') }}
          </p>
      </div>
-     <a href="{{ route('index') }}#rooms" wire:navigate class="btn-primary text-sm !px-5 !py-2.5 w-fit">
+     <a href="{{ route('view-rooms') }}" wire:navigate class="btn-primary text-sm !px-5 !py-2.5 w-fit">
          <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
              <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
          </svg>

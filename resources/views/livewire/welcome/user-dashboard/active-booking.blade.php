@@ -27,10 +27,18 @@
                          <!-- Booking info -->
                          <div class="flex-1 min-w-0">
                              <div class="flex items-start justify-between gap-2">
-                                 <div>
+                                 <div class="grid grid-cols-2 gap-2">
                                      <h3 class="text-sm font-semibold text-foreground">
                                          {{ $booking->room->name ?? 'Room' }}</h3>
                                      <p class="text-xs text-gray-400 mt-0.5">{{ $booking->booking_code }}</p>
+                                     <div class="flex space-x-2 my-1">
+                                         @if ($booking->status === 'pending')
+                                             <a href="{{ route('payment', $booking->booking_code) }}" wire:navigate
+                                                 class="btn-sm text-xs text-white bg-red-800 hover:bg-red-700 rounded-lg px-2 py-1">
+                                                 Bayar Sekarang
+                                             </a>
+                                         @endif
+                                     </div>
                                  </div>
                                  @if ($booking->status === 'paid')
                                      <span class="badge-success flex-shrink-0">Paid</span>

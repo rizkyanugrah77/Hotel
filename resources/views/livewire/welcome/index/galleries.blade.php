@@ -8,9 +8,6 @@
           </div>
 
           <!-- Gallery Grid (Masonry-style) -->
-          @php
-              $featuredGalleries = collect($rooms)->pluck('galleries')->flatten()->where('is_featured', true);
-          @endphp
           <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
               @if ($featuredGalleries->count() > 0)
                   <div class="md:col-span-2 md:row-span-2 rounded-3xl overflow-hidden shadow-soft cursor-pointer group animate-on-scroll-scale"
@@ -46,6 +43,7 @@
                           </div>
                       </div>
                   @endforeach
+
               @endif
           </div>
       </div>

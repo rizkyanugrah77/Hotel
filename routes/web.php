@@ -19,6 +19,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', Index::class)->name('index');
 Route::get('/room/{slug}', RoomDetail::class)->name('room-detail-preview');
+Route::view('/view/rooms', 'livewire.welcome.view-rooms')->name('view-rooms');
 Route::post('/midtrans/callback', [MidtransController::class, 'callback'])->name('midtrans.callback');
 
 

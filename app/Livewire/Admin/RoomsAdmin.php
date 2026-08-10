@@ -42,6 +42,8 @@ class RoomsAdmin extends Component
 
     public ?string $oldImage = null;
 
+    public int $perPage = 2;
+
     public function save(): void
     {
         $validated = $this->validate();
@@ -174,7 +176,7 @@ class RoomsAdmin extends Component
             })
             ->when($this->filterStatus, fn ($query) => $query->where('status', $this->filterStatus))
             ->latest()
-            ->get();
+            ->paginate($this->perPage);
 
         return view('livewire.layout.rooms-manager', [
             'rooms' => $rooms,

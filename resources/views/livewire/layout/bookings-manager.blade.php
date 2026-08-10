@@ -23,7 +23,8 @@
             <div class="flex justify-between items-start mb-4">
                 <div>
                     <p class="text-sm text-gray-500 mb-1">Total Bookings</p>
-                    <h3 class="text-2xl font-poppins font-bold text-foreground" id="kpiTotal">0</h3>
+                    <h3 class="text-2xl font-poppins font-bold text-foreground" id="kpiTotal">
+                        {{ $bookingStats['total'] }}</h3>
                 </div>
                 <div class="w-10 h-10 bg-primary/10 text-primary rounded-xl flex items-center justify-center">
                     <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
@@ -39,7 +40,8 @@
             <div class="flex justify-between items-start mb-4">
                 <div>
                     <p class="text-sm text-gray-500 mb-1">Confirmed</p>
-                    <h3 class="text-2xl font-poppins font-bold text-emerald-600" id="kpiConfirmed">0</h3>
+                    <h3 class="text-2xl font-poppins font-bold text-emerald-600" id="kpiConfirmed">
+                        {{ $bookingStats['paid'] }}</h3>
                 </div>
                 <div class="w-10 h-10 bg-emerald-50 text-emerald-600 rounded-xl flex items-center justify-center">
                     <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
@@ -55,7 +57,8 @@
             <div class="flex justify-between items-start mb-4">
                 <div>
                     <p class="text-sm text-gray-500 mb-1">Pending</p>
-                    <h3 class="text-2xl font-poppins font-bold text-amber-600" id="kpiPending">0</h3>
+                    <h3 class="text-2xl font-poppins font-bold text-amber-600" id="kpiPending">
+                        {{ $bookingStats['pending'] }}</h3>
                 </div>
                 <div class="w-10 h-10 bg-amber-50 text-amber-600 rounded-xl flex items-center justify-center">
                     <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
@@ -71,7 +74,8 @@
             <div class="flex justify-between items-start mb-4">
                 <div>
                     <p class="text-sm text-gray-500 mb-1">Total Revenue</p>
-                    <h3 class="text-2xl font-poppins font-bold text-accent-700" id="kpiRevenue">Rp 0</h3>
+                    <h3 class="text-2xl font-poppins font-bold text-accent-700" id="kpiRevenue">
+                        {{ 'Rp ' . number_format($bookingStats['total_price'] ?? 0, 0, ',', '.') }}</h3>
                 </div>
                 <div class="w-10 h-10 bg-accent/10 text-accent-700 rounded-xl flex items-center justify-center">
                     <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
@@ -97,19 +101,20 @@
                             <path stroke-linecap="round" stroke-linejoin="round"
                                 d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />
                         </svg>
-                        <input type="text" id="searchInput" placeholder="Cari booking code, user..."
-                            class="input pl-10 pr-4 py-2 text-sm w-64" oninput="filterBookings()" />
+                        <input wire:model.live="search" type="text" id="searchInput"
+                            placeholder="Cari booking code, user..." class="input pl-10 pr-4 py-2 text-sm w-64" />
                     </div>
-                    <select id="filterStatus" class="input py-2 text-sm w-40" onchange="filterBookings()">
+                    <select wire:model.live="filterStatus" id="filterStatus" class="input py-2 text-sm w-40">
                         <option value="">Semua Status</option>
-                        <option value="confirmed">Confirmed</option>
-                        <option value="pending">Pending</option>
-                        <option value="checked_in">Checked In</option>
-                        <option value="checked_out">Checked Out</option>
-                        <option value="cancelled">Cancelled</option>
+                        @foreach ($bookings as $booking)
+                            <option value="{{ $booking->status }}">{{ $booking->status }}</option>
+                        @endforeach
                     </select>
-                    <select id="filterRoom" class="input py-2 text-sm w-44" onchange="filterBookings()">
+                    <select wire:model.live="filterRoom" id="filterRoom" class="input py-2 text-sm w-44">
                         <option value="">Semua Room</option>
+                        @foreach ($rooms as $room)
+                            <option value="{{ $room->id }}">{{ $room->name }}</option>
+                        @endforeach
                     </select>
                     <button @click="$dispatch('open-modal', 'manage-booking'); $wire.resetForm()"
                         class="btn-primary text-sm px-4 py-2">
@@ -139,7 +144,7 @@
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-gray-100">
-                        @foreach ($bookings as $index => $booking)
+                        @forelse ($bookings as $index => $booking)
                             <tr class="hover:bg-gray-50">
                                 <td class="py-3 px-6 text-gray-700 font-medium">{{ $index + 1 }}</td>
                                 <td class="py-3 px-6 text-gray-700">{{ $booking->booking_code }}</td>
@@ -177,10 +182,15 @@
                                     <x-delete-button :item="$booking" confirmDelete="confirmDelete" />
                                 </td>
                             </tr>
-                        @endforeach
+                        @empty
+                            <tr>
+                                <td colspan="10" class="py-3 px-6 text-center text-gray-500">No bookings found.</td>
+                            </tr>
+                        @endforelse
                     </tbody>
                 </table>
             </div>
+            {{ $bookings->links() }}
         </div>
     </div>
 

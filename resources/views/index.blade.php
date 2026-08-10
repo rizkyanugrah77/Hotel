@@ -91,7 +91,7 @@
        BOOKING SEARCH SECTION
        =================================== -->
     <section id="booking-search" class="relative -mt-20 z-20 px-4">
-        @include('welcome.booking-form')
+        @include('welcome.index.booking-form')
     </section>
 
 
@@ -99,7 +99,7 @@
        ABOUT SECTION
        =================================== -->
     <section id="about" class="section">
-        @include('welcome.about')
+        @include('welcome.index.about')
     </section>
 
 
@@ -107,8 +107,7 @@
        FEATURED ROOMS
        =================================== -->
     <section id="rooms" class="section bg-gray-50/80">
-        @include('welcome.rooms')
-
+        @include('welcome.index.rooms')
     </section>
 
 
@@ -116,15 +115,14 @@
        FACILITIES
        =================================== -->
     <section id="facilities" class="section">
-        @include('welcome.facilities')
+        @include('welcome.index.facilities')
     </section>
 
     <!-- ===================================
        GALLERY
        =================================== -->
     <section id="gallery" class="section bg-gray-50/80">
-        @include('welcome.galleries')
-
+        @include('welcome.index.galleries')
         <!-- Lightbox -->
         <div id="gallery-lightbox"
             class="fixed inset-0 z-50 bg-black/90 backdrop-blur-sm flex items-center justify-center opacity-0 pointer-events-none transition-opacity duration-300">
@@ -137,7 +135,6 @@
             <img id="lightbox-img" src="" alt="Gallery image expanded"
                 class="max-w-[90vw] max-h-[85vh] object-contain rounded-2xl shadow-2xl" />
         </div>
-
     </section>
 
 

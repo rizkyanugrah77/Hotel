@@ -38,11 +38,11 @@
                     'text-white/80 hover:text-red-600 hover:bg-white' => !request()->routeIs(
                         'index'),
                 ])>Home</a>
-                <a href="#" wire:navigate @class([
+                <a href="{{ route('view-rooms') }}" wire:navigate @class([
                     'px-4 py-2 text-sm font-medium hover:text-red-600 transition-colors rounded-xl hover:bg-white',
-                    'bg-white text-red-600' => request()->routeIs('rooms'),
+                    'bg-white text-red-600' => request()->routeIs('view-rooms'),
                     'text-white/80 hover:text-red-600 hover:bg-white ' => !request()->routeIs(
-                        'rooms'),
+                        'view-rooms'),
                 ])>Rooms</a>
                 <a href="#" wire:navigate @class([
                     'px-4 py-2 text-sm font-medium hover:text-red-600 transition-colors rounded-xl hover:bg-white',
@@ -122,7 +122,7 @@
             </div>
 
             <nav class="space-y-1" aria-label="Mobile navigation">
-                <a href="/"
+                <a href="{{ route('index') }}" wire:navigate
                     class="flex items-center gap-3 px-4 py-3 text-primary bg-primary/5 rounded-2xl font-medium"
                     aria-current="page">
                     <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
@@ -131,7 +131,7 @@
                     </svg>
                     Home
                 </a>
-                <a href="/pages/rooms.html"
+                <a href="{{ route('view-rooms') }}" wire:navigate
                     class="flex items-center gap-3 px-4 py-3 text-gray-600 hover:text-primary hover:bg-primary/5 rounded-2xl transition-colors">
                     <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round"
@@ -139,16 +139,7 @@
                     </svg>
                     Rooms
                 </a>
-                <a href="/pages/booking.html"
-                    class="flex items-center gap-3 px-4 py-3 text-gray-600 hover:text-primary hover:bg-primary/5 rounded-2xl transition-colors">
-                    <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-                        stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round"
-                            d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 0 1 2.25-2.25h13.5A2.25 2.25 0 0 1 21 7.5v11.25m-18 0A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75m-18 0v-7.5A2.25 2.25 0 0 1 5.25 9h13.5A2.25 2.25 0 0 1 21 11.25v7.5" />
-                    </svg>
-                    Booking
-                </a>
-                <a href="/pages/dashboard.html"
+                <a href="#"
                     class="flex items-center gap-3 px-4 py-3 text-gray-600 hover:text-primary hover:bg-primary/5 rounded-2xl transition-colors">
                     <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                         stroke="currentColor">
@@ -160,6 +151,7 @@
             </nav>
 
             <div class="mt-8 pt-6 border-t border-gray-100">
+
                 <a href="{{ route('login') }}" wire:navigate class="btn-primary w-full text-center">
                     <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round"

@@ -27,7 +27,7 @@ class GalleryManager extends Component
 
     public $search = '';
 
-    public $perPage = 10;
+    public $perPage = 5;
 
     public function save()
     {
@@ -138,7 +138,12 @@ class GalleryManager extends Component
                 'featured' => Gallery::query()->where('is_featured', 1)->count(),
                 'rooms' => Gallery::query()->where('room_id', '!=', null)->count(),
                 'regular' => Gallery::query()->where('is_featured', 0)->count(),
+                'ratio' => Gallery::query()->where('is_featured', 1)->count() / Gallery::query()->count() * 100,
             ],
+            'topRoom' => Room::query()
+                ->withCount('galleries')
+                ->orderByDesc('galleries_count')
+                ->first(),
             'rooms' => Room::all(),
         ]);
     }

@@ -166,6 +166,10 @@
                 </tbody>
             </table>
         </div>
+        <div class="p-4 bg-gray-50 rounded-b-xl">
+
+            {{ $rooms->links() }}
+        </div>
     </div>
 
     {{-- modal tambah --}}

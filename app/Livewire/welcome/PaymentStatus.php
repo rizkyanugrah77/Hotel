@@ -99,13 +99,6 @@ class PaymentStatus extends Component
             'isHtml5ParserEnabled' => true,
             'isRemoteEnabled' => true
         ]);
-
-        // $dom_pdf = $pdf->getDomPDF();
-        // $canvas = $dom_pdf->getCanvas();
-        // $canvas->page_text(50, 80, "Page {PAGE_NUM} of {PAGE_COUNT}", null, 10, [0, 0, 0]); 
-        // $qrCode = QrCode::size(150)->generate($payment->order_id);
-        
-
         return response()->streamDownload(
             fn () => print($pdf->output()),
             'receipt-' . $payment->order_id . '.pdf'

@@ -12,7 +12,7 @@ use Livewire\Component;
 
 class BookingManager extends Component
 {
-    public $bookings;
+    // public $bookings;
 
     public string $booking_code = '';
 
@@ -40,6 +40,10 @@ class BookingManager extends Component
 
     public $bookingDeleteId;
 
+    public $search = '';
+
+    public $filterStatus;
+    public $filterRoom;
     public function mount()
     {
         $this->users = User::where('role', '!=', 'admin')->get();
@@ -156,12 +160,43 @@ class BookingManager extends Component
 
     public function render()
     {
+        $bookings = Booking::query()
+            ->when($this->search, function ($query) {
+                $query->where(function ($query) {
+                    $query->where('booking_code', 'like', "%{$this->search}%")
+                        ->orWhereHas('room', function ($query) {
+                            $query->where('name', 'like', "%{$this->search}%");
+                        })
+                        ->orWhereHas('user', function ($query) {
+                            $query->where('name', 'like', "%{$this->search}%")
+                                ->orWhere('email', 'like', "%{$this->search}%");
+                        });
+                });
+            })
+            ->when($this->filterStatus, function ($query) {
+                $query->where('status', $this->filterStatus);
+            })
+            ->when($this->filterRoom, function ($query) {
+                $query->where('room_id', $this->filterRoom);
+            })
+            ->with('room', 'user')
+            ->latest()
+            ->paginate(10);
+
         return view('livewire.layout.bookings-manager', [
-            $this->bookings = Booking::with('room', 'user')->latest()->get(),
+            'bookings' => $bookings,
             'users' => $this->users,
             'rooms' => $this->rooms,
+            'bookingStats' => [
+                'total' => Booking::count(),
+                'pending' => Booking::where('status', 'pending')->count(),
+                'completed' => Booking::where('status', 'completed')->count(),
+                'cancelled' => Booking::where('status', 'cancelled')->count(),
+                'paid' => Booking::where('status', 'paid')->count(),
+                'total_price' => Booking::where('status', 'paid')->sum('total_price'),
+            ],
         ]);
-    }
+    }   
 
     public function rules()
     {

@@ -135,7 +135,7 @@
                     </tr>
                 </thead>
                 <tbody class="divide-y divide-gray-100">
-                    @foreach ($galleries as $gallery)
+                    @forelse ($galleries as $gallery)
                         <tr>
                             <td class="py-3 px-6">{{ $loop->iteration }}</td>
                             <td class="py-3 px-6"><img src="{{ asset('assets/img/gallery/' . $gallery->image) }}"
@@ -164,9 +164,16 @@
                                 </div>
                             </td>
                         </tr>
-                    @endforeach
-                </tbody>
+                    @empty
+                        <tr>
+                            <td colspan="7" class="py-12 text-center text-gray-500">Belum ada data galeri.</td>
+                        </tr>
+                    @endforelse
             </table>
+
+            <div class="mx-3 my-5">
+                {{ $galleries->links() }}
+            </div>
         </div>
     </div>
 
@@ -176,6 +183,13 @@
         <div class="bg-white border border-gray-100 shadow-sm rounded-2xl p-6">
             <h2 class="font-poppins font-bold text-lg mb-6">Gambar per Room</h2>
             <div class="space-y-4" id="reportByRoom">
+                @foreach ($rooms as $room)
+                    <div class="p-4 bg-blue-50 rounded-xl">
+                        <p class="text-sm text-gray-500 mb-1">{{ $room->name }}</p>
+                        <p class="text-xl font-poppins font-bold text-accent-700">{{ $room->galleries->count() }}</p>
+                    </div>
+                @endforeach
+
             </div>
         </div>
 
@@ -185,25 +199,25 @@
             <div class="space-y-4">
                 <div class="p-4 bg-gray-50 rounded-xl">
                     <p class="text-sm text-gray-500 mb-1">Total Featured</p>
-                    <p class="text-xl font-poppins font-bold text-accent-700" id="statFeatured">0</p>
+                    <p class="text-xl font-poppins font-bold text-accent-700">{{ $galleryStats['featured'] }}</p>
                 </div>
                 <div class="p-4 bg-gray-50 rounded-xl">
                     <p class="text-sm text-gray-500 mb-1">Total Non-Featured</p>
-                    <p class="text-xl font-poppins font-bold text-foreground" id="statNonFeatured">0</p>
+                    <p class="text-xl font-poppins font-bold text-foreground">{{ $galleryStats['regular'] }}</p>
                 </div>
                 <div class="p-4 bg-gray-50 rounded-xl">
                     <p class="text-sm text-gray-500 mb-1">Rasio Featured</p>
-                    <p class="text-xl font-poppins font-bold text-primary" id="statRatio">0%</p>
+                    <p class="text-xl font-poppins font-bold text-primary">{{ $galleryStats['ratio'] }}%</p>
                 </div>
                 <div class="p-4 bg-gray-50 rounded-xl">
                     <p class="text-sm text-gray-500 mb-1">Room Paling Banyak Gambar</p>
-                    <p class="text-xl font-poppins font-bold text-blue-600" id="statTopRoom">-</p>
+                    <p class="text-xl font-poppins font-bold text-blue-600">{{ $topRoom->name }}</p>
                 </div>
             </div>
         </div>
 
         <!-- Quick Actions -->
-        <div class="bg-white border border-gray-100 shadow-sm rounded-2xl p-6">
+        <div class="bg-white border h-1/2 border-gray-100 shadow-sm rounded-2xl p-6">
             <h2 class="font-poppins font-bold text-lg mb-6">Status Galeri</h2>
             <div class="space-y-4" id="statusReport">
             </div>
