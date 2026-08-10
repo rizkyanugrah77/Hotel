@@ -77,18 +77,8 @@
                                <td class="py-3.5 px-6 text-gray-500">{{ $payment->booking->total_guests }} orang
                                </td>
                                <td class="py-3.5 px-6">
-                                   @if ($payment->booking->status === 'paid')
-                                       <span class="badge-success">Paid</span>
-                                   @elseif($payment->booking->status === 'pending')
-                                       <span class="badge-warning">Pending</span>
-                                   @elseif($payment->booking->status === 'cancelled')
-                                       <span class="badge bg-red-50 text-red-600">Cancelled</span>
-                                   @elseif($payment->booking->status === 'completed')
-                                       <span class="badge bg-gray-100 text-gray-600">Selesai</span>
-                                   @else
-                                       <span
-                                           class="badge bg-gray-100 text-gray-600">{{ ucfirst($payment->booking->status) }}</span>
-                                   @endif
+                                   <span
+                                       class="badge-{{ $payment->booking->status === 'paid' ? 'success' : ($payment->booking->status === 'pending' ? 'warning' : ($payment->booking->status === 'cancelled' ? 'danger' : ($payment->booking->status === 'completed' ? 'primary' : ''))) }}">{{ ucfirst($payment->booking->status) }}</span>
                                </td>
                                <td class="py-3.5 px-6 font-semibold text-foreground text-right">Rp
                                    {{ number_format($payment->booking->total_price, 0, ',', '.') }}</td>

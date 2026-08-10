@@ -40,18 +40,10 @@
                                          @endif
                                      </div>
                                  </div>
-                                 @if ($booking->status === 'paid')
-                                     <span class="badge-success flex-shrink-0">Paid</span>
-                                 @elseif($booking->status === 'pending')
-                                     <span class="badge-warning flex-shrink-0">Pending</span>
-                                 @elseif($booking->status === 'cancelled')
-                                     <span class="badge-danger flex-shrink-0">Cancelled</span>
-                                 @elseif($booking->status === 'completed')
-                                     <span class="badge-primary flex-shrink-0">Completed</span>
-                                 @else
-                                     <span
-                                         class="badge bg-gray-100 text-gray-600 flex-shrink-0">{{ ucfirst($booking->status) }}</span>
-                                 @endif
+
+                                 <span
+                                     class="badge-{{ $booking->status === 'paid' ? 'success' : ($booking->status === 'pending' ? 'warning' : ($booking->status === 'cancelled' ? 'danger' : ($booking->status === 'completed' ? 'primary' : ''))) }} flex-shrink capitalize ">{{ ucfirst($booking->status) }}</span>
+
                              </div>
 
                              <div class="flex flex-wrap items-center gap-x-4 gap-y-1 mt-2 text-xs text-gray-500">
