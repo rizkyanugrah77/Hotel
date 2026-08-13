@@ -20,6 +20,7 @@
 
     <!-- Scripts -->
     @vite(['resources/css/app.css', 'resources/js/app.js', 'resources/js/main.js'])
+    @livewireStyles
 
     <style>
         /* Bottom nav safe area for mobile */

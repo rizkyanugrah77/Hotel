@@ -4,12 +4,14 @@ use App\Http\Controllers\BookingController;
 use App\Http\Controllers\FacilityController;
 use App\Http\Controllers\MidtransController;
 use App\Http\Controllers\RoomController;
+use App\Livewire\Admin\TransactionManager;
 use App\Livewire\welcome\Index;
 use App\Livewire\welcome\PaymentController;
 use App\Livewire\welcome\PaymentStatus;
 use App\Livewire\Welcome\RoomDetail;
 use App\Livewire\Welcome\UserDashboard;
 use Illuminate\Support\Facades\Route;
+
 
 // Route::view('/', 'index')->name('index');
 
@@ -30,6 +32,7 @@ Route::middleware(['auth', 'isAdmin', 'verified'])->group(function () {
     Route::get('/admin/facilities-manager', [FacilityController::class, 'index'])->name('facilities.manager');
     Route::get('/admin/bookings-manager', [BookingController::class, 'index'])->name('bookings.manager');
     Route::view('/admin/gallery-manager', 'admin.gallery-manager')->name('gallery.manager');
+    Route::get('/admin/transaction-manager', TransactionManager::class)->name('transaction.manager');
 });
 
 Route::middleware(['auth', 'verified'])->group(function () {

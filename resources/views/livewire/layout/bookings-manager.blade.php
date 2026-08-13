@@ -106,9 +106,10 @@
                     </div>
                     <select wire:model.live="filterStatus" id="filterStatus" class="input py-2 text-sm w-40">
                         <option value="">Semua Status</option>
-                        @foreach ($bookings as $booking)
-                            <option value="{{ $booking->status }}">{{ $booking->status }}</option>
-                        @endforeach
+                        <option value="paid">Paid</option>
+                        <option value="pending">Pending</option>
+                        <option value="completed">Completed</option>
+                        <option value="cancelled">Cancelled</option>
                     </select>
                     <select wire:model.live="filterRoom" id="filterRoom" class="input py-2 text-sm w-44">
                         <option value="">Semua Room</option>
@@ -273,7 +274,7 @@
                 <div>
                     <label for="bookingUserId" class="input-label">User <span class="text-red-500">*</span></label>
                     <select id="bookingUserId" wire:model="user_id" class="input" required>
-                        <option value="">Pilih User</option>
+                        <option value="">Pilih Guest</option>
                         @foreach ($users as $user)
                             <option value="{{ $user->id }}">{{ $user->name }}</option>
                         @endforeach

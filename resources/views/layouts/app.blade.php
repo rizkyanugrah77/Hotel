@@ -15,6 +15,7 @@
 
     <!-- Scripts -->
     @vite(['resources/css/app.css', 'resources/js/app.js', 'resources/js/main.js'])
+    @livewireStyles
 </head>
 
 <body class="bg-gray-100 text-foreground font-inter h-screen overflow-hidden flex relative">

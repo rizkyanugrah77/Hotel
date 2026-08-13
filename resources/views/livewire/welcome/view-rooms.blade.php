@@ -11,7 +11,6 @@
 
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
                 @php
-                    // Tip: Idealnya query database dipindahkan ke Controller agar file Blade lebih bersih
                     $rooms = \App\Models\Room::with('facilities')->latest()->get();
                 @endphp
 
@@ -33,7 +32,7 @@
                             <!-- Floating Glassmorphism Badge -->
                             <div class="grid grid-cols-2 gap-2 absolute top-4 right-4">
                                 <div
-                                    class="flex items-center gap-2 bg-white/90 backdrop-blur-md px-3 py-1.5 rounded-full text-xs font-semibold text-gray-800 shadow-lg border border-white/20">
+                                    class="flex items-center gap-2 bg-white/70 backdrop-blur-md px-3 py-1.5 rounded-full text-xs font-semibold text-gray-800 shadow-lg border border-white/20">
                                     <svg class="w-3.5 h-3.5 text-accent" fill="none" viewBox="0 0 24 24"
                                         stroke="currentColor">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -41,17 +40,11 @@
                                     </svg>
                                     <span>{{ $room->bed_type }} Bed{{ $room->bed_type > 1 ? 's' : '' }}</span>
                                 </div>
-                                <div
-                                    class="flex w-24 items-center justify-center bg-white/90 backdrop-blur-md px-3 py-1.5 rounded-full text-xs font-semibold text-gray-800 shadow-lg border border-white/20">
-                                    <span
-                                        @if ($room->status === 'available') class="text-green-500" @elseif ($room->status === 'maintenance') class="text-yellow-500" @elseif($room->status === 'occupied') class="text-red-600" @else
-                                    class="text-gray-500" @endif>
-                                        {{ $room->status }}
-                                    </span>
-
-                                </div>
+                                <span
+                                    class="badge-{{ $room->status === 'available' ? 'success' : ($room->status === 'maintenance' ? 'warning' : 'primary') }} capitalize flex w-24 items-center justify-center  backdrop-blur-md px-3 py-1.5 rounded-full text-xs font-semibold  shadow-lg border bg-white/70">
+                                    {{ $room->status }}
+                                </span>
                             </div>
-
                         </div>
 
                         <!-- Content Section -->

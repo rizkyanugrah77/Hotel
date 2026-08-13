@@ -77,14 +77,14 @@
         </div> --}}
 
         <!-- Scroll Down Indicator -->
-        <a href="#booking-search"
+        {{-- <a href="#booking-search"
             class="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 text-white/60 hover:text-white transition-colors animate-bounce-soft"
             aria-label="Scroll to booking search">
             <span class="text-xs font-inter uppercase tracking-widest">Scroll</span>
             <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />
             </svg>
-        </a>
+        </a> --}}
     </section>
 
     <!-- ===================================

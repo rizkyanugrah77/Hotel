@@ -15,24 +15,40 @@
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
 
-    @vite(['resources/css/app.css', 'resources/js/app.js'])
+    @vite(['resources/css/app.css', 'resources/js/app.js', 'resources/js/main.js'])
 
     @livewireStyles
 </head>
 
 <body class="font-sans text-gray-900 antialiased">
-    <div class="min-h-screen flex flex-col sm:justify-center items-center pt-6 sm:pt-0 bg-gray-100 ">
-        <div>
-            <a href="/">
-                <x-application-logo class="w-20 h-20 fill-current text-gray-500" />
-            </a>
+    <div class="relative min-h-screen flex items-center justify-center px-4 py-8 sm:py-10 overflow-hidden">
+        <!-- Background Image -->
+        <div class="absolute inset-0">
+            <img src="{{ asset('dist/resources/assets/images/hero.png') }}" alt="Sitio Tio Resort"
+                class="w-full h-full object-cover" loading="eager" />
+            <div class="absolute inset-0 bg-gradient-hero"></div>
         </div>
 
-        <div class="w-full sm:max-w-md mt-6 px-6 py-4 bg-white  shadow-md overflow-hidden sm:rounded-lg">
-            {{ $slot }}
+        <!-- Floating Batak Pattern -->
+        <div class="absolute inset-0 batak-pattern opacity-20"></div>
+
+        <!-- Content -->
+        <div class="relative z-10 w-full max-w-md">
+            <!-- Branding -->
+            <div class="flex flex-row justify-center items-center gap-2 mb-6">
+                <a href="/" wire:navigate class="group flex flex-row justify-center items-center gap-2">
+                    <x-application-logo class="!w-12 !h-12" />
+                </a>
+
+            </div>
+
+            <!-- Card -->
+            <div class="glass rounded-3xl shadow-soft-xl p-6 sm:p-8 md:p-10">
+                {{ $slot }}
+            </div>
         </div>
     </div>
-     @livewireScriptConfig
+    @livewireScriptConfig
 </body>
 
 </html>

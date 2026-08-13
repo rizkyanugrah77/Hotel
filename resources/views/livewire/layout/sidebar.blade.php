@@ -84,8 +84,12 @@
             Facility
         </a>
 
-        <a href="#"
-            class="flex items-center gap-3 px-4 py-3 text-white/80 hover:text-white hover:bg-white/5 rounded-xl transition-colors">
+        <a href="{{ route('transaction.manager') }}" wire:navigate @class([
+            'flex items-center gap-3 px-4 py-3 rounded-xl font-medium transition-colors',
+            'bg-white/10 text-white' => request()->routeIs('transaction.manager'),
+            'text-white/80 hover:text-white hover:bg-white/5' => !request()->routeIs(
+                'transaction.manager'),
+        ])>
             <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round"
                     d="M2.25 18.75a60.07 60.07 0 0 1 15.797 2.104c1.111.23 2.203-.63 2.203-1.765V4.91c0-.821-.548-1.54-1.34-1.742a60.05 60.05 0 0 0-16.66 0A1.75 1.75 0 0 0 .91 4.91v13.008c0 .97.786 1.756 1.756 1.756H4.5v-12.75a.75.75 0 0 1 .75-.75h.75m0 0h.75a.75.75 0 0 1 .75.75v12.75m0-12.75h.75a.75.75 0 0 1 .75.75v12.75" />

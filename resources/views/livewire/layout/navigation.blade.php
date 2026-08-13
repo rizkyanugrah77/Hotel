@@ -21,21 +21,14 @@ new class extends Component {
         <div class="flex justify-between h-16">
             <div class="flex">
                 <!-- Logo -->
-                @if (auth()->user()->role === 'admin')
-                    <div class="shrink-0 flex items-center">
-                        <a href="{{ route('dashboard') }}" wire:navigate class="flex items-center gap-3 group"
-                            aria-label="Sitio Tio Resort Home">
-                            <x-application-logo />
-                        </a>
-                    </div>
-                @else
-                    <div class="shrink-0 flex items-center">
-                        <a href="{{ route('index') }}" wire:navigate class="flex items-center gap-3 group"
-                            aria-label="Sitio Tio Resort Home">
-                            <x-application-logo />
-                        </a>
-                    </div>
-                @endif
+
+                <div class="shrink-0 flex items-center">
+                    <a href="{{ route('index') }}" wire:navigate class="flex items-center gap-3 group"
+                        aria-label="Sitio Tio Resort Home">
+                        <x-application-logo />
+                    </a>
+                </div>
+
                 <!-- Navigation Links -->
                 {{-- <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
                     <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')" wire:navigate>

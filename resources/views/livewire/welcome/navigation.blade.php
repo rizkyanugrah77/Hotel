@@ -44,12 +44,12 @@
                     'text-white/80 hover:text-red-600 hover:bg-white ' => !request()->routeIs(
                         'view-rooms'),
                 ])>Rooms</a>
-                <a href="#" wire:navigate @class([
+                {{-- <a href="#" wire:navigate @class([
                     'px-4 py-2 text-sm font-medium hover:text-red-600 transition-colors rounded-xl hover:bg-white',
                     'bg-white text-red-600' => request()->routeIs('booking'),
                     'text-white/80 hover:text-red-600 hover:bg-white ' => !request()->routeIs(
                         'booking'),
-                ])>My Booking</a>
+                ])>My Booking</a> --}}
                 <div class="w-px h-6 bg-white/20 mx-2"></div>
                 @auth
                     @if (auth()->user()->isAdmin())
@@ -122,24 +122,27 @@
             </div>
 
             <nav class="space-y-1" aria-label="Mobile navigation">
-                <a href="{{ route('index') }}" wire:navigate
-                    class="flex items-center gap-3 px-4 py-3 text-primary bg-primary/5 rounded-2xl font-medium"
-                    aria-current="page">
+                <a href="{{ route('index') }}" wire:navigate @class([
+                    'flex items-center gap-3  px-4 py-3 text-gray-600 hover:text-primary hover:bg-primary/5 rounded-2xl transition-colors',
+                    'bg-primary/5' => request()->routeIs('index'),
+                ]) aria-current="page">
                     <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round"
                             d="m2.25 12 8.954-8.955a1.126 1.126 0 0 1 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25" />
                     </svg>
                     Home
                 </a>
-                <a href="{{ route('view-rooms') }}" wire:navigate
-                    class="flex items-center gap-3 px-4 py-3 text-gray-600 hover:text-primary hover:bg-primary/5 rounded-2xl transition-colors">
+                <a href="{{ route('view-rooms') }}" wire:navigate @class([
+                    'flex items-center gap-3  px-4 py-3 text-gray-600 hover:text-primary hover:bg-primary/5 rounded-2xl transition-colors',
+                    'bg-primary/5' => request()->routeIs('view-rooms'),
+                ])>
                     <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round"
                             d="M3.75 21h16.5M4.5 3h15M5.25 3v18m13.5-18v18M9 6.75h1.5m-1.5 3h1.5m-1.5 3h1.5m3-6H15m-1.5 3H15m-1.5 3H15M9 21v-3.375c0-.621.504-1.125 1.125-1.125h3.75c.621 0 1.125.504 1.125 1.125V21" />
                     </svg>
                     Rooms
                 </a>
-                <a href="#"
+                {{-- <a href="#"
                     class="flex items-center gap-3 px-4 py-3 text-gray-600 hover:text-primary hover:bg-primary/5 rounded-2xl transition-colors">
                     <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                         stroke="currentColor">
@@ -147,18 +150,40 @@
                             d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z" />
                     </svg>
                     My Bookings
-                </a>
+                </a> --}}
             </nav>
 
             <div class="mt-8 pt-6 border-t border-gray-100">
+                @auth
+                    @if (auth()->user()->isCustomer())
+                        <a href="{{ route('login') }}" wire:navigate class="btn-primary w-full text-center">
+                            <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke-width="2"
+                                stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round"
+                                    d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 0 1 2.25-2.25h13.5A2.25 2.25 0 0 1 21 7.5v11.25m-18 0A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75m-18 0v-7.5A2.25 2.25 0 0 1 5.25 9h13.5A2.25 2.25 0 0 1 21 11.25v7.5" />
+                            </svg>
+                            Book Now
+                        </a>
+                    @elseif(auth()->user()->isAdmin())
+                        <a href="{{ route('login') }}" wire:navigate class="btn-primary w-full text-center">
+                            <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke-width="2"
+                                stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round"
+                                    d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 0 1 2.25-2.25h13.5A2.25 2.25 0 0 1 21 7.5v11.25m-18 0A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75m-18 0v-7.5A2.25 2.25 0 0 1 5.25 9h13.5A2.25 2.25 0 0 1 21 11.25v7.5" />
+                            </svg>
+                            Book Now
+                        </a>
+                    @endif
+                @else
+                    <a href="{{ route('login') }}" wire:navigate class="btn-primary w-full text-center">
+                        <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 0 1 2.25-2.25h13.5A2.25 2.25 0 0 1 21 7.5v11.25m-18 0A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75m-18 0v-7.5A2.25 2.25 0 0 1 5.25 9h13.5A2.25 2.25 0 0 1 21 11.25v7.5" />
+                        </svg>
+                        Book Now
+                    </a>
+                @endauth
 
-                <a href="{{ route('login') }}" wire:navigate class="btn-primary w-full text-center">
-                    <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round"
-                            d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 0 1 2.25-2.25h13.5A2.25 2.25 0 0 1 21 7.5v11.25m-18 0A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75m-18 0v-7.5A2.25 2.25 0 0 1 5.25 9h13.5A2.25 2.25 0 0 1 21 11.25v7.5" />
-                    </svg>
-                    Book Now
-                </a>
             </div>
         </div>
     </div>

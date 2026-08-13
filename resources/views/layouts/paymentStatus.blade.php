@@ -15,6 +15,7 @@
 
     <!-- Scripts -->
     @vite(['resources/css/app.css', 'resources/js/app.js', 'resources/js/main.js'])
+    @livewireStyles
 </head>
 
 <body class="bg-background text-foreground font-inter">
