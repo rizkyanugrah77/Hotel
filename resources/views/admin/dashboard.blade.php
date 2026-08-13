@@ -1,4 +1,4 @@
-<x-app-layout>
+<div>
 
     <!-- Main Content Area -->
     <!-- Topbar -->
@@ -105,47 +105,30 @@
                                 </tr>
                             </thead>
                             <tbody class="divide-y divide-gray-100">
-                                <tr class="hover:bg-gray-50 cursor-pointer">
-                                    <td class="py-3 px-6">
-                                        <div class="font-medium text-foreground">Sarah Anderson</div>
-                                        <div class="text-xs text-gray-500">STR-847291</div>
-                                    </td>
-                                    <td class="py-3 px-6">Deluxe Lake View</td>
-                                    <td class="py-3 px-6">Oct 12 - Oct 14</td>
-                                    <td class="py-3 px-6"><span class="badge-success">Confirmed</span></td>
-                                    <td class="py-3 px-6 font-medium">Rp 2.66M</td>
-                                </tr>
-                                <tr class="hover:bg-gray-50 cursor-pointer">
-                                    <td class="py-3 px-6">
-                                        <div class="font-medium text-foreground">Budi Santoso</div>
-                                        <div class="text-xs text-gray-500">STR-736219</div>
-                                    </td>
-                                    <td class="py-3 px-6">Superior Garden</td>
-                                    <td class="py-3 px-6">Oct 13 - Oct 15</td>
-                                    <td class="py-3 px-6"><span class="badge-warning">Pending</span></td>
-                                    <td class="py-3 px-6 font-medium">Rp 1.88M</td>
-                                </tr>
-                                <tr class="hover:bg-gray-50 cursor-pointer">
-                                    <td class="py-3 px-6">
-                                        <div class="font-medium text-foreground">Michael Chen</div>
-                                        <div class="text-xs text-gray-500">STR-625108</div>
-                                    </td>
-                                    <td class="py-3 px-6">Lake Villa</td>
-                                    <td class="py-3 px-6">Oct 15 - Oct 18</td>
-                                    <td class="py-3 px-6"><span class="badge-success">Confirmed</span></td>
-                                    <td class="py-3 px-6 font-medium">Rp 11.6M</td>
-                                </tr>
-                                <tr class="hover:bg-gray-50 cursor-pointer">
-                                    <td class="py-3 px-6">
-                                        <div class="font-medium text-foreground">Elena Putri</div>
-                                        <div class="text-xs text-gray-500">STR-514097</div>
-                                    </td>
-                                    <td class="py-3 px-6">Deluxe Lake View</td>
-                                    <td class="py-3 px-6">Oct 10 - Oct 12</td>
-                                    <td class="py-3 px-6"><span class="badge bg-gray-100 text-gray-600">Checked
-                                            Out</span></td>
-                                    <td class="py-3 px-6 font-medium">Rp 2.66M</td>
-                                </tr>
+                                @forelse ($bookings as $booking)
+                                    <tr class="hover:bg-gray-50 cursor-pointer">
+
+                                        <td class="py-3 px-6">
+                                            <div class="font-medium text-foreground">{{ $booking->user->name }}</div>
+                                            <div class="text-xs text-gray-500">{{ $booking->booking_code }}</div>
+                                        </td>
+                                        <td class="py-3 px-6">{{ $booking->room->name }}</td>
+                                        <td class="py-3 px-6">{{ $booking->check_in->format('d M Y') }} -
+                                            {{ $booking->check_out->format('d M Y') }}</td>
+                                        <td class="py-3 px-6">
+                                            <span
+                                                class="badge-{{ $booking->status === 'completed' ? 'success' : ($booking->status === 'paid' ? 'primary' : ($booking->status === 'cancelled' ? 'danger' : 'warning')) }}">
+                                                {{ $booking->status }}
+                                            </span>
+                                        </td>
+                                        <td class="py-3 px-6 font-medium">
+                                            {{ $booking->total_price ? 'Rp ' . number_format($booking->total_price, 0, ',', '.') : 'Belum ada data' }}
+                                        </td>
+                                    @empty
+                                        <td colspan="5" class="text-center py-6">Belum ada data</td>
+
+                                    </tr>
+                                @endforelse
                             </tbody>
                         </table>
                     </div>
@@ -158,42 +141,21 @@
                     <h2 class="font-poppins font-bold text-lg mb-6">Room Status</h2>
 
                     <div class="space-y-4">
-                        <div>
-                            <div class="flex justify-between text-sm mb-1">
-                                <span class="text-gray-600">Deluxe Lake View (12/15)</span>
-                                <span class="font-medium">80%</span>
+                        @forelse ($bookings as $booking)
+                            <div>
+                                <div class="flex justify-between text-sm mb-1">
+                                    <span class="text-gray-600">{{ $booking->room->name }}
+                                    </span>
+                                    <span class="font-medium"></span>
+                                </div>
+                                <div class="w-full bg-gray-100 rounded-full h-2">
+                                    <div class="bg-primary h-2 rounded-full" style="width: 80%"></div>
+                                </div>
                             </div>
-                            <div class="w-full bg-gray-100 rounded-full h-2">
-                                <div class="bg-primary h-2 rounded-full" style="width: 80%"></div>
-                            </div>
-                        </div>
-                        <div>
-                            <div class="flex justify-between text-sm mb-1">
-                                <span class="text-gray-600">Superior Garden (18/20)</span>
-                                <span class="font-medium">90%</span>
-                            </div>
-                            <div class="w-full bg-gray-100 rounded-full h-2">
-                                <div class="bg-primary h-2 rounded-full" style="width: 90%"></div>
-                            </div>
-                        </div>
-                        <div>
-                            <div class="flex justify-between text-sm mb-1">
-                                <span class="text-gray-600">Lake Villa (2/5)</span>
-                                <span class="font-medium">40%</span>
-                            </div>
-                            <div class="w-full bg-gray-100 rounded-full h-2">
-                                <div class="bg-accent h-2 rounded-full" style="width: 40%"></div>
-                            </div>
-                        </div>
-                        <div>
-                            <div class="flex justify-between text-sm mb-1">
-                                <span class="text-gray-600">Presidential Suite (1/2)</span>
-                                <span class="font-medium">50%</span>
-                            </div>
-                            <div class="w-full bg-gray-100 rounded-full h-2">
-                                <div class="bg-accent h-2 rounded-full" style="width: 50%"></div>
-                            </div>
-                        </div>
+                        @empty
+                            <div class="text-center py-6">Belum ada data</div>
+                        @endforelse
+
                     </div>
 
                     <div class="mt-8 pt-6 border-t border-gray-100">
@@ -224,4 +186,4 @@
     </main>
 
 
-</x-app-layout>
+</div>

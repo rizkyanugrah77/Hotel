@@ -183,11 +183,16 @@
                                 </div>
                             </div>
 
-                            <button type="submit" wire:loading.attr="disabled" class="btn-primary w-full mt-6">
-                                <span wire:loading.remove wire:target="save" class="relative">Reserve Now</span>
-                                <span wire:loading wire:target="save" class="loading">Loading...</span>
-                            </button>
-
+                            @if (Auth::check())
+                                <button type="submit" wire:loading.attr="disabled" class="btn-primary w-full mt-6">
+                                    <span wire:loading.remove wire:target="save" class="relative">Reserve Now</span>
+                                    <span wire:loading wire:target="save" class="loading">Loading...</span>
+                                </button>
+                            @else
+                                <a href="{{ route('login') }}" wire:navigate class="btn-primary w-full mt-6">
+                                    <span class="relative">Reserve Now</span>
+                                </a>
+                            @endif
 
                             <p class="text-xs text-center text-gray-500 mt-3">You won't be charged yet</p>
                         </form>

@@ -4,6 +4,7 @@ use App\Http\Controllers\BookingController;
 use App\Http\Controllers\FacilityController;
 use App\Http\Controllers\MidtransController;
 use App\Http\Controllers\RoomController;
+use App\Livewire\Admin\AdminDashboard;
 use App\Livewire\Admin\TransactionManager;
 use App\Livewire\welcome\Index;
 use App\Livewire\welcome\PaymentController;
@@ -11,6 +12,7 @@ use App\Livewire\welcome\PaymentStatus;
 use App\Livewire\Welcome\RoomDetail;
 use App\Livewire\Welcome\UserDashboard;
 use Illuminate\Support\Facades\Route;
+
 
 
 // Route::view('/', 'index')->name('index');
@@ -27,7 +29,7 @@ Route::post('/midtrans/callback', [MidtransController::class, 'callback'])->name
 
 // ROLE ADMIN
 Route::middleware(['auth', 'isAdmin', 'verified'])->group(function () {
-    Route::view('admin/dashboard', 'admin.dashboard')->name('dashboard');
+    Route::get('/admin/dashboard', AdminDashboard::class)->name('dashboard');
     Route::get('/admin/rooms-manager', [RoomController::class, 'index'])->name('rooms.manager');
     Route::get('/admin/facilities-manager', [FacilityController::class, 'index'])->name('facilities.manager');
     Route::get('/admin/bookings-manager', [BookingController::class, 'index'])->name('bookings.manager');
