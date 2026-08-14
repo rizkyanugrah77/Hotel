@@ -279,7 +279,7 @@
                             <option value="{{ $user->id }}">{{ $user->name }}</option>
                         @endforeach
                     </select>
-                    <x-input-error name="user_id" />
+                    <x-input-error :message="$errors->get('user_id')" />
                 </div>
             </div>
 
@@ -343,7 +343,7 @@
                     @endforeach
                 </div>
 
-                <x-input-error name="room_id" />
+                <x-input-error :message="$errors->get('room_id')" />
             </div>
 
             <!-- Row: Check In & Check Out -->
@@ -352,14 +352,14 @@
                     <label class="input-label">Check In <span class="text-red-500">*</span></label>
                     <input type="date" id="bookingCheckIn" wire:model.live="check_in" class="input"
                         min="{{ now()->toDateString() }}" />
-                    <x-input-error name="check_in" />
+                    <x-input-error :message="$errors->get('check_in')" />
                 </div>
                 <div>
                     <label class="input-label">Check Out <span class="text-red-500">*</span></label>
                     <input type="date" id="bookingCheckOut" wire:model.live="check_out" class="input"
                         min="{{ $check_in ?: now()->toDateString() }}" required />
 
-                    <x-input-error name="check_out" />
+                    <x-input-error :message="$errors->get('check_out')" />
                 </div>
             </div>
 
@@ -396,6 +396,7 @@
                         <option value="completed">Completed</option>
                         <option value="cancelled">Cancelled</option>
                     </select>
+                    <x-input-error :message="$errors->get('status')" />
                 </div>
             @endif
             <!-- Duration Info -->

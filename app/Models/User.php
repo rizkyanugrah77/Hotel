@@ -61,11 +61,11 @@ class User extends Authenticatable
 
     public function bookings(): HasMany
     {
-        return $this->hasMany(Booking::class)->cascadeOnDelete();
+        return $this->hasMany(Booking::class);
     }
 
     public function payments(): HasMany
     {
-        return $this->hasMany(Payment::class)->cascadeOnDelete();
+        return $this->hasMany(Payment::class);
     }
 }

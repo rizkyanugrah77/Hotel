@@ -180,7 +180,7 @@
                     <x-input-label for="room-name" :value="__('Nama') . ' *'" />
                     <x-text-input wire:model="name" id="room-name" class="input"
                         placeholder="Contoh: Deluxe Lake View" required />
-                    <x-input-error name="name" class="mt-2" />
+                    <x-input-error :message="$errors->get('name')" />
                 </div>
                 <div>
                     <x-input-label for="room-bed-type" :value="__('Tipe Tempat Tidur') . ' *'" />
@@ -193,7 +193,7 @@
                         <option value="King">King</option>
                         <option value="Twin Double">Twin Double</option>
                     </select>
-                    <x-input-error name="bed_type" class="mt-2" />
+                    <x-input-error :message="$errors->get('bed_type')" />
                 </div>
             </div>
             <div class="mb-2">
@@ -218,26 +218,26 @@
                         </label>
                     @endforeach
                 </div>
-                <x-input-error name="selectedFacilities" class="mt-2" />
+                <x-input-error :message="$errors->get('selectedFacilities')" />
             </div>
 
             <div class="mb-4">
                 <x-input-label for="room-description" :value="__('Deskripsi') . ' *'" />
                 <textarea id="room-description" wire:model="description" class="input" rows="3"
                     placeholder="Deskripsi singkat mengenai kamar..." required></textarea>
-                <x-input-error name="description" class="mt-2" />
+                <x-input-error :message="$errors->get('description')" />
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
                 <div>
                     <x-input-label for="room-size" :value="__('Ukuran (m²)') . ' *'" />
                     <x-text-input wire:model="size" id="room-size" class="input" min="1" required />
-                    <x-input-error name="size" class="mt-2" />
+                    <x-input-error :message="$errors->get('size')" />
                 </div>
                 <div>
                     <x-input-label for="room-capacity" :value="__('Kapasitas (orang)') . ' *'" />
                     <x-text-input wire:model="capacity" id="room-capacity" class="input" min="1" required />
-                    <x-input-error name="capacity" class="mt-2" />
+                    <x-input-error :message="$errors->get('capacity')" />
                 </div>
             </div>
 
@@ -245,7 +245,7 @@
                 <div>
                     <x-input-label for="room-price" :value="__('Harga per Malam (Rp)') . ' *'" />
                     <x-text-input wire:model="price" id="room-price" class="input" min="0" required />
-                    <x-input-error name="price" class="mt-2" />
+                    <x-input-error :message="$errors->get('price')" />
                 </div>
                 <div>
                     <x-input-label for="room-status" :value="__('Status') . ' *'" />
@@ -254,7 +254,7 @@
                         <option value="occupied">Occupied</option>
                         <option value="maintenance">Maintenance</option>
                     </select>
-                    <x-input-error name="status" class="mt-2" />
+                    <x-input-error :message="$errors->get('status')" />
                 </div>
             </div>
 
@@ -272,7 +272,7 @@
                     <img src="{{ $image->temporaryUrl() }}" alt="{{ $name }}"
                         class="w-20 h-20 object-cover mt-4 mb-2 rounded-2xl">
                 @endif
-                <x-input-error name="image" />
+                <x-input-error :message="$errors->get('image')" />
             </div>
 
             <div class="mt-6 flex flex-col-reverse gap-3 border-t border-gray-100 pt-4 sm:flex-row sm:justify-end">

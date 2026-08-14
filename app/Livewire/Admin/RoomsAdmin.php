@@ -24,7 +24,7 @@ class RoomsAdmin extends Component
 
     public string $capacity = '';
 
-    public int $price = 0;
+    public string $price = '';
 
     public string $status = 'available';
 
@@ -124,7 +124,7 @@ class RoomsAdmin extends Component
         $this->bed_type = $room->bed_type ?? '';
         $this->size = (string) $room->size;
         $this->capacity = (string) $room->capacity;
-        $this->price = (int) $room->price;
+        $this->price = (string) $room->price;
         $this->status = $room->status ?? 'available';
         $this->image = null;
         $this->selectedFacilities = $room
@@ -201,7 +201,7 @@ class RoomsAdmin extends Component
             'bed_type' => ['required', 'string', 'max:100'],
             'size' => ['required', 'integer', 'min:1', 'max:10000'],
             'capacity' => ['required', 'integer', 'min:1', 'max:1000'],
-            'price' => ['required', 'integer', 'min:0'],
+            'price' => ['required', 'numeric', 'min:0'],
             'status' => ['required', Rule::in(['available', 'occupied', 'maintenance'])],
             'image' => [$this->editingRoomId ? 'nullable' : 'required', 'file', 'mimes:png,jpg,jpeg', 'max:2048'],
             'selectedFacilities' => ['nullable', 'array'],

@@ -105,19 +105,20 @@
                                 </tr>
                             </thead>
                             <tbody class="divide-y divide-gray-100">
-                                @forelse ($bookings as $booking)
+                                @forelse ($rooms->flatMap->bookings as $booking)
                                     <tr class="hover:bg-gray-50 cursor-pointer">
 
                                         <td class="py-3 px-6">
-                                            <div class="font-medium text-foreground">{{ $booking->user->name }}</div>
-                                            <div class="text-xs text-gray-500">{{ $booking->booking_code }}</div>
+                                            <div class="font-medium text-foreground">
+                                                {{ $booking->booking_code }}</div>
+                                            <div class="text-xs text-gray-500">{{ $booking->user->name }}</div>
                                         </td>
                                         <td class="py-3 px-6">{{ $booking->room->name }}</td>
                                         <td class="py-3 px-6">{{ $booking->check_in->format('d M Y') }} -
                                             {{ $booking->check_out->format('d M Y') }}</td>
                                         <td class="py-3 px-6">
                                             <span
-                                                class="badge-{{ $booking->status === 'completed' ? 'success' : ($booking->status === 'paid' ? 'primary' : ($booking->status === 'cancelled' ? 'danger' : 'warning')) }}">
+                                                class="badge-{{ $booking->status === 'completed' ? 'success' : ($booking->status === 'paid' ? 'success' : ($booking->status === 'cancelled' ? 'danger' : 'warning')) }}">
                                                 {{ $booking->status }}
                                             </span>
                                         </td>
@@ -141,15 +142,16 @@
                     <h2 class="font-poppins font-bold text-lg mb-6">Room Status</h2>
 
                     <div class="space-y-4">
-                        @forelse ($bookings as $booking)
+                        @forelse ($rooms as $room)
                             <div>
                                 <div class="flex justify-between text-sm mb-1">
-                                    <span class="text-gray-600">{{ $booking->room->name }}
-                                    </span>
-                                    <span class="font-medium"></span>
+                                    <span class="text-gray-600">{{ $room->name }}</span>
+                                    <span
+                                        class="font-medium capitalize badge badge-{{ $room->status === 'available' ? 'success' : ($room->status === 'maintenance' ? 'warning' : ($room->status === 'occupied' ? 'primary' : 'info')) }}">{{ $room->status }}</span>
                                 </div>
                                 <div class="w-full bg-gray-100 rounded-full h-2">
-                                    <div class="bg-primary h-2 rounded-full" style="width: 80%"></div>
+                                    <div class="h-2 rounded-full {{ $room->status === 'available' ? 'bg-green-500' : ($room->status === 'maintenance' ? 'bg-orange-500' : ($room->status === 'occupied' ? 'bg-primary' : 'bg-blue-500')) }}"
+                                        style="width: 100%"></div>
                                 </div>
                             </div>
                         @empty

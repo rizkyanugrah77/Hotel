@@ -89,123 +89,8 @@
         </div>
     </div>
 
-    <!-- Filter Laporan -->
-    <div class="bg-white border border-gray-100 shadow-sm rounded-2xl p-4 sm:p-6 mb-6">
-        <div class="flex flex-col lg:flex-row lg:items-end justify-between gap-4">
-
-            <!-- Judul -->
-            <div>
-                <h2 class="font-poppins font-bold text-lg text-gray-800">
-                    Laporan Transaksi
-                </h2>
-                <p class="text-sm text-gray-500 mt-1">
-                    Filter laporan berdasarkan periode
-                </p>
-            </div>
-
-            <!-- Filter -->
-            <div class="flex flex-col sm:flex-row gap-3 w-full lg:w-auto">
-
-                <!-- Jenis Periode -->
-                <div class="w-full sm:w-40">
-                    <label class="block text-xs font-medium text-gray-500 mb-1.5">
-                        Periode
-                    </label>
-
-                    <select wire:model.live="reportPeriod" class="input py-2.5 text-sm w-full">
-                        <option value="daily">Harian</option>
-                        <option value="monthly">Bulanan</option>
-                        <option value="yearly">Tahunan</option>
-                    </select>
-                </div>
-
-                <!-- Harian -->
-                @if ($reportPeriod === 'daily')
-                    <div class="w-full sm:w-44">
-                        <label class="block text-xs font-medium text-gray-500 mb-1.5">
-                            Tanggal
-                        </label>
-
-                        <input type="date" wire:model.live="reportDate" class="input py-2.5 text-sm w-full">
-                    </div>
-                @endif
-
-                <!-- Bulanan -->
-                @if ($reportPeriod === 'monthly')
-                    <div class="w-full sm:w-44">
-                        <label class="block text-xs font-medium text-gray-500 mb-1.5">
-                            Bulan
-                        </label>
-
-                        <input type="month" wire:model.live="reportMonth" class="input py-2.5 text-sm w-full">
-                    </div>
-                @endif
-
-                <!-- Tahunan -->
-                @if ($reportPeriod === 'yearly')
-                    <div class="w-full sm:w-32">
-                        <label class="block text-xs font-medium text-gray-500 mb-1.5">
-                            Tahun
-                        </label>
-
-                        <select wire:model.live="reportYear" class="input py-2.5 text-sm w-full">
-
-                            @for ($year = now()->year; $year >= now()->year - 5; $year--)
-                                <option value="{{ $year }}">
-                                    {{ $year }}
-                                </option>
-                            @endfor
-
-                        </select>
-                    </div>
-                @endif
-
-                <!-- Export -->
-                <div class="flex items-end">
-                    <button wire:click="exportExcel" wire:loading.attr="disabled"
-                        class="inline-flex items-center justify-center gap-2 px-5 py-2.5
-                           bg-emerald-600 hover:bg-emerald-700
-                           text-white text-sm font-semibold
-                           rounded-xl transition-all shadow-sm
-                           disabled:opacity-50 disabled:cursor-not-allowed">
-
-                        <!-- Excel Icon -->
-                        <svg wire:loading.remove class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke-width="1.8"
-                            stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round"
-                                d="M12 3v12m0 0 4-4m-4 4-4-4M5 21h14a2 2 0 0 0 2-2v-4M3 15v4a2 2 0 0 0 2 2" />
-                        </svg>
-
-                        <!-- Loading -->
-                        <svg wire:loading class="w-5 h-5 animate-spin" fill="none" viewBox="0 0 24 24">
-                            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor"
-                                stroke-width="4">
-                            </circle>
-
-                            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z">
-                            </path>
-                        </svg>
-
-                        <span wire:loading.remove>
-                            Export Excel
-                        </span>
-
-                        <span wire:loading>
-                            Mengekspor...
-                        </span>
-                    </button>
-                </div>
-
-            </div>
-        </div>
-    </div>
-
     <!-- Search & Filter + Transaction List -->
     <div class="bg-white border border-gray-100 shadow-sm rounded-2xl overflow-hidden mb-8">
-
-
-
-        {{-- daftar --}}
         <div
             class="p-3 sm:p-6 border-b border-gray-100 flex flex-col lg:flex-row justify-between items-start lg:items-center gap-4">
             <h2 class="font-poppins font-bold text-lg">Daftar Transaksi</h2>
@@ -254,8 +139,7 @@
                             <td class="py-3 px-6 text-gray-700">{{ $tx->booking?->booking_code ?? '-' }}</td>
                             <td class="py-3 px-6 text-gray-700">{{ $tx->user?->name ?? '-' }}</td>
                             <td class="py-3 px-6 text-gray-700">{{ $tx->booking?->room?->name ?? '-' }}</td>
-                            <td class="py-3 px-6 text-gray-700">
-                                {{ $tx->payment_type ?? ($tx->payment_method ?? '-') }}
+                            <td class="py-3 px-6 text-gray-700">{{ $tx->payment_type ?? ($tx->payment_method ?? '-') }}
                             </td>
                             <td class="py-3 px-6 text-gray-700">
                                 {{ 'Rp ' . number_format($tx->gross_amount, 0, ',', '.') }}</td>

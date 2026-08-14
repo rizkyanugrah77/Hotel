@@ -29,7 +29,8 @@ new class extends Component {
         $validated = $this->validate([
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'lowercase', 'email', 'max:255', Rule::unique(User::class)->ignore($user->id)],
-            'phone' => ['required', 'numeric', 'max:15', 'min:8'],
+            'phone' => ['required', 'regex:/^(?:\+62|08)[0-9]{8,12}$/', Rule::unique(User::class)->ignore($user->id)],
+            'address' => ['required', 'string', 'max:255'],
         ]);
 
         $user->fill($validated);
@@ -78,14 +79,14 @@ new class extends Component {
             <x-input-label for="name" :value="__('Name')" />
             <x-text-input wire:model="name" id="name" name="name" type="text" class="mt-1 block w-full" required
                 autofocus autocomplete="name" />
-            <x-input-error class="mt-2" name="name" />
+            <x-input-error class="mt-2" :message="$errors->get('name')" />
         </div>
 
         <div>
             <x-input-label for="email" :value="__('Email')" />
             <x-text-input wire:model="email" id="email" name="email" type="email" class="mt-1 block w-full"
                 required autocomplete="username" />
-            <x-input-error class="mt-2" name="email" />
+            <x-input-error class="mt-2" :message="$errors->get('email')" />
 
             @if (auth()->user() instanceof \Illuminate\Contracts\Auth\MustVerifyEmail && !auth()->user()->hasVerifiedEmail())
                 <div>
@@ -111,7 +112,14 @@ new class extends Component {
             <x-input-label for="phone" :value="__('Phone')" />
             <x-text-input wire:model="phone" id="phone" name="phone" type="text" class="mt-1 block w-full"
                 required autofocus autocomplete="phone" />
-            <x-input-error class="mt-2" name="phone" />
+            <x-input-error class="mt-2" :message="$errors->get('phone')" />
+        </div>
+
+        <div>
+            <x-input-label for="address" :value="__('Address')" />
+            <x-text-input wire:model="address" id="address" name="address" type="text" class="mt-1 block w-full"
+                required autofocus autocomplete="address" />
+            <x-input-error class="mt-2" :message="$errors->get('address')" />
         </div>
 
         <div class="flex items-center gap-4">

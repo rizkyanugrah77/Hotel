@@ -152,6 +152,10 @@
     @apply badge bg-amber-50 text-amber-700;
   }
 
+  .badge-danger {
+    @apply badge bg-rose-50 text-rose-700;
+  }
+
   /* Input styles */
   .input {
     @apply w-full px-4 py-3 bg-white border border-gray-200 rounded-2xl 

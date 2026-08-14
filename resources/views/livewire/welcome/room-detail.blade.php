@@ -135,11 +135,13 @@
                                     <label class="input-label text-xs">Check In</label>
                                     <input type="date" class="input !py-2 !px-3 text-sm" wire:model.live="check_in"
                                         min="{{ now()->toDateString() }}" required />
+                                    <x-input-error :message="$errors->first('check_in')" class="mt-1 text-sm" />
                                 </div>
                                 <div>
                                     <label class="input-label text-xs">Check Out</label>
                                     <input type="date" class="input !py-2 !px-3 text-sm" wire:model.live="check_out"
                                         min="{{ $check_in ?: now()->toDateString() }}" required />
+                                    <x-input-error :message="$errors->first('check_out')" class="mt-1 text-sm" />
                                 </div>
                             </div>
 
@@ -151,6 +153,7 @@
                                             {{ $guest > 2 ? ' (+Rp 300K)' : '' }}</option>
                                     @endforeach
                                 </select>
+                                <x-input-error :message="$errors->first('total_guests')" class="mt-1 text-sm" />
                             </div>
 
                             <!-- Price Breakdown -->

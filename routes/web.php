@@ -35,6 +35,7 @@ Route::middleware(['auth', 'isAdmin', 'verified'])->group(function () {
     Route::get('/admin/bookings-manager', [BookingController::class, 'index'])->name('bookings.manager');
     Route::view('/admin/gallery-manager', 'admin.gallery-manager')->name('gallery.manager');
     Route::get('/admin/transaction-manager', TransactionManager::class)->name('transaction.manager');
+    Route::view('/admin/guest-manager', 'admin.guest')->name('guest.manager');
 });
 
 Route::middleware(['auth', 'verified'])->group(function () {

@@ -49,8 +49,12 @@
             Bookings
         </a>
 
-        <a href="#"
-            class="flex items-center gap-3 px-4 py-3 text-white/80 hover:text-white hover:bg-white/5 rounded-xl transition-colors">
+        <a href="{{ route('guest.manager') }}" wire:navigate @class([
+            'flex items-center gap-3 px-4 py-3 rounded-xl font-medium transition-colors',
+            'bg-white/10 text-white' => request()->routeIs('guest.manager'),
+            'text-white/80 hover:text-white hover:bg-white/5' => !request()->routeIs(
+                'guest.manager'),
+        ])>
             <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round"
                     d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.5 20.118a7.5 7.5 0 0 1 15 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.5-1.632Z" />

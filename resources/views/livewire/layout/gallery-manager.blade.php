@@ -258,7 +258,7 @@
                         <option value="{{ $room->id }}">{{ $room->name }}</option>
                     @endforeach
                 </select>
-                <x-input-error name="room_id" class="mt-2" />
+                <x-input-error :message="$errors->get('room_id')" class="mt-2" />
             </div>
 
             <!-- Image Path -->
@@ -279,14 +279,14 @@
                             class="mt-2 w-full h-48 object-cover rounded-xl">
                     @endif
                 @endif
-                <x-input-error name="image" class="mt-2" />
+                <x-input-error :message="$errors->get('image')" class="mt-2" />
             </div>
 
             <!-- Caption -->
             <div class="mb-4">
                 <x-input-label for="caption" :value="__('Caption') . ' *'" />
                 <textarea class="input" rows="3" placeholder="Deskripsi singkat gambar..." wire:model="caption" required></textarea>
-                <x-input-error name="caption" class="mt-2" />
+                <x-input-error :message="$errors->get('caption')" class="mt-2" />
             </div>
 
             <!-- Is Featured -->
@@ -302,7 +302,7 @@
                     </label>
                     <span class="text-sm text-gray-600" id="featuredLabel">Non-Featured</span>
                 </div>
-                <x-input-error name="is_featured" class="mt-2" />
+                <x-input-error :message="$errors->get('is_featured')" class="mt-2" />
             </div>
 
             <!-- Modal Footer -->

@@ -177,19 +177,19 @@
             <div class="mb-4">
                 <x-input-label for="name" value="Nama Fasilitas" :required="true" />
                 <input type="text" wire:model="name" class="input" placeholder="e.g. Kolam Renang" />
-                <x-input-error name="name" class="mt-2" />
+                <x-input-error :message="$errors->get('name')" class="mt-2" />
             </div>
 
             <div class="mb-4">
                 <x-input-label for="icon" value="Ikon SVG" :required="true" />
                 <textarea wire:model="icon" class="input font-mono text-xs" rows="3" placeholder="<svg>...</svg>"></textarea>
-                <x-input-error name="icon" class="mt-2" />
+                <x-input-error :message="$errors->get('icon')" class="mt-2" />
             </div>
 
             <div class="mb-4">
                 <x-input-label for="description" value="Deskripsi" :required="true" />
                 <textarea wire:model="description" class="input" rows="4" placeholder="Deskripsi mengenai fasilitas..."></textarea>
-                <x-input-error name="description" class="mt-2" />
+                <x-input-error :message="$errors->get('description')" class="mt-2" />
             </div>
 
             {{-- Footer --}}
