@@ -108,8 +108,9 @@
                         <option value="">Semua Status</option>
                         <option value="paid">Paid</option>
                         <option value="pending">Pending</option>
-                        <option value="completed">Completed</option>
+                        <option value="checked_in">Checked In</option>
                         <option value="cancelled">Cancelled</option>
+                        <option value="checked_out">Checked Out</option>
                     </select>
                     <select wire:model.live="filterRoom" id="filterRoom" class="input py-2 text-sm w-44">
                         <option value="">Semua Room</option>
@@ -164,15 +165,17 @@
                                 <td class="py-3 px-6 text-gray-700">
                                     <span @class([
                                         'px-3 py-1 rounded-full text-xs font-medium text-white',
-                                        'bg-emerald-600' => $booking->status === 'completed',
+                                        'bg-red-700' => $booking->status === 'checked_out',
                                         'bg-amber-600' => $booking->status === 'pending',
                                         'bg-red-600' => $booking->status === 'cancelled',
                                         'bg-blue-600' => $booking->status === 'paid',
+                                        'bg-emerald-600' => $booking->status === 'checked_in',
                                         'bg-gray-600' => !in_array($booking->status, [
-                                            'completed',
+                                            'checked_out',
                                             'pending',
                                             'cancelled',
                                             'paid',
+                                            'checked_in',
                                         ]),
                                     ])>
                                         {{ ucfirst($booking->status) }}
@@ -180,7 +183,7 @@
                                 </td>
                                 <td class="py-3 px-6 inline-flex text-gray-700">
                                     <x-edit-button :item="$booking" action="edit" />
-                                    <x-delete-button :item="$booking" confirmDelete="confirmDelete" />
+                                    {{-- <x-delete-button :item="$booking" confirmDelete="confirmDelete" /> --}}
                                 </td>
                             </tr>
                         @empty
@@ -284,7 +287,7 @@
             </div>
 
             <!-- Room -->
-            <div class="mb-4">
+            {{-- <div class="mb-4">
                 <p class="input-label mb-3">
                     Room <span class="text-red-500">*</span>
                 </p>
@@ -344,20 +347,20 @@
                 </div>
 
                 <x-input-error :message="$errors->get('room_id')" />
-            </div>
+            </div> --}}
 
             <!-- Row: Check In & Check Out -->
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
                 <div>
                     <label class="input-label">Check In <span class="text-red-500">*</span></label>
                     <input type="date" id="bookingCheckIn" wire:model.live="check_in" class="input"
-                        min="{{ now()->toDateString() }}" />
+                        min="{{ now()->toDateString() }}" disabled />
                     <x-input-error :message="$errors->get('check_in')" />
                 </div>
                 <div>
                     <label class="input-label">Check Out <span class="text-red-500">*</span></label>
                     <input type="date" id="bookingCheckOut" wire:model.live="check_out" class="input"
-                        min="{{ $check_in ?: now()->toDateString() }}" required />
+                        min="{{ $check_in ?: now()->toDateString() }}" disabled />
 
                     <x-input-error :message="$errors->get('check_out')" />
                 </div>
@@ -390,10 +393,12 @@
             @if ($bookingEditId)
                 <div class="mb-4">
                     <label class="input-label">Status <span class="text-red-500">*</span></label>
-                    <select id="bookingStatus" wire:model="status" class="input" disabled>
+                    <select id="bookingStatus" wire:model="status" class="input"
+                        @if ($this->status === 'checked_out' || $this->status === 'cancelled') disabled @endif>
                         <option value="pending">Pending</option>
                         <option value="paid">Paid</option>
-                        <option value="completed">Completed</option>
+                        <option value="checked_in">Checked In</option>
+                        <option value="checked_out">Checked Out</option>
                         <option value="cancelled">Cancelled</option>
                     </select>
                     <x-input-error :message="$errors->get('status')" />

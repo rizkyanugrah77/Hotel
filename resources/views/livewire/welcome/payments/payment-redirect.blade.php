@@ -32,10 +32,22 @@
         document.addEventListener('DOMContentLoaded', function() {
             const params = new URLSearchParams(window.location.search);
             const orderId = params.get('order_id');
+            const transactionStatus = params.get('transaction_status');
+            const statusCode = params.get('status_code');
 
             if (orderId) {
-                // Redirect to the payment status page
-                window.location.href = "{{ url('/payment-success') }}/" + encodeURIComponent(orderId);
+                // Check if payment is Unfinished (pending / 201)
+                if (transactionStatus === 'pending' || statusCode === '201') {
+                    window.location.href = "{{ route('user.dashboard') }}";
+                } 
+                // Check if payment is Error/Failed (deny, cancel, expire, or status_code != 200/201)
+                else if (['deny', 'cancel', 'expire'].includes(transactionStatus) || (statusCode && statusCode !== '200' && statusCode !== '201')) {
+                    window.location.href = "{{ route('user.dashboard') }}";
+                } 
+                // Otherwise proceed to success page
+                else {
+                    window.location.href = "{{ url('/payment-success') }}/" + encodeURIComponent(orderId);
+                }
             } else {
                 // No order_id found, redirect to homepage
                 window.location.href = "{{ route('index') }}";

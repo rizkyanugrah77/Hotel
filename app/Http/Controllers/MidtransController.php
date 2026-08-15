@@ -30,10 +30,10 @@ class MidtransController extends Controller
             // Validasi Signature
             $mySignature = hash(
                 'sha512',
-                $orderId.
-                $statusCode.
-                $grossAmount.
-                config('midtrans.serverKey')
+                $orderId .
+                    $statusCode .
+                    $grossAmount .
+                    config('midtrans.serverKey')
             );
 
             if ($signatureKey !== $mySignature) {
@@ -61,15 +61,18 @@ class MidtransController extends Controller
                     if ($type == 'credit_card') {
                         $payment->transaction_status =
                             ($fraud == 'challenge')
-                                ? 'CHALLENGE'
-                                : 'SUCCESS';
+                            ? 'CHALLENGE'
+                            : 'SUCCESS';
                     }
                     break;
 
                 case 'settlement':
                     $payment->transaction_status = 'SUCCESS';
                     $payment->booking()->update([
-                        'status' => 'paid',    
+                        'status' => 'paid',
+                    ]);
+                    $payment->booking->room->update([
+                        'status' => 'occupied',
                     ]);
                     break;
 
@@ -78,13 +81,19 @@ class MidtransController extends Controller
                     $payment->booking()->update([
                         'status' => 'pending',
                     ]);
+                    $payment->booking->room->update([
+                        'status' => 'available'
+                    ]);
                     break;
 
                 case 'deny':
                     $payment->transaction_status = 'FAILED';
                     $payment->booking()->update([
                         'status' => 'cancelled',
-                        'payment_method'=> $acquirer,
+                        'payment_method' => $acquirer,
+                    ]);
+                    $payment->booking->room->update([
+                        'status' => 'available'
                     ]);
                     break;
 
@@ -93,12 +102,18 @@ class MidtransController extends Controller
                     $payment->booking()->update([
                         'status' => 'cancelled',
                     ]);
+                    $payment->booking->room->update([
+                        'status' => 'available'
+                    ]);
                     break;
 
                 case 'cancel':
                     $payment->transaction_status = 'CANCEL';
                     $payment->booking()->update([
                         'status' => 'cancelled',
+                    ]);
+                    $payment->booking->room->update([
+                        'status' => 'available'
                     ]);
                     break;
             }
@@ -116,7 +131,6 @@ class MidtransController extends Controller
             return response()->json([
                 'message' => 'OK',
             ]);
-
         } catch (\Exception $e) {
 
             Log::error('Midtrans Callback Error', [

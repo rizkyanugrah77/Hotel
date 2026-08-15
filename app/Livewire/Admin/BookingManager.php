@@ -42,8 +42,8 @@ class BookingManager extends Component
 
     public $search = '';
 
-    public $filterStatus;
-    public $filterRoom;
+    public ?string $filterStatus = null;
+    public ?int $filterRoom = null;
     public function mount()
     {
         $this->users = User::where('role', '!=', 'admin')->get();
@@ -87,7 +87,6 @@ class BookingManager extends Component
 
             $this->resetForm();
             $this->dispatch('booking-saved', message: $isUpdate ? 'Booking berhasil diupdate.' : 'Booking berhasil ditambahkan.', type: 'success');
-
         } catch (\Throwable $th) {
             $this->dispatch('booking-error', message: $th->getMessage(), type: 'error');
         }
@@ -134,11 +133,11 @@ class BookingManager extends Component
         $prefix = 'TRX-';
         $random = Str::random(8);
 
-        while (Booking::where('booking_code', $prefix.$random)->exists()) {
+        while (Booking::where('booking_code', $prefix . $random)->exists()) {
             $random = Str::random(8);
         }
 
-        return $prefix.$random;
+        return $prefix . $random;
     }
 
     public function resetForm()
@@ -196,7 +195,7 @@ class BookingManager extends Component
                 'total_price' => Booking::where('status', 'paid')->sum('total_price'),
             ],
         ]);
-    }   
+    }
 
     public function rules()
     {
@@ -213,7 +212,7 @@ class BookingManager extends Component
                 'date',
                 'after:check_in',
             ],
-            'status' => 'required|in:completed,pending,cancelled,paid',
+            'status' => 'required|in:pending,paid,checked_in,checked_out,cancelled',
         ];
     }
 }

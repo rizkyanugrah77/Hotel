@@ -43,64 +43,79 @@ class PaymentStatus extends Component
                     $payment->booking->update([
                         'status' => 'paid',
                     ]);
+                    $payment->booking->room->update([
+                        'status' => 'occupied',
+                    ]);
                 } elseif ($status == 'pending') {
                     $payment->transaction_status = 'PENDING';
                     $payment->booking->update([
                         'status' => 'pending',
+                    ]);
+                    $payment->booking->room->update([
+                        'status' => 'available'
                     ]);
                 } elseif ($status == 'deny') {
                     $payment->transaction_status = 'FAILED';
                     $payment->booking->update([
                         'status' => 'pending',
                     ]);
+                    $payment->booking->room->update([
+                        'status' => 'available'
+                    ]);
                 } elseif ($status == 'expire') {
                     $payment->transaction_status = 'EXPIRED';
                     $payment->booking->update([
-                        'status' => 'pending',
+                        'status' => 'cancelled',
+                    ]);
+
+                    $payment->booking->room->update([
+                        'status' => 'available'
                     ]);
                 } elseif ($status == 'cancel') {
                     $payment->transaction_status = 'CANCEL';
                     $payment->booking->update([
                         'status' => 'cancelled',
                     ]);
+                    $payment->booking->room->update([
+                        'status' => 'available'
+                    ]);
                 }
-                    
+
                 if ($type) {
                     $payment->payment_type = $type;
                 }
                 $payment->payment_method = $acquirer;
                 $payment->save();
-
             }
         } catch (\Exception $e) {
-            session()->flash('error', 'Payment status check failed: '.$e->getMessage());
+            session()->flash('error', 'Payment status check failed: ' . $e->getMessage());
         }
 
         $this->payment = $payment;
     }
 
-       public function downloadReceipt()
+    public function downloadReceipt()
     {
         $payment = Payment::with([
             'booking.room',
             'booking.user',
         ])->where('order_id', $this->orderId)->firstOrFail();
 
-      $pdf = Pdf::loadView('livewire.welcome.payments.receipt', [
+        $pdf = Pdf::loadView('livewire.welcome.payments.receipt', [
             'payment' => $payment,
         ]);
 
-// 226 pt = 80 mm lebar, 600 pt = tinggi kertas (bisa disesuaikan)
-        $pdf->setPaper([0, 0, 230, 500], 'portrait'); 
+        // 226 pt = 80 mm lebar, 600 pt = tinggi kertas (bisa disesuaikan)
+        $pdf->setPaper([0, 0, 230, 500], 'portrait');
 
         $pdf->setOptions([
             'dpi' => 150,
-            'defaultFont' => 'sans-serif', 
+            'defaultFont' => 'sans-serif',
             'isHtml5ParserEnabled' => true,
             'isRemoteEnabled' => true
         ]);
         return response()->streamDownload(
-            fn () => print($pdf->output()),
+            fn() => print($pdf->output()),
             'receipt-' . $payment->order_id . '.pdf'
         );
     }
@@ -113,6 +128,5 @@ class PaymentStatus extends Component
         return view('livewire.welcome.payments.payment-success', [
             'payment' => $this->payment,
         ])->layout('layouts.guest');
-
     }
 }

@@ -78,7 +78,7 @@
                          <path stroke-linecap="round" stroke-linejoin="round"
                              d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1 1 15 0Z" />
                      </svg>
-                     Jl. Samosir No. 88, Tuktuk Siadong, Samosir, Sumatera Utara 22395
+                     Jl. Aek Rangat No.71, Siogung-Ogung, Kec. Pangururan, Kabupaten Samosir, Sumatera Utara
                  </li>
                  <li class="flex items-center gap-3 text-sm text-red-600/60">
                      <svg class="w-5 h-5 text-accent flex-shrink-0" fill="none" viewBox="0 0 24 24"
