@@ -139,7 +139,7 @@
             <!-- Room Status Summary -->
             <div>
                 <div class="card bg-white border border-gray-100 shadow-sm rounded-2xl p-6">
-                    <h2 class="font-poppins font-bold text-lg mb-6">Room Status</h2>
+                    <h2 class="font-poppins font-bold text-lg mb-6">Room Availability</h2>
 
                     <div class="space-y-4">
                         @forelse ($rooms as $room)
@@ -147,11 +147,13 @@
                                 <div class="flex justify-between text-sm mb-1">
                                     <span class="text-gray-600">{{ $room->name }}</span>
                                     <span
-                                        class="font-medium capitalize badge badge-{{ $room->status === 'available' ? 'success' : ($room->status === 'maintenance' ? 'warning' : ($room->status === 'occupied' ? 'primary' : 'info')) }}">{{ $room->status }}</span>
+                                        class="font-medium badge-success">{{ $room->units->where('status', 'available')->count() }}
+                                        / {{ $room->units->count() }}</span>
                                 </div>
                                 <div class="w-full bg-gray-100 rounded-full h-2">
-                                    <div class="h-2 rounded-full {{ $room->status === 'available' ? 'bg-green-500' : ($room->status === 'maintenance' ? 'bg-orange-500' : ($room->status === 'occupied' ? 'bg-primary' : 'bg-blue-500')) }}"
-                                        style="width: 100%"></div>
+                                    <div class="h-2 rounded-full bg-emerald-500 "
+                                        style="width: {{ ($room->units->where('status', 'available')->count() / $room->units->count()) * 100 }}%">
+                                    </div>
                                 </div>
                             </div>
                         @empty

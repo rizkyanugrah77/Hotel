@@ -22,6 +22,7 @@ return new class extends Migration
             $table->string('bed_type')->nullable();
             $table->string('image')->nullable();
             $table->string('size')->nullable();
+            $table->unsignedBigInteger('room_stock')->default(1);
             $table->timestamps();
         });
     }

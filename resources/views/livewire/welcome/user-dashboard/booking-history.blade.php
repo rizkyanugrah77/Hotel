@@ -82,12 +82,12 @@
                                     $payment = $payments->where('booking_id', $booking->id)->first();
                                 @endphp
                                 @if ($payment)
-                                    @if ($booking->status === 'paid')
-                                        <a href="{{ route('payment-success', $payment->order_id) }}" wire:navigate
-                                            class="btn-primary text-xs !px-2 !py-1.5 inline-flex">Cetak</a>
-                                    @else
+                                    @if ($booking->status === 'pending' || $booking->status === 'cancelled')
                                         <a href="{{ route('payment-check', $payment->order_id) }}" wire:navigate
                                             class="btn-ghost text-xs !px-2 !py-1.5 inline-flex">Cek</a>
+                                    @else
+                                        <a href="{{ route('payment-success', $payment->order_id) }}" wire:navigate
+                                            class="btn-primary text-xs !px-2 !py-1.5 inline-flex">Cetak</a>
                                     @endif
                                 @endif
                             </td>

@@ -1,5 +1,6 @@
 @props(['item', 'action'])
 
+{{-- @php($itemId = is_array($item) ? $item['id'] : (is_object($item) ? $item->id : $item)) --}}
 
 <button wire:click="{{ $action }}({{ $item->id }})"
     class="w-8 h-8 rounded-lg bg-amber-50 text-amber-600 flex items-center justify-center hover:bg-amber-100 transition-colors"

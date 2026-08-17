@@ -81,18 +81,71 @@
                 Guests
             </a>
 
-            <a href="{{ route('rooms.manager') }}" wire:navigate @class([
-                'flex items-center gap-3 px-4 py-3 rounded-xl font-medium transition-colors',
-                'bg-white/10 text-white' => request()->routeIs('rooms.manager'),
-                'text-white/80 hover:text-white hover:bg-white/5' => !request()->routeIs(
-                    'rooms.manager'),
-            ])>
-                <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round"
-                        d="M2.25 21h19.5M3.75 21V9.75 6.75m0 3h16.5m-16.5 0 2.07-5.175A1.5 1.5 0 0 1 7.214 3.75h9.572a1.5 1.5 0 0 1 1.394.925l2.07 5.175m0 0V21m-12-7.5h.008v.008H8.25V13.5Zm3.75 0h.008v.008H12V13.5Zm3.75 0h.008v.008H15.75V13.5Z" />
-                </svg>
-                Rooms
-            </a>
+            <div x-data="{ openAccordion: {{ request()->routeIs('rooms.manager', 'room-units-manager') ? 'true' : 'false' }} }">
+                <button type="button" @click="openAccordion = !openAccordion" :aria-expanded="openAccordion"
+                    class="flex w-full items-center justify-between rounded-xl px-4 py-3 font-medium text-white/80 transition-colors hover:bg-white/5 hover:text-white">
+                    <span class="inline-flex text-sm gap-3">
+                        <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                            stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                d="M2.25 21h19.5M3.75 21V9.75 6.75m0 3h16.5m-16.5 0 2.07-5.175A1.5 1.5 0 0 1 7.214 3.75h9.572a1.5 1.5 0 0 1 1.394.925l2.07 5.175m0 0V21m-12-7.5h.008v.008H8.25V13.5Zm3.75 0h.008v.008H12V13.5Zm3.75 0h.008v.008H15.75V13.5Z" />
+                        </svg>
+                        Room Management
+                    </span>
+                    <svg class="h-5 w-5 transition-transform duration-200" :class="openAccordion && 'rotate-90'"
+                        fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
+                    </svg>
+                </button>
+
+                <div x-show="openAccordion" x-transition.opacity class="mt-1 space-y-1 pl-4">
+                    <a href="{{ route('rooms.manager') }}" wire:navigate @class([
+                        'flex items-center gap-3 rounded-xl px-4 py-2.5 text-sm font-medium transition-colors',
+                        'bg-white/10 text-white' => request()->routeIs('rooms.manager'),
+                        'text-white/80 hover:bg-white/5 hover:text-white' => !request()->routeIs(
+                            'rooms.manager'),
+                    ])>
+                        <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                            stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                d="M2.25 21h19.5M3.75 21V9.75 6.75m0 3h16.5m-16.5 0 2.07-5.175A1.5 1.5 0 0 1 7.214 3.75h9.572a1.5 1.5 0 0 1 1.394.925l2.07 5.175m0 0V21m-12-7.5h.008v.008H8.25V13.5Zm3.75 0h.008v.008H12V13.5Zm3.75 0h.008v.008H15.75V13.5Z" />
+                        </svg>
+                        Rooms
+                    </a>
+                    @foreach (\App\Models\Room::orderBy('name')->get() as $room)
+                        <a href="{{ route('room-units-manager', $room->slug) }}" wire:navigate
+                            @class([
+                                'flex items-center gap-3 rounded-xl px-4 py-2.5 text-sm font-medium transition-colors',
+                                'bg-white/10 text-white' => request()->route('roomSlug') === $room->slug,
+                                'text-white/80 hover:bg-white/5 hover:text-white' =>
+                                    request()->route('roomSlug') !== $room->slug,
+                            ])>
+                            <svg class="h-4 w-4 shrink-0" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                                stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round"
+                                    d="M8.25 6.75h12M8.25 12h12m-12 5.25h12M3 6.75h.008v.008H3V6.75zm0 5.25h.008v.008H3v-5.25zm0 5.25h.008v.008H3v-5.25z" />
+                            </svg>
+                            <span class="truncate">{{ $room->name }}</span>
+                        </a>
+                    @endforeach
+                </div>
+            </div>
+
+            {{-- <a href="{{ route('rooms.manager') }}" wire:navigate @class([
+                        'flex items-center gap-3 px-4 py-3 rounded-xl font-medium transition-colors',
+                        'bg-white/10 text-white' => request()->routeIs('rooms.manager'),
+                        'text-white/80 hover:text-white hover:bg-white/5' => !request()->routeIs(
+                            'rooms.manager'),
+                    ])>
+                        <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                            stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                d="M2.25 21h19.5M3.75 21V9.75 6.75m0 3h16.5m-16.5 0 2.07-5.175A1.5 1.5 0 0 1 7.214 3.75h9.572a1.5 1.5 0 0 1 1.394.925l2.07 5.175m0 0V21m-12-7.5h.008v.008H8.25V13.5Zm3.75 0h.008v.008H12V13.5Zm3.75 0h.008v.008H15.75V13.5Z" />
+                        </svg>
+                        Rooms
+                    </a> --}}
+
+
 
             <a href="{{ route('facilities.manager') }}" wire:navigate @class([
                 'flex items-center gap-3 px-4 py-3 rounded-xl font-medium transition-colors',

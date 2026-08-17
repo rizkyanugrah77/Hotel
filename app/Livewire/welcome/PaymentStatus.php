@@ -43,42 +43,32 @@ class PaymentStatus extends Component
                     $payment->booking->update([
                         'status' => 'paid',
                     ]);
-                    $payment->booking->room->update([
-                        'status' => 'occupied',
-                    ]);
+                    $payment->booking->room->syncStatusFromUnits();
                 } elseif ($status == 'pending') {
                     $payment->transaction_status = 'PENDING';
                     $payment->booking->update([
                         'status' => 'pending',
                     ]);
-                    $payment->booking->room->update([
-                        'status' => 'available'
-                    ]);
+                    $payment->booking->room->syncStatusFromUnits();
                 } elseif ($status == 'deny') {
                     $payment->transaction_status = 'FAILED';
                     $payment->booking->update([
                         'status' => 'pending',
                     ]);
-                    $payment->booking->room->update([
-                        'status' => 'available'
-                    ]);
+                    $payment->booking->room->syncStatusFromUnits();
                 } elseif ($status == 'expire') {
                     $payment->transaction_status = 'EXPIRED';
                     $payment->booking->update([
                         'status' => 'cancelled',
                     ]);
 
-                    $payment->booking->room->update([
-                        'status' => 'available'
-                    ]);
+                    $payment->booking->room->syncStatusFromUnits();
                 } elseif ($status == 'cancel') {
                     $payment->transaction_status = 'CANCEL';
                     $payment->booking->update([
                         'status' => 'cancelled',
                     ]);
-                    $payment->booking->room->update([
-                        'status' => 'available'
-                    ]);
+                    $payment->booking->room->syncStatusFromUnits();
                 }
 
                 if ($type) {

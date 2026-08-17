@@ -15,7 +15,7 @@
         <div class="absolute inset-0 batak-pattern opacity-20"></div>
 
         <!-- Content -->
-        {{-- <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-32 lg:py-0 w-full">
+        <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-32 lg:py-0 w-full">
             <div class="max-w-3xl pt-10">
                 <!-- Badge -->
                 <div
@@ -25,7 +25,7 @@
                 </div>
 
                 <!-- Headline -->
-                <h1 class="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-poppins font-bold text-white leading-[1.1] mb-6 animate-fade-in"
+                <h1 class="text-4xl sm:text-4xl md:text-6xl lg:text-7xl font-poppins font-bold text-white leading-[1.1] mb-6 animate-fade-in"
                     style="animation-delay: 0.15s;">
                     Experience The
                     <span class="text-gradient-accent block mt-2">Magic of Lake Toba</span>
@@ -33,7 +33,7 @@
                 </h1>
 
                 <!-- Subtitle -->
-                <p class="text-lg sm:text-xl text-white/80 font-inter leading-relaxed max-w-xl mb-10 animate-fade-in"
+                <p class="text-md sm:text-lg text-white/80 font-inter leading-relaxed max-w-xl mb-10 animate-fade-in"
                     style="animation-delay: 0.3s;">
                     Nestled on the shores of Lake Toba, Sitio Tio Resort offers an unforgettable blend of traditional
                     Batak Samosir hospitality and modern luxury.
@@ -74,17 +74,17 @@
                     </div>
                 </div>
             </div>
-        </div> --}}
+        </div>
 
         <!-- Scroll Down Indicator -->
-        {{-- <a href="#booking-search"
+        <a href="#booking-search"
             class="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 text-white/60 hover:text-white transition-colors animate-bounce-soft"
             aria-label="Scroll to booking search">
             <span class="text-xs font-inter uppercase tracking-widest">Scroll</span>
             <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />
             </svg>
-        </a> --}}
+        </a>
     </section>
 
     <!-- ===================================

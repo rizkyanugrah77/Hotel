@@ -84,10 +84,13 @@
             {{-- <div class="qr" style="text-align: center;">
                 <img src="{{ QrCode::size(50)->generate($payment->booking->booking_code) }}" alt="QR Code">
             </div> --}}
+            <x-application-logo class="flex h-10 w-auto" />
+
             <div class="flex flex-col">
                 <span class="font-bold text-xl">Sitio Tio Resort</span>
                 <span class="text-sm text-gray-500">Booking Receipt</span>
             </div>
+
         </div>
     </div>
 
@@ -97,19 +100,6 @@
         </div>
 
         <table class="flex flex-col w-full">
-            <tr class="flex w-full items-center justify-between">
-                <td class="label w-1/2 text-left">Kode Pemesanan</td>
-                <td class="value w-1/2 text-right">
-                    {{ $payment->booking->booking_code ?? $payment->booking->id }}
-                </td>
-            </tr>
-
-            <tr>
-                <td class="label">Status Pembayaran</td>
-                <td class="paid">
-                    {{ $payment->booking->status }}
-                </td>
-            </tr>
 
             <tr>
                 <td class="label">Metode Pembayaran</td>
@@ -117,6 +107,13 @@
                     {{ ucfirst($payment->payment_method) }}
                 </td>
             </tr>
+            <tr class="flex w-full items-center justify-between">
+                <td class="label w-1/2 text-left">Kode Pemesanan</td>
+                <td class="value w-1/2 text-right">
+                    {{ $payment->booking->booking_code ?? $payment->booking->id }}
+                </td>
+            </tr>
+
 
             <tr>
                 <td class="label">Order ID</td>
@@ -124,6 +121,15 @@
                     {{ $payment->order_id }}
                 </td>
             </tr>
+            <tr>
+                <td class="label">Status Pembayaran</td>
+                <td class="paid">
+                    {{ $payment->transaction_status }}
+                </td>
+            </tr>
+
+
+
         </table>
     </div>
 

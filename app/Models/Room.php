@@ -20,10 +20,12 @@ class Room extends Model
         'bed_type',
         'image',
         'size',
+        'room_stock',
     ];
 
     protected $casts = [
         'price' => 'decimal:2',
+
     ];
 
     public function bookings(): HasMany
@@ -41,6 +43,11 @@ class Room extends Model
         );
     }
 
+    public function units(): HasMany
+    {
+        return $this->hasMany(RoomUnit::class);
+    }
+
     public function galleries()
     {
         return $this->hasMany(Gallery::class)->orderBy('is_featured', 'desc')->orderBy('created_at', 'desc');
@@ -48,6 +55,25 @@ class Room extends Model
 
     public function getPriceFormattedAttribute()
     {
-        return 'Rp.'.number_format($this->price, 0, ',', '.');
+        return 'Rp.' . number_format($this->price, 0, ',', '.');
+    }
+
+    public function syncStatusFromUnits(): void
+    {
+        $totalUnits = $this->units()->count();
+
+        if ($totalUnits === 0) {
+            return;
+        }
+
+        $occupiedUnits = $this->units()
+            ->where('status', 'occupied')
+            ->count();
+
+        $this->update([
+            'status' => $occupiedUnits === $totalUnits
+                ? 'occupied'
+                : 'available'
+        ]);
     }
 }

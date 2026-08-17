@@ -18,83 +18,82 @@
 
     <x-toast />
     <!-- KPI Cards -->
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-        <div class="bg-white border border-gray-100 shadow-sm rounded-2xl p-6">
-            <div class="flex justify-between items-start mb-4">
+    <div class="mb-6 grid grid-cols-2 gap-3 lg:mb-8 lg:grid-cols-4 lg:gap-6">
+        <div class="rounded-2xl border border-gray-100 bg-white p-4 shadow-sm sm:p-5 lg:p-6">
+            <div class="mb-2 flex items-start justify-between sm:mb-4">
                 <div>
                     <p class="text-sm text-gray-500 mb-1">Total Bookings</p>
                     <h3 class="text-2xl font-poppins font-bold text-foreground" id="kpiTotal">
                         {{ $bookingStats['total'] }}</h3>
                 </div>
-                <div class="w-10 h-10 bg-primary/10 text-primary rounded-xl flex items-center justify-center">
+                <div class="flex h-9 w-9 items-center justify-center rounded-xl bg-primary/10 text-primary sm:h-10 sm:w-10">
                     <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round"
                             d="M16.5 6v.75m0 3v.75m0 3v.75m0 3V18m-9-5.25h5.25M7.5 15h3M3.375 5.25c-.621 0-1.125.504-1.125 1.125v3.026a2.999 2.999 0 0 1 0 5.198v3.026c0 .621.504 1.125 1.125 1.125h17.25c.621 0 1.125-.504 1.125-1.125v-3.026a2.999 2.999 0 0 1 0-5.198V6.375c0-.621-.504-1.125-1.125-1.125H3.375Z" />
                     </svg>
                 </div>
             </div>
-            <p class="text-xs text-gray-500 font-medium" id="kpiTotalSub">Semua booking</p>
+            <p class="hidden text-xs font-medium text-gray-500 sm:block" id="kpiTotalSub">Semua booking</p>
         </div>
 
-        <div class="bg-white border border-gray-100 shadow-sm rounded-2xl p-6">
-            <div class="flex justify-between items-start mb-4">
+        <div class="rounded-2xl border border-gray-100 bg-white p-4 shadow-sm sm:p-5 lg:p-6">
+            <div class="mb-2 flex items-start justify-between sm:mb-4">
                 <div>
                     <p class="text-sm text-gray-500 mb-1">Confirmed</p>
                     <h3 class="text-2xl font-poppins font-bold text-emerald-600" id="kpiConfirmed">
                         {{ $bookingStats['paid'] }}</h3>
                 </div>
-                <div class="w-10 h-10 bg-emerald-50 text-emerald-600 rounded-xl flex items-center justify-center">
+                <div class="flex h-9 w-9 items-center justify-center rounded-xl bg-emerald-50 text-emerald-600 sm:h-10 sm:w-10">
                     <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round"
                             d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
                     </svg>
                 </div>
             </div>
-            <p class="text-xs text-emerald-600 font-medium" id="kpiConfirmedSub">Booking aktif</p>
+            <p class="hidden text-xs font-medium text-emerald-600 sm:block" id="kpiConfirmedSub">Booking aktif</p>
         </div>
 
-        <div class="bg-white border border-gray-100 shadow-sm rounded-2xl p-6">
-            <div class="flex justify-between items-start mb-4">
+        <div class="rounded-2xl border border-gray-100 bg-white p-4 shadow-sm sm:p-5 lg:p-6">
+            <div class="mb-2 flex items-start justify-between sm:mb-4">
                 <div>
                     <p class="text-sm text-gray-500 mb-1">Pending</p>
                     <h3 class="text-2xl font-poppins font-bold text-amber-600" id="kpiPending">
                         {{ $bookingStats['pending'] }}</h3>
                 </div>
-                <div class="w-10 h-10 bg-amber-50 text-amber-600 rounded-xl flex items-center justify-center">
+                <div class="flex h-9 w-9 items-center justify-center rounded-xl bg-amber-50 text-amber-600 sm:h-10 sm:w-10">
                     <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round"
                             d="M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
                     </svg>
                 </div>
             </div>
-            <p class="text-xs text-amber-600 font-medium" id="kpiPendingSub">Menunggu konfirmasi</p>
+            <p class="hidden text-xs font-medium text-amber-600 sm:block" id="kpiPendingSub">Menunggu konfirmasi</p>
         </div>
 
-        <div class="bg-white border border-gray-100 shadow-sm rounded-2xl p-6">
-            <div class="flex justify-between items-start mb-4">
+        <div class="rounded-2xl border border-gray-100 bg-white p-4 shadow-sm sm:p-5 lg:p-6">
+            <div class="mb-2 flex items-start justify-between sm:mb-4">
                 <div>
                     <p class="text-sm text-gray-500 mb-1">Total Revenue</p>
                     <h3 class="text-2xl font-poppins font-bold text-accent-700" id="kpiRevenue">
                         {{ 'Rp ' . number_format($bookingStats['total_price'] ?? 0, 0, ',', '.') }}</h3>
                 </div>
-                <div class="w-10 h-10 bg-accent/10 text-accent-700 rounded-xl flex items-center justify-center">
+                <div class="flex h-9 w-9 items-center justify-center rounded-xl bg-accent/10 text-accent-700 sm:h-10 sm:w-10">
                     <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round"
                             d="M2.25 18 9 11.25l4.306 4.306a11.95 11.95 0 0 1 5.814-5.518l2.74-1.22m0 0-5.94-2.281m5.94 2.28-2.28 5.941" />
                     </svg>
                 </div>
             </div>
-            <p class="text-xs text-accent-600 font-medium" id="kpiRevenueSub">Dari confirmed booking</p>
+            <p class="hidden text-xs font-medium text-accent-600 sm:block" id="kpiRevenueSub">Dari confirmed booking</p>
         </div>
     </div>
 
     <!-- Action Bar & Table -->
-    <div class="bg-white border border-gray-100 shadow-sm rounded-2xl overflow-hidden mb-8 ">
+    <div class="mb-8 overflow-hidden rounded-2xl border border-gray-100 bg-white shadow-sm">
         <div class="grid grid-cols-1">
-            <div
-                class="p-3 lg:p-6 border-b border-gray-100 flex flex-col lg:flex-row justify-between items-start lg:items-center gap-4">
-                <h2 class="font-poppins font-bold text-lg">Daftar Booking</h2>
-                <div class="flex flex-col lg:flex-row w-full lg:w-auto items-stretch lg:items-center gap-3">
+            <div class="flex flex-col items-start justify-between gap-3 border-b border-gray-100 p-4 sm:p-5 lg:flex-row lg:items-center">
+                <h2 class="font-poppins text-lg font-bold">Daftar Booking</h2>
+                <div class="grid w-full grid-cols-2 gap-2 lg:flex lg:w-auto lg:items-center lg:gap-3">
                     <div class="relative">
                         <svg class="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" fill="none"
                             viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
@@ -102,9 +101,9 @@
                                 d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />
                         </svg>
                         <input wire:model.live="search" type="text" id="searchInput"
-                            placeholder="Cari booking code, user..." class="input pl-10 pr-4 py-2 text-sm w-64" />
+                            placeholder="Cari booking atau tamu..." class="input w-full py-2 pl-10 pr-4 text-sm lg:w-56" />
                     </div>
-                    <select wire:model.live="filterStatus" id="filterStatus" class="input py-2 text-sm w-40">
+                    <select wire:model.live="filterStatus" id="filterStatus" class="input min-w-0 py-2 text-sm lg:w-36">
                         <option value="">Semua Status</option>
                         <option value="paid">Paid</option>
                         <option value="pending">Pending</option>
@@ -112,14 +111,14 @@
                         <option value="cancelled">Cancelled</option>
                         <option value="checked_out">Checked Out</option>
                     </select>
-                    <select wire:model.live="filterRoom" id="filterRoom" class="input py-2 text-sm w-44">
+                    <select wire:model.live="filterRoom" id="filterRoom" class="input min-w-0 py-2 text-sm lg:w-40">
                         <option value="">Semua Room</option>
                         @foreach ($rooms as $room)
                             <option value="{{ $room->id }}">{{ $room->name }}</option>
                         @endforeach
                     </select>
                     <button @click="$dispatch('open-modal', 'manage-booking'); $wire.resetForm()"
-                        class="btn-primary text-sm px-4 py-2">
+                        class="btn-primary col-span-2 justify-center px-4 py-2 text-sm lg:col-auto">
                         <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke-width="2"
                             stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
@@ -129,72 +128,98 @@
                 </div>
             </div>
 
-            <div class="overflow-x-auto">
-                <table class="w-full text-left text-sm whitespace-nowrap" id="bookingsTable">
+            <div class="divide-y divide-gray-100 md:hidden">
+                @forelse ($bookings as $booking)
+                    @php
+                        $statusClasses = match ($booking->status) {
+                            'paid' => 'bg-blue-100 text-blue-700',
+                            'checked_in' => 'bg-emerald-100 text-emerald-700',
+                            'pending' => 'bg-amber-100 text-amber-700',
+                            'cancelled' => 'bg-red-100 text-red-700',
+                            'checked_out' => 'bg-rose-100 text-rose-700',
+                            default => 'bg-gray-100 text-gray-700',
+                        };
+                    @endphp
+                    <article wire:key="booking-mobile-{{ $booking->id }}" class="p-4">
+                        <div class="flex items-start justify-between gap-3">
+                            <div class="min-w-0">
+                                <p class="truncate font-semibold text-gray-900">{{ $booking->booking_code }}</p>
+                                <p class="mt-0.5 truncate text-sm text-gray-600">{{ $booking->user->name }}</p>
+                            </div>
+                            <span class="shrink-0 rounded-full px-2 py-1 text-xs font-medium {{ $statusClasses }}">{{ ucwords(str_replace('_', ' ', $booking->status)) }}</span>
+                        </div>
+                        <div class="mt-3 rounded-lg bg-gray-50 p-3 text-sm">
+                            <p class="font-medium text-gray-800">{{ $booking->room->name }}</p>
+                            <p class="mt-1 text-xs text-gray-500">{{ $booking->check_in->format('d M Y') }} - {{ $booking->check_out->format('d M Y') }}</p>
+                        </div>
+                        <div class="mt-3 flex items-center justify-between text-sm">
+                            <span class="text-gray-500">{{ $booking->total_guests }} tamu</span>
+                            <span class="font-semibold text-emerald-700">Rp{{ number_format($booking->total_price, 0, ',', '.') }}</span>
+                        </div>
+                        <div class="mt-3 flex justify-end border-t border-gray-100 pt-3">
+                            <x-edit-button :item="$booking" action="edit" />
+                        </div>
+                    </article>
+                @empty
+                    <p class="px-4 py-12 text-center text-sm text-gray-500">Tidak ada booking ditemukan.</p>
+                @endforelse
+            </div>
+
+            <div class="hidden overflow-x-auto md:block">
+                <table class="w-full min-w-[850px] text-left text-sm" id="bookingsTable">
                     <thead class="bg-gray-50 text-gray-500">
                         <tr>
-                            <th class="py-3 px-6 font-medium">No</th>
-                            <th class="py-3 px-6 font-medium">Booking Code</th>
-                            <th class="py-3 px-6 font-medium">Room</th>
-                            <th class="py-3 px-6 font-medium">User ID</th>
-                            <th class="py-3 px-6 font-medium">Check In</th>
-                            <th class="py-3 px-6 font-medium">Check Out</th>
-                            <th class="py-3 px-6 font-medium">Guests</th>
-                            <th class="py-3 px-6 font-medium">Total Price</th>
-                            <th class="py-3 px-6 font-medium">Status</th>
-                            <th class="py-3 px-6 font-medium text-center">Actions</th>
+                            <th class="px-4 py-3 font-medium">No</th>
+                            <th class="px-4 py-3 font-medium">Booking & Tamu</th>
+                            <th class="px-4 py-3 font-medium">Kamar</th>
+                            <th class="px-4 py-3 font-medium">Menginap</th>
+                            <th class="px-4 py-3 font-medium">Tamu</th>
+                            <th class="px-4 py-3 font-medium">Total</th>
+                            <th class="px-4 py-3 font-medium">Status</th>
+                            <th class="px-4 py-3 text-center font-medium">Aksi</th>
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-gray-100">
                         @forelse ($bookings as $index => $booking)
-                            <tr class="hover:bg-gray-50">
-                                <td class="py-3 px-6 text-gray-700 font-medium">{{ $index + 1 }}</td>
-                                <td class="py-3 px-6 text-gray-700">{{ $booking->booking_code }}</td>
-                                <td class="py-3 px-6 text-gray-700">{{ $booking->room->name }}</td>
-                                <td class="py-3 px-6 text-gray-700">{{ $booking->user->name }}</td>
-                                <td class="py-3 px-6 text-gray-700">
-                                    {{ $booking->check_in->format('D-m-Y, H:i:s') }}
+                            <tr wire:key="booking-{{ $booking->id }}" class="hover:bg-gray-50">
+                                @php
+                                    $statusClasses = match ($booking->status) {
+                                        'paid' => 'bg-blue-100 text-blue-700',
+                                        'checked_in' => 'bg-emerald-100 text-emerald-700',
+                                        'pending' => 'bg-amber-100 text-amber-700',
+                                        'cancelled' => 'bg-red-100 text-red-700',
+                                        'checked_out' => 'bg-rose-100 text-rose-700',
+                                        default => 'bg-gray-100 text-gray-700',
+                                    };
+                                @endphp
+                                <td class="px-4 py-3 font-medium text-gray-500">{{ $bookings->firstItem() + $index }}</td>
+                                <td class="px-4 py-3">
+                                    <p class="font-medium text-gray-800">{{ $booking->booking_code }}</p>
+                                    <p class="mt-0.5 text-xs text-gray-500">{{ $booking->user->name }}</p>
                                 </td>
-                                <td class="py-3 px-6 text-gray-700">
-                                    {{ $booking->check_out->format('D-m-Y, H:i:s') }}
+                                <td class="px-4 py-3 text-gray-700">{{ $booking->room->name }}</td>
+                                <td class="px-4 py-3 text-xs text-gray-600">
+                                    <p>{{ $booking->check_in->format('d M Y') }}</p>
+                                    <p class="mt-1">{{ $booking->check_out->format('d M Y') }}</p>
                                 </td>
-                                <td class="py-3 px-6 text-gray-700">{{ $booking->total_guests }}</td>
-                                <td class="py-3 px-6 text-gray-700">
-                                    {{ 'Rp ' . number_format($booking->total_price, 0, ',', '.') }}
+                                <td class="px-4 py-3 text-gray-700">{{ $booking->total_guests }}</td>
+                                <td class="px-4 py-3 whitespace-nowrap font-medium text-emerald-700">Rp{{ number_format($booking->total_price, 0, ',', '.') }}</td>
+                                <td class="px-4 py-3">
+                                    <span class="inline-flex rounded-full px-2 py-1 text-xs font-medium {{ $statusClasses }}">{{ ucwords(str_replace('_', ' ', $booking->status)) }}</span>
                                 </td>
-                                <td class="py-3 px-6 text-gray-700">
-                                    <span @class([
-                                        'px-3 py-1 rounded-full text-xs font-medium text-white',
-                                        'bg-red-700' => $booking->status === 'checked_out',
-                                        'bg-amber-600' => $booking->status === 'pending',
-                                        'bg-red-600' => $booking->status === 'cancelled',
-                                        'bg-blue-600' => $booking->status === 'paid',
-                                        'bg-emerald-600' => $booking->status === 'checked_in',
-                                        'bg-gray-600' => !in_array($booking->status, [
-                                            'checked_out',
-                                            'pending',
-                                            'cancelled',
-                                            'paid',
-                                            'checked_in',
-                                        ]),
-                                    ])>
-                                        {{ ucfirst($booking->status) }}
-                                    </span>
-                                </td>
-                                <td class="py-3 px-6 inline-flex text-gray-700">
+                                <td class="px-4 py-3 text-center text-gray-700">
                                     <x-edit-button :item="$booking" action="edit" />
-                                    {{-- <x-delete-button :item="$booking" confirmDelete="confirmDelete" /> --}}
                                 </td>
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="10" class="py-3 px-6 text-center text-gray-500">No bookings found.</td>
+                                <td colspan="8" class="px-4 py-12 text-center text-gray-500">Tidak ada booking ditemukan.</td>
                             </tr>
                         @endforelse
                     </tbody>
                 </table>
             </div>
-            {{ $bookings->links() }}
+            <div class="bg-gray-50 p-4">{{ $bookings->links() }}</div>
         </div>
     </div>
 
