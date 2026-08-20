@@ -43,32 +43,38 @@ class PaymentStatus extends Component
                     $payment->booking->update([
                         'status' => 'paid',
                     ]);
-                    $payment->booking->room->syncStatusFromUnits();
+                    $payment->booking->roomUnit = 'occupied';
                 } elseif ($status == 'pending') {
                     $payment->transaction_status = 'PENDING';
                     $payment->booking->update([
                         'status' => 'pending',
                     ]);
-                    $payment->booking->room->syncStatusFromUnits();
+                    $payment->booking->roomUnit = 'available';
                 } elseif ($status == 'deny') {
                     $payment->transaction_status = 'FAILED';
                     $payment->booking->update([
                         'status' => 'pending',
                     ]);
-                    $payment->booking->room->syncStatusFromUnits();
+                    $payment->booking->roomUnit = 'available';
                 } elseif ($status == 'expire') {
                     $payment->transaction_status = 'EXPIRED';
                     $payment->booking->update([
                         'status' => 'cancelled',
                     ]);
 
-                    $payment->booking->room->syncStatusFromUnits();
+                    $payment->booking->roomUnit = 'available';
                 } elseif ($status == 'cancel') {
                     $payment->transaction_status = 'CANCEL';
                     $payment->booking->update([
                         'status' => 'cancelled',
                     ]);
-                    $payment->booking->room->syncStatusFromUnits();
+                    $payment->booking->roomUnit = 'available';
+                } elseif ($status == 'refund') {
+                    $payment->transaction_status = 'REFUNDED';
+                    $payment->booking->update([
+                        'status' => 'cancelled',
+                    ]);
+                    $payment->booking->roomUnit = 'available';
                 }
 
                 if ($type) {

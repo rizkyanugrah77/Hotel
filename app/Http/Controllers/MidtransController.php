@@ -71,7 +71,7 @@ class MidtransController extends Controller
                     $payment->booking()->update([
                         'status' => 'paid',
                     ]);
-                    $payment->booking->room->update([
+                    $payment->booking->roomUnit()->update([
                         'status' => 'occupied',
                     ]);
                     break;
@@ -81,7 +81,7 @@ class MidtransController extends Controller
                     $payment->booking()->update([
                         'status' => 'pending',
                     ]);
-                    $payment->booking->room->update([
+                    $payment->booking->roomUnit()->update([
                         'status' => 'available'
                     ]);
                     break;
@@ -92,7 +92,7 @@ class MidtransController extends Controller
                         'status' => 'cancelled',
                         'payment_method' => $acquirer,
                     ]);
-                    $payment->booking->room->update([
+                    $payment->booking->roomUnit()->update([
                         'status' => 'available'
                     ]);
                     break;
@@ -102,7 +102,7 @@ class MidtransController extends Controller
                     $payment->booking()->update([
                         'status' => 'cancelled',
                     ]);
-                    $payment->booking->room->update([
+                    $payment->booking->roomUnit()->update([
                         'status' => 'available'
                     ]);
                     break;
@@ -112,7 +112,17 @@ class MidtransController extends Controller
                     $payment->booking()->update([
                         'status' => 'cancelled',
                     ]);
-                    $payment->booking->room->update([
+                    $payment->booking->roomUnit()->update([
+                        'status' => 'available'
+                    ]);
+                    break;
+
+                case 'refund':
+                    $payment->transaction_status = 'REFUND';
+                    $payment->booking()->update([
+                        'status' => 'cancelled',
+                    ]);
+                    $payment->booking->roomUnit()->update([
                         'status' => 'available'
                     ]);
                     break;

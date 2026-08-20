@@ -69,7 +69,7 @@ Pindahkan aset HTML murni Anda agar bisa dipakai oleh Livewire.
 
 ## 5. Pembuatan Fitur Inti dengan Livewire (CRUD & Bisnis Logik)
 Gunakan command `php artisan make:livewire NamaKomponen`.
-- [ ] **Admin Panel (Livewire Components)**:
+- [+] **Admin Panel (Livewire Components)**:
   + `Admin\RoomManager`: Menampilkan datatable Livewire untuk CRUD kamar (upload foto kamar langsung tersimpan ke Storage).
   + `Admin\FacilityManager`: CRUD fasilitas.
   + `Admin\GalleryManager`: Upload multi-foto ke tabel `galleries`.
@@ -85,12 +85,12 @@ Gunakan command `php artisan make:livewire NamaKomponen`.
     - Insert data ke tabel `bookings` dan tabel `payments`.
 
 ## 6. Integrasi Midtrans (Sistem Pembayaran) dengan Livewire
-- [ ] **Persiapan Midtrans**: 
+- [+] **Persiapan Midtrans**: 
   - Login Dashboard Midtrans -> Settings -> Access Keys (Dapatkan Merchant ID, Server Key, Client Key Sandbox).
-- [ ] **Install & Konfigurasi Package**: 
+- [+] **Install & Konfigurasi Package**: 
   - `composer require midtrans/midtrans-php`
   - Masukkan Key di `.env` (seperti yang dicontohkan di tahap sebelumnya).
-- [ ] **Logika Checkout di Livewire (`Booking\CheckoutForm`)**:
+- [+] **Logika Checkout di Livewire (`Booking\CheckoutForm`)**:
   - Di fungsi `pay()` dalam Livewire, setelah data `booking` dan `payment` dibuat:
     ```php
     \Midtrans\Config::$serverKey = env('MIDTRANS_SERVER_KEY');
@@ -112,7 +112,7 @@ Gunakan command `php artisan make:livewire NamaKomponen`.
     // Kirim token ke frontend (Javascript)
     $this->dispatch('pay-with-snap', token: $snapToken);
     ```
-- [ ] **Implementasi Script Snap di View Checkout**:
+- [+] **Implementasi Script Snap di View Checkout**:
   - Masukkan `<script src="https://app.sandbox.midtrans.com/snap/snap.js" data-client-key="{{ env('MIDTRANS_CLIENT_KEY') }}"></script>`.
   - Tangkap event Livewire via JS:
     ```javascript

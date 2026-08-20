@@ -81,7 +81,7 @@
             </div>
 
             <!-- Mobile Menu Toggle -->
-            <button id="mobile-menu-toggle"
+            <button type="button" id="mobile-menu-toggle"
                 class="lg:hidden p-2 text-white hover:bg-white/10 rounded-xl transition-colors"
                 aria-label="Open navigation menu">
                 <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
@@ -112,7 +112,7 @@
                     </div>
                     <span class="font-poppins font-bold text-foreground">Sitio Tio</span>
                 </div>
-                <button id="mobile-menu-close" class="p-2 hover:bg-gray-100 rounded-xl transition-colors"
+                <button type="button" id="mobile-menu-close" class="p-2 hover:bg-gray-100 rounded-xl transition-colors"
                     aria-label="Close navigation menu">
                     <svg class="w-5 h-5 text-gray-500" fill="none" viewBox="0 0 24 24" stroke-width="2"
                         stroke="currentColor">

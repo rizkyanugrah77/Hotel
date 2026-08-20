@@ -14,7 +14,13 @@ class Index extends Component
             'galleries',
             'facilities',
             'bookings.user',
+            'units',
         ])->latest()->get();
+
+        foreach ($rooms as $room) {
+            $room->hasAvailableUnit = $room->units()->where('status', 'available')->exists();
+        }
+
 
         $featuredGalleries = Gallery::where('is_featured', 1)->latest()->take(8)->get();
 

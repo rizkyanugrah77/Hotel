@@ -262,8 +262,8 @@
     <x-modal-2 name="room-unit-delete-confirmation">
         <p>Apakah anda yakin ingin menghapus unit ini?</p>
         <div class="flex justify-end gap-2">
-            <button wire:click="deleteUnit" class="btn-primary">Hapus</button>
-            <button wire:click="$dispatch('close-modal-room-unit-delete-confirmation')" class="btn-secondary">
+            <button type="button" wire:click="deleteUnit" class="btn-primary">Hapus</button>
+            <button type="button" wire:click="$dispatch('close-modal-room-unit-delete-confirmation')" class="btn-secondary">
                 Batal
             </button>
         </div>

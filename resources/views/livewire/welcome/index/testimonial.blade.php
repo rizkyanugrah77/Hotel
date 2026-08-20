@@ -138,7 +138,7 @@
 
            <!-- Navigation -->
            <div class="flex items-center justify-center gap-4 mt-8">
-               <button id="testimonial-prev"
+                <button type="button" id="testimonial-prev"
                    class="w-10 h-10 rounded-full border border-gray-200 flex items-center justify-center hover:bg-primary hover:border-primary hover:text-white transition-all duration-300 text-gray-500"
                    aria-label="Previous testimonial">
                    <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
@@ -146,14 +146,14 @@
                    </svg>
                </button>
                <div class="flex gap-2">
-                   <button data-testimonial-dot class="w-8 h-3 bg-primary rounded-full transition-all duration-300"
+                    <button type="button" data-testimonial-dot class="w-8 h-3 bg-primary rounded-full transition-all duration-300"
                        aria-label="Go to testimonial 1"></button>
-                   <button data-testimonial-dot class="w-3 h-3 bg-gray-300 rounded-full transition-all duration-300"
+                    <button type="button" data-testimonial-dot class="w-3 h-3 bg-gray-300 rounded-full transition-all duration-300"
                        aria-label="Go to testimonial 2"></button>
-                   <button data-testimonial-dot class="w-3 h-3 bg-gray-300 rounded-full transition-all duration-300"
+                    <button type="button" data-testimonial-dot class="w-3 h-3 bg-gray-300 rounded-full transition-all duration-300"
                        aria-label="Go to testimonial 3"></button>
                </div>
-               <button id="testimonial-next"
+                <button type="button" id="testimonial-next"
                    class="w-10 h-10 rounded-full border border-gray-200 flex items-center justify-center hover:bg-primary hover:border-primary hover:text-white transition-all duration-300 text-gray-500"
                    aria-label="Next testimonial">
                    <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">

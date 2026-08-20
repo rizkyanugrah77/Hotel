@@ -116,7 +116,7 @@ class RoomsAdmin extends Component
 
     public function edit(int $roomId): void
     {
-        $room = Room::findOrFail($roomId);
+        $room = Room::with('facilities:id')->findOrFail($roomId);
 
         $this->editingRoomId = $room->id;
         $this->name = $room->name;
@@ -170,7 +170,12 @@ class RoomsAdmin extends Component
 
     public function render()
     {
-        $rooms = Room::with('units')
+        $rooms = Room::query()
+            ->with('facilities:id,name,icon')
+            ->withCount([
+                'units',
+                'units as available_units_count' => fn($query) => $query->where('status', 'available'),
+            ])
             ->when($this->search, function ($query) {
                 $query->where(function ($query) {
                     $query->where('name', 'like', "%{$this->search}%")
@@ -181,18 +186,28 @@ class RoomsAdmin extends Component
             ->latest()
             ->paginate($this->perPage);
 
-        $roomStats = [
-            'total' => $rooms->sum(fn($room) => $room->units->count()),
-            'available' => $rooms->sum(fn($room) => $room->units->where('status', 'available')->count()),
-            'occupied' => $rooms->sum(fn($room) => $room->units->where('status', 'occupied')->count()),
-            'maintenance' => $rooms->sum(fn($room) => $room->units->where('status', 'maintenance')->count()),
-        ];
+        $roomStats = RoomUnit::query()
+            ->selectRaw('COUNT(*) as total')
+            ->selectRaw("COALESCE(SUM(CASE WHEN status = 'available' THEN 1 ELSE 0 END), 0) as available")
+            ->selectRaw("COALESCE(SUM(CASE WHEN status = 'occupied' THEN 1 ELSE 0 END), 0) as occupied")
+            ->selectRaw("COALESCE(SUM(CASE WHEN status = 'maintenance' THEN 1 ELSE 0 END), 0) as maintenance")
+            ->first()
+            ->only(['total', 'available', 'occupied', 'maintenance']);
 
         return view('livewire.layout.rooms-manager', [
             'rooms' => $rooms,
-            'facilities' => Facility::orderBy('name')->get(),
+            'facilities' => Facility::query()->select(['id', 'name', 'icon'])->orderBy('name')->get(),
             'roomStats' => $roomStats,
-            'managingRoom' => $this->managingRoomSlug ? Room::with('units')->where('slug', $this->managingRoomSlug)->first() : null,
+            'managingRoom' => $this->managingRoomSlug
+                ? Room::query()
+                ->select(['id', 'name', 'slug'])
+                ->withCount([
+                    'units as available_units_count' => fn($query) => $query->where('status', 'available'),
+                ])
+                ->with('units:id,room_id,room_number,status')
+                ->where('slug', $this->managingRoomSlug)
+                ->first()
+                : null,
             'chartData' => [
                 'labels' => ['Available', 'Occupied', 'Maintenance'],
                 'datasets' => [
@@ -216,7 +231,7 @@ class RoomsAdmin extends Component
                 'required',
                 Rule::unique('rooms', 'name')->ignore($this->editingRoomId),
             ],
-            'description' => ['required', 'string', 'max:255'],
+            'description' => ['required', 'string', 'max:1000'],
             'bed_type' => ['required', 'string', 'max:100'],
             'size' => ['required', 'integer', 'min:1', 'max:10000'],
             'capacity' => ['required', 'integer', 'min:1', 'max:1000'],

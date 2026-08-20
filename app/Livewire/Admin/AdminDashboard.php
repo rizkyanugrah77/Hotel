@@ -10,7 +10,7 @@ class AdminDashboard extends Component
 {
     public function render()
     {
-        $rooms = Room::with('units', 'bookings', 'bookings.user')->get();
+        $rooms = Room::with(['units', 'bookings.user', 'bookings.room'])->get();
 
         $totalRevenue = Booking::where('status', 'paid')->sum('total_price');
         $totalBookings = Booking::count();

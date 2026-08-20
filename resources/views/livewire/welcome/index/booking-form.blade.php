@@ -12,21 +12,21 @@
               @csrf
               <div>
                   <label for="checkin" class="input-label">Check In</label>
-                  <input type="date" wire:model="checkin" id="checkin" class="input" />
-                  @error('checkin')
+                  <input type="date" wire:model="check_in" id="checkin" class="input" />
+                  @error('check_in')
                       <span class="text-red-500 text-xs">{{ $message }}</span>
                   @enderror
               </div>
               <div>
                   <label for="checkout" class="input-label">Check Out</label>
-                  <input type="date" wire:model="checkout" id="checkout" class="input" />
-                  @error('checkout')
+                  <input type="date" wire:model="check_out" id="checkout" class="input" />
+                  @error('check_out')
                       <span class="text-red-500 text-xs">{{ $message }}</span>
                   @enderror
               </div>
               <div>
                   <label for="guests" class="input-label">Guests</label>
-                  <select wire:model="guests" id="guests" class="input">
+                  <select wire:model="total_guest" id="guests" class="input">
                       <option>1 Guest</option>
                       <option>2 Guests</option>
                       <option>3 Guests</option>

@@ -133,11 +133,11 @@
 
   /* Badge */
   .badge {
-    @apply inline-flex items-center gap-1 px-3 py-1 text-xs font-semibold rounded-full;
+    @apply inline-flex items-center gap-1 px-3 py-1 text-xs font-semibold rounded-full transition-all duration-300 ;
   }
 
   .badge-primary {
-    @apply badge bg-primary/10 text-primary;
+    @apply badge bg-primary/10 text-primary ;
   }
 
   .badge-accent {
@@ -153,7 +153,10 @@
   }
 
   .badge-danger {
-    @apply badge bg-rose-50 text-rose-700;
+    @apply badge bg-rose-50 text-primary;
+  }
+  .badge-info {
+    @apply badge bg-sky-50 text-sky-700 ;
   }
 
   /* Input styles */

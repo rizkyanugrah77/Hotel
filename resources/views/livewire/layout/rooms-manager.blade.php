@@ -85,7 +85,7 @@
                     <option value="occupied">Occupied</option>
                     <option value="maintenance">Maintenance</option>
                 </select>
-                <button @click="$dispatch('open-modal', 'manage-room'); $wire.resetForm()"
+                <button type="button" @click="$dispatch('open-modal', 'manage-room'); $wire.resetForm()"
                     class="btn-primary px-3 py-2 text-sm whitespace-nowrap sm:px-4">
                     Tambah Kamar
                 </button>
@@ -143,7 +143,7 @@
                         <p class="text-gray-500">Kapasitas <span
                                 class="font-medium text-gray-800">{{ $room->capacity }} orang</span></p>
                         <p class="text-gray-500">Stok <span
-                                class="font-medium text-gray-800">{{ $room->units()->where('status', 'available')->count() }}/{{ $room->units->count() }}</span>
+                                class="font-medium text-gray-800">{{ $room->available_units_count }}/{{ $room->units_count }}</span>
                         </p>
                     </div>
                     <p class="mt-3 font-semibold text-emerald-700">Rp{{ number_format($room->price, 0, ',', '.') }}
@@ -223,7 +223,7 @@
                                 </div>
                             </td>
                             <td class="px-4 py-3 whitespace-nowrap">
-                                {{ $room->units()->where('status', 'available')->count() }}/{{ $room->units->count() }}
+                                {{ $room->available_units_count }}/{{ $room->units_count }}
                             </td>
                             <td class="px-4 py-3 whitespace-nowrap font-medium text-emerald-700">
                                 Rp{{ number_format($room->price, 0, ',', '.') }}</td>
@@ -280,7 +280,7 @@
                     <div>
                         <p class="font-medium text-gray-800">{{ $managingRoom->name }}</p>
                         <p class="text-xs text-gray-500">Sisa Stok:
-                            {{ $managingRoom->units()->where('status', 'available')->count() }}</p>
+                            {{ $managingRoom->available_units_count }}</p>
                     </div>
                     <div>
                         <a href="{{ route('room-units-manager', $managingRoom->slug) }}" wire:navigate
@@ -458,7 +458,7 @@
     <x-modal-2 name="delete-room" title="Hapus Kamar">
         <p>Tindakan ini akan menghapus kamar beserta data booking terkait.</p>
         <div class="mt-6 flex flex-col-reverse gap-3 sm:flex-row sm:justify-end">
-            <button @click="$dispatch('close-modal', 'delete-room')"
+            <button type="button" @click="$dispatch('close-modal', 'delete-room')"
                 class="flex-1 px-4 py-2.5 text-sm font-medium text-gray-700 bg-gray-100 rounded-xl hover:bg-gray-200 transition-colors">Batal</button>
             <x-danger-button wire:click="delete" wire:loading.attr="disabled" type="button">
                 <span wire:loading.remove wire:target="delete">Hapus</span>

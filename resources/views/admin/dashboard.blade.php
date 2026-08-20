@@ -113,13 +113,24 @@
                                                 {{ $booking->booking_code }}</div>
                                             <div class="text-xs text-gray-500">{{ $booking->user->name }}</div>
                                         </td>
-                                        <td class="py-3 px-6">{{ $booking->room->name }}</td>
+                                        <td class="py-3 px-6">
+                                            <div class="font-medium text-foreground">
+                                                {{ $booking->room->name }}</div>
+                                            <div class="text-xs text-gray-500">{{ $booking->roomUnit->room_number }}
+                                            </div>
+                                        </td>
                                         <td class="py-3 px-6">{{ $booking->check_in->format('d M Y') }} -
                                             {{ $booking->check_out->format('d M Y') }}</td>
                                         <td class="py-3 px-6">
-                                            <span
-                                                class="badge-{{ $booking->status === 'completed' ? 'success' : ($booking->status === 'paid' ? 'success' : ($booking->status === 'cancelled' ? 'danger' : 'warning')) }}">
-                                                {{ $booking->status }}
+                                            <span @class([
+                                                'badge',
+                                                'badge-primary' => $booking->status === 'pending',
+                                                'badge-info' => $booking->status === 'paid',
+                                                'badge-success' => $booking->status === 'checked_in',
+                                                'badge-warning' => $booking->status === 'checked_out',
+                                                'badge-accent' => $booking->status === 'cancelled',
+                                            ])>
+                                                {{ ucfirst($booking->status) }}
                                             </span>
                                         </td>
                                         <td class="py-3 px-6 font-medium">

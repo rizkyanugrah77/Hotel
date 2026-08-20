@@ -26,7 +26,8 @@
                     <h3 class="text-2xl font-poppins font-bold text-foreground" id="kpiTotal">
                         {{ $bookingStats['total'] }}</h3>
                 </div>
-                <div class="flex h-9 w-9 items-center justify-center rounded-xl bg-primary/10 text-primary sm:h-10 sm:w-10">
+                <div
+                    class="flex h-9 w-9 items-center justify-center rounded-xl bg-primary/10 text-primary sm:h-10 sm:w-10">
                     <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round"
                             d="M16.5 6v.75m0 3v.75m0 3v.75m0 3V18m-9-5.25h5.25M7.5 15h3M3.375 5.25c-.621 0-1.125.504-1.125 1.125v3.026a2.999 2.999 0 0 1 0 5.198v3.026c0 .621.504 1.125 1.125 1.125h17.25c.621 0 1.125-.504 1.125-1.125v-3.026a2.999 2.999 0 0 1 0-5.198V6.375c0-.621-.504-1.125-1.125-1.125H3.375Z" />
@@ -43,7 +44,8 @@
                     <h3 class="text-2xl font-poppins font-bold text-emerald-600" id="kpiConfirmed">
                         {{ $bookingStats['paid'] }}</h3>
                 </div>
-                <div class="flex h-9 w-9 items-center justify-center rounded-xl bg-emerald-50 text-emerald-600 sm:h-10 sm:w-10">
+                <div
+                    class="flex h-9 w-9 items-center justify-center rounded-xl bg-emerald-50 text-emerald-600 sm:h-10 sm:w-10">
                     <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round"
                             d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
@@ -60,7 +62,8 @@
                     <h3 class="text-2xl font-poppins font-bold text-amber-600" id="kpiPending">
                         {{ $bookingStats['pending'] }}</h3>
                 </div>
-                <div class="flex h-9 w-9 items-center justify-center rounded-xl bg-amber-50 text-amber-600 sm:h-10 sm:w-10">
+                <div
+                    class="flex h-9 w-9 items-center justify-center rounded-xl bg-amber-50 text-amber-600 sm:h-10 sm:w-10">
                     <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round"
                             d="M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
@@ -77,7 +80,8 @@
                     <h3 class="text-2xl font-poppins font-bold text-accent-700" id="kpiRevenue">
                         {{ 'Rp ' . number_format($bookingStats['total_price'] ?? 0, 0, ',', '.') }}</h3>
                 </div>
-                <div class="flex h-9 w-9 items-center justify-center rounded-xl bg-accent/10 text-accent-700 sm:h-10 sm:w-10">
+                <div
+                    class="flex h-9 w-9 items-center justify-center rounded-xl bg-accent/10 text-accent-700 sm:h-10 sm:w-10">
                     <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round"
                             d="M2.25 18 9 11.25l4.306 4.306a11.95 11.95 0 0 1 5.814-5.518l2.74-1.22m0 0-5.94-2.281m5.94 2.28-2.28 5.941" />
@@ -91,7 +95,8 @@
     <!-- Action Bar & Table -->
     <div class="mb-8 overflow-hidden rounded-2xl border border-gray-100 bg-white shadow-sm">
         <div class="grid grid-cols-1">
-            <div class="flex flex-col items-start justify-between gap-3 border-b border-gray-100 p-4 sm:p-5 lg:flex-row lg:items-center">
+            <div
+                class="flex flex-col items-start justify-between gap-3 border-b border-gray-100 p-4 sm:p-5 lg:flex-row lg:items-center">
                 <h2 class="font-poppins text-lg font-bold">Daftar Booking</h2>
                 <div class="grid w-full grid-cols-2 gap-2 lg:flex lg:w-auto lg:items-center lg:gap-3">
                     <div class="relative">
@@ -101,7 +106,8 @@
                                 d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />
                         </svg>
                         <input wire:model.live="search" type="text" id="searchInput"
-                            placeholder="Cari booking atau tamu..." class="input w-full py-2 pl-10 pr-4 text-sm lg:w-56" />
+                            placeholder="Cari booking atau tamu..."
+                            class="input w-full py-2 pl-10 pr-4 text-sm lg:w-56" />
                     </div>
                     <select wire:model.live="filterStatus" id="filterStatus" class="input min-w-0 py-2 text-sm lg:w-36">
                         <option value="">Semua Status</option>
@@ -117,7 +123,7 @@
                             <option value="{{ $room->id }}">{{ $room->name }}</option>
                         @endforeach
                     </select>
-                    <button @click="$dispatch('open-modal', 'manage-booking'); $wire.resetForm()"
+                    <button type="button" @click="$dispatch('open-modal', 'manage-booking'); $wire.resetForm()"
                         class="btn-primary col-span-2 justify-center px-4 py-2 text-sm lg:col-auto">
                         <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke-width="2"
                             stroke="currentColor">
@@ -132,12 +138,12 @@
                 @forelse ($bookings as $booking)
                     @php
                         $statusClasses = match ($booking->status) {
-                            'paid' => 'bg-blue-100 text-blue-700',
-                            'checked_in' => 'bg-emerald-100 text-emerald-700',
-                            'pending' => 'bg-amber-100 text-amber-700',
-                            'cancelled' => 'bg-red-100 text-red-700',
-                            'checked_out' => 'bg-rose-100 text-rose-700',
-                            default => 'bg-gray-100 text-gray-700',
+                            'paid' => 'badge-info',
+                            'checked_in' => 'badge-success',
+                            'pending' => 'badge-warning',
+                            'cancelled' => 'badge-danger',
+                            'checked_out' => 'badge-accent',
+                            default => 'badge-primary',
                         };
                     @endphp
                     <article wire:key="booking-mobile-{{ $booking->id }}" class="p-4">
@@ -146,15 +152,18 @@
                                 <p class="truncate font-semibold text-gray-900">{{ $booking->booking_code }}</p>
                                 <p class="mt-0.5 truncate text-sm text-gray-600">{{ $booking->user->name }}</p>
                             </div>
-                            <span class="shrink-0 rounded-full px-2 py-1 text-xs font-medium {{ $statusClasses }}">{{ ucwords(str_replace('_', ' ', $booking->status)) }}</span>
+                            <span
+                                class="shrink-0 rounded-full px-2 py-1 text-xs font-medium {{ $statusClasses }}">{{ ucwords(str_replace('_', ' ', $booking->status)) }}</span>
                         </div>
                         <div class="mt-3 rounded-lg bg-gray-50 p-3 text-sm">
                             <p class="font-medium text-gray-800">{{ $booking->room->name }}</p>
-                            <p class="mt-1 text-xs text-gray-500">{{ $booking->check_in->format('d M Y') }} - {{ $booking->check_out->format('d M Y') }}</p>
+                            <p class="mt-1 text-xs text-gray-500">{{ $booking->check_in->format('d M Y') }} -
+                                {{ $booking->check_out->format('d M Y') }}</p>
                         </div>
                         <div class="mt-3 flex items-center justify-between text-sm">
                             <span class="text-gray-500">{{ $booking->total_guests }} tamu</span>
-                            <span class="font-semibold text-emerald-700">Rp{{ number_format($booking->total_price, 0, ',', '.') }}</span>
+                            <span
+                                class="font-semibold text-emerald-700">Rp{{ number_format($booking->total_price, 0, ',', '.') }}</span>
                         </div>
                         <div class="mt-3 flex justify-end border-t border-gray-100 pt-3">
                             <x-edit-button :item="$booking" action="edit" />
@@ -184,15 +193,16 @@
                             <tr wire:key="booking-{{ $booking->id }}" class="hover:bg-gray-50">
                                 @php
                                     $statusClasses = match ($booking->status) {
-                                        'paid' => 'bg-blue-100 text-blue-700',
-                                        'checked_in' => 'bg-emerald-100 text-emerald-700',
-                                        'pending' => 'bg-amber-100 text-amber-700',
-                                        'cancelled' => 'bg-red-100 text-red-700',
-                                        'checked_out' => 'bg-rose-100 text-rose-700',
-                                        default => 'bg-gray-100 text-gray-700',
+                                        'paid' => 'badge-info',
+                                        'checked_in' => 'badge-success',
+                                        'pending' => 'badge-warning',
+                                        'cancelled' => 'badge-primary',
+                                        'checked_out' => 'badge-accent',
+                                        default => 'badge-primary',
                                     };
                                 @endphp
-                                <td class="px-4 py-3 font-medium text-gray-500">{{ $bookings->firstItem() + $index }}</td>
+                                <td class="px-4 py-3 font-medium text-gray-500">{{ $bookings->firstItem() + $index }}
+                                </td>
                                 <td class="px-4 py-3">
                                     <p class="font-medium text-gray-800">{{ $booking->booking_code }}</p>
                                     <p class="mt-0.5 text-xs text-gray-500">{{ $booking->user->name }}</p>
@@ -203,9 +213,11 @@
                                     <p class="mt-1">{{ $booking->check_out->format('d M Y') }}</p>
                                 </td>
                                 <td class="px-4 py-3 text-gray-700">{{ $booking->total_guests }}</td>
-                                <td class="px-4 py-3 whitespace-nowrap font-medium text-emerald-700">Rp{{ number_format($booking->total_price, 0, ',', '.') }}</td>
+                                <td class="px-4 py-3 whitespace-nowrap font-medium text-emerald-700">
+                                    Rp{{ number_format($booking->total_price, 0, ',', '.') }}</td>
                                 <td class="px-4 py-3">
-                                    <span class="inline-flex rounded-full px-2 py-1 text-xs font-medium {{ $statusClasses }}">{{ ucwords(str_replace('_', ' ', $booking->status)) }}</span>
+                                    <span
+                                        class="inline-flex rounded-full px-2 py-1 text-xs font-medium {{ $statusClasses }}">{{ ucwords(str_replace('_', ' ', $booking->status)) }}</span>
                                 </td>
                                 <td class="px-4 py-3 text-center text-gray-700">
                                     <x-edit-button :item="$booking" action="edit" />
@@ -213,7 +225,8 @@
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="8" class="px-4 py-12 text-center text-gray-500">Tidak ada booking ditemukan.</td>
+                                <td colspan="8" class="px-4 py-12 text-center text-gray-500">Tidak ada booking
+                                    ditemukan.</td>
                             </tr>
                         @endforelse
                     </tbody>
@@ -263,7 +276,7 @@
             <div class="mt-6 pt-6 border-t border-gray-100">
                 <h3 class="text-sm font-medium text-gray-600 mb-3">Aksi Cepat</h3>
                 <div class="grid grid-cols-2 gap-3">
-                    <button onclick="openModal()"
+                    <button type="button" onclick="openModal()"
                         class="p-3 border border-gray-200 rounded-xl text-sm font-medium hover:bg-gray-50 transition-colors flex flex-col items-center gap-2">
                         <svg class="w-5 h-5 text-gray-500" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                             stroke="currentColor">
@@ -271,7 +284,7 @@
                         </svg>
                         Tambah Booking
                     </button>
-                    <button onclick="exportReport()"
+                    <button type="button" onclick="exportReport()"
                         class="p-3 border border-gray-200 rounded-xl text-sm font-medium hover:bg-gray-50 transition-colors flex flex-col items-center gap-2">
                         <svg class="w-5 h-5 text-gray-500" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                             stroke="currentColor">

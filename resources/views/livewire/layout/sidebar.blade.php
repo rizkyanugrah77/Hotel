@@ -7,7 +7,7 @@
         class="fixed inset-y-0 left-0 z-50 w-64 transition-transform duration-300 md:relative md:translate-x-0 h-screen bg-gradient-to-br from-slate-800 via-rose-950 to-rose-900 text-white flex-shrink-0 flex flex-col shadow-2xl md:shadow-none">
 
         <!-- Toggle Button attached to sidebar -->
-        <button @click="sidebarOpen = !sidebarOpen"
+        <button type="button" @click="sidebarOpen = !sidebarOpen"
             class="md:hidden absolute  top-56 -right-10 bg-rose-900 text-white p-2 rounded-r-md shadow-md focus:outline-none">
             <!-- Icon when closed (hamburger) -->
             <svg x-show="!sidebarOpen" class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -112,7 +112,7 @@
                         </svg>
                         Rooms
                     </a>
-                    @foreach (\App\Models\Room::orderBy('name')->get() as $room)
+                    @foreach ($sidebarRooms as $room)
                         <a href="{{ route('room-units-manager', $room->slug) }}" wire:navigate
                             @class([
                                 'flex items-center gap-3 rounded-xl px-4 py-2.5 text-sm font-medium transition-colors',
@@ -130,20 +130,6 @@
                     @endforeach
                 </div>
             </div>
-
-            {{-- <a href="{{ route('rooms.manager') }}" wire:navigate @class([
-                        'flex items-center gap-3 px-4 py-3 rounded-xl font-medium transition-colors',
-                        'bg-white/10 text-white' => request()->routeIs('rooms.manager'),
-                        'text-white/80 hover:text-white hover:bg-white/5' => !request()->routeIs(
-                            'rooms.manager'),
-                    ])>
-                        <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-                            stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round"
-                                d="M2.25 21h19.5M3.75 21V9.75 6.75m0 3h16.5m-16.5 0 2.07-5.175A1.5 1.5 0 0 1 7.214 3.75h9.572a1.5 1.5 0 0 1 1.394.925l2.07 5.175m0 0V21m-12-7.5h.008v.008H8.25V13.5Zm3.75 0h.008v.008H12V13.5Zm3.75 0h.008v.008H15.75V13.5Z" />
-                        </svg>
-                        Rooms
-                    </a> --}}
 
 
 

@@ -16,16 +16,16 @@
 
         <!-- Content -->
         <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-32 lg:py-0 w-full">
-            <div class="max-w-3xl pt-10">
+            <div class="max-w-3xl pt-32 lg:-translate-y-20">
                 <!-- Badge -->
-                <div
+                {{-- <div
                     class="inline-flex items-center gap-2 px-4 py-2 bg-white/10 backdrop-blur-sm rounded-full border border-white/20 mb-8 animate-fade-in">
                     <span class="w-2 h-2 bg-accent rounded-full animate-pulse-soft"></span>
                     <span class="text-sm text-white/90 font-inter">Samosir Island's Premier Retreat</span>
-                </div>
+                </div> --}}
 
                 <!-- Headline -->
-                <h1 class="text-4xl sm:text-4xl md:text-6xl lg:text-7xl font-poppins font-bold text-white leading-[1.1] mb-6 animate-fade-in"
+                <h1 class="text-4xl sm:text-4xl md:text-6xl lg:text-7xl font-poppins font-bold text-white pt-5 leading-[1.1] mb-6 animate-fade-in"
                     style="animation-delay: 0.15s;">
                     Experience The
                     <span class="text-gradient-accent block mt-2">Magic of Lake Toba</span>
@@ -33,7 +33,7 @@
                 </h1>
 
                 <!-- Subtitle -->
-                <p class="text-md sm:text-lg text-white/80 font-inter leading-relaxed max-w-xl mb-10 animate-fade-in"
+                <p class="text-md sm:text-lg text-white/80 font-inter leading-relaxed max-w-xl mb-8 animate-fade-in"
                     style="animation-delay: 0.3s;">
                     Nestled on the shores of Lake Toba, Sitio Tio Resort offers an unforgettable blend of traditional
                     Batak Samosir hospitality and modern luxury.
@@ -59,7 +59,7 @@
                 </div>
 
                 <!-- Stats -->
-                <div class="grid grid-cols-3 gap-6 mt-16 max-w-md animate-fade-in" style="animation-delay: 0.6s;">
+                <div class="grid grid-cols-3 gap-6 mt-10 max-w-md animate-fade-in" style="animation-delay: 0.6s;">
                     <div class="text-center">
                         <div class="text-2xl sm:text-3xl font-poppins font-bold text-white" data-counter="150">0</div>
                         <div class="text-xs sm:text-sm text-white/60 mt-1">Luxury Rooms</div>

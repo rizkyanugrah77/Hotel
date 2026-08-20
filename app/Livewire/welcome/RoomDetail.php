@@ -18,7 +18,7 @@ class RoomDetail extends Component
     public string $booking_code = '';
 
     public ?int $room_id = null;
-
+    public ?int $room_unit_id = null;
     public $user_id;
 
     public string $check_in = '';
@@ -33,15 +33,20 @@ class RoomDetail extends Component
 
     public int $nights = 1;
 
+
+
     public function mount($slug)
     {
-        $this->room = Room::where('slug', $slug)->with('galleries')->firstOrFail();
+        $this->room = Room::where('slug', $slug)->with('galleries', 'units')->firstOrFail();
         $this->check_in = now('Asia/Jakarta')->toDateString();
         $this->check_out = now('Asia/Jakarta')->addDay()->toDateString();
         $this->total_guests = 1;
         $this->booking_id = request('booking');
         $this->calculatePrice();
     }
+
+
+
 
     public function updated($property)
     {
@@ -89,12 +94,27 @@ class RoomDetail extends Component
             $this->redirect(route('login', absolute: true), navigate: true);
         }
 
+        $unit = $this->room->units()
+            ->whereDoesntHave('bookings', function ($query) {
+                $query->whereIn('status', ['pending', 'paid',])
+                    ->where('check_in', '<', $this->check_out)
+                    ->where('check_out', '>', $this->check_in);
+            })
+            ->first();
+
+        if (! $unit) {
+            $this->dispatch('room-detail-error', message: 'Tidak ada unit kamar tersedia.', type: 'error');
+            return;
+        }
+
         $this->user_id = $user->id;
         $this->room_id = $this->room->id;
+        $this->room_unit_id = $unit->id;
         $this->booking_code = $this->generateBookingCode();
         $this->calculatePrice();
 
         $validation = $this->validate();
+
 
         $attributes = collect($validation)->except('status')->all();
         $attributes['check_in'] = Carbon::parse($this->check_in)->setTimezone('Asia/Jakarta')->setTimeFrom(Carbon::now('Asia/Jakarta'))->format('Y-m-d H:i:s');
@@ -104,6 +124,10 @@ class RoomDetail extends Component
         $booking = Booking::updateOrCreate(['booking_code' => $this->booking_code], $attributes);
         if ($booking) {
             $this->dispatch('room-detail-saved', message: 'Booking berhasil ditambahkan.', type: 'success');
+
+            $unit->update([
+                'status' => 'occupied',
+            ]);
             $bookingCode = $booking->booking_code;
             $this->resetForm();
 
@@ -112,7 +136,6 @@ class RoomDetail extends Component
         } else {
             $this->dispatch('room-detail-error', message: 'Booking gagal ditambahkan.', type: 'error');
         }
-
     }
 
     public function generateBookingCode(): string
@@ -120,11 +143,11 @@ class RoomDetail extends Component
         $prefix = 'TRX-';
         $random = Str::random(8);
 
-        while (Booking::where('booking_code', $prefix.$random)->exists()) {
+        while (Booking::where('booking_code', $prefix . $random)->exists()) {
             $random = Str::random(8);
         }
 
-        return $prefix.$random;
+        return $prefix . $random;
     }
 
     public function resetForm()
@@ -132,6 +155,7 @@ class RoomDetail extends Component
         $this->reset([
             'booking_code',
             'room_id',
+            'room_unit_id',
             'user_id',
             'check_in',
             'check_out',
@@ -145,8 +169,11 @@ class RoomDetail extends Component
 
     public function render()
     {
-        return view('livewire.welcome.room-detail',
-            ['room' => $this->room,
+        return view(
+            'livewire.welcome.room-detail',
+            [
+                'room' => $this->room,
+
 
             ]
         )->layout('layouts.guest');
@@ -157,6 +184,7 @@ class RoomDetail extends Component
         return [
             'booking_code' => 'required|string',
             'room_id' => 'required|exists:rooms,id',
+            'room_unit_id' => 'required|exists:room_units,id',
             'user_id' => 'required|exists:users,id',
             'check_in' => [
                 'required',

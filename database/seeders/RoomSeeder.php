@@ -31,6 +31,7 @@ class RoomSeeder extends Seeder
                 'size' => '45',
                 'created_at' => now(),
                 'updated_at' => now(),
+
             ],
             [
                 'name' => 'Superior Garden',
@@ -44,7 +45,7 @@ class RoomSeeder extends Seeder
                             bathroom is fitted with modern amenities, ensuring a comfortable stay.',
                 'capacity' => 2,
                 'price' => 940000,
-                'status' => 'occupied',
+                'status' => 'available',
                 'bed_type' => 'Queen',
                 'image' => 'room-superior.png',
                 'size' => '35',

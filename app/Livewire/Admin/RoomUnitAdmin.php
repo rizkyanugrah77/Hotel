@@ -31,7 +31,7 @@ class RoomUnitAdmin extends Component
         $isEditing = (bool) $this->roomUnitId;
 
         $validated['room_id'] = $this->roomId;
-        $validated['room_number'] = strtoupper($this->room_number);
+        $validated['room_number'] = $this->roomName . ' No. ' . $this->room_number;
         $validated['status'] = $this->status;
 
         if ($isEditing) {

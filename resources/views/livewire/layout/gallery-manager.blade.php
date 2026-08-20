@@ -112,7 +112,7 @@
                         <option value="{{ $room->id }}">{{ $room->name }}</option>
                     @endforeach
                 </select>
-                <button @click="$dispatch('open-modal', 'manage-gallery'); $wire.resetForm()"
+                <button type="button" @click="$dispatch('open-modal', 'manage-gallery'); $wire.resetForm()"
                     class="btn-primary text-sm px-4 py-2">
                     <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
@@ -224,7 +224,7 @@
             <div class="mt-6 pt-6 border-t border-gray-100">
                 <h3 class="text-sm font-medium text-gray-600 mb-3">Aksi Cepat</h3>
                 <div class="grid grid-cols-2 gap-3">
-                    <button onclick="openModal()"
+                    <button type="button" onclick="openModal()"
                         class="p-3 border border-gray-200 rounded-xl text-sm font-medium hover:bg-gray-50 transition-colors flex flex-col items-center gap-2">
                         <svg class="w-5 h-5 text-gray-500" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                             stroke="currentColor">
@@ -232,7 +232,7 @@
                         </svg>
                         Tambah Gambar
                     </button>
-                    <button onclick="exportReport()"
+                    <button type="button" onclick="exportReport()"
                         class="p-3 border border-gray-200 rounded-xl text-sm font-medium hover:bg-gray-50 transition-colors flex flex-col items-center gap-2">
                         <svg class="w-5 h-5 text-gray-500" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                             stroke="currentColor">
@@ -324,7 +324,7 @@
         <h2 class="text-lg font-poppins font-semibold mb-4">Konfirmasi Hapus</h2>
         <p class="text-sm text-gray-600">Apakah Anda yakin ingin menghapus gambar ini?</p>
         <div class="flex justify-end gap-3 mt-6 pt-4 border-t border-gray-100">
-            <button @click="$dispatch('close-modal', 'gallery-delete-confirmation')"
+            <button type="button" @click="$dispatch('close-modal', 'gallery-delete-confirmation')"
                 class="flex-1 px-4 py-2.5 text-sm font-medium text-gray-700 bg-gray-100 rounded-xl hover:bg-gray-200 transition-colors">Batal</button>
             <x-danger-button wire:click="delete" type="button">
                 <span wire:loading.remove wire:target="delete">Hapus</span>

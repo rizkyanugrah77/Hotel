@@ -162,7 +162,7 @@
 
                 <!-- Export -->
                 <div class="flex items-end">
-                    <button wire:click="exportExcel" wire:loading.attr="disabled"
+                    <button type="button" wire:click="exportExcel" wire:loading.attr="disabled"
                         class="inline-flex items-center justify-center gap-2 px-5 py-2.5
                            bg-emerald-600 hover:bg-emerald-700
                            text-white text-sm font-semibold

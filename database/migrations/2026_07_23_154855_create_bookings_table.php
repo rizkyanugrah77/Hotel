@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('booking_code')->unique();
             $table->foreignId('room_id')->constrained('rooms')->cascadeOnDelete();
+            $table->foreignId('room_unit_id')->constrained('room_units')->cascadeOnDelete();
             $table->foreignId('user_id')->constrained('users')->cascadeOnDelete();
             $table->dateTime('check_in');
             $table->dateTime('check_out');

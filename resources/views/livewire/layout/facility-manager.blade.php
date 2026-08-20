@@ -85,7 +85,7 @@
                         <input type="text" wire:model.live.debounce.300ms="search" placeholder="Cari fasilitas..."
                             class="input pl-10 pr-4 py-2 text-sm sm:w-40 w-full" />
                     </div>
-                    <button @click="$dispatch('open-modal', 'manage-facility'); $wire.resetForm()"
+                    <button type="button" @click="$dispatch('open-modal', 'manage-facility'); $wire.resetForm()"
                         class="btn-primary flex justify-center items-center gap-2 text-sm px-4 py-2 whitespace-nowrap">
                         <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
@@ -131,7 +131,7 @@
                                     {{ Str::limit($facility->description, 60) }}</td>
                                 <td class="py-3 px-6">
                                     <div class="flex items-center justify-center gap-2">
-                                        <button wire:click="edit({{ $facility->id }})"
+                                        <button type="button" wire:click="edit({{ $facility->id }})"
                                             class="w-8 h-8 rounded-lg bg-amber-50 text-amber-600 flex items-center justify-center hover:bg-amber-100 transition-colors"
                                             title="Edit">
                                             <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
@@ -140,7 +140,7 @@
                                                     d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10" />
                                             </svg>
                                         </button>
-                                        <button wire:click="confirmDelete({{ $facility->id }})"
+                                        <button type="button" wire:click="confirmDelete({{ $facility->id }})"
                                             class="w-8 h-8 rounded-lg bg-red-50 text-red-600 flex items-center justify-center hover:bg-red-100 transition-colors"
                                             title="Hapus">
                                             <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24"
@@ -209,7 +209,7 @@
     <x-modal-2 name="delete-facility" title="Hapus Fasilitas?">
         <p class="text-sm text-gray-600">Apakah Anda yakin ingin menghapus fasilitas ini?</p>
         <div class="flex justify-end gap-3 mt-6 pt-4 border-t border-gray-100">
-            <button @click="$dispatch('close-modal', 'delete-facility')"
+            <button type="button" @click="$dispatch('close-modal', 'delete-facility')"
                 class="btn-second text-sm px-5 py-2.5">Batal</button>
             <x-danger-button wire:click="delete" type="button">
                 <span wire:loading.remove wire:target="delete">Hapus</span>

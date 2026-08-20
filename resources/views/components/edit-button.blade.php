@@ -2,7 +2,7 @@
 
 {{-- @php($itemId = is_array($item) ? $item['id'] : (is_object($item) ? $item->id : $item)) --}}
 
-<button wire:click="{{ $action }}({{ $item->id }})"
+<button type="button" wire:click="{{ $action }}({{ $item->id }})"
     class="w-8 h-8 rounded-lg bg-amber-50 text-amber-600 flex items-center justify-center hover:bg-amber-100 transition-colors"
     title="Edit">
     <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">

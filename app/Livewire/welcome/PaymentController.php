@@ -38,7 +38,7 @@ class PaymentController extends Component
     public function mount($bookingCode)
     {
         $this->bookingCode = $bookingCode;
-        $this->bookings = Booking::with('room', 'user')->where('booking_code', $bookingCode)->first();
+        $this->bookings = Booking::with('room', 'roomUnit', 'user')->where('booking_code', $bookingCode)->first();
 
         if (! $this->bookings) {
             return redirect()->route('index');
@@ -54,7 +54,7 @@ class PaymentController extends Component
         Config::$is3ds = config('midtrans.is3ds');
 
         // 2. Prepare transaction details
-        $orderId = 'INV-'.Str::uuid()->toString();
+        $orderId = 'INV-' . Str::uuid()->toString();
         $grossAmount = (int) $this->bookings->total_price;
 
         $midtrans_parameter = [
@@ -67,7 +67,7 @@ class PaymentController extends Component
                 'email' => $this->bookings->user->email,
             ],
             'callbacks' => [
-                'finish' => route('payment-check').'?order_id='.$orderId,
+                'finish' => route('payment-check') . '?order_id=' . $orderId,
             ],
         ];
 
@@ -78,7 +78,7 @@ class PaymentController extends Component
             // 4. Save Payment record to database
             Payment::create([
                 'booking_id' => $this->bookings->id,
-                'user_id' => auth()->id(),
+                'user_id' => $this->bookings->user->id,
                 'order_id' => $orderId,
                 'gross_amount' => $grossAmount,
                 'payment_type' => $this->payment_type,
@@ -90,9 +90,8 @@ class PaymentController extends Component
 
             // 5. Redirect user to Midtrans payment page
             return redirect()->away($snap->redirect_url);
-
         } catch (\Exception $e) {
-            session()->flash('error', 'Payment initialization failed: '.$e->getMessage());
+            session()->flash('error', 'Payment initialization failed: ' . $e->getMessage());
         }
 
         // return redirect()->back();
