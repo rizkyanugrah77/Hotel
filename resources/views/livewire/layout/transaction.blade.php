@@ -6,13 +6,14 @@
         this.toast.type = type;
         window.setTimeout(() => this.toast.show = false, 5000);
     }
-}" class="min-w-0 flex-1 overflow-y-auto p-4 sm:p-6 lg:p-8">
+}"
+    class="relative min-w-0 w-full max-w-full flex-1 overflow-x-hidden overflow-y-auto p-4 sm:p-6 lg:p-8">
 
     <x-toast />
 
     <!-- KPI Cards -->
-    <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-6 mb-6 sm:mb-8">
-        <div class="bg-white border border-gray-100 shadow-sm rounded-2xl p-4 sm:p-6">
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-6 mb-6 sm:mb-8">
+        <div class="bg-slate-50 border border-slate-200 shadow-md rounded-2xl p-4 sm:p-6">
             <div class="flex justify-between items-start mb-3 sm:mb-4">
                 <div>
                     <p class="text-xs sm:text-sm text-gray-500 mb-1">Total Transaksi</p>
@@ -31,7 +32,7 @@
             <p class="text-[10px] sm:text-xs text-gray-500 font-medium">Semua transaksi</p>
         </div>
 
-        <div class="bg-white border border-gray-100 shadow-sm rounded-2xl p-4 sm:p-6">
+        <div class="bg-emerald-50 border border-emerald-200 shadow-md rounded-2xl p-4 sm:p-6">
             <div class="flex justify-between items-start mb-3 sm:mb-4">
                 <div>
                     <p class="text-xs sm:text-sm text-gray-500 mb-1">Berhasil</p>
@@ -50,7 +51,7 @@
             <p class="text-[10px] sm:text-xs text-emerald-600 font-medium">Pembayaran sukses</p>
         </div>
 
-        <div class="bg-white border border-gray-100 shadow-sm rounded-2xl p-4 sm:p-6">
+        <div class="bg-amber-50 border border-amber-200 shadow-md rounded-2xl p-4 sm:p-6">
             <div class="flex justify-between items-start mb-3 sm:mb-4">
                 <div>
                     <p class="text-xs sm:text-sm text-gray-500 mb-1">Pending</p>
@@ -69,7 +70,7 @@
             <p class="text-[10px] sm:text-xs text-amber-600 font-medium">Menunggu pembayaran</p>
         </div>
 
-        <div class="bg-white border border-gray-100 shadow-sm rounded-2xl p-4 sm:p-6">
+        <div class="bg-violet-50 border border-violet-200 shadow-md rounded-2xl p-4 sm:p-6">
             <div class="flex justify-between items-start mb-3 sm:mb-4">
                 <div>
                     <p class="text-xs sm:text-sm text-gray-500 mb-1">Total Revenue</p>
@@ -90,7 +91,7 @@
     </div>
 
     <!-- Filter Laporan -->
-    <div class="bg-white border border-gray-100 shadow-sm rounded-2xl p-4 sm:p-6 mb-6">
+    <div class="bg-white border border-slate-200 shadow-md rounded-2xl p-4 sm:p-6 mb-6">
         <div class="flex flex-col lg:flex-row lg:items-end justify-between gap-4">
 
             <!-- Judul -->
@@ -161,12 +162,13 @@
                 @endif
 
                 <!-- Export -->
-                <div class="flex items-end">
+                <div class="flex items-end w-full sm:w-auto">
                     <button type="button" wire:click="exportExcel" wire:loading.attr="disabled"
                         class="inline-flex items-center justify-center gap-2 px-5 py-2.5
                            bg-emerald-600 hover:bg-emerald-700
                            text-white text-sm font-semibold
                            rounded-xl transition-all shadow-sm
+                           w-full sm:w-auto
                            disabled:opacity-50 disabled:cursor-not-allowed">
 
                         <!-- Excel Icon -->
@@ -200,10 +202,91 @@
         </div>
     </div>
 
+    <!-- Chart -->
+    <div class="mt-8 mb-6 w-full max-w-full hidden md:block">
+        <div
+            class="grid min-w-0 grid-cols-1 gap-5 rounded-2xl border border-slate-200 bg-white p-4 shadow-md sm:gap-6 sm:p-6 lg:grid-cols-12">
+            <h2 class="lg:col-span-12 font-poppins text-xl font-bold text-gray-800">Grafik Transaksi</h2>
+
+            <div class="min-w-0 h-64 col-span-8 w-full  lg:h-80">
+                <canvas
+                    wire:key="transaction-chart-{{ $reportPeriod }}-{{ $reportDate }}-{{ $reportMonth }}-{{ $reportYear }}"
+                    wire:ignore x-data x-init="$nextTick(() => {
+                        new window.Chart($el, {
+                            type: 'line',
+                            data: {{ Js::from($chartData) }},
+                            options: {
+                                responsive: true,
+                                maintainAspectRatio: false,
+                                scales: {
+                                    y: {
+                                        beginAtZero: true,
+                                        ticks: { precision: 0 }
+                                    }
+                                }
+                            }
+                        })
+                    })"></canvas>
+            </div>
+
+            <div class="flex flex-col items-center col-span-4 gap-5">
+                <div class="min-w-0 w-full h-32">
+                    <canvas
+                        wire:key="transaction-status-chart-{{ $reportPeriod }}-{{ $reportDate }}-{{ $reportMonth }}-{{ $reportYear }}"
+                        wire:ignore x-data x-init="$nextTick(() => {
+                            new window.Chart($el, {
+                                type: 'bar',
+                                data: {
+                                    labels: {{ Js::from($statusChartData['labels']) }},
+                                    datasets: [{
+                                        label: 'Jumlah transaksi',
+                                        data: {{ Js::from($statusChartData['data']) }},
+                                        backgroundColor: ['#059669', '#d97706', '#dc2626', '#64748b'],
+                                        borderRadius: 6
+                                    }]
+                                },
+                                options: {
+                                    responsive: true,
+                                    maintainAspectRatio: false,
+                                    plugins: { legend: { display: false } },
+                                    scales: { y: { beginAtZero: true, ticks: { precision: 0 } } }
+                                }
+                            })
+                        })"></canvas>
+                </div>
+
+                <div class="min-w-0 w-full h-32">
+                    <h3 class="mb-2 text-center text-sm font-semibold text-gray-700">Metode Pembayaran</h3>
+                    <canvas
+                        wire:key="payment-method-chart-{{ $reportPeriod }}-{{ $reportDate }}-{{ $reportMonth }}-{{ $reportYear }}"
+                        wire:ignore x-data x-init="$nextTick(() => {
+                            new window.Chart($el, {
+                                type: 'doughnut',
+                                data: {
+                                    labels: {{ Js::from($paymentMethods->pluck('payment_type')->values()) }},
+                                    datasets: [{
+                                        data: {{ Js::from($paymentMethods->pluck('total')->values()) }},
+                                        backgroundColor: ['#2563eb', '#7c3aed', '#0891b2', '#ea580c', '#16a34a', '#db2777'],
+                                        borderWidth: 2,
+                                        borderColor: '#ffffff'
+                                    }]
+                                },
+                                options: {
+                                    responsive: true,
+                                    maintainAspectRatio: false,
+                                    plugins: { legend: { position: 'bottom' } }
+                                }
+                            })
+                        })"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
     <!-- Search & Filter + Transaction List -->
-    <div class="bg-white border border-gray-100 shadow-sm rounded-2xl overflow-hidden mb-8">
-
-
+    <div class="w-full min-w-0 overflow-hidden bg-white border border-slate-200 shadow-md rounded-2xl mb-8">
 
         {{-- daftar --}}
         <div
@@ -217,9 +300,11 @@
                             d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />
                     </svg>
                     <input wire:model.live="search" type="text" placeholder="Cari kode transaksi, user, room..."
-                        class="input pl-10 pr-4 py-2 text-sm w-full sm:w-64" />
+                        class="input pl-10 pr-4 py-2 text-sm lg:w-full sm:w-64" />
                 </div>
-                <select wire:model.live="filterStatus" class="input py-2 text-sm w-full sm:w-44">
+
+                <select id="filterStatus" wire:model.live="filterStatus"
+                    class="mt-2 block w-full rounded-md bg-white py-2 pl-3 pr-10 text-sm text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:w-40">
                     <option value="">Semua Status</option>
                     <option value="success">Berhasil</option>
                     <option value="pending">Pending</option>
@@ -274,24 +359,25 @@
         </div>
 
         <!-- Cards: mobile first -->
-        <div class="md:hidden divide-y divide-gray-100">
+        <div class="md:hidden grid grid-cols-1 gap-4">
             @forelse ($transactions as $tx)
                 <div class="p-4 space-y-3">
-                    <div class="flex items-start justify-between gap-3">
+                    <div class="flex items-start justify-between">
                         <div class="min-w-0">
                             <p class="font-mono text-sm font-semibold text-gray-800 truncate">{{ $tx->order_id }}</p>
                             <p class="text-xs text-gray-500">{{ $tx->user?->name ?? '-' }}</p>
                         </div>
                         <x-transaction-status :status="$tx->transaction_status" />
                     </div>
-                    <div class="flex items-center justify-between text-sm">
-                        <span class="text-gray-500">{{ $tx->booking?->room?->name ?? '-' }}</span>
-                        <span class="text-gray-500">{{ $tx->booking?->booking_code ?? '-' }}</span>
+                    <div class="flex items-center justify-between gap-3 text-sm">
+                        <span class="min-w-0 truncate text-gray-500">{{ $tx->booking?->room?->name ?? '-' }}</span>
+                        <span
+                            class="min-w-0 truncate text-right text-gray-500">{{ $tx->booking?->booking_code ?? '-' }}</span>
                     </div>
                     <div class="flex items-center justify-between pt-2 border-t border-gray-100">
                         <span
-                            class="text-xs text-gray-400">{{ $tx->payment_type ?? ($tx->payment_method ?? '-') }}</span>
-                        <span class="font-poppins font-bold text-accent-700">
+                            class="min-w-0 truncate pr-3 text-xs text-gray-400">{{ $tx->payment_type ?? ($tx->payment_method ?? '-') }}</span>
+                        <span class="shrink-0 font-poppins font-bold text-accent-700">
                             {{ 'Rp ' . number_format($tx->gross_amount, 0, ',', '.') }}
                         </span>
                     </div>
@@ -307,8 +393,8 @@
     </div>
 
     <!-- Recent Transactions Summary -->
-    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 lg:gap-8">
-        <div class="bg-white border border-gray-100 shadow-sm rounded-2xl p-4 sm:p-6 lg:col-span-1">
+    <div class="grid min-w-0 grid-cols-1 gap-6 lg:grid-cols-3 lg:gap-8">
+        <div class="min-w-0 bg-sky-50 border border-sky-200 shadow-md rounded-2xl p-4 sm:p-6 lg:col-span-1">
             <h2 class="font-poppins font-bold text-lg mb-4">Metode Pembayaran</h2>
             <div class="space-y-4">
                 @forelse ($paymentMethods as $method)
@@ -323,7 +409,7 @@
             </div>
         </div>
 
-        <div class="bg-white border border-gray-100 shadow-sm rounded-2xl p-4 sm:p-6">
+        <div class="min-w-0 bg-violet-50 border border-violet-200 shadow-md rounded-2xl p-4 sm:p-6">
             <h2 class="font-poppins font-bold text-lg mb-4">Statistik Transaksi</h2>
             <div class="space-y-4">
                 <div class="p-4 bg-gray-50 rounded-xl">
@@ -344,7 +430,7 @@
             </div>
         </div>
 
-        <div class="bg-white border border-gray-100 shadow-sm rounded-2xl p-4 sm:p-6">
+        <div class="min-w-0 bg-indigo-50 border border-indigo-200 shadow-md rounded-2xl p-4 sm:p-6">
             <h2 class="font-poppins font-bold text-lg mb-4">Ringkasan Booking</h2>
             <div class="space-y-4">
                 <div class="p-4 bg-gray-50 rounded-xl">
