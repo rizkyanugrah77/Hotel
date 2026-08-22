@@ -156,6 +156,20 @@
                                 <x-input-error :message="$errors->first('total_guests')" class="mt-1 text-sm" />
                             </div>
 
+                            <div>
+                                <label class="input-label text-xs">Promo Code</label>
+                                <div class="flex gap-2">
+                                    <input type="text" wire:model.live="promo_code" class="input !py-2 !px-3 text-sm"
+                                        placeholder="Masukkan kode promo" />
+                                    <button type="button" wire:click="applyPromo" wire:loading.attr="disabled"
+                                        wire:target="applyPromo" class="btn-primary !px-4 !py-2 text-sm">Pakai</button>
+                                </div>
+                                <x-input-error :message="$errors->first('promo_code')" class="mt-1 text-sm" />
+                                @if ($promo)
+                                    <p class="mt-1 text-xs text-green-600">Promo {{ $promo->code }} diterapkan.</p>
+                                @endif
+                            </div>
+
                             <!-- Price Breakdown -->
                             <div class="bg-gray-50 rounded-xl p-4 mt-6 space-y-2 text-sm">
                                 <div class="flex justify-between text-gray-600">
@@ -170,14 +184,15 @@
                                         <span>{{ 'Rp ' . number_format(($total_guests - 2) * 300000 * max($nights, 1), 0, ',', '.') }}</span>
                                     </div>
                                 @endif
+                                @if ($discount_amount > 0)
+                                    <div class="flex justify-between text-green-600">
+                                        <span>Promo {{ $promo->code }}</span>
+                                        <span>-{{ 'Rp ' . number_format($discount_amount, 0, ',', '.') }}</span>
+                                    </div>
+                                @endif
                                 <div class="flex justify-between text-gray-600">
                                     <span>Taxes & Fees (11%)</span>
-                                    @php
-                                        $base = $room->price * max($nights, 1);
-                                        $extra = $total_guests > 2 ? ($total_guests - 2) * 300000 * max($nights, 1) : 0;
-                                        $taxes = ($base + $extra) * 0.11;
-                                    @endphp
-                                    <span>{{ 'Rp ' . number_format($taxes, 0, ',', '.') }}</span>
+                                    <span>{{ 'Rp ' . number_format($tax_amount, 0, ',', '.') }}</span>
                                 </div>
                                 <div
                                     class="border-t border-gray-200 pt-2 mt-2 flex justify-between font-bold text-foreground">

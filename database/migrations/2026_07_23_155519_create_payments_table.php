@@ -16,6 +16,8 @@ return new class extends Migration
             $table->foreignId('user_id')->constrained('users')->cascadeOnDelete();
             $table->foreignId('booking_id')->constrained('bookings')->cascadeOnDelete();
             $table->string('order_id');
+            $table->decimal('sub_total_amount', 12, 2);
+            $table->decimal('tax_amount', 10, 2)->default(0);
             $table->decimal('gross_amount', 10, 2);
             $table->string('payment_type')->nullable();
             $table->string('transaction_id')->nullable();

@@ -96,17 +96,19 @@
                         </div>
 
                         <div class="space-y-3 pb-6 border-b border-gray-100 text-sm">
-                            @php
-                                $subtotal = $bookings->total_price / 1.11;
-                                $taxAmount = $bookings->total_price - $subtotal;
-                            @endphp
                             <div class="flex justify-between">
                                 <span class="text-gray-500">Subtotal</span>
-                                <span>Rp {{ number_format($subtotal, 0, ',', '.') }}</span>
+                                <span>Rp {{ number_format($sub_total_amount + $discount_amount, 0, ',', '.') }}</span>
                             </div>
+                            @if ($discount_amount > 0)
+                                <div class="flex justify-between text-green-600">
+                                    <span>Promo {{ $promo?->code }}</span>
+                                    <span>-Rp {{ number_format($discount_amount, 0, ',', '.') }}</span>
+                                </div>
+                            @endif
                             <div class="flex justify-between">
                                 <span class="text-gray-500">Taxes (11%)</span>
-                                <span>Rp {{ number_format($taxAmount, 0, ',', '.') }}</span>
+                                <span>Rp {{ number_format($tax_amount, 0, ',', '.') }}</span>
                             </div>
                         </div>
 

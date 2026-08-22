@@ -5,6 +5,7 @@ use App\Http\Controllers\FacilityController;
 use App\Http\Controllers\MidtransController;
 use App\Http\Controllers\RoomController;
 use App\Livewire\Admin\AdminDashboard;
+use App\Livewire\Admin\PromoManager;
 use App\Livewire\Admin\RoomUnitAdmin;
 use App\Livewire\Admin\TransactionManager;
 use App\Livewire\welcome\Index;
@@ -13,6 +14,7 @@ use App\Livewire\welcome\PaymentStatus;
 use App\Livewire\Welcome\RoomDetail;
 use App\Livewire\Welcome\UserDashboard;
 use Illuminate\Support\Facades\Route;
+
 
 
 
@@ -39,6 +41,7 @@ Route::middleware(['auth', 'isAdmin', 'verified'])->group(function () {
     Route::get('/admin/transaction-manager', TransactionManager::class)->name('transaction.manager');
     Route::view('/admin/guest-manager', 'admin.guest')->name('guest.manager');
     Route::get('/admin/room-units-manager/{roomSlug}', RoomUnitAdmin::class)->name('room-units-manager');
+    Route::get('/admin/promo-manager', PromoManager::class)->name('promo-manager');
 });
 
 Route::middleware(['auth', 'verified'])->group(function () {

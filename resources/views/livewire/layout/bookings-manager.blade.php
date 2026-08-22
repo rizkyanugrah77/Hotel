@@ -11,6 +11,7 @@
     x-on:booking-deleted.window="$dispatch('close-modal', 'delete-booking'); showToast($event.detail.message, $event.detail.type)"
     x-on:booking-error.window="showToast($event.detail.message, $event.detail.type); $dispatch('close-modal', 'manage-booking')"
     x-on:booking-editing.window="$dispatch('open-modal', 'manage-booking')"
+    x-on:booking-detail.window="$dispatch('open-modal', 'booking-detail')"
     x-on:booking-delete-confirmation.window="$dispatch('open-modal', 'delete-booking')"
     class="min-w-0 flex-1 overflow-y-auto p-4 sm:p-6 lg:p-8">
 
@@ -156,7 +157,8 @@
                                 class="shrink-0 rounded-full px-2 py-1 text-xs font-medium {{ $statusClasses }}">{{ ucwords(str_replace('_', ' ', $booking->status)) }}</span>
                         </div>
                         <div class="mt-3 rounded-lg bg-gray-50 p-3 text-sm">
-                            <p class="font-medium text-gray-800">{{ $booking->room->name }}</p>
+                            <p class="font-medium text-gray-800">{{ $booking->room->name }} No
+                                {{ $booking->roomUnit->room_number[2] }}</p>
                             <p class="mt-1 text-xs text-gray-500">{{ $booking->check_in->format('d M Y') }} -
                                 {{ $booking->check_out->format('d M Y') }}</p>
                         </div>
@@ -201,13 +203,14 @@
                                         default => 'badge-primary',
                                     };
                                 @endphp
-                                <td class="px-4 py-3 font-medium text-gray-500">{{ $bookings->firstItem() + $index }}
+                                <td class="px-4 py-3 font-medium text-gray-500">{{ $index + 1 }}
                                 </td>
                                 <td class="px-4 py-3">
                                     <p class="font-medium text-gray-800">{{ $booking->booking_code }}</p>
                                     <p class="mt-0.5 text-xs text-gray-500">{{ $booking->user->name }}</p>
                                 </td>
-                                <td class="px-4 py-3 text-gray-700">{{ $booking->room->name }}</td>
+                                <td class="px-4 py-3 text-gray-700"> {{ $booking->room->name }} No.
+                                    {{ $booking->roomUnit->room_number }}</td>
                                 <td class="px-4 py-3 text-xs text-gray-600">
                                     <p>{{ $booking->check_in->format('d M Y') }}</p>
                                     <p class="mt-1">{{ $booking->check_out->format('d M Y') }}</p>
@@ -219,8 +222,10 @@
                                     <span
                                         class="inline-flex rounded-full px-2 py-1 text-xs font-medium {{ $statusClasses }}">{{ ucwords(str_replace('_', ' ', $booking->status)) }}</span>
                                 </td>
-                                <td class="px-4 py-3 text-center text-gray-700">
+                                <td class="px-4 py-3 flex items-center space-x-2  text-center text-gray-700">
                                     <x-edit-button :item="$booking" action="edit" />
+
+                                    <x-show-button :item="$booking" action="show" />
                                 </td>
                             </tr>
                         @empty
@@ -232,7 +237,7 @@
                     </tbody>
                 </table>
             </div>
-            <div class="bg-gray-50 p-4">{{ $bookings->links() }}</div>
+            {{-- <div class="bg-gray-50 p-4">{{ $bookings->links() }}</div> --}}
         </div>
     </div>
 
@@ -298,6 +303,85 @@
         </div>
     </div>
 
+    <x-modal-2 name="booking-detail" title="Detail Booking">
+        @if ($payments)
+            @php
+                $status = $payments->transaction_status ?? 'N/A';
+                $statusClasses = match ($status) {
+                    'settlement', 'capture', 'success', 'paid', 'completed' => 'bg-emerald-100 text-emerald-700',
+                    'pending', 'challenge' => 'bg-amber-100 text-amber-700',
+                    'cancel', 'cancelled', 'deny', 'failure', 'expire' => 'bg-red-100 text-red-700',
+                    default => 'bg-slate-100 text-slate-600',
+                };
+            @endphp
+
+            <div class="space-y-4">
+                <div class="rounded-xl bg-gradient-to-br from-primary to-primary/80 p-4 text-white shadow-sm">
+                    <div class="flex items-start justify-between gap-3">
+                        <div>
+                            <p class="text-xs font-medium text-white/70">Total Pembayaran</p>
+                            <p class="mt-1 text-2xl font-bold">Rp
+                                {{ number_format($payments->gross_amount, 0, ',', '.') }}</p>
+                        </div>
+                        <span class="rounded-full px-2.5 py-1 text-xs font-semibold {{ $statusClasses }}">
+                            {{ ucfirst(str_replace('_', ' ', $status)) }}
+                        </span>
+                    </div>
+                </div>
+
+                <dl class="divide-y divide-gray-100 overflow-hidden rounded-xl border border-gray-100 text-sm">
+                    <div class="grid grid-cols-3 gap-3 px-4 py-3">
+                        <dt class="text-gray-500">Payment ID</dt>
+                        <dd class="col-span-2 break-all text-right font-medium text-gray-800">
+                            {{ $payments->order_id }}</dd>
+                    </div>
+
+                    <div class="grid grid-cols-3 gap-3 bg-gray-50/60 px-4 py-3">
+                        <dt class="text-gray-500">Kode Booking</dt>
+                        <dd class="col-span-2 text-right font-medium text-gray-800">
+                            {{ $payments->booking?->booking_code ?? 'N/A' }}</dd>
+                    </div>
+                    <div class="grid grid-cols-3 gap-3 px-4 py-3">
+                        <dt class="text-gray-500">Email</dt>
+                        <dd class="col-span-2 break-all text-right font-medium text-gray-800">
+                            {{ $payments->booking->user->email ?? 'N/A' }}</dd>
+                    </div>
+                    <div class="grid grid-cols-3 gap-3 px-4 py-3">
+                        <dt class="text-gray-500">Name</dt>
+                        <dd class="col-span-2 break-all text-right font-medium text-gray-800">
+                            {{ $payments->booking->user->name ?? 'N/A' }}</dd>
+                    </div>
+                    <div class="grid grid-cols-3 gap-3 px-4 py-3">
+                        <dt class="text-gray-500">Phone</dt>
+                        <dd class="col-span-2 break-all text-right font-medium text-gray-800">
+                            {{ $payments->booking->user->phone ?? 'N/A' }}</dd>
+                    </div>
+
+                    <div class="grid grid-cols-3 gap-3 px-4 py-3">
+                        <dt class="text-gray-500">Room</dt>
+                        <dd class="col-span-2 break-all text-right font-medium text-gray-800">
+                            {{ $payments->booking->room->name ?? 'N/A' }}</dd>
+                    </div>
+
+                    <div class="grid grid-cols-3 gap-3 px-4 py-3">
+                        <dt class="text-gray-500">Metode</dt>
+                        <dd class="col-span-2 text-right font-medium text-gray-800">
+                            {{ $payments->payment_method ?? 'N/A' }}</dd>
+                    </div>
+                    <div class="grid grid-cols-3 gap-3 bg-gray-50/60 px-4 py-3">
+                        <dt class="text-gray-500">Tanggal</dt>
+                        <dd class="col-span-2 text-right font-medium text-gray-800">
+                            {{ $payments->created_at?->format('d M Y, H:i') ?? 'N/A' }}</dd>
+                    </div>
+                </dl>
+            </div>
+        @else
+            <div class="rounded-xl border border-dashed border-gray-300 bg-gray-50 px-4 py-8 text-center">
+                <p class="text-sm font-medium text-gray-700">Belum ada pembayaran</p>
+                <p class="mt-1 text-xs text-gray-500">Data pembayaran akan tampil setelah transaksi dibuat.</p>
+            </div>
+        @endif
+    </x-modal-2>
 
     <x-modal-2 name="manage-booking" :title="$bookingEditId ? 'Edit Booking' : 'Tambah Booking'">
         <form wire:submit="save">
@@ -386,6 +470,42 @@
 
                 <x-input-error :message="$errors->get('room_id')" />
             </div> --}}
+
+            <!-- Row: RoomUnit -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                <div>
+                    <label class="input-label">Room<span class="text-red-500">*</span></label>
+                    <select wire:model.live="room_id" name="room_id" id="room_id" class="input">
+                        <option value="">Select Room</option>
+                        @foreach ($rooms as $room)
+                            <option value="{{ $room->id }}">{{ $room->name }}</option>
+                        @endforeach
+                    </select>
+                    <x-input-error :message="$errors->get('room_id')" />
+                </div>
+
+                <div>
+                    <label class="input-label">RoomUnit <span class="text-red-500">*</span></label>
+                    <select wire:model="room_unit_id" name="room_unit_id" id="room_unit_id" class="input">
+                        <option value="">Select RoomUnit</option>
+                        @if ($room_id)
+                            @foreach ($rooms->find($room_id)->units as $room_unit)
+                                @if ($room_unit->status == 'available' || $room_unit->id == $room_unit_id)
+                                    <option value="{{ $room_unit->id }}"
+                                        {{ $room_unit->id == $room_unit_id ? 'selected' : '' }}>
+                                        {{ $room_unit->room_number }}</option>
+                                @else
+                                    <option value="{{ $room_unit->id }}" disabled>
+                                        {{ $room_unit->room_number }} (Tidak Tersedia)
+                                    </option>
+                                @endif
+                            @endforeach
+                        @endif
+                    </select>
+
+                    <x-input-error :message="$errors->get('room_unit_id')" />
+                </div>
+            </div>
 
             <!-- Row: Check In & Check Out -->
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">

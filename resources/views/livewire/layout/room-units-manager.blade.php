@@ -232,6 +232,7 @@
     <x-modal-2 name="manage-room-unit">
         <form wire:submit.prevent="save" class="mt-5 space-y-4">
             <div>
+
                 <x-input-label for="room_number" value="Nomor Kamar Baru" />
                 <x-text-input id="room_number" type="text" wire:model="room_number" min="1"
                     max="25" class="mt-1" placeholder="Contoh: 10" required />
@@ -263,7 +264,8 @@
         <p>Apakah anda yakin ingin menghapus unit ini?</p>
         <div class="flex justify-end gap-2">
             <button type="button" wire:click="deleteUnit" class="btn-primary">Hapus</button>
-            <button type="button" wire:click="$dispatch('close-modal-room-unit-delete-confirmation')" class="btn-secondary">
+            <button type="button" wire:click="$dispatch('close-modal-room-unit-delete-confirmation')"
+                class="btn-secondary">
                 Batal
             </button>
         </div>

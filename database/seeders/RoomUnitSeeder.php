@@ -19,7 +19,7 @@ class RoomUnitSeeder extends Seeder
         foreach ($rooms as $room) {
             for ($i = 1; $i <= 2; $i++) {
                 $room->units()->create([
-                    'room_number' => $room->name . ' No. ' . random_int(100, 999),
+                    'room_number' => random_int(100, 999),
                     'status' => 'available',
                 ]);
             }

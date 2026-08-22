@@ -30,21 +30,11 @@ class RoomDetail extends Component
 
     public int $total_price = 0;
 
-    public int $subtotal_amount = 0;
-
-    public int $discount_amount = 0;
-
-    public int $tax_amount = 0;
-
     public string $status = 'pending';
 
     public int $nights = 1;
 
     public $promo;
-
-    public string $promo_code = '';
-
-    public array $claimed_promo_ids = [];
 
 
 
@@ -54,13 +44,11 @@ class RoomDetail extends Component
         $this->check_in = now('Asia/Jakarta')->toDateString();
         $this->check_out = now('Asia/Jakarta')->addDay()->toDateString();
         $this->total_guests = 1;
-        $this->promo_code = (string) request('promo', '');
+        $this->promo = request('promo')
+            ? Promo::where('code', request('promo'))->first()
+            : null;
         $this->booking_id = request('booking');
         $this->calculatePrice();
-
-        if ($this->promo_code !== '') {
-            $this->validatePromo();
-        }
     }
 
 
@@ -69,23 +57,6 @@ class RoomDetail extends Component
         if (in_array($property, ['check_in', 'check_out', 'total_guests'])) {
             $this->calculatePrice();
         }
-    }
-
-    public function updatedPromoCode(): void
-    {
-        $this->promo_code = strtoupper(trim($this->promo_code));
-
-        if (! $this->promo || $this->promo->code === $this->promo_code || ! in_array($this->promo->id, $this->claimed_promo_ids, true)) {
-            return;
-        }
-
-        Promo::whereKey($this->promo->id)
-            ->where('used_count', '>', 0)
-            ->decrement('used_count');
-
-        $this->claimed_promo_ids = array_values(array_diff($this->claimed_promo_ids, [$this->promo->id]));
-        $this->promo = null;
-        $this->calculatePrice();
     }
 
     public function calculatePrice()
@@ -116,102 +87,9 @@ class RoomDetail extends Component
 
 
         $subtotal = $basePrice + $extraGuestPrice;
-        $this->discount_amount = $this->promo && $subtotal >= $this->promo->minimum_transaction
-            ? $this->discountFor($subtotal)
-            : 0;
-        $this->subtotal_amount = $subtotal - $this->discount_amount;
-        $this->tax_amount = (int) round($this->subtotal_amount * 0.11);
-        $this->total_price = $this->subtotal_amount + $this->tax_amount;
-    }
+        $taxes = $subtotal * 0.11;
 
-    public function applyPromo()
-    {
-        if (! $this->validatePromo()) {
-            return;
-        }
-
-        if (in_array($this->promo->id, $this->claimed_promo_ids, true)) {
-            return;
-        }
-
-        $claimed = Promo::query()
-            ->whereKey($this->promo->id)
-            ->where('is_active', true)
-            ->where('start_date', '<=', now('Asia/Jakarta'))
-            ->where('end_date', '>=', now('Asia/Jakarta'))
-            ->where(function ($query) {
-                $query->whereNull('quota')->orWhereColumn('used_count', '<', 'quota');
-            })
-            ->increment('used_count');
-
-        if (! $claimed) {
-            $this->promo = null;
-            $this->calculatePrice();
-            $this->addError('promo_code', 'Kuota promo sudah habis.');
-
-            return;
-        }
-
-        $this->claimed_promo_ids[] = $this->promo->id;
-    }
-
-    private function validatePromo(): bool
-    {
-        $this->resetErrorBag('promo_code');
-        $this->promo_code = strtoupper(trim($this->promo_code));
-
-        if ($this->promo_code === '') {
-            $this->promo = null;
-            $this->calculatePrice();
-
-            return true;
-        }
-
-        if ($this->promo && $this->promo->code === $this->promo_code && in_array($this->promo->id, $this->claimed_promo_ids, true)) {
-            $this->calculatePrice();
-
-            return true;
-        }
-
-        $promo = Promo::query()
-            ->where('code', $this->promo_code)
-            ->where('is_active', true)
-            ->where('start_date', '<=', now('Asia/Jakarta'))
-            ->where('end_date', '>=', now('Asia/Jakarta'))
-            ->where(function ($query) {
-                $query->whereNull('quota')->orWhereColumn('used_count', '<', 'quota');
-            })
-            ->first();
-
-        if (! $promo) {
-            $this->promo = null;
-            $this->calculatePrice();
-            $this->addError('promo_code', 'Kode promo tidak valid atau sudah tidak berlaku.');
-
-            return false;
-        }
-
-        $this->promo = $promo;
-        $this->calculatePrice();
-
-        if ($this->discount_amount === 0) {
-            $this->promo = null;
-            $this->calculatePrice();
-            $this->addError('promo_code', 'Promo belum memenuhi minimum transaksi.');
-
-            return false;
-        }
-
-        return true;
-    }
-
-    private function discountFor(int $subtotal): int
-    {
-        $discount = $this->promo->discount_type === 'percentage'
-            ? $subtotal * ($this->promo->discount_value / 100)
-            : $this->promo->discount_value;
-
-        return min($subtotal, (int) round($discount));
+        $this->total_price = (int) ($subtotal + $taxes);
     }
 
 
@@ -221,12 +99,6 @@ class RoomDetail extends Component
         $user = Auth::user();
         if (! $user) {
             $this->redirect(route('login', absolute: true), navigate: true);
-
-            return;
-        }
-
-        if (! $this->validatePromo()) {
-            return;
         }
 
         $unit = $this->room->units()
@@ -265,14 +137,6 @@ class RoomDetail extends Component
                 'status' => 'occupied',
             ]);
             $bookingCode = $booking->booking_code;
-            session()->put("booking_payment_data.{$bookingCode}", [
-                'promo_id' => $this->promo?->id,
-                'promo_code' => $this->promo?->code,
-                'subtotal_amount' => $this->subtotal_amount,
-                'discount_amount' => $this->discount_amount,
-                'tax_amount' => $this->tax_amount,
-                'gross_amount' => $this->total_price,
-            ]);
             $this->resetForm();
 
             // return redirect()->route('payment', $bookingCode);
@@ -305,15 +169,9 @@ class RoomDetail extends Component
             'check_out',
             'total_guests',
             'total_price',
-            'subtotal_amount',
-            'discount_amount',
-            'tax_amount',
             'status',
-            'promo_code',
-            'claimed_promo_ids',
 
         ]);
-        $this->promo = null;
         $this->resetValidation();
     }
 

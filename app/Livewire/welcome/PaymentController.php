@@ -4,6 +4,7 @@ namespace App\Livewire\welcome;
 
 use App\Models\Booking;
 use App\Models\Payment;
+use App\Models\Promo;
 use Illuminate\Support\Str;
 use Livewire\Component;
 use Midtrans\Config;
@@ -29,6 +30,16 @@ class PaymentController extends Component
 
     public $payment_method;
 
+    public $promo;
+
+    public ?int $promo_id = null;
+
+    public int $sub_total_amount = 0;
+
+    public int $discount_amount = 0;
+
+    public int $tax_amount = 0;
+
     public string $transaction_status = 'pending';
 
     public $bookingCode;
@@ -42,6 +53,19 @@ class PaymentController extends Component
 
         if (! $this->bookings) {
             return redirect()->route('index');
+        }
+
+        $paymentData = session("booking_payment_data.{$bookingCode}", []);
+
+        if (($paymentData['gross_amount'] ?? null) === (int) $this->bookings->total_price) {
+            $this->promo_id = $paymentData['promo_id'] ?? null;
+            $this->promo = $this->promo_id ? Promo::find($this->promo_id) : null;
+            $this->sub_total_amount = $paymentData['subtotal_amount'];
+            $this->discount_amount = $paymentData['discount_amount'];
+            $this->tax_amount = $paymentData['tax_amount'];
+        } else {
+            $this->sub_total_amount = (int) round($this->bookings->total_price / 1.11);
+            $this->tax_amount = (int) $this->bookings->total_price - $this->sub_total_amount;
         }
     }
 
@@ -80,6 +104,9 @@ class PaymentController extends Component
                 'booking_id' => $this->bookings->id,
                 'user_id' => $this->bookings->user->id,
                 'order_id' => $orderId,
+                'promo_id' => $this->promo_id,
+                'sub_total_amount' => $this->sub_total_amount,
+                'tax_amount' => $this->tax_amount,
                 'gross_amount' => $grossAmount,
                 'payment_type' => $this->payment_type,
                 'transaction_id' => Str::random(10), // Placeholder until webhook updates it

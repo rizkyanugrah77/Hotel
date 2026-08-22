@@ -90,87 +90,6 @@
         </div>
     </div>
 
-    {{-- Chart --}}
-    <div class="mt-8 mb-6 w-full max-w-full hidden md:block">
-        <div
-            class="grid min-w-0 grid-cols-1 gap-5 rounded-2xl border border-slate-200 bg-white p-4 shadow-md sm:gap-6 sm:p-6 lg:grid-cols-12">
-            <h2 class="lg:col-span-12 font-poppins text-xl font-bold text-gray-800">Grafik Transaksi</h2>
-
-            <div class="min-w-0 h-56 col-span-8 w-full">
-                <canvas
-                    wire:key="transaction-chart-{{ $reportPeriod }}-{{ $reportDate }}-{{ $reportMonth }}-{{ $reportYear }}"
-                    wire:ignore x-data x-init="$nextTick(() => {
-                        new window.Chart($el, {
-                            type: 'line',
-                            data: {{ Js::from($chartData) }},
-                            options: {
-                                responsive: true,
-                                maintainAspectRatio: false,
-                                scales: {
-                                    y: {
-                                        beginAtZero: true,
-                                        ticks: { precision: 0 }
-                                    }
-                                }
-                            }
-                        })
-                    })"></canvas>
-            </div>
-
-            <div class="flex flex-col items-center col-span-4 gap-5">
-                <div class="min-w-0 w-full h-28">
-                    <canvas
-                        wire:key="transaction-status-chart-{{ $reportPeriod }}-{{ $reportDate }}-{{ $reportMonth }}-{{ $reportYear }}"
-                        wire:ignore x-data x-init="$nextTick(() => {
-                            new window.Chart($el, {
-                                type: 'bar',
-                                data: {
-                                    labels: {{ Js::from($statusChartData['labels']) }},
-                                    datasets: [{
-                                        label: 'Jumlah transaksi',
-                                        data: {{ Js::from($statusChartData['data']) }},
-                                        backgroundColor: ['#059669', '#d97706', '#dc2626', '#64748b'],
-                                        borderRadius: 6
-                                    }]
-                                },
-                                options: {
-                                    responsive: true,
-                                    maintainAspectRatio: false,
-                                    plugins: { legend: { display: false } },
-                                    scales: { y: { beginAtZero: true, ticks: { precision: 0 } } }
-                                }
-                            })
-                        })"></canvas>
-                </div>
-
-                <div class="min-w-0 w-full h-28">
-                    <h3 class="mb-2 text-center text-sm font-semibold text-gray-700">Metode Pembayaran</h3>
-                    <canvas
-                        wire:key="payment-method-chart-{{ $reportPeriod }}-{{ $reportDate }}-{{ $reportMonth }}-{{ $reportYear }}"
-                        wire:ignore x-data x-init="$nextTick(() => {
-                            new window.Chart($el, {
-                                type: 'doughnut',
-                                data: {
-                                    labels: {{ Js::from($paymentMethods->pluck('payment_type')->values()) }},
-                                    datasets: [{
-                                        data: {{ Js::from($paymentMethods->pluck('total')->values()) }},
-                                        backgroundColor: ['#2563eb', '#7c3aed', '#0891b2', '#ea580c', '#16a34a', '#db2777'],
-                                        borderWidth: 2,
-                                        borderColor: '#ffffff'
-                                    }]
-                                },
-                                options: {
-                                    responsive: true,
-                                    maintainAspectRatio: false,
-                                    plugins: { legend: { position: 'bottom' } }
-                                }
-                            })
-                        })"></canvas>
-                </div>
-            </div>
-        </div>
-    </div>
-
     <!-- Filter Laporan -->
     <div class="bg-white border border-slate-200 shadow-md rounded-2xl p-4 sm:p-6 mb-6">
         <div class="flex flex-col lg:flex-row lg:items-end justify-between gap-4">
@@ -253,8 +172,8 @@
                            disabled:opacity-50 disabled:cursor-not-allowed">
 
                         <!-- Excel Icon -->
-                        <svg wire:loading.remove class="w-5 h-5" fill="none" viewBox="0 0 24 24"
-                            stroke-width="1.8" stroke="currentColor">
+                        <svg wire:loading.remove class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke-width="1.8"
+                            stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round"
                                 d="M12 3v12m0 0 4-4m-4 4-4-4M5 21h14a2 2 0 0 0 2-2v-4M3 15v4a2 2 0 0 0 2 2" />
                         </svg>
@@ -282,8 +201,6 @@
             </div>
         </div>
     </div>
-
-
 
 
     <!-- Search & Filter + Transaction List -->

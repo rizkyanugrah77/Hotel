@@ -18,7 +18,10 @@ class Payment extends Model
         'booking_id',
         'user_id',
         'order_id',
+        'promo_id',
         'gross_amount',
+        'tax_amount',
+        'sub_total_amount',
         'payment_type',
         'transaction_id',
         'snap_token',
@@ -38,5 +41,10 @@ class Payment extends Model
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function promo(): BelongsTo
+    {
+        return $this->belongsTo(Promo::class);
     }
 }

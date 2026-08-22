@@ -32,7 +32,6 @@
                 'text-white/80 hover:text-white hover:bg-white/5' => !request()->routeIs(
                     'dashboard'),
             ])>
-                <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round"
                         d="M3.75 6A2.25 2.25 0 0 1 6 3.75h2.25A2.25 2.25 0 0 1 10.5 6v2.25a2.25 2.25 0 0 1-2.25 2.25H6a2.25 2.25 0 0 1-2.25-2.25V6ZM3.75 15.75A2.25 2.25 0 0 1 6 13.5h2.25a2.25 2.25 0 0 1 2.25 2.25V18a2.25 2.25 0 0 1-2.25 2.25H6A2.25 2.25 0 0 1 3.75 18v-2.25ZM13.5 6a2.25 2.25 0 0 1 2.25-2.25H18A2.25 2.25 0 0 1 20.25 6v2.25A2.25 2.25 0 0 1 18 10.5h-2.25a2.25 2.25 0 0 1-2.25-2.25V6ZM13.5 15.75a2.25 2.25 0 0 1 2.25-2.25H18a2.25 2.25 0 0 1 2.25 2.25V18A2.25 2.25 0 0 1 18 20.25h-2.25a2.25 2.25 0 0 1-2.25-2.25v-2.25Z" />
                 </svg>
@@ -146,18 +145,41 @@
                 Facility
             </a>
 
-            <a href="{{ route('transaction.manager') }}" wire:navigate @class([
-                'flex items-center gap-3 px-4 py-3 rounded-xl font-medium transition-colors',
-                'bg-white/10 text-white' => request()->routeIs('transaction.manager'),
-                'text-white/80 hover:text-white hover:bg-white/5' => !request()->routeIs(
-                    'transaction.manager'),
-            ])>
-                <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+            <div x-data="{ openAccordion: {{ request()->routeIs('transaction.manager', 'promo-manager') ? 'true' : 'false' }} }">
+                <button type="button" @click="openAccordion = !openAccordion" :aria-expanded="openAccordion"
+                    class="flex w-full items-center justify-between rounded-xl px-4 py-3 font-medium text-white/80 transition-colors hover:bg-white/5 hover:text-white">
+                    <span class="inline-flex items-center gap-3 text-sm">
+                        <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                            stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round"
                         d="M2.25 18.75a60.07 60.07 0 0 1 15.797 2.104c1.111.23 2.203-.63 2.203-1.765V4.91c0-.821-.548-1.54-1.34-1.742a60.05 60.05 0 0 0-16.66 0A1.75 1.75 0 0 0 .91 4.91v13.008c0 .97.786 1.756 1.756 1.756H4.5v-12.75a.75.75 0 0 1 .75-.75h.75m0 0h.75a.75.75 0 0 1 .75.75v12.75m0-12.75h.75a.75.75 0 0 1 .75.75v12.75" />
-                </svg>
-                Finance
-            </a>
+                        </svg>
+                        Finance
+                    </span>
+                    <svg class="h-5 w-5 transition-transform duration-200" :class="openAccordion && 'rotate-90'"
+                        fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
+                    </svg>
+                </button>
+
+                <div x-show="openAccordion" x-transition.opacity class="mt-1 space-y-1 pl-4">
+                    <a href="{{ route('transaction.manager') }}" wire:navigate @class([
+                        'flex items-center gap-3 rounded-xl px-4 py-2.5 text-sm font-medium transition-colors',
+                        'bg-white/10 text-white' => request()->routeIs('transaction.manager'),
+                        'text-white/80 hover:bg-white/5 hover:text-white' => !request()->routeIs(
+                            'transaction.manager'),
+                    ])>
+                        Transaction
+                    </a>
+                    <a href="{{ route('promo-manager') }}" wire:navigate @class([
+                        'flex items-center gap-3 rounded-xl px-4 py-2.5 text-sm font-medium transition-colors',
+                        'bg-white/10 text-white' => request()->routeIs('promo-manager'),
+                        'text-white/80 hover:bg-white/5 hover:text-white' => !request()->routeIs('promo-manager'),
+                    ])>
+                        Promo
+                    </a>
+                </div>
+            </div>
 
         </nav>
 

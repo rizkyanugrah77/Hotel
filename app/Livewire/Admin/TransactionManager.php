@@ -66,55 +66,6 @@ class TransactionManager extends Component
                 $query->where('transaction_status', $this->filterStatus);
             });
 
-        $chartQuery = clone $transactionsQuery;
-
-        if ($this->reportPeriod === 'daily') {
-            $currentStart = Carbon::parse($this->reportDate)->startOfDay();
-            $currentEnd = $currentStart->copy()->endOfDay();
-            $previousStart = $currentStart->copy()->subDay();
-            $previousEnd = $currentEnd->copy()->subDay();
-        } elseif ($this->reportPeriod === 'monthly') {
-            $currentStart = Carbon::parse($this->reportMonth . '-01')->startOfMonth();
-            $currentEnd = $currentStart->copy()->endOfMonth();
-            $previousStart = $currentStart->copy()->subMonthNoOverflow();
-            $previousEnd = $previousStart->copy()->endOfMonth();
-        } else {
-            $currentStart = Carbon::create($this->reportYear)->startOfYear();
-            $currentEnd = $currentStart->copy()->endOfYear();
-            $previousStart = $currentStart->copy()->subYear();
-            $previousEnd = $previousStart->copy()->endOfYear();
-        }
-
-        $transactionsQuery->whereBetween('created_at', [$currentStart, $currentEnd]);
-
-        $currentChartPayments = (clone $chartQuery)
-            ->whereBetween('created_at', [$currentStart, $currentEnd])
-            ->get(['created_at']);
-        $previousChartPayments = (clone $chartQuery)
-            ->whereBetween('created_at', [$previousStart, $previousEnd])
-            ->get(['created_at']);
-
-        if ($this->reportPeriod === 'daily') {
-            $labels = collect(range(0, 23))->map(fn($hour) => sprintf('%02d:00', $hour));
-            $currentCounts = $currentChartPayments->countBy(fn($payment) => $payment->created_at->format('H'));
-            $previousCounts = $previousChartPayments->countBy(fn($payment) => $payment->created_at->format('H'));
-            $currentData = collect(range(0, 23))->map(fn($hour) => $currentCounts->get(sprintf('%02d', $hour), 0));
-            $previousData = collect(range(0, 23))->map(fn($hour) => $previousCounts->get(sprintf('%02d', $hour), 0));
-        } elseif ($this->reportPeriod === 'monthly') {
-            $startOfMonth = Carbon::parse($this->reportMonth . '-01')->startOfMonth();
-            $labels = collect(range(1, $startOfMonth->daysInMonth))->map(fn($day) => (string) $day);
-            $currentCounts = $currentChartPayments->countBy(fn($payment) => $payment->created_at->day);
-            $previousCounts = $previousChartPayments->countBy(fn($payment) => $payment->created_at->day);
-            $currentData = collect(range(1, $startOfMonth->daysInMonth))->map(fn($day) => $currentCounts->get($day, 0));
-            $previousData = collect(range(1, $startOfMonth->daysInMonth))->map(fn($day) => $previousCounts->get($day, 0));
-        } else {
-            $labels = collect(range(1, 12))->map(fn($month) => Carbon::create($this->reportYear, $month)->translatedFormat('M'));
-            $currentCounts = $currentChartPayments->countBy(fn($payment) => $payment->created_at->month);
-            $previousCounts = $previousChartPayments->countBy(fn($payment) => $payment->created_at->month);
-            $currentData = collect(range(1, 12))->map(fn($month) => $currentCounts->get($month, 0));
-            $previousData = collect(range(1, 12))->map(fn($month) => $previousCounts->get($month, 0));
-        }
-
         $transactions = $transactionsQuery->latest()->paginate(10);
 
         $paymentMethods = Payment::query()
@@ -123,41 +74,7 @@ class TransactionManager extends Component
             ->orderByDesc('total')
             ->get();
 
-        $paidStatuses = ['success', 'capture', 'settlement', 'paid', 'completed'];
-
-        $chartData = [
-            'labels' => $labels,
-            'datasets' => [
-                [
-                    'label' => 'Periode sebelumnya',
-                    'data' => $previousData,
-                    'borderColor' => '#2563eb',
-                    'backgroundColor' => 'rgba(37, 99, 235, 0.15)',
-                    'fill' => true,
-                    'tension' => 0.35,
-                ],
-                [
-                    'label' => 'Periode dipilih',
-                    'data' => $currentData,
-                    'borderColor' => '#059669',
-                    'backgroundColor' => 'rgba(5, 150, 105, 0.15)',
-                    'fill' => true,
-                    'tension' => 0.35,
-                ],
-
-            ],
-        ];
-
-        $statusChartData = [
-            'labels' => ['Berhasil', 'Pending', 'Gagal', 'Dibatalkan'],
-            'data' => [
-                Payment::whereIn('transaction_status', $paidStatuses)->count(),
-                Payment::whereIn('transaction_status', ['pending', 'challenge'])->count(),
-                Payment::whereIn('transaction_status', ['deny', 'failure'])->count(),
-                Payment::whereIn('transaction_status', ['cancelled', 'cancel'])->count(),
-            ],
-        ];
-
+        $paidStatuses = ['success', 'capture', 'settlement', 'deny', 'pending', 'expire'];
         return view('livewire.layout.transaction', [
             'transactions' => $transactions,
             'paymentMethods' => $paymentMethods,
@@ -171,8 +88,7 @@ class TransactionManager extends Component
                 'average' => (float) Payment::whereIn('transaction_status', $paidStatuses)->avg('gross_amount'),
                 'highest' => (float) Payment::whereIn('transaction_status', $paidStatuses)->max('gross_amount'),
             ],
-            'chartData' => $chartData,
-            'statusChartData' => $statusChartData,
+
 
         ])->layout('layouts.app');
     }

@@ -9,10 +9,11 @@ use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 use Livewire\Component;
+use Livewire\WithPagination;
 
 class BookingManager extends Component
 {
-    // public $bookings;
+    use WithPagination;
 
     public string $booking_code = '';
 
@@ -44,78 +45,36 @@ class BookingManager extends Component
 
     public $search = '';
 
+    public $payments;
+
     public ?string $filterStatus = null;
     public ?int $filterRoom = null;
+
+    // Payment
+    public $orderId;
+    public $date;
+    public $bookingCode;
+    public $paymentMethod;
+    public $gross_amount;
     public function mount()
     {
         $this->users = User::where('role', '!=', 'admin')->get();
         $this->rooms = Room::with('units')->get();
     }
 
-    // public function save()
-
-    // {
-
-    //     // $user = Auth::user();
-    //     $validation = $this->validate();
-    //     $room = Room::with('units')->findOrFail($this->room_id);
-    //     $unit = $room->units()
-    //         ->whereDoesntHave('bookings', function ($query) {
-    //             $query->whereIn('status', ['pending', 'paid',])
-    //                 ->where('check_in', '<', $this->check_out)
-    //                 ->where('check_out', '>', $this->check_in);
-    //         })
-    //         ->first();
-
-    //     if (!$unit) {
-    //         $this->dispatch('booking-error', message: 'Unit kamar tidak ditemukan.', type: 'error');
-    //         return;
-    //     }
-
-
-    //     $attributes = collect($validation)->except('status')->all();
-
-    //     $booking = $this->bookingEditId ? Booking::findOrFail($this->bookingEditId) : null;
-    //     $attributes['booking_code'] = $booking ? $booking->booking_code : $this->generateBookingCode();
-    //     $attributes['room_id'] = $room->id;
-    //     $attributes['room_unit_id'] = $unit->id;
-    //     $attributes['user_id'] = $this->user_id;
-    //     $attributes['check_in'] = Carbon::parse($this->check_in)
-    //         ->setTimezone('Asia/Jakarta')
-    //         ->setTimeFrom(Carbon::now('Asia/Jakarta'))
-    //         ->format('Y-m-d H:i:s');
-
-    //     $attributes['check_out'] = Carbon::parse($this->check_out)
-    //         ->setTimezone('Asia/Jakarta')
-    //         ->setTime(12, 0, 0)
-    //         ->format('Y-m-d H:i:s');
-    //     $attributes['total_guests'] = $room->capacity;
-    //     $nights = Carbon::parse($this->check_in)->diffInDays(Carbon::parse($this->check_out));
-    //     $attributes['total_price'] = $room->price * max($nights, 1);
-    //     $attributes['status'] = $this->status;
-
-    //     $isUpdate = (bool) $booking;
-    //     try {
-    //         if ($booking) {
-    //             $booking->update($attributes);
-    //         } else {
-    //             Booking::create($attributes);
-    //         }
-
-    //         $this->resetForm();
-    //         $this->dispatch('booking-saved', message: $isUpdate ? 'Booking berhasil diupdate.' : 'Booking berhasil ditambahkan.', type: 'success');
-    //     } catch (\Throwable $th) {
-    //         $this->dispatch('booking-error', message: $th->getMessage(), type: 'error');
-    //     }
-    // }
+    public function updatedRoomId(): void
+    {
+        $this->room_unit_id = null;
+    }
 
     public function save()
     {
         $validation = $this->validate();
 
-        $room = Room::with('units')->findOrFail($this->room_id);
+        $room = $this->rooms->find($this->room_id);
 
         $unit = $room->units()
+            ->whereKey($this->room_unit_id)
             ->whereDoesntHave('bookings', function ($query) {
                 $query->whereIn('status', ['pending', 'paid', 'checked_in'])
                     ->when($this->bookingEditId, function ($query) {
@@ -169,12 +128,17 @@ class BookingManager extends Component
         $attributes['status'] = $this->status;
 
         $isUpdate = (bool) $booking;
+        $previousUnit = $booking?->roomUnit;
 
         try {
             if ($booking) {
                 $booking->update($attributes);
             } else {
                 $booking = Booking::create($attributes);
+            }
+
+            if ($previousUnit && ! $previousUnit->is($unit)) {
+                $previousUnit->update(['status' => 'available']);
             }
 
             // pending, paid, atau checkin = unit tidak bisa dipakai
@@ -204,7 +168,7 @@ class BookingManager extends Component
     public function edit(int $bookingId)
     {
         $this->bookingEditId = $bookingId;
-        $booking = Booking::with('room', 'user', 'roomUnit')->findOrFail($bookingId);
+        $booking = Booking::with(['room', 'roomUnit', 'user'])->findOrFail($bookingId);
         $this->booking_code = $booking->booking_code;
         $this->room_id = $booking->room->id;
         $this->room_unit_id = $booking->roomUnit?->id;
@@ -217,6 +181,16 @@ class BookingManager extends Component
 
         $this->resetValidation();
         $this->dispatch('booking-editing');
+    }
+
+    public function show(int $bookingId)
+    {
+        $this->bookingId = $bookingId;
+        $booking = Booking::with('payments')->findOrFail($bookingId);
+        $this->payments = $booking->payments->first();
+
+        $this->resetValidation();
+        $this->dispatch('booking-detail');
     }
 
     public function confirmDelete(int $bookingId)
@@ -263,7 +237,11 @@ class BookingManager extends Component
             'total_price',
             'status',
             'bookingEditId',
-
+            'orderId',
+            'date',
+            'bookingCode',
+            'paymentMethod',
+            'gross_amount',
         ]);
         $this->resetValidation();
     }
@@ -306,6 +284,7 @@ class BookingManager extends Component
             'users' => $this->users,
             'rooms' => $this->rooms,
             'bookingStats' => $bookingStats,
+            'payments' => $this->payments,
         ]);
     }
 
@@ -314,6 +293,7 @@ class BookingManager extends Component
         return [
             'user_id' => 'required|exists:users,id',
             'room_id' => 'required|exists:rooms,id',
+            'room_unit_id' => 'required|exists:room_units,id',
             'check_in' => [
                 'required',
                 'date',
