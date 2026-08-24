@@ -3,10 +3,12 @@
 namespace App\Livewire\Welcome;
 
 use App\Models\Booking;
+use App\Models\Payment;
 use App\Models\Promo;
 use App\Models\Room;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use Livewire\Component;
 
@@ -214,8 +216,7 @@ class RoomDetail extends Component
         return min($subtotal, (int) round($discount));
     }
 
-
-
+    /*
     public function save()
     {
         $user = Auth::user();
@@ -230,6 +231,7 @@ class RoomDetail extends Component
         }
 
         $unit = $this->room->units()
+            ->lockForUpdate()
             ->whereDoesntHave('bookings', function ($query) {
                 $query->whereIn('status', ['pending', 'paid',])
                     ->where('check_in', '<', $this->check_out)
@@ -281,6 +283,95 @@ class RoomDetail extends Component
             $this->dispatch('room-detail-error', message: 'Booking gagal ditambahkan.', type: 'error');
         }
     }
+    */
+
+    public function save()
+    {
+        $user = Auth::user();
+
+        if (! $user) {
+            $this->redirect(route('login', absolute: true), navigate: true);
+
+            return;
+        }
+
+        if (! $this->validatePromo()) {
+            return;
+        }
+
+        $this->calculatePrice();
+
+        try {
+            $booking = DB::transaction(function () use ($user) {
+                $unit = $this->room->units()
+                    ->where('status', 'available')
+                    ->lockForUpdate()
+                    ->whereDoesntHave('bookings', function ($query) {
+                        $query->whereIn('status', ['pending', 'paid', 'checked_in'])
+                            ->where('check_in', '<', $this->check_out)
+                            ->where('check_out', '>', $this->check_in);
+                })
+                    ->first();
+
+                if (! $unit) {
+                    return null;
+                }
+
+                $this->user_id = $user->id;
+                $this->room_id = $this->room->id;
+                $this->room_unit_id = $unit->id;
+                $this->booking_code = $this->generateBookingCode();
+
+                $validation = $this->validate();
+
+                $attributes = collect($validation)->except('status')->all();
+                $attributes['check_in'] = Carbon::parse($this->check_in)
+                    ->setTimezone('Asia/Jakarta')
+                    ->setTimeFrom(Carbon::now('Asia/Jakarta'))
+                    ->format('Y-m-d H:i:s');
+                $attributes['check_out'] = Carbon::parse($this->check_out)
+                    ->setTimezone('Asia/Jakarta')
+                    ->setTime(12, 0, 0)
+                    ->format('Y-m-d H:i:s');
+                $attributes['status'] = 'pending';
+
+                return Booking::create($attributes);
+            }, 3);
+
+            if (! $booking) {
+                $this->dispatch(
+                    'room-detail-error',
+                    message: 'Tidak ada unit kamar tersedia.',
+                    type: 'error'
+                );
+
+                return;
+            }
+
+            session()->put("booking_payment_data.{$booking->booking_code}", [
+                'promo_id' => $this->promo?->id,
+                'promo_code' => $this->promo?->code,
+                'subtotal_amount' => $this->subtotal_amount,
+                'discount_amount' => $this->discount_amount,
+                'tax_amount' => $this->tax_amount,
+                'gross_amount' => $this->total_price,
+            ]);
+
+            $this->dispatch('room-detail-saved', message: 'Booking berhasil ditambahkan.', type: 'success');
+            $this->resetForm();
+            $this->redirect(route('payment', $booking->booking_code), navigate: true);
+        } catch (\Throwable $e) {
+            report($e);
+
+            $this->dispatch(
+                'room-detail-error',
+                message: 'Booking gagal diproses. Silakan coba lagi.',
+                type: 'error'
+            );
+        }
+    }
+
+
 
     public function generateBookingCode(): string
     {

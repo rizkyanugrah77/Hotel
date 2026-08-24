@@ -20,7 +20,8 @@
                         <p class="mb-1 text-xs text-gray-500 sm:text-sm">Today's Revenue</p>
                         <h3 class="font-poppins text-lg font-bold text-foreground sm:text-2xl">Rp 12.4M</h3>
                     </div>
-                    <div class="flex h-8 w-8 items-center justify-center rounded-lg bg-green-50 text-green-600 sm:h-10 sm:w-10 sm:rounded-xl">
+                    <div
+                        class="flex h-8 w-8 items-center justify-center rounded-lg bg-green-50 text-green-600 sm:h-10 sm:w-10 sm:rounded-xl">
                         <svg class="h-4 w-4 sm:h-5 sm:w-5" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                             stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round"
@@ -37,7 +38,8 @@
                         <p class="mb-1 text-xs text-gray-500 sm:text-sm">Total Bookings</p>
                         <h3 class="font-poppins text-lg font-bold text-foreground sm:text-2xl">24</h3>
                     </div>
-                    <div class="flex h-8 w-8 items-center justify-center rounded-lg bg-primary/10 text-primary sm:h-10 sm:w-10 sm:rounded-xl">
+                    <div
+                        class="flex h-8 w-8 items-center justify-center rounded-lg bg-primary/10 text-primary sm:h-10 sm:w-10 sm:rounded-xl">
                         <svg class="h-4 w-4 sm:h-5 sm:w-5" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                             stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round"
@@ -54,7 +56,8 @@
                         <p class="mb-1 text-xs text-gray-500 sm:text-sm">Occupancy Rate</p>
                         <h3 class="font-poppins text-lg font-bold text-foreground sm:text-2xl">78%</h3>
                     </div>
-                    <div class="flex h-8 w-8 items-center justify-center rounded-lg bg-blue-50 text-blue-600 sm:h-10 sm:w-10 sm:rounded-xl">
+                    <div
+                        class="flex h-8 w-8 items-center justify-center rounded-lg bg-blue-50 text-blue-600 sm:h-10 sm:w-10 sm:rounded-xl">
                         <svg class="h-4 w-4 sm:h-5 sm:w-5" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                             stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round"
@@ -73,7 +76,8 @@
                         <p class="mb-1 text-xs text-gray-500 sm:text-sm">Check-ins Today</p>
                         <h3 class="font-poppins text-lg font-bold text-foreground sm:text-2xl">12</h3>
                     </div>
-                    <div class="flex h-8 w-8 items-center justify-center rounded-lg bg-accent/10 text-accent-700 sm:h-10 sm:w-10 sm:rounded-xl">
+                    <div
+                        class="flex h-8 w-8 items-center justify-center rounded-lg bg-accent/10 text-accent-700 sm:h-10 sm:w-10 sm:rounded-xl">
                         <svg class="h-4 w-4 sm:h-5 sm:w-5" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                             stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round"
@@ -85,13 +89,86 @@
             </div>
         </div>
 
+        <!-- Filter Laporan -->
+        <div class="bg-white  shadow-md rounded-2xl p-4 sm:p-6 mb-6">
+            <div class="flex flex-col lg:flex-row lg:items-end justify-between gap-4">
+
+                <!-- Judul -->
+                <div>
+                    <h2 class="font-poppins font-bold text-lg text-gray-800">
+                        Laporan Transaksi
+                    </h2>
+                    <p class="text-sm text-gray-500 mt-1">
+                        Filter laporan berdasarkan periode
+                    </p>
+                </div>
+
+                <!-- Filter -->
+                <div class="flex flex-col sm:flex-row gap-3 w-full lg:w-auto">
+
+                    <!-- Jenis Periode -->
+                    <div class="w-full sm:w-40">
+                        <label class="block text-xs font-medium text-gray-500 mb-1.5">
+                            Periode
+                        </label>
+
+                        <select wire:model.live="reportPeriod" class="input py-2.5 text-sm w-full">
+                            <option value="daily">Harian</option>
+                            <option value="monthly">Bulanan</option>
+                            <option value="yearly">Tahunan</option>
+                        </select>
+                    </div>
+
+                    <!-- Harian -->
+                    @if ($reportPeriod === 'daily')
+                        <div class="w-full sm:w-44">
+                            <label class="block text-xs font-medium text-gray-500 mb-1.5">
+                                Tanggal
+                            </label>
+
+                            <input type="date" wire:model.live="reportDate" class="input py-2.5 text-sm w-full">
+                        </div>
+                    @endif
+
+                    <!-- Bulanan -->
+                    @if ($reportPeriod === 'monthly')
+                        <div class="w-full sm:w-44">
+                            <label class="block text-xs font-medium text-gray-500 mb-1.5">
+                                Bulan
+                            </label>
+
+                            <input type="month" wire:model.live="reportMonth" class="input py-2.5 text-sm w-full">
+                        </div>
+                    @endif
+
+                    <!-- Tahunan -->
+                    @if ($reportPeriod === 'yearly')
+                        <div class="w-full sm:w-32">
+                            <label class="block text-xs font-medium text-gray-500 mb-1.5">
+                                Tahun
+                            </label>
+
+                            <select wire:model.live="reportYear" class="input py-2.5 text-sm w-full">
+
+                                @for ($year = now()->year; $year >= now()->year - 5; $year--)
+                                    <option value="{{ $year }}">
+                                        {{ $year }}
+                                    </option>
+                                @endfor
+                            </select>
+                        </div>
+                    @endif
+                </div>
+            </div>
+        </div>
         {{-- Chart --}}
-        <div class="mb-5 w-full max-w-full sm:mb-6">
+        <div class="mb-5 w-full max-w-full sm:mb-6  rounded-xl">
             <div
                 class="grid min-w-0 grid-cols-1 gap-4 rounded-xl border border-slate-200 bg-white p-4 shadow-sm sm:gap-5 sm:rounded-2xl sm:p-5 lg:grid-cols-12 lg:p-6">
-                <h2 class="font-poppins text-base font-bold text-gray-800 sm:text-lg lg:col-span-12 lg:text-xl">Grafik Transaksi</h2>
+                <h2 class="font-poppins text-base font-bold text-gray-800 sm:text-lg lg:col-span-12 lg:text-xl">Grafik
+                    Transaksi</h2>
 
-                <div class="h-52 min-w-0 w-full sm:h-60 lg:col-span-8 lg:h-64">
+                <div class="h-52 min-w-0 w-full sm:h-60 lg:col-span-8 lg:h-64 border border-slate-400 rounded-xl p-2">
                     <canvas
                         wire:key="transaction-chart-{{ $reportPeriod }}-{{ $reportDate }}-{{ $reportMonth }}-{{ $reportYear }}"
                         wire:ignore x-data x-init="$nextTick(() => {
@@ -112,8 +189,8 @@
                         })"></canvas>
                 </div>
 
-                <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:col-span-4 lg:grid-cols-1 lg:gap-5">
-                    <div class="h-36 min-w-0 w-full sm:h-40 lg:h-28">
+                <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:col-span-4 lg:grid-cols-1 lg:gap-5 ">
+                    <div class="h-36 min-w-0 w-full sm:h-40 lg:h-28 border border-slate-400 rounded-xl">
                         <canvas
                             wire:key="transaction-status-chart-{{ $reportPeriod }}-{{ $reportDate }}-{{ $reportMonth }}-{{ $reportYear }}"
                             wire:ignore x-data x-init="$nextTick(() => {
@@ -138,8 +215,9 @@
                             })"></canvas>
                     </div>
 
-                    <div class="h-40 min-w-0 w-full sm:h-40 lg:h-32">
-                        <h3 class="mb-1 text-center text-xs font-semibold text-gray-700 sm:mb-2 sm:text-sm">Metode Pembayaran</h3>
+                    <div class="h-40 min-w-0 w-full sm:h-40 lg:h-32rounded-xl">
+                        <h3 class="mb-1 text-center text-xs font-semibold text-gray-700 sm:mb-2 sm:text-sm">Metode
+                            Pembayaran</h3>
                         <canvas
                             wire:key="payment-method-chart-{{ $reportPeriod }}-{{ $reportDate }}-{{ $reportMonth }}-{{ $reportYear }}"
                             wire:ignore x-data x-init="$nextTick(() => {
@@ -170,17 +248,18 @@
         <div class="grid grid-cols-1 gap-5 lg:grid-cols-3 lg:gap-8">
             <!-- Recent Bookings Table -->
             <div class="lg:col-span-2">
-                <div class="card overflow-hidden rounded-xl border border-gray-100 bg-white shadow-sm sm:rounded-2xl">
-                    <div class="flex items-center justify-between border-b border-gray-100 p-4 sm:p-5 lg:p-6">
+                <div class="card overflow-auto rounded-xl border border-slate-200 bg-white shadow-sm sm:rounded-2xl">
+                    <div class="flex items-center justify-between border-b border-slate-200 p-4 sm:p-5 lg:p-6 ">
                         <h2 class="font-poppins text-base font-bold sm:text-lg">Recent Bookings</h2>
                         <button class="text-xs font-medium text-primary hover:underline sm:text-sm">View All</button>
                     </div>
-                    <div class="divide-y divide-gray-100 md:hidden">
+                    <div class="divide-y divide-slate-200 md:hidden ">
                         @forelse ($rooms->flatMap->bookings as $booking)
                             <article class="space-y-2 p-4">
                                 <div class="flex items-start justify-between gap-3">
                                     <div class="min-w-0">
-                                        <p class="truncate text-sm font-semibold text-foreground">{{ $booking->booking_code }}</p>
+                                        <p class="truncate text-sm font-semibold text-foreground">
+                                            {{ $booking->booking_code }}</p>
                                         <p class="truncate text-xs text-gray-500">{{ $booking->user->name }}</p>
                                     </div>
                                     <span @class([
@@ -195,9 +274,11 @@
                                 <div class="flex items-end justify-between gap-3 text-xs">
                                     <div class="min-w-0 text-gray-500">
                                         <p class="truncate font-medium text-gray-700">{{ $booking->room->name }}</p>
-                                        <p>{{ $booking->check_in->format('d M') }} - {{ $booking->check_out->format('d M Y') }}</p>
+                                        <p>{{ $booking->check_in->format('d M') }} -
+                                            {{ $booking->check_out->format('d M Y') }}</p>
                                     </div>
-                                    <p class="shrink-0 font-semibold text-foreground">Rp {{ number_format($booking->total_price, 0, ',', '.') }}</p>
+                                    <p class="shrink-0 font-semibold text-foreground">Rp
+                                        {{ number_format($booking->total_price, 0, ',', '.') }}</p>
                                 </div>
                             </article>
                         @empty
@@ -248,11 +329,11 @@
                                             {{ $booking->total_price ? 'Rp ' . number_format($booking->total_price, 0, ',', '.') : 'Belum ada data' }}
                                         </td>
                                     </tr>
-                                    @empty
-                                        <tr>
-                                            <td colspan="5" class="py-6 text-center">Belum ada data</td>
-                                        </tr>
-                                    @endforelse
+                                @empty
+                                    <tr>
+                                        <td colspan="5" class="py-6 text-center">Belum ada data</td>
+                                    </tr>
+                                @endforelse
                             </tbody>
                         </table>
                     </div>
@@ -261,7 +342,8 @@
 
             <!-- Room Status Summary -->
             <div>
-                <div class="card rounded-xl border border-gray-100 bg-white p-4 shadow-sm sm:rounded-2xl sm:p-5 lg:p-6">
+                <div
+                    class="card rounded-xl border border-gray-100 bg-white p-4 shadow-sm sm:rounded-2xl sm:p-5 lg:p-6">
                     <h2 class="mb-4 font-poppins text-base font-bold sm:mb-5 sm:text-lg lg:mb-6">Room Availability</h2>
 
                     <div class="space-y-3 sm:space-y-4">
@@ -296,7 +378,36 @@
                                 </svg>
                                 New Booking
                             </button>
-                            <button
+                            <button type="button" wire:click="exportExcel" wire:loading.attr="disabled"
+                                class="flex flex-col items-center gap-1.5 rounded-lg border border-gray-200 p-2.5 text-xs font-medium transition-colors hover:bg-gray-50 sm:gap-2 sm:rounded-xl sm:p-3 sm:text-sm">
+
+                                <!-- Excel Icon -->
+                                <svg class="h-4 w-4 text-gray-500 sm:h-5 sm:w-5" fill="none" viewBox="0 0 24 24"
+                                    stroke-width="1.5" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                        d="M19.5 14.25v-2.625a3.375 3.375 0 0 0-3.375-3.375h-1.5A1.125 1.125 0 0 1 13.5 7.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 0 0-9-9Z" />
+                                </svg>
+
+                                <!-- Loading -->
+                                <svg wire:loading class="w-5 h-5 animate-spin" fill="none" viewBox="0 0 24 24">
+                                    <circle class="opacity-25" cx="12" cy="12" r="10"
+                                        stroke="currentColor" stroke-width="4">
+                                    </circle>
+
+                                    <path class="opacity-75" fill="currentColor"
+                                        d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z">
+                                    </path>
+                                </svg>
+
+                                <span wire:loading.remove>
+                                    Export Excel
+                                </span>
+
+                                <span wire:loading>
+                                    Mengekspor...
+                                </span>
+                            </button>
+                            {{-- <button
                                 class="flex flex-col items-center gap-1.5 rounded-lg border border-gray-200 p-2.5 text-xs font-medium transition-colors hover:bg-gray-50 sm:gap-2 sm:rounded-xl sm:p-3 sm:text-sm">
                                 <svg class="h-4 w-4 text-gray-500 sm:h-5 sm:w-5" fill="none" viewBox="0 0 24 24"
                                     stroke-width="1.5" stroke="currentColor">
@@ -304,7 +415,7 @@
                                         d="M19.5 14.25v-2.625a3.375 3.375 0 0 0-3.375-3.375h-1.5A1.125 1.125 0 0 1 13.5 7.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 0 0-9-9Z" />
                                 </svg>
                                 Generate Report
-                            </button>
+                            </button> --}}
                         </div>
                     </div>
                 </div>

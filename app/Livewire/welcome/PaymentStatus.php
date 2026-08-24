@@ -5,8 +5,6 @@ namespace App\Livewire\welcome;
 use App\Models\Payment;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Livewire\Component;
-use Midtrans\Config;
-use Midtrans\Transaction;
 
 class PaymentStatus extends Component
 {
@@ -22,71 +20,7 @@ class PaymentStatus extends Component
             return redirect()->route('index');
         }
 
-        // Fetch latest status from Midtrans
-        Config::$serverKey = config('midtrans.serverKey');
-        Config::$isProduction = config('midtrans.isProduction');
-        Config::$isSanitized = config('midtrans.isSanitized');
-        Config::$is3ds = config('midtrans.is3ds');
-
-        try {
-            $statusResponse = Transaction::status($orderId);
-            $status = $statusResponse->transaction_status ?? null;
-            $type = $statusResponse->payment_type ?? null;
-            $fraud = $statusResponse->fraud_status ?? null;
-            $acquirer = $statusResponse->acquirer ?? null;
-
-            if ($status == 'capture') {
-                if ($type == 'credit_card') {
-                    $payment->transaction_status = ($fraud == 'challenge') ? 'CHALLENGE' : 'SUCCESS';
-                } elseif ($status == 'settlement') {
-                    $payment->transaction_status = 'SUCCESS';
-                    $payment->booking->update([
-                        'status' => 'paid',
-                    ]);
-                    $payment->booking->roomUnit = 'occupied';
-                } elseif ($status == 'pending') {
-                    $payment->transaction_status = 'PENDING';
-                    $payment->booking->update([
-                        'status' => 'pending',
-                    ]);
-                    $payment->booking->roomUnit = 'available';
-                } elseif ($status == 'deny') {
-                    $payment->transaction_status = 'FAILED';
-                    $payment->booking->update([
-                        'status' => 'pending',
-                    ]);
-                    $payment->booking->roomUnit = 'available';
-                } elseif ($status == 'expire') {
-                    $payment->transaction_status = 'EXPIRED';
-                    $payment->booking->update([
-                        'status' => 'cancelled',
-                    ]);
-
-                    $payment->booking->roomUnit = 'available';
-                } elseif ($status == 'cancel') {
-                    $payment->transaction_status = 'CANCEL';
-                    $payment->booking->update([
-                        'status' => 'cancelled',
-                    ]);
-                    $payment->booking->roomUnit = 'available';
-                } elseif ($status == 'refund') {
-                    $payment->transaction_status = 'REFUNDED';
-                    $payment->booking->update([
-                        'status' => 'cancelled',
-                    ]);
-                    $payment->booking->roomUnit = 'available';
-                }
-
-                if ($type) {
-                    $payment->payment_type = $type;
-                }
-                $payment->payment_method = $acquirer;
-                $payment->save();
-            }
-        } catch (\Exception $e) {
-            session()->flash('error', 'Payment status check failed: ' . $e->getMessage());
-        }
-
+        // The signed webhook is the sole authority for payment state transitions.
         $this->payment = $payment;
     }
 

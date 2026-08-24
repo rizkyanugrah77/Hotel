@@ -159,33 +159,71 @@
 
         <div class="relative z-10 max-w-4xl mx-auto px-4 text-center animate-on-scroll">
             <div
-                class="inline-flex items-center gap-2 px-4 py-2 bg-white/10 backdrop-blur-sm rounded-full border border-white/20 mb-6">
-                <svg class="w-4 h-4 text-accent" fill="currentColor" viewBox="0 0 24 24">
+                class="inline-flex items-center gap-2 px-4 py-2 bg-accent/15 backdrop-blur-md rounded-full border border-accent/40 mb-6 shadow-lg shadow-black/10">
+                <span class="relative flex h-2 w-2">
+                    <span
+                        class="absolute inline-flex h-full w-full rounded-full bg-accent opacity-75 animate-ping"></span>
+                    <span class="relative inline-flex h-2 w-2 rounded-full bg-accent"></span>
+                </span>
+                <svg class="w-4 h-4 text-accent" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                     <path
                         d="M11.48 3.499a.562.562 0 0 1 1.04 0l2.125 5.111a.563.563 0 0 0 .475.345l5.518.442c.499.04.701.663.321.988l-4.204 3.602a.563.563 0 0 0-.182.557l1.285 5.385a.562.562 0 0 1-.84.61l-4.725-2.885a.562.562 0 0 0-.586 0L6.982 20.54a.562.562 0 0 1-.84-.61l1.285-5.386a.562.562 0 0 0-.182-.557l-4.204-3.602a.562.562 0 0 1 .321-.988l5.518-.442a.563.563 0 0 0 .475-.345L11.48 3.5Z" />
                 </svg>
-                <span class="text-sm text-white/90">Limited Time Offer</span>
+                <span class="text-xs font-poppins font-semibold tracking-[0.18em] text-white uppercase">Penawaran
+                    Spesial</span>
             </div>
-            <h2 class="text-3xl md:text-5xl lg:text-6xl font-poppins font-bold text-white leading-tight">
-                Your Dream Lakeside <br class="hidden sm:block" />
-                <span class="text-gradient-accent">Escape Awaits</span>
-            </h2>
-            <p class="text-lg text-white/80 mt-6 max-w-2xl mx-auto">
-                Book your stay today and enjoy 20% off for early reservations. Experience the magic of Samosir Island
-                with world-class luxury.
-            </p>
-            <div class="flex flex-col sm:flex-row justify-center gap-4 mt-10">
-                {{-- <a href="/pages/booking.html" class="btn-accent text-base !px-10 !py-4">
-                    Book Now — Save 20%
-                    <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3" />
-                    </svg>
-                </a> --}}
-                <a href="{{ route('view-rooms') }}" wire:navigate
-                    class="inline-flex items-center justify-center gap-2 px-10 py-4 border-2 border-white/30 text-white font-poppins font-semibold rounded-2xl transition-all duration-300 hover:bg-white/10 backdrop-blur-sm">
-                    View Rooms
-                </a>
+            @if ($promos->count() > 0)
+                <p class="text-sm md:text-base font-medium tracking-wide text-white/80 mb-3">Liburan impian di Samosir
+                    kini lebih hemat</p>
+                <h2
+                    class="text-4xl md:text-6xl lg:text-7xl font-poppins font-bold text-white leading-[1.05] tracking-tight">
+                    {{ $promos->first()->name }}
+                    <span class="block mt-2 text-gradient-accent">{{ $promos->first()->description }}</span>
+                </h2>
+            @else
+                <p class="text-sm md:text-base font-medium tracking-wide text-white/80 mb-3">Waktunya berhenti
+                    membayangkan dan mulai berlibur</p>
+                <h2
+                    class="text-4xl md:text-6xl lg:text-7xl font-poppins font-bold text-white leading-[1.05] tracking-tight">
+                    Your Dream Lakeside
+                    <span class="block mt-2 text-gradient-accent">Escape Awaits</span>
+                </h2>
+            @endif
+            @if ($promos->count() > 0)
+                <div
+                    class="inline-flex items-center gap-3 mt-7 px-5 py-3 rounded-2xl bg-black/20 border border-dashed border-white/50 backdrop-blur-sm">
+                    <span class="text-sm text-white/75">Gunakan kode</span>
+                    <span
+                        class="font-poppins font-bold tracking-[0.16em] text-accent">{{ $promos->first()->code }}</span>
+                </div>
+            @else
+                <p class="text-lg text-white/80 mt-6 max-w-2xl mx-auto leading-relaxed">
+                    Book your stay today and enjoy 20% off for early reservations. Experience the magic of Samosir
+                    Island
+                    with world-class luxury.
+                </p>
+            @endif
+            <div class="flex flex-col sm:flex-row justify-center items-center gap-4 mt-9">
+                @if ($promos->count() > 0)
+                    <a href="{{ route('view-rooms') }}" wire:navigate
+                        class="btn-accent text-base !px-8 !py-4 shadow-xl shadow-black/25 hover:scale-[1.03]">
+                        Pesan Sekarang, Hemat
+                        <span
+                            class="font-bold">{{ $promos->first()->discount_type == 'percentage' ? $promos->first()->discount_value . '%' : 'Rp' . number_format($promos->first()->discount_value, '0', ',', '.') }}</span>
+                        <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke-width="2"
+                            stroke="currentColor" aria-hidden="true">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3" />
+                        </svg>
+                    </a>
+                @else
+                    <a href="{{ route('view-rooms') }}" wire:navigate
+                        class="inline-flex items-center justify-center gap-2 px-10 py-4 border-2 border-white/30 text-white font-poppins font-semibold rounded-2xl transition-all duration-300 hover:bg-white/10 hover:-translate-y-0.5 backdrop-blur-sm">
+                        Lihat Ketersediaan Kamar
+                    </a>
+                @endif
             </div>
+            {{-- <p class="mt-6 text-sm text-white/65">Pemandangan dan kenyamanan terbaik menanti Anda di tepi Danau Toba.</p> --}}
         </div>
     </section>
 

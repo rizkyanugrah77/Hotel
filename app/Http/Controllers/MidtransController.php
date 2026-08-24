@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\Payment;
+use App\Models\Booking;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Midtrans\Config;
 use Midtrans\Notification;
@@ -42,96 +44,73 @@ class MidtransController extends Controller
                 ], 403);
             }
 
-            $payment = Payment::with('booking')->where('order_id', $orderId)->first();
-
-            if (! $payment) {
-                return response()->json([
-                    'message' => 'Payment not found',
-                ], 404);
-            }
-
             $transaction = $notification->transaction_status;
             $type = $notification->payment_type;
             $fraud = $notification->fraud_status ?? null;
             $acquirer = $notification->acquirer;
 
-            switch ($transaction) {
+            $paymentFound = DB::transaction(function () use ($orderId, $transaction, $type, $fraud, $acquirer, $notification) {
+                $payment = Payment::where('order_id', $orderId)->lockForUpdate()->first();
 
-                case 'capture':
-                    if ($type == 'credit_card') {
-                        $payment->transaction_status =
-                            ($fraud == 'challenge')
-                            ? 'CHALLENGE'
-                            : 'SUCCESS';
+                if (! $payment) {
+                    return false;
+                }
+
+                $booking = Booking::whereKey($payment->booking_id)->lockForUpdate()->firstOrFail();
+                $finalPaymentStatuses = ['SUCCESS', 'FAILED', 'EXPIRED', 'CANCEL', 'REFUND'];
+
+                if (in_array($payment->transaction_status, $finalPaymentStatuses, true)) {
+                    return true;
+                }
+
+                $paymentStatus = match ($transaction) {
+                    'capture' => $type === 'credit_card' && $fraud === 'challenge'
+                        ? 'CHALLENGE'
+                        : 'SUCCESS',
+                    'settlement' => 'SUCCESS',
+                    'pending' => 'PENDING',
+                    'deny' => 'FAILED',
+                    'expire' => 'EXPIRED',
+                    'cancel' => 'CANCEL',
+                    'refund' => 'REFUND',
+                    default => null,
+                };
+
+                if (! $paymentStatus) {
+                    return true;
+                }
+
+                $payment->update([
+                    'transaction_status' => $paymentStatus,
+                    'payment_type' => $type,
+                    'transaction_id' => $notification->transaction_id,
+                    'payment_method' => $acquirer,
+                ]);
+
+                if ($paymentStatus === 'SUCCESS' && $booking->status === 'pending') {
+                    $booking->update(['status' => 'paid']);
+                }
+
+                if (in_array($paymentStatus, ['FAILED', 'EXPIRED', 'CANCEL', 'REFUND'], true)
+                    && $booking->status === 'pending') {
+                    $hasOtherActivePayment = Payment::where('booking_id', $booking->id)
+                        ->where('id', '!=', $payment->id)
+                        ->whereIn('transaction_status', ['pending', 'PENDING', 'CHALLENGE', 'SUCCESS'])
+                        ->exists();
+
+                    if (! $hasOtherActivePayment) {
+                        $booking->update(['status' => 'cancelled']);
                     }
-                    break;
+                }
 
-                case 'settlement':
-                    $payment->transaction_status = 'SUCCESS';
-                    $payment->booking()->update([
-                        'status' => 'paid',
-                    ]);
-                    $payment->booking->roomUnit()->update([
-                        'status' => 'occupied',
-                    ]);
-                    break;
+                return true;
+            }, 3);
 
-                case 'pending':
-                    $payment->transaction_status = 'PENDING';
-                    $payment->booking()->update([
-                        'status' => 'pending',
-                    ]);
-                    $payment->booking->roomUnit()->update([
-                        'status' => 'available'
-                    ]);
-                    break;
-
-                case 'deny':
-                    $payment->transaction_status = 'FAILED';
-                    $payment->booking()->update([
-                        'status' => 'cancelled',
-                        'payment_method' => $acquirer,
-                    ]);
-                    $payment->booking->roomUnit()->update([
-                        'status' => 'available'
-                    ]);
-                    break;
-
-                case 'expire':
-                    $payment->transaction_status = 'EXPIRED';
-                    $payment->booking()->update([
-                        'status' => 'cancelled',
-                    ]);
-                    $payment->booking->roomUnit()->update([
-                        'status' => 'available'
-                    ]);
-                    break;
-
-                case 'cancel':
-                    $payment->transaction_status = 'CANCEL';
-                    $payment->booking()->update([
-                        'status' => 'cancelled',
-                    ]);
-                    $payment->booking->roomUnit()->update([
-                        'status' => 'available'
-                    ]);
-                    break;
-
-                case 'refund':
-                    $payment->transaction_status = 'REFUND';
-                    $payment->booking()->update([
-                        'status' => 'cancelled',
-                    ]);
-                    $payment->booking->roomUnit()->update([
-                        'status' => 'available'
-                    ]);
-                    break;
+            if (! $paymentFound) {
+                return response()->json([
+                    'message' => 'Payment not found',
+                ], 404);
             }
-
-            $payment->payment_type = $type;
-            $payment->transaction_id = $notification->transaction_id;
-            $payment->payment_method = $acquirer;
-            $payment->save();
 
             Log::info('Midtrans Callback', [
                 'order_id' => $orderId,

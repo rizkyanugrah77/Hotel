@@ -66,14 +66,12 @@ class Room extends Model
             return;
         }
 
-        $occupiedUnits = $this->units()
-            ->where('status', 'occupied')
+        $availableUnits = $this->units()
+            ->where('status', 'available')
             ->count();
 
         $this->update([
-            'status' => $occupiedUnits === $totalUnits
-                ? 'occupied'
-                : 'available'
+            'status' => $availableUnits === 0 ? 'maintenance' : 'available',
         ]);
     }
 }

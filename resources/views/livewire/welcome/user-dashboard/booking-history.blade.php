@@ -38,7 +38,7 @@
                                 <span class="badge-warning text-[10px]">Pending</span>
                             @elseif($booking->status === 'cancelled')
                                 <span class="badge bg-red-50 text-red-600 text-[10px]">Cancelled</span>
-                            @elseif($booking->status === 'completed')
+                            @elseif($booking->status === 'checked_in')
                                 <span class="badge bg-gray-100 text-gray-600 text-[10px]">Selesai</span>
                             @else
                                 <span
@@ -82,13 +82,15 @@
                                     $payment = $payments->where('booking_id', $booking->id)->first();
                                 @endphp
                                 @if ($payment)
-                                    @if ($booking->status === 'pending' || $booking->status === 'cancelled')
-                                        <a href="{{ route('payment-check', $payment->order_id) }}" wire:navigate
-                                            class="btn-ghost text-xs !px-2 !py-1.5 inline-flex">Cek</a>
-                                    @else
+                                    @if ($booking->status === 'paid' || $booking->status === 'checked_in' || $booking->status === 'checked_out')
                                         <a href="{{ route('payment-success', $payment->order_id) }}" wire:navigate
-                                            class="btn-primary text-xs !px-2 !py-1.5 inline-flex">Cetak</a>
+                                            class="btn-ghost text-xs !px-2 !py-1.5 inline-flex">Cek Bukti</a>
+                                    @elseif($booking->status === 'pending' || $booking->status === 'cancelled')
+                                        <a href="{{ route('payment-success', $payment->order_id) }}" wire:navigate
+                                            class="btn-primary text-xs !px-2 !py-1.5 inline-flex">Cek Pembayaran</a>
                                     @endif
+                                @else
+                                    <span class="badge-primary text-[10px]">Belum ada pembayaran</span>
                                 @endif
                             </td>
                             <td class="py-3.5 px-6 font-medium text-foreground">
@@ -99,7 +101,7 @@
                             <td class="py-3.5 px-6 text-gray-500">{{ $booking->total_guests }} orang</td>
                             <td class="py-3.5 px-6">
                                 <span
-                                    class="badge-{{ $booking->status === 'paid' ? 'success' : ($booking->status === 'pending' ? 'warning' : ($booking->status === 'cancelled' ? 'primary' : ($booking->status === 'completed' ? 'success' : ''))) }}">{{ ucfirst($booking->status) }}</span>
+                                    class="badge-{{ $booking->status === 'paid' ? 'success' : ($booking->status === 'pending' ? 'warning' : ($booking->status === 'cancelled' ? 'primary' : ($booking->status === 'checked_in' ? 'success' : ''))) }}">{{ ucfirst($booking->status) }}</span>
                             </td>
                             <td class="py-3.5 px-6 font-semibold text-foreground text-right">Rp
                                 {{ number_format($booking->total_price, 0, ',', '.') }}</td>

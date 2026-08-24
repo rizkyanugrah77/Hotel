@@ -71,6 +71,12 @@ class PaymentController extends Component
 
     public function pay()
     {
+        if ($this->bookings->status !== 'pending') {
+            session()->flash('error', 'Booking ini tidak dapat dibayar.');
+
+            return;
+        }
+
         // 1. Setup Midtrans Configuration
         Config::$serverKey = config('midtrans.serverKey');
         Config::$isProduction = config('midtrans.isProduction');

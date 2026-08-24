@@ -40,6 +40,7 @@ class TransactionsExport implements FromCollection, WithHeadings, WithMapping, S
             'Kode Booking',
             'User',
             'Kamar',
+            'Pajak',
             'Metode Pembayaran',
             'Total',
             'Status'
@@ -58,6 +59,7 @@ class TransactionsExport implements FromCollection, WithHeadings, WithMapping, S
             $payment->booking?->booking_code ?? '-',
             $payment->user?->name ?? '-',
             $payment->booking?->room?->name ?? '-',
+            $payment->tax_amount,
             $payment->payment_type ?? ($payment->payment_method ?? '-'),
             $payment->gross_amount,
             ucfirst($payment->transaction_status)

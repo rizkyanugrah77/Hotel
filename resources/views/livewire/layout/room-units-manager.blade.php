@@ -240,11 +240,14 @@
             </div>
             <div>
                 <x-input-label for="status" value="Status Unit" />
-                <select id="status" wire:model="status" class="mt-1">
+                <select id="status" wire:model="status" class="mt-1" @disabled($status === 'occupied')>
                     <option value="available">Available</option>
-                    <option value="occupied">Occupied</option>
+                    <option value="occupied" disabled>Occupied (otomatis saat check-in)</option>
                     <option value="maintenance">Maintenance</option>
                 </select>
+                @if ($status === 'occupied')
+                    <p class="mt-1 text-xs text-amber-700">Status unit berubah otomatis saat booking check-in/check-out.</p>
+                @endif
                 <x-input-error :message="$errors->first('status')" />
             </div>
 

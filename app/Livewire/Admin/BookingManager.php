@@ -4,9 +4,11 @@ namespace App\Livewire\Admin;
 
 use App\Models\Booking;
 use App\Models\Room;
+use App\Models\RoomUnit;
 use App\Models\User;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use Livewire\Component;
 use Livewire\WithPagination;
@@ -70,85 +72,102 @@ class BookingManager extends Component
     public function save()
     {
         $validation = $this->validate();
-
-        $room = $this->rooms->find($this->room_id);
-
-        $unit = $room->units()
-            ->whereKey($this->room_unit_id)
-            ->whereDoesntHave('bookings', function ($query) {
-                $query->whereIn('status', ['pending', 'paid', 'checked_in'])
-                    ->when($this->bookingEditId, function ($query) {
-                        $query->where('id', '!=', $this->bookingEditId);
-                    })
-                    ->where('check_in', '<', $this->check_out)
-                    ->where('check_out', '>', $this->check_in);
-            })
-            ->first();
-
-        if (! $unit) {
-            $this->dispatch(
-                'booking-error',
-                message: 'Unit kamar tidak tersedia pada tanggal tersebut.',
-                type: 'error'
-            );
-
-            return;
-        }
-
-        $attributes = collect($validation)->except('status')->all();
-
-        $booking = $this->bookingEditId
-            ? Booking::findOrFail($this->bookingEditId)
-            : null;
-
-        $attributes['booking_code'] = $booking
-            ? $booking->booking_code
-            : $this->generateBookingCode();
-
-        $attributes['room_id'] = $room->id;
-        $attributes['room_unit_id'] = $unit->id;
-        $attributes['user_id'] = $this->user_id;
-
-        $attributes['check_in'] = Carbon::parse($this->check_in)
-            ->setTimezone('Asia/Jakarta')
-            ->setTimeFrom(Carbon::now('Asia/Jakarta'))
-            ->format('Y-m-d H:i:s');
-
-        $attributes['check_out'] = Carbon::parse($this->check_out)
-            ->setTimezone('Asia/Jakarta')
-            ->setTime(12, 0, 0)
-            ->format('Y-m-d H:i:s');
-
-        $attributes['total_guests'] = $room->capacity;
-
-        $nights = Carbon::parse($this->check_in)
-            ->diffInDays(Carbon::parse($this->check_out));
-
-        $attributes['total_price'] = $room->price * max($nights, 1);
-        $attributes['status'] = $this->status;
-
-        $isUpdate = (bool) $booking;
-        $previousUnit = $booking?->roomUnit;
+        $isUpdate = (bool) $this->bookingEditId;
 
         try {
-            if ($booking) {
-                $booking->update($attributes);
-            } else {
-                $booking = Booking::create($attributes);
-            }
+            $booking = DB::transaction(function () use ($validation) {
+                $room = Room::findOrFail($this->room_id);
+                $booking = $this->bookingEditId
+                    ? Booking::lockForUpdate()->findOrFail($this->bookingEditId)
+                    : null;
+                $wasCheckedIn = $booking?->status === 'checked_in';
+                $previousUnitId = $booking?->room_unit_id;
 
-            if ($previousUnit && ! $previousUnit->is($unit)) {
-                $previousUnit->update(['status' => 'available']);
-            }
+                $unit = $room->units()
+                    ->whereKey($this->room_unit_id)
+                    ->where(function ($query) use ($booking) {
+                        $query->where('status', 'available')
+                            ->when($booking, function ($query) use ($booking) {
+                                $query->orWhere(function ($query) use ($booking) {
+                                    $query->where('status', 'occupied')
+                                        ->whereKey($booking->room_unit_id);
+                                });
+                            });
+                    })
+                    ->lockForUpdate()
+                    ->whereDoesntHave('bookings', function ($query) {
+                        $query->whereIn('status', ['pending', 'paid', 'checked_in'])
+                            ->when($this->bookingEditId, function ($query) {
+                                $query->where('id', '!=', $this->bookingEditId);
+                            })
+                            ->where('check_in', '<', $this->check_out)
+                            ->where('check_out', '>', $this->check_in);
+                    })
+                    ->first();
 
-            // pending, paid, atau checkin = unit tidak bisa dipakai
-            if (in_array($booking->status, ['pending', 'paid', 'checked_in'])) {
-                $unit->update(['status' => 'occupied']);
-            }
+                if (! $unit) {
+                    return null;
+                }
 
-            // checkout atau cancelled = unit tersedia kembali
-            if (in_array($booking->status, ['checked_out', 'cancelled'])) {
-                $unit->update(['status' => 'available']);
+                $attributes = collect($validation)->except('status')->all();
+                $attributes['booking_code'] = $booking
+                    ? $booking->booking_code
+                    : $this->generateBookingCode();
+                $attributes['room_id'] = $room->id;
+                $attributes['room_unit_id'] = $unit->id;
+                $attributes['user_id'] = $this->user_id;
+                $attributes['check_in'] = Carbon::parse($this->check_in)
+                    ->setTimezone('Asia/Jakarta')
+                    ->setTimeFrom(Carbon::now('Asia/Jakarta'))
+                    ->format('Y-m-d H:i:s');
+                $attributes['check_out'] = Carbon::parse($this->check_out)
+                    ->setTimezone('Asia/Jakarta')
+                    ->setTime(12, 0, 0)
+                    ->format('Y-m-d H:i:s');
+                $attributes['total_guests'] = $room->capacity;
+                $attributes['total_price'] = $room->price * max(
+                    Carbon::parse($this->check_in)->diffInDays(Carbon::parse($this->check_out)),
+                    1
+                );
+                $attributes['status'] = $this->status;
+
+                $previousUnit = $wasCheckedIn && $previousUnitId !== $unit->id
+                    ? RoomUnit::whereKey($previousUnitId)->lockForUpdate()->first()
+                    : null;
+
+                if ($booking) {
+                    $booking->update($attributes);
+                } else {
+                    $booking = Booking::create($attributes);
+                }
+
+                if ($previousUnit) {
+                    $previousUnit->newQuery()
+                        ->whereKey($previousUnit->id)
+                        ->where('status', 'occupied')
+                        ->update(['status' => 'available']);
+                }
+
+                if ($booking->status === 'checked_in') {
+                    $unit->update(['status' => 'occupied']);
+                } elseif ($wasCheckedIn) {
+                    $unit->newQuery()
+                        ->whereKey($unit->id)
+                        ->where('status', 'occupied')
+                        ->update(['status' => 'available']);
+                }
+
+                return $booking;
+            }, 3);
+
+            if (! $booking) {
+                $this->dispatch(
+                    'booking-error',
+                    message: 'Unit kamar tidak tersedia pada tanggal tersebut.',
+                    type: 'error'
+                );
+
+                return;
             }
 
             $this->resetForm();
@@ -297,7 +316,6 @@ class BookingManager extends Component
             'check_in' => [
                 'required',
                 'date',
-                'after_or_equal:today',
             ],
             'check_out' => [
                 'required',

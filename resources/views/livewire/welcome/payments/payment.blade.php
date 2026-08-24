@@ -1,6 +1,17 @@
 <div>
     <main class="px-4 py-32">
         <div class="max-w-5xl mx-auto">
+            @if (session('error'))
+                <div class="mb-6 flex items-start gap-3 rounded-2xl border border-red-200 bg-red-50 p-4 text-sm text-red-800"
+                    role="alert">
+                    <svg class="mt-0.5 h-5 w-5 shrink-0" fill="none" viewBox="0 0 24 24" stroke-width="2"
+                        stroke="currentColor" aria-hidden="true">
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                            d="M12 9v3.75m9-.75a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9 3.75h.008v.008H12v-.008Z" />
+                    </svg>
+                    <p>{{ session('error') }}</p>
+                </div>
+            @endif
 
             <!-- Stepper -->
             <div class="mb-12">

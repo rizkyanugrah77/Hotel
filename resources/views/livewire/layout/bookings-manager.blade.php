@@ -490,13 +490,14 @@
                         <option value="">Select RoomUnit</option>
                         @if ($room_id)
                             @foreach ($rooms->find($room_id)->units as $room_unit)
-                                @if ($room_unit->status == 'available' || $room_unit->id == $room_unit_id)
-                                    <option value="{{ $room_unit->id }}"
-                                        {{ $room_unit->id == $room_unit_id ? 'selected' : '' }}>
-                                        {{ $room_unit->room_number }}</option>
-                                @else
-                                    <option value="{{ $room_unit->id }}" disabled>
-                                        {{ $room_unit->room_number }} (Tidak Tersedia)
+                                 @if ($room_unit->status == 'available' || $room_unit->id == $room_unit_id)
+                                     <option value="{{ $room_unit->id }}"
+                                         {{ $room_unit->id == $room_unit_id ? 'selected' : '' }}
+                                         @disabled($room_unit->status === 'occupied')>
+                                         {{ $room_unit->room_number }}{{ $room_unit->status === 'occupied' ? ' (Occupied)' : '' }}</option>
+                                 @else
+                                     <option value="{{ $room_unit->id }}" disabled>
+                                         {{ $room_unit->room_number }} ({{ ucfirst($room_unit->status) }})
                                     </option>
                                 @endif
                             @endforeach

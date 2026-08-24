@@ -9,10 +9,11 @@
 }" x-on:open-modal-edit-promo.window="$dispatch('open-modal', 'manage-promo')"
     x-on:show-toast.window="showToast($event.detail.message, $event.detail.type)"
     x-on:promo-error.window="showToast($event.detail.message, 'error')"
-    x-on:promo-saved.window="$dispatch('close-modal', 'manage-promo'), $dispatch('show-toast', $event.detail.message, $event.detail.type)"
+    x-on:promo-saved.window="$dispatch('close-modal', 'manage-promo'), $dispatch('show`-toast', $event.detail.message, $event.detail.type)"
+    x-on:promo-edit.window="$dispatch('open-modal', 'manage-promo')"
     x-on:promo-deleted.window="$dispatch('close-modal', 'manage-promo'), $dispatch('show-toast', $event.detail.message, 'success')"
     x-on:promo-deleted.window="$dispatch('promo-delete-confirmation')"
-    x-on:promo-deleted-error.window="$dispatch('show-toast', $event.detail.message, 'error')"
+    x-on:promo-delete-error.window="$dispatch('show-toast', $event.detail.message, 'error')"
     class="min-w-0 flex-1 overflow-y-auto p-4 sm:p-6 lg:p-8">
     <x-toast />
     <div class="mb-5 flex flex-col gap-3 sm:mb-6 sm:flex-row sm:items-end sm:justify-between">
@@ -125,6 +126,7 @@
                         <th class="px-4 py-3 font-medium">Kuota</th>
                         <th class="px-4 py-3 font-medium">Periode</th>
                         <th class="px-4 py-3 font-medium">Status</th>
+                        <th class="px-4 py-3 font-medium">Aksi</th>
                     </tr>
                 </thead>
                 <tbody class="divide-y divide-gray-100">
@@ -167,10 +169,15 @@
                                     'bg-gray-100 text-gray-600' => !$isActive,
                                 ])>{{ $isActive ? 'Aktif' : 'Nonaktif' }}</span>
                             </td>
+                            <td class="px-4 py-3">
+                                <div class="flex items-center gap-2">
+                                    <x-edit-button :item="$promo" :title="'Edit promo'" action="edit" />
+                                </div>
+                            </td>
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="6" class="px-4 py-12 text-center text-gray-500">Belum ada promo.</td>
+                            <td colspan="7" class="px-4 py-12 text-center text-gray-500">Belum ada promo.</td>
                         </tr>
                     @endforelse
                 </tbody>
@@ -184,18 +191,22 @@
         @endif
     </section>
 
-    <x-modal-2 name="manage-promo" title="Tambah Promo">
+    <x-modal-2 name="manage-promo" :title="$editingPromoId ? 'Edit Promo' : 'Tambah Promo'">
         <form wire:submit="save">
             <div class="space-y-4">
                 <div class="grid gap-4 sm:grid-cols-2">
                     <div>
                         <x-input-label for="promo-code" value="Kode Promo" />
-                        <x-text-input id="promo-code" wire:model="code" class="input mt-1" placeholder="Contoh: HEMAT10" required />
+
+                        <x-text-input id="promo-code" wire:model="code" class="input mt-1"
+                            placeholder="Contoh: HEMAT10" required />
+
                         <x-input-error :message="$errors->get('code')" class="mt-2" />
                     </div>
                     <div>
                         <x-input-label for="promo-name" value="Nama Promo" />
-                        <x-text-input id="promo-name" wire:model="name" class="input mt-1" placeholder="Contoh: Promo Liburan" required />
+                        <x-text-input id="promo-name" wire:model="name" class="input mt-1"
+                            placeholder="Contoh: Promo Liburan" required />
                         <x-input-error :message="$errors->get('name')" class="mt-2" />
                     </div>
                 </div>
@@ -212,7 +223,8 @@
                     </div>
                     <div>
                         <x-input-label for="promo-discount-value" value="Nilai Diskon" />
-                        <x-text-input id="promo-discount-value" wire:model="discount_value" type="number" min="0" class="input mt-1" placeholder="0" required />
+                        <x-text-input id="promo-discount-value" wire:model="discount_value" type="number"
+                            min="0" class="input mt-1" placeholder="0" required />
                         <x-input-error :message="$errors->get('discount_value')" class="mt-2" />
                     </div>
                 </div>
@@ -220,12 +232,14 @@
                 <div class="grid gap-4 sm:grid-cols-2">
                     <div>
                         <x-input-label for="promo-minimum-transaction" value="Nilai Transaksi Minimum" />
-                        <x-text-input id="promo-minimum-transaction" wire:model="minimum_transaction" type="number" min="0" class="input mt-1" placeholder="0" required />
+                        <x-text-input id="promo-minimum-transaction" wire:model="minimum_transaction" type="number"
+                            min="0" class="input mt-1" placeholder="0" required />
                         <x-input-error :message="$errors->get('minimum_transaction')" class="mt-2" />
                     </div>
                     <div>
                         <x-input-label for="promo-quota" value="Kuota" />
-                        <x-text-input id="promo-quota" wire:model="quota" type="number" min="0" class="input mt-1" placeholder="Kosongkan untuk tanpa batas" />
+                        <x-text-input id="promo-quota" wire:model="quota" type="number" min="0"
+                            class="input mt-1" placeholder="Kosongkan untuk tanpa batas" />
                         <x-input-error :message="$errors->get('quota')" class="mt-2" />
                     </div>
                 </div>
@@ -233,7 +247,8 @@
                 <div class="grid gap-4 sm:grid-cols-2">
                     <div>
                         <x-input-label for="promo-used-count" value="Jumlah Penggunaan" />
-                        <x-text-input id="promo-used-count" wire:model="used_count" type="number" min="0" class="input mt-1" placeholder="0" required />
+                        <x-text-input id="promo-used-count" wire:model="used_count" type="number" min="0"
+                            class="input mt-1" placeholder="0" required />
                         <x-input-error :message="$errors->get('used_count')" class="mt-2" />
                     </div>
                     <div class="flex items-end">
@@ -244,8 +259,10 @@
                                     <p class="mt-0.5 text-xs text-gray-500">Promo dapat digunakan saat aktif.</p>
                                 </div>
                                 <label class="relative inline-flex cursor-pointer items-center">
-                                    <input id="promo-is-active" type="checkbox" wire:model="is_active" class="peer sr-only" />
-                                    <span class="h-6 w-11 rounded-full bg-gray-200 transition-colors peer-checked:bg-primary peer-focus:ring-4 peer-focus:ring-primary/20 after:absolute after:left-[2px] after:top-[2px] after:h-5 after:w-5 after:rounded-full after:border after:border-gray-300 after:bg-white after:transition-transform peer-checked:after:translate-x-full"></span>
+                                    <input id="promo-is-active" type="checkbox" wire:model="is_active"
+                                        class="peer sr-only" />
+                                    <span
+                                        class="h-6 w-11 rounded-full bg-gray-200 transition-colors peer-checked:bg-primary peer-focus:ring-4 peer-focus:ring-primary/20 after:absolute after:left-[2px] after:top-[2px] after:h-5 after:w-5 after:rounded-full after:border after:border-gray-300 after:bg-white after:transition-transform peer-checked:after:translate-x-full"></span>
                                 </label>
                             </div>
                             <x-input-error :message="$errors->get('is_active')" class="mt-2" />
@@ -256,12 +273,14 @@
                 <div class="grid gap-4 sm:grid-cols-2">
                     <div>
                         <x-input-label for="promo-start-date" value="Tanggal Mulai" />
-                        <x-text-input id="promo-start-date" wire:model="start_date" type="date" class="input mt-1" required />
+                        <x-text-input id="promo-start-date" wire:model="start_date" type="date"
+                            class="input mt-1" required />
                         <x-input-error :message="$errors->get('start_date')" class="mt-2" />
                     </div>
                     <div>
                         <x-input-label for="promo-end-date" value="Tanggal Berakhir" />
-                        <x-text-input id="promo-end-date" wire:model="end_date" type="date" class="input mt-1" required />
+                        <x-text-input id="promo-end-date" wire:model="end_date" type="date" class="input mt-1"
+                            required />
                         <x-input-error :message="$errors->get('end_date')" class="mt-2" />
                     </div>
                 </div>

@@ -23,17 +23,23 @@ class PromoManager extends Component
     public string $end_date = '';
     public bool $is_active = true;
 
+    public ?int $editingPromoId = null;
+
     public function save()
     {
         $this->code = strtoupper(trim($this->code));
-        $validated = $this->validate($this->Rules(), $this->Messages());
+        $validated = $this->validate($this->Rules($this->editingPromoId), $this->Messages());
         $validated = $this->normaliseDates($validated);
 
         try {
-            Promo::create($validated);
+            if ($this->editingPromoId) {
+                $promo = Promo::findOrFail($this->editingPromoId);
+                $promo->update($validated);
+            } else {
+                Promo::create($validated);
+            }
 
             $this->resetForm();
-
             $this->dispatch('promo-saved', message: 'Promo berhasil ditambahkan.', type: 'success');
         } catch (\Throwable $th) {
             $this->dispatch('promo-error', message: $th->getMessage());
@@ -44,38 +50,40 @@ class PromoManager extends Component
     {
         $promo = Promo::findOrFail($id);
 
-        $this->fill([
-            'code' => $promo->code,
-            'name' => $promo->name,
-            'discount_type' => $promo->discount_type,
-            'discount_value' => $promo->discount_value,
-            'minimum_transaction' => $promo->minimum_transaction,
-            'quota' => $promo->quota,
-            'used_count' => $promo->used_count,
-            'start_date' => $promo->start_date->format('Y-m-d'),
-            'end_date' => $promo->end_date->format('Y-m-d'),
-            'is_active' => $promo->is_active,
-        ]);
+        $this->editingPromoId = $promo->id;
+        $this->code = $promo->code;
+        $this->name = $promo->name;
+        $this->discount_type = $promo->discount_type;
+        $this->discount_value = $promo->discount_value;
+        $this->minimum_transaction = $promo->minimum_transaction;
+        $this->quota = (int) $promo->quota;
+        $this->used_count = (int) $promo->used_count;
+        $this->start_date = $promo->start_date->format('Y-m-d');
+        $this->end_date = $promo->end_date->format('Y-m-d');
+        $this->is_active = $promo->is_active;
+        $this->resetValidation();
+
+        $this->dispatch('promo-edit');
     }
 
-    public function update($id)
-    {
-        $this->code = strtoupper(trim($this->code));
-        $validated = $this->validate($this->Rules($id), $this->Messages());
-        $validated = $this->normaliseDates($validated);
+    // public function update($id)
+    // {
+    //     $this->code = strtoupper(trim($this->code));
+    //     $validated = $this->validate($this->Rules($id), $this->Messages());
+    //     $validated = $this->normaliseDates($validated);
 
-        try {
-            $promo = Promo::findOrFail($id);
+    //     try {
+    //         $promo = Promo::findOrFail($id);
 
-            $promo->update($validated);
+    //         $promo->update($validated);
 
-            $this->resetForm();
+    //         $this->resetForm();
 
-            $this->dispatch('success', message: 'Promo berhasil diupdate.');
-        } catch (\Throwable $th) {
-            $this->dispatch('promo-error', message: $th->getMessage());
-        }
-    }
+    //         $this->dispatch('success', message: 'Promo berhasil diupdate.');
+    //     } catch (\Throwable $th) {
+    //         $this->dispatch('promo-error', message: $th->getMessage());
+    //     }
+    // }
 
     public function delete($id)
     {
@@ -134,10 +142,10 @@ class PromoManager extends Component
         return $validated;
     }
 
-    public function Rules(?int $ignorePromoId = null)
+    public function Rules(?int $editingPromoId)
     {
         return [
-            'code' => ['string', 'required', Rule::unique('promos', 'code')->ignore($ignorePromoId)],
+            'code' => ['string', 'required', Rule::unique('promos', 'code')->ignore($editingPromoId)],
             'name' => 'string|required',
             'discount_type' => 'required|in:percentage,fixed',
             'discount_value' => 'integer|required|min:1',
