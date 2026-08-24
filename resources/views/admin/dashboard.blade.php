@@ -274,8 +274,10 @@
                                 <div class="flex items-end justify-between gap-3 text-xs">
                                     <div class="min-w-0 text-gray-500">
                                         <p class="truncate font-medium text-gray-700">{{ $booking->room->name }}</p>
-                                        <p>{{ $booking->check_in->format('d M') }} -
-                                            {{ $booking->check_out->format('d M Y') }}</p>
+                                        <p>
+                                            {{ Carbon\Carbon::parse($booking->check_in)->format('d M Y H:i') }} -
+                                            {{ Carbon\Carbon::parse($booking->check_out)->format('d M Y H:i') }}
+                                        </p>
                                     </div>
                                     <p class="shrink-0 font-semibold text-foreground">Rp
                                         {{ number_format($booking->total_price, 0, ',', '.') }}</p>
@@ -311,8 +313,12 @@
                                             <div class="text-xs text-gray-500">{{ $booking->roomUnit->room_number }}
                                             </div>
                                         </td>
-                                        <td class="px-4 py-3 lg:px-6">{{ $booking->check_in->format('d M Y') }} -
-                                            {{ $booking->check_out->format('d M Y') }}</td>
+                                        <td class="px-4 py-3 lg:px-6">
+                                            <div>{{ Carbon\Carbon::parse($booking->check_in)->format('d M Y H:i') }}
+                                            </div>
+                                            <div>{{ Carbon\Carbon::parse($booking->check_out)->format('d M Y H:i') }}
+                                            </div>
+                                        </td>
                                         <td class="px-4 py-3 lg:px-6">
                                             <span @class([
                                                 'badge',
