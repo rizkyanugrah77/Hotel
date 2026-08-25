@@ -244,6 +244,9 @@
                         <th class="py-3 px-6 font-medium">User</th>
                         <th class="py-3 px-6 font-medium">Room</th>
                         <th class="py-3 px-6 font-medium">Metode</th>
+                        <th class="py-3 px-6 font-medium">Tax</th>
+                        <th class="py-3 px-6 font-medium">Promo</th>
+                        <th class="py-3 px-6 font-medium">Subtotal</th>
                         <th class="py-3 px-6 font-medium">Total</th>
                         <th class="py-3 px-6 font-medium">Status</th>
                     </tr>
@@ -253,7 +256,9 @@
                         <tr class="hover:bg-gray-50">
                             <td class="py-3 px-6 text-gray-700 font-medium">{{ $index + 1 }}</td>
                             <td class="py-3 px-6 text-gray-700 font-mono">{{ $tx->order_id }}</td>
-                            <td class="py-3 px-6 text-gray-700">{{ $tx->created_at->format('d M Y H:i') }}</td>
+                            <td class="py-3 px-6 text-gray-700">
+                                {{ Carbon\Carbon::parse($tx->created_at)->setTimezone('Asia/Jakarta')->format('d M Y H:i') }}
+                            </td>
                             <td class="py-3 px-6 text-gray-700">{{ $tx->booking?->booking_code ?? '-' }}</td>
                             <td class="py-3 px-6 text-gray-700">{{ $tx->user?->name ?? '-' }}</td>
                             <td class="py-3 px-6 text-gray-700">{{ $tx->booking?->room?->name ?? '-' }}</td>
@@ -261,7 +266,27 @@
                                 {{ $tx->payment_type ?? ($tx->payment_method ?? '-') }}
                             </td>
                             <td class="py-3 px-6 text-gray-700">
-                                {{ 'Rp ' . number_format($tx->gross_amount, 0, ',', '.') }}</td>
+                                Rp. {{ number_format($tx->tax_amount, 0, ',', '.') }}
+                            </td>
+
+
+                            <td class="py-3 px-6 text-gray-700">
+                                @if ($tx->promo)
+                                    @if ($tx->promo->discount_type === 'percentage')
+                                        {{ $tx->promo->discount_value }}%
+                                    @else
+                                        Rp. {{ number_format($tx->promo->discount_value, 0, ',', '.') }}
+                                    @endif
+                                @else
+                                    No Promo
+                                @endif
+                            </td>
+                            <td class="py-3 px-6 text-gray-700">
+                                {{ 'Rp ' . number_format($tx->sub_total_amount, 0, ',', '.') }}
+                            </td>
+                            <td class="py-3 px-6 text-gray-700">
+                                {{ 'Rp ' . number_format($tx->gross_amount, 0, ',', '.') }}
+                            </td>
                             <td class="py-3 px-6">
                                 <x-transaction-status :status="$tx->transaction_status" />
                             </td>

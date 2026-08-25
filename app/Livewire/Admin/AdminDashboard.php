@@ -18,11 +18,18 @@ class AdminDashboard extends Component
 
     public int $reportYear;
 
+    public int $chartVersion = 0;
+
     public function mount(): void
     {
         $this->reportDate = today()->format('Y-m-d');
         $this->reportMonth = today()->format('Y-m');
         $this->reportYear = today()->year;
+    }
+
+    public function refreshCharts(): void
+    {
+        $this->chartVersion++;
     }
 
     public function render()
@@ -83,13 +90,16 @@ class AdminDashboard extends Component
         }
 
 
+
+        $paidStatuses = ['success', 'capture', 'settlement', 'paid',];
         $paymentMethods = Payment::query()
-            ->selectRaw("COALESCE(payment_type, payment_method, 'Lainnya') as payment_type, COUNT(*) as total")
-            ->groupByRaw("COALESCE(payment_type, payment_method, 'Lainnya')")
+            ->selectRaw("COALESCE(payment_method, 'Lainnya') as payment_type, COUNT(*) as total")
+            ->whereIn('transaction_status', $paidStatuses)
+            ->whereBetween('created_at', [$currentStart, $currentEnd])
+            ->groupByRaw("COALESCE(payment_method, 'Lainnya')")
             ->orderByDesc('total')
             ->get();
 
-        $paidStatuses = ['success', 'capture', 'settlement', 'paid', 'completed'];
 
         $chartData = [
             'labels' => $labels,
@@ -115,11 +125,11 @@ class AdminDashboard extends Component
         ];
 
         $statusChartData = [
-            'labels' => ['Berhasil', 'Pending', 'Gagal', 'Dibatalkan'],
+            'labels' => ['Berhasil', 'Pending', 'Expired', 'Dibatalkan'],
             'data' => [
                 Payment::whereIn('transaction_status', $paidStatuses)->count(),
                 Payment::whereIn('transaction_status', ['pending', 'challenge'])->count(),
-                Payment::whereIn('transaction_status', ['deny', 'failure'])->count(),
+                Payment::whereIn('transaction_status', ['deny', 'expired'])->count(),
                 Payment::whereIn('transaction_status', ['cancelled', 'cancel'])->count(),
             ],
         ];

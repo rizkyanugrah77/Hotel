@@ -1,4 +1,5 @@
 <div>
+    {{-- wire:poll.10s="refreshCharts" --}}
 
     <!-- Main Content Area -->
     <!-- Topbar -->
@@ -170,7 +171,7 @@
 
                 <div class="h-52 min-w-0 w-full sm:h-60 lg:col-span-8 lg:h-64 border border-slate-400 rounded-xl p-2">
                     <canvas
-                        wire:key="transaction-chart-{{ $reportPeriod }}-{{ $reportDate }}-{{ $reportMonth }}-{{ $reportYear }}"
+                        wire:key="transaction-chart-{{ $chartVersion }}-{{ $reportPeriod }}-{{ $reportDate }}-{{ $reportMonth }}-{{ $reportYear }}"
                         wire:ignore x-data x-init="$nextTick(() => {
                             new window.Chart($el, {
                                 type: 'line',
@@ -192,7 +193,7 @@
                 <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:col-span-4 lg:grid-cols-1 lg:gap-5 ">
                     <div class="h-36 min-w-0 w-full sm:h-40 lg:h-28 border border-slate-400 rounded-xl">
                         <canvas
-                            wire:key="transaction-status-chart-{{ $reportPeriod }}-{{ $reportDate }}-{{ $reportMonth }}-{{ $reportYear }}"
+                            wire:key="transaction-status-chart-{{ $chartVersion }}-{{ $reportPeriod }}-{{ $reportDate }}-{{ $reportMonth }}-{{ $reportYear }}"
                             wire:ignore x-data x-init="$nextTick(() => {
                                 new window.Chart($el, {
                                     type: 'bar',
@@ -219,7 +220,7 @@
                         <h3 class="mb-1 text-center text-xs font-semibold text-gray-700 sm:mb-2 sm:text-sm">Metode
                             Pembayaran</h3>
                         <canvas
-                            wire:key="payment-method-chart-{{ $reportPeriod }}-{{ $reportDate }}-{{ $reportMonth }}-{{ $reportYear }}"
+                            wire:key="payment-method-chart-{{ $chartVersion }}-{{ $reportPeriod }}-{{ $reportDate }}-{{ $reportMonth }}-{{ $reportYear }}"
                             wire:ignore x-data x-init="$nextTick(() => {
                                 new window.Chart($el, {
                                     type: 'doughnut',
@@ -314,9 +315,11 @@
                                             </div>
                                         </td>
                                         <td class="px-4 py-3 lg:px-6">
-                                            <div>{{ Carbon\Carbon::parse($booking->check_in)->format('d M Y H:i') }}
+                                            <div class="text-xs">
+                                                {{ \Carbon\Carbon::parse($booking->check_in)->format('d M Y H:i') }}
                                             </div>
-                                            <div>{{ Carbon\Carbon::parse($booking->check_out)->format('d M Y H:i') }}
+                                            <div class="text-xs">
+                                                {{ \Carbon\Carbon::parse($booking->check_out)->format('d M Y H:i') }}
                                             </div>
                                         </td>
                                         <td class="px-4 py-3 lg:px-6">

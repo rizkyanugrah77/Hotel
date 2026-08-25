@@ -41,8 +41,10 @@ class TransactionsExport implements FromCollection, WithHeadings, WithMapping, S
             'User',
             'Kamar',
             'Pajak',
-            'Metode Pembayaran',
+            'Subtotal',
+            'Promo',
             'Total',
+            'Metode Pembayaran',
             'Status'
         ];
     }
@@ -59,9 +61,11 @@ class TransactionsExport implements FromCollection, WithHeadings, WithMapping, S
             $payment->booking?->booking_code ?? '-',
             $payment->user?->name ?? '-',
             $payment->booking?->room?->name ?? '-',
-            $payment->tax_amount,
-            $payment->payment_type ?? ($payment->payment_method ?? '-'),
-            $payment->gross_amount,
+            'Rp ' . number_format($payment->tax_amount, 0, ',', '.'),
+            'Rp ' . number_format($payment->sub_total_amount, 0, ',', '.'),
+            $payment->promo?->discount_type === 'percentage' ? $payment->promo?->discount_value . '%' : 'Rp ' . number_format($payment->promo?->discount_value, 0, ',', '.') ?? '-',
+            'Rp ' . number_format($payment->gross_amount, 0, ',', '.'),
+            $payment->payment_type,
             ucfirst($payment->transaction_status)
         ];
     }

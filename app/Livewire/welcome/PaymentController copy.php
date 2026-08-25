@@ -71,32 +71,11 @@ class PaymentController extends Component
 
     public function pay()
     {
-        $booking = Booking::with(['roomUnit', 'user'])
-            ->whereKey($this->bookings->id)
-            ->first();
-
-        if (! $booking || $booking->status !== 'pending') {
+        if ($this->bookings->status !== 'pending') {
             session()->flash('error', 'Booking ini tidak dapat dibayar.');
 
             return;
         }
-
-        $unitIsUnavailable = ! $booking->roomUnit
-            || $booking->roomUnit->status !== 'available'
-            || $booking->roomUnit->bookings()
-                ->whereKeyNot($booking->id)
-                ->whereIn('status', ['paid', 'checked_in'])
-                ->where('check_in', '<', $booking->check_out)
-                ->where('check_out', '>', $booking->check_in)
-                ->exists();
-
-        if ($unitIsUnavailable) {
-            session()->flash('error', 'Unit kamar untuk tanggal booking ini sudah penuh dan tidak dapat dibayar.');
-
-            return;
-        }
-
-        $this->bookings = $booking;
 
         // 1. Setup Midtrans Configuration
         Config::$serverKey = config('midtrans.serverKey');

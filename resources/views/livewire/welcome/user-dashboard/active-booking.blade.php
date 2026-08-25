@@ -26,48 +26,59 @@
 
                          <!-- Booking info -->
                          <div class="flex-1 min-w-0">
-                             <div class="flex items-start justify-between gap-2">
-                                 <div class="grid grid-cols-2 gap-2">
-                                     <h3 class="text-sm font-semibold text-foreground">
-                                         {{ $booking->room->name ?? 'Room' }}</h3>
-                                     <p class="text-xs text-gray-400 mt-0.5">{{ $booking->booking_code }}</p>
-                                     <div class="flex space-x-2 my-1">
-                                         @if ($booking->status === 'pending')
-                                             <a href="{{ route('payment', $booking->booking_code) }}" wire:navigate
-                                                 class="btn-sm text-xs text-white bg-red-800 hover:bg-red-700 rounded-lg px-2 py-1">
-                                                 Bayar Sekarang
-                                             </a>
-                                         @endif
+                             <form wire:submit="cancel({{ $booking->id }})">
+                                 <div class="flex items-start justify-between gap-2">
+                                     <div class="grid grid-cols-2 gap-2">
+                                         <h3 class="text-sm font-semibold text-foreground">
+                                             {{ $booking->room->name ?? 'Room' }}</h3>
+                                         <p class="text-xs text-gray-400 mt-0.5">{{ $booking->booking_code }}</p>
+                                         <div class="flex space-x-2 my-1">
+                                             @if ($booking->status === 'pending')
+                                                 <a href="{{ route('payment', $booking->booking_code) }}" wire:navigate
+                                                     class="btn-sm text-xs text-white bg-red-800 hover:bg-red-700 rounded-lg px-2 py-1">
+                                                     Bayar Sekarang
+                                                 </a>
+                                             @endif
+                                         </div>
                                      </div>
+
+                                     <span
+                                         class="badge-{{ $booking->status === 'paid' ? 'success' : ($booking->status === 'pending' ? 'warning' : ($booking->status === 'cancelled' ? 'danger' : '')) }} flex-shrink capitalize ">{{ ucfirst($booking->status) }}</span>
+
                                  </div>
 
-                                 <span
-                                     class="badge-{{ $booking->status === 'paid' ? 'success' : ($booking->status === 'pending' ? 'warning' : ($booking->status === 'cancelled' ? 'danger' : ($booking->status === 'completed' ? 'primary' : ''))) }} flex-shrink capitalize ">{{ ucfirst($booking->status) }}</span>
-
-                             </div>
-
-                             <div class="flex flex-wrap items-center gap-x-4 gap-y-1 mt-2 text-xs text-gray-500">
-                                 <span class="flex items-center gap-1">
-                                     <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-                                         stroke="currentColor">
-                                         <path stroke-linecap="round" stroke-linejoin="round"
-                                             d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 0 1 2.25-2.25h13.5A2.25 2.25 0 0 1 21 7.5v11.25m-18 0A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75m-18 0v-7.5A2.25 2.25 0 0 1 5.25 9h13.5A2.25 2.25 0 0 1 21 11.25v7.5" />
-                                     </svg>
-                                     {{ $booking->check_in->format('d M') }} —
-                                     {{ $booking->check_out->format('d M Y') }}
-                                 </span>
-                                 <span class="flex items-center gap-1">
-                                     <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-                                         stroke="currentColor">
-                                         <path stroke-linecap="round" stroke-linejoin="round"
-                                             d="M15 19.128a9.38 9.38 0 0 0 2.625.372 9.337 9.337 0 0 0 4.121-.952 4.125 4.125 0 0 0-7.533-2.493M15 19.128v-.003c0-1.113-.285-2.16-.786-3.07M15 19.128v.106A12.318 12.318 0 0 1 8.624 21c-2.331 0-4.512-.645-6.374-1.766l-.001-.109a6.375 6.375 0 0 1 11.964-3.07M12 6.375a3.375 3.375 0 1 1-6.75 0 3.375 3.375 0 0 1 6.75 0Zm8.25 2.25a2.625 2.625 0 1 1-5.25 0 2.625 2.625 0 0 1 5.25 0Z" />
-                                     </svg>
-                                     {{ $booking->total_guests }} tamu
-                                 </span>
-                                 <span class="font-semibold text-foreground">
-                                     Rp {{ number_format($booking->total_price, 0, ',', '.') }}
-                                 </span>
-                             </div>
+                                 <div class="flex flex-wrap items-center gap-x-4 gap-y-1 mt-2 text-xs text-gray-500">
+                                     <span class="flex items-center gap-1">
+                                         <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                                             stroke="currentColor">
+                                             <path stroke-linecap="round" stroke-linejoin="round"
+                                                 d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 0 1 2.25-2.25h13.5A2.25 2.25 0 0 1 21 7.5v11.25m-18 0A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75m-18 0v-7.5A2.25 2.25 0 0 1 5.25 9h13.5A2.25 2.25 0 0 1 21 11.25v7.5" />
+                                         </svg>
+                                         {{ $booking->check_in->format('d M') }} —
+                                         {{ $booking->check_out->format('d M Y') }}
+                                     </span>
+                                     <span class="flex items-center gap-1">
+                                         <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                                             stroke="currentColor">
+                                             <path stroke-linecap="round" stroke-linejoin="round"
+                                                 d="M15 19.128a9.38 9.38 0 0 0 2.625.372 9.337 9.337 0 0 0 4.121-.952 4.125 4.125 0 0 0-7.533-2.493M15 19.128v-.003c0-1.113-.285-2.16-.786-3.07M15 19.128v.106A12.318 12.318 0 0 1 8.624 21c-2.331 0-4.512-.645-6.374-1.766l-.001-.109a6.375 6.375 0 0 1 11.964-3.07M12 6.375a3.375 3.375 0 1 1-6.75 0 3.375 3.375 0 0 1 6.75 0Zm8.25 2.25a2.625 2.625 0 1 1-5.25 0 2.625 2.625 0 0 1 5.25 0Z" />
+                                         </svg>
+                                         {{ $booking->total_guests }} tamu
+                                     </span>
+                                     <span class="font-semibold text-foreground">
+                                         Rp {{ number_format($booking->total_price, 0, ',', '.') }}
+                                     </span>
+                                 </div>
+                                 @if ($booking->status === 'pending')
+                                     <div
+                                         class="flex flex-wrap items-center gap-x-4 gap-y-1 mt-2 text-xs text-gray-500">
+                                         <button type="submit"
+                                             class="btn-sm text-xs text-white bg-red-800 hover:bg-red-700 rounded-lg px-2 py-1">
+                                             Cancel
+                                         </button>
+                                     </div>
+                                 @endif
+                             </form>
                          </div>
                      </div>
                  </div>

@@ -9,11 +9,27 @@ use Livewire\Component;
 
 class UserDashboard extends Component
 {
+
+    public function cancel($id)
+    {
+        $cancelled = Booking::whereKey($id)
+            ->where('user_id', auth()->id())
+            ->where('status', 'pending')
+            ->update(['status' => 'cancelled']);
+
+        if ($cancelled) {
+            session()->flash('success', 'Booking berhasil dibatalkan.');
+        } else {
+            session()->flash('error', 'Booking tidak ditemukan atau tidak dapat dibatalkan.');
+        }
+
+        return redirect()->route('user.dashboard');
+    }
+
     public function render()
     {
         $user = auth()->user();
         $now = Carbon::now();
-        $orderId = $payments->order_id ?? null;
 
         // Active bookings (pending or confirmed, check_out in the future)
         $activeBookings = Booking::with('room')
@@ -38,7 +54,7 @@ class UserDashboard extends Component
             ->get();
 
         $payments = Payment::with('booking')->whereIn('booking_id', $allBookings->pluck('id'))->get();
-     
+
 
         // Stats
         $totalBookings = $allBookings->count();

@@ -307,10 +307,10 @@ class RoomDetail extends Component
                     ->where('status', 'available')
                     ->lockForUpdate()
                     ->whereDoesntHave('bookings', function ($query) {
-                        $query->whereIn('status', ['pending', 'paid', 'checked_in'])
+                        $query->whereIn('status', ['paid', 'checked_in'])
                             ->where('check_in', '<', $this->check_out)
                             ->where('check_out', '>', $this->check_in);
-                })
+                    })
                     ->first();
 
                 if (! $unit) {

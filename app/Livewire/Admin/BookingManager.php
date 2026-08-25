@@ -96,7 +96,7 @@ class BookingManager extends Component
                     })
                     ->lockForUpdate()
                     ->whereDoesntHave('bookings', function ($query) {
-                        $query->whereIn('status', ['pending', 'paid', 'checked_in'])
+                        $query->whereIn('status', ['paid', 'checked_in'])
                             ->when($this->bookingEditId, function ($query) {
                                 $query->where('id', '!=', $this->bookingEditId);
                             })
@@ -148,7 +148,7 @@ class BookingManager extends Component
                         ->update(['status' => 'available']);
                 }
 
-                if ($booking->status === 'checked_in') {
+                if ($booking->status === 'checked_in' || $booking->status === 'paid') {
                     $unit->update(['status' => 'occupied']);
                 } elseif ($wasCheckedIn) {
                     $unit->newQuery()

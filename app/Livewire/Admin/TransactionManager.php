@@ -2,13 +2,14 @@
 
 namespace App\Livewire\Admin;
 
+use App\Exports\TransactionsExport;
 use App\Models\Booking;
 use App\Models\Payment;
+use App\Models\Promo;
 use Carbon\Carbon;
 use Livewire\Component;
 use Livewire\WithPagination;
 use Maatwebsite\Excel\Facades\Excel;
-use App\Exports\TransactionsExport;
 
 class TransactionManager extends Component
 {
@@ -23,6 +24,7 @@ class TransactionManager extends Component
     public string $reportDate;
 
     public string $reportMonth;
+    public $promos;
 
     public int $reportYear;
 
@@ -31,6 +33,7 @@ class TransactionManager extends Component
         $this->reportDate = today()->format('Y-m-d');
         $this->reportMonth = today()->format('Y-m');
         $this->reportYear = today()->year;
+        $this->promos = Promo::all();
     }
 
     public function updatedSearch()
@@ -77,6 +80,7 @@ class TransactionManager extends Component
         $paidStatuses = ['success', 'capture', 'settlement', 'deny', 'pending', 'expire'];
         return view('livewire.layout.transaction', [
             'transactions' => $transactions,
+            'promos' => $this->promos,
             'paymentMethods' => $paymentMethods,
             'transactionStats' => [
                 'total' => Payment::count(),
