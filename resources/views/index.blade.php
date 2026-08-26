@@ -36,7 +36,7 @@
                 <p class="text-md sm:text-lg text-white/80 font-inter leading-relaxed max-w-xl mb-8 animate-fade-in"
                     style="animation-delay: 0.3s;">
                     Nestled on the shores of Lake Toba, Sitio Tio Resort offers an unforgettable blend of traditional
-                    Batak Samosir hospitality and modern luxury.
+                    Samosir hospitality and modern luxury.
                 </p>
 
                 <!-- CTA Buttons -->
@@ -59,18 +59,17 @@
                 </div>
 
                 <!-- Stats -->
-                <div class="grid grid-cols-3 gap-6 mt-10 max-w-md animate-fade-in" style="animation-delay: 0.6s;">
-                    <div class="text-center">
-                        <div class="text-2xl sm:text-3xl font-poppins font-bold text-white" data-counter="150">0</div>
+                <div class="flex justify-center items-center gap-6 mt-10 max-w-md animate-fade-in"
+                    style="animation-delay: 0.6s;">
+                    <div class="flex flex-col justify-center items-center gap-2">
+                        <div class="text-2xl sm:text-3xl font-poppins font-bold text-white">{{ $rooms->count() }}</div>
                         <div class="text-xs sm:text-sm text-white/60 mt-1">Luxury Rooms</div>
                     </div>
-                    <div class="text-center border-x border-white/20">
-                        <div class="text-2xl sm:text-3xl font-poppins font-bold text-accent" data-counter="4800">0</div>
+                    <div class="h-12 border-l-2 border-gray-300 mx-4"></div>
+                    <div class="flex flex-col justify-center items-center gap-2">
+                        <div class="text-2xl sm:text-3xl font-poppins font-bold text-accent">
+                            {{ $rooms->flatMap->bookings->sum('total_guests') }}</div>
                         <div class="text-xs sm:text-sm text-white/60 mt-1">Happy Guests</div>
-                    </div>
-                    <div class="text-center">
-                        <div class="text-2xl sm:text-3xl font-poppins font-bold text-white" data-counter="15">0</div>
-                        <div class="text-xs sm:text-sm text-white/60 mt-1">Awards Won</div>
                     </div>
                 </div>
             </div>

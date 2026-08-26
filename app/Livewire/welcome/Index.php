@@ -14,8 +14,11 @@ class Index extends Component
         $rooms = Room::with([
             'galleries',
             'facilities',
+            'bookings',
             'bookings.user',
+            'bookings.payments',
             'units',
+
         ])->latest()->get();
         $promotions = Promo::with([
             'payments'

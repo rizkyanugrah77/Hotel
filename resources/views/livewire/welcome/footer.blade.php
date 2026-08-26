@@ -16,7 +16,7 @@
                  </div>
              </div>
              <p class="text-red-600/60 text-sm leading-relaxed">
-                 A luxury lakeside resort on Samosir Island, blending Batak cultural heritage with modern comfort
+                 A luxury lakeside resort on Samosir Island, blending cultural heritage with modern comfort
                  and world-class hospitality.
              </p>
              <div class="flex gap-3 mt-6">

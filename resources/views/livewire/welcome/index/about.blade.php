@@ -30,10 +30,10 @@
               <div class="gold-line mb-4"></div>
               <h2 class="section-title">A Paradise Rooted in <span class="text-gradient-primary">Lake Toba</span>
               </h2>
-              <p class="section-subtitle mt-4">
+              {{-- <p class="section-subtitle mt-4">
                   Sitio Tio Resort is more than a hotel — it's a cultural journey, offering an experience that
                   nourishes both body and soul.
-              </p>
+              </p> --}}
               <div class="grid grid-cols-2 gap-4 mt-8">
                   <div class="flex items-start gap-3">
                       <div
@@ -62,7 +62,7 @@
                       </div>
                       <div>
                           <h3 class="font-poppins font-semibold text-foreground text-sm">Cultural Cuisine</h3>
-                          <p class="text-xs text-gray-500 mt-1">Authentic Batak & international dishes</p>
+                          <p class="text-xs text-gray-500 mt-1">Authentic local & international dishes</p>
                       </div>
                   </div>
                   <div class="flex items-start gap-3">
@@ -90,16 +90,39 @@
                       </div>
                       <div>
                           <h3 class="font-poppins font-semibold text-foreground text-sm">Warm Hospitality</h3>
-                          <p class="text-xs text-gray-500 mt-1">Horas! The Batak way of welcome</p>
+                          <p class="text-xs text-gray-500 mt-1">Heartfelt Samosir hospitality</p>
                       </div>
                   </div>
               </div>
-              <a href="#rooms" class="btn-outline mt-8 inline-flex">
+              {{-- <a href="#rooms" class="btn-outline mt-3 inline-flex" wire:navigate>
                   Discover Our Rooms
                   <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
                       <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3" />
                   </svg>
-              </a>
+              </a> --}}
+
+              <div class="mt-4 max-w-[280px] rounded-2xl overflow-hidden shadow-lg border border-gray-200 bg-white">
+                  <iframe width="100%" height="160" frameborder="0" style="border:0; display:block;"
+                      referrerpolicy="strict-origin-when-cross-origin" loading="lazy"
+                      allow="fullscreen; accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                      src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d126421.20607539793!2d98.78469165000001!3d2.1578144999999996!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x302e437c07775635%3A0xa42f7580b07e5d75!2sSitio%20Tio%20Resort!5e0!3m2!1sen!2sid!4v1726424868683!5m2!1sen!2sid"
+                      allowfullscreen></iframe>
+                  <a href="https://maps.app.goo.gl/KU8sb6zXcH3iyadc8" target="_blank" rel="noopener noreferrer"
+                      class="flex items-center justify-center gap-2 px-4 py-2.5 text-sm font-poppins font-semibold text-primary hover:bg-gray-50 transition-colors">
+                      <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+                          <path stroke-linecap="round" stroke-linejoin="round"
+                              d="M15 10.5a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
+                          <path stroke-linecap="round" stroke-linejoin="round"
+                              d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1 1 15 0Z" />
+                      </svg>
+                      Lihat Lokasi
+                      <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke-width="2.5"
+                          stroke="currentColor">
+                          <path stroke-linecap="round" stroke-linejoin="round"
+                              d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3" />
+                      </svg>
+                  </a>
+              </div>
           </div>
       </div>
   </div>
