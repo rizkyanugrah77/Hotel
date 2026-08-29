@@ -4,10 +4,11 @@
     <!-- Main Content Area -->
     <!-- Topbar -->
     <x-slot name="header">
-        <div class="flex h-16 items-center border-b border-gray-200 bg-white px-4 sm:h-20 sm:px-6 lg:px-8">
-            <h1 class="font-poppins text-lg font-bold text-foreground sm:text-xl">Dashboard Overview</h1>
+        <div class="h-20 bg-white border-b border-gray-200 flex items-center justify-between px-8 flex-shrink-0">
+            <h1 class="text-xl font-poppins font-bold text-foreground">Dashboard Overview</h1>
         </div>
     </x-slot>
+
 
 
     <!-- Content -->
@@ -114,14 +115,14 @@
                         </label>
 
                         <select wire:model.live="reportPeriod" class="input py-2.5 text-sm w-full">
-                            <option value="daily">Harian</option>
+                            <option value="weekly">Mingguan</option>
                             <option value="monthly">Bulanan</option>
                             <option value="yearly">Tahunan</option>
                         </select>
                     </div>
 
-                    <!-- Harian -->
-                    @if ($reportPeriod === 'daily')
+                    <!-- Mingguan -->
+                    @if ($reportPeriod === 'weekly')
                         <div class="w-full sm:w-44">
                             <label class="block text-xs font-medium text-gray-500 mb-1.5">
                                 Tanggal
@@ -169,20 +170,44 @@
                 <h2 class="font-poppins text-base font-bold text-gray-800 sm:text-lg lg:col-span-12 lg:text-xl">Grafik
                     Transaksi</h2>
 
-                <div class="h-52 min-w-0 w-full sm:h-60 lg:col-span-8 lg:h-64 border border-slate-400 rounded-xl p-2">
+                <div class="h-52 min-w-0 w-full sm:h-60 lg:col-span-8 lg:h-64 border border-gray-300 rounded-xl p-2">
                     <canvas
                         wire:key="transaction-chart-{{ $chartVersion }}-{{ $reportPeriod }}-{{ $reportDate }}-{{ $reportMonth }}-{{ $reportYear }}"
                         wire:ignore x-data x-init="$nextTick(() => {
                             new window.Chart($el, {
-                                type: 'line',
+                                type: 'bar',
                                 data: {{ Js::from($chartData) }},
                                 options: {
                                     responsive: true,
                                     maintainAspectRatio: false,
+                                    plugins: {
+                                        tooltip: {
+                                            callbacks: {
+                                                label: (context) => {
+                                                    const value = context.parsed.y;
+                                                    const percentage = {{ $totalRoomUnits }} ?
+                                                        ((value / {{ $totalRoomUnits }}) * 100).toFixed(1) :
+                                                        0;
+
+                                                    return `${context.dataset.label}: ${value} unit (${percentage}%)`;
+                                                }
+                                            }
+                                        }
+                                    },
                                     scales: {
                                         y: {
                                             beginAtZero: true,
-                                            ticks: { precision: 0 }
+                                            max: {{ $chartCapacity }},
+                                            ticks: {
+                                                precision: 0,
+                                                callback: (value) => {
+                                                    const percentage = {{ $totalRoomUnits }} ?
+                                                        Math.round((value / {{ $totalRoomUnits }}) * 100) :
+                                                        0;
+
+                                                    return `${value} unit (${percentage}%)`;
+                                                }
+                                            }
                                         }
                                     }
                                 }
@@ -255,7 +280,7 @@
                         <button class="text-xs font-medium text-primary hover:underline sm:text-sm">View All</button>
                     </div>
                     <div class="divide-y divide-slate-200 md:hidden ">
-                        @forelse ($rooms->flatMap->bookings as $booking)
+                        @forelse ($recentBookings as $booking)
                             <article class="space-y-2 p-4">
                                 <div class="flex items-start justify-between gap-3">
                                     <div class="min-w-0">
@@ -280,8 +305,8 @@
                                             {{ Carbon\Carbon::parse($booking->check_out)->format('d M Y H:i') }}
                                         </p>
                                     </div>
-                                    <p class="shrink-0 font-semibold text-foreground">Rp
-                                        {{ number_format($booking->total_price, 0, ',', '.') }}</p>
+                                    <div class="shrink-0 font-semibold text-foreground">Rp
+                                        {{ number_format($booking->total_price, 0, ',', '.') }}</div>
                                 </div>
                             </article>
                         @empty
@@ -300,43 +325,44 @@
                                 </tr>
                             </thead>
                             <tbody class="divide-y divide-gray-100">
-                                @forelse ($rooms->flatMap->bookings as $booking)
+                                @forelse ($recentBookings as $booking)
                                     <tr class="hover:bg-gray-50 cursor-pointer">
 
-                                        <td class="px-4 py-3 lg:px-6">
-                                            <div class="font-medium text-foreground">
-                                                {{ $booking->booking_code }}</div>
-                                            <div class="text-xs text-gray-500">{{ $booking->user->name }}</div>
-                                        </td>
-                                        <td class="px-4 py-3 lg:px-6">
-                                            <div class="font-medium text-foreground">
-                                                {{ $booking->room->name }}</div>
-                                            <div class="text-xs text-gray-500">{{ $booking->roomUnit->room_number }}
-                                            </div>
-                                        </td>
-                                        <td class="px-4 py-3 lg:px-6">
-                                            <div class="text-xs">
-                                                {{ \Carbon\Carbon::parse($booking->check_in)->format('d M Y H:i') }}
-                                            </div>
-                                            <div class="text-xs">
-                                                {{ \Carbon\Carbon::parse($booking->check_out)->format('d M Y H:i') }}
-                                            </div>
-                                        </td>
-                                        <td class="px-4 py-3 lg:px-6">
-                                            <span @class([
-                                                'badge',
-                                                'badge-primary' => $booking->status === 'pending',
-                                                'badge-info' => $booking->status === 'paid',
-                                                'badge-success' => $booking->status === 'checked_in',
-                                                'badge-warning' => $booking->status === 'checked_out',
-                                                'badge-accent' => $booking->status === 'cancelled',
-                                            ])>
-                                                {{ ucfirst($booking->status) }}
-                                            </span>
-                                        </td>
-                                        <td class="px-4 py-3 font-medium lg:px-6">
-                                            {{ $booking->total_price ? 'Rp ' . number_format($booking->total_price, 0, ',', '.') : 'Belum ada data' }}
-                                        </td>
+                                            <td class="px-4 py-3 lg:px-6">
+                                                <div class="font-medium text-foreground">
+                                                    {{ $booking->booking_code }}</div>
+                                                <div class="text-xs text-gray-500">{{ $booking->user->name }}</div>
+                                            </td>
+                                            <td class="px-4 py-3 lg:px-6">
+                                                <div class="font-medium text-foreground">
+                                                    {{ $booking->room->name }}</div>
+                                                <div class="text-xs text-gray-500">
+                                                    {{ $booking->roomUnit->room_number }}
+                                                </div>
+                                            </td>
+                                            <td class="px-4 py-3 lg:px-6">
+                                                <div class="text-xs">
+                                                    {{ \Carbon\Carbon::parse($booking->check_in)->format('d M Y H:i') }}
+                                                </div>
+                                                <div class="text-xs">
+                                                    {{ \Carbon\Carbon::parse($booking->check_out)->format('d M Y H:i') }}
+                                                </div>
+                                            </td>
+                                            <td class="px-4 py-3 lg:px-6">
+                                                <span @class([
+                                                    'badge',
+                                                    'badge-primary' => $booking->status === 'pending',
+                                                    'badge-info' => $booking->status === 'paid',
+                                                    'badge-success' => $booking->status === 'checked_in',
+                                                    'badge-warning' => $booking->status === 'checked_out',
+                                                    'badge-accent' => $booking->status === 'cancelled',
+                                                ])>
+                                                    {{ ucfirst($booking->status) }}
+                                                </span>
+                                            </td>
+                                            <td class="px-4 py-3 font-medium lg:px-6">
+                                                {{ $booking->total_price ? 'Rp ' . number_format($booking->total_price, 0, ',', '.') : 'Belum ada data' }}
+                                            </td>
                                     </tr>
                                 @empty
                                     <tr>
@@ -346,6 +372,10 @@
                             </tbody>
                         </table>
                     </div>
+                    <div class="border-t border-slate-200 px-4 py-3 sm:px-5 lg:px-6">
+                        {{ $recentBookings->links() }}
+                    </div>
+
                 </div>
             </div>
 

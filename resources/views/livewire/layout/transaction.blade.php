@@ -16,9 +16,21 @@
         <div class="bg-slate-50 border border-slate-200 shadow-md rounded-2xl p-4 sm:p-6">
             <div class="flex justify-between items-start mb-3 sm:mb-4">
                 <div>
-                    <p class="text-xs sm:text-sm text-gray-500 mb-1">Total Transaksi</p>
+                    <p class="text-xs sm:text-sm text-gray-500 mb-1">Pendapatan Periode Terpilih</p>
                     <h3 class="text-xl sm:text-2xl font-poppins font-bold text-foreground">
-                        {{ $transactionStats['total'] ?? 0 }}</h3>
+                        {{ 'Rp ' . number_format($transactionStats['total'] ?? 0, 0, ',', '.') }}</h3>
+                    @if ($transactionStats['total_change'] !== null)
+                        <p @class([
+                            'text-[10px] sm:text-xs font-medium mt-1 text-emerald-600',
+                            'text-emerald-600' => $transactionStats['total_change'] >= 0,
+                            'text-rose-600' => $transactionStats['total_change'] < 0,
+                        ])>
+                            {{ $transactionStats['total_change'] >= 0 ? '+' : '' }}{{ number_format($transactionStats['total_change'], 1, ',', '.') }}%
+
+                        </p>
+                    @else
+                        <p class="text-[10px] sm:text-xs text-gray-500 font-medium mt-1">-</p>
+                    @endif
                 </div>
                 <div
                     class="w-8 h-8 sm:w-10 sm:h-10 bg-primary/10 text-primary rounded-xl flex items-center justify-center">
@@ -72,10 +84,13 @@
 
         <div class="bg-violet-50 border border-violet-200 shadow-md rounded-2xl p-4 sm:p-6">
             <div class="flex justify-between items-start mb-3 sm:mb-4">
-                <div>
-                    <p class="text-xs sm:text-sm text-gray-500 mb-1">Total Revenue</p>
-                    <h3 class="text-xl sm:text-2xl font-poppins font-bold text-accent-700">
+                <div class="flex flex-col">
+                    <p class="text-xs sm:text-sm  mb-1">Laba Bersih Estimasi</p>
+                    <h3 class="text-xl sm:text-2xl font-poppins font-bold text-accent">
                         {{ 'Rp ' . number_format($transactionStats['revenue'] ?? 0, 0, ',', '.') }}</h3>
+                    <h3 class="text-sm sm:text-md font-poppins font-medium text-primary">
+                        {{ 'Rp ' . number_format($transactionStats['total_tax'] ?? 0, 0, ',', '.') }} <span
+                            class="text-xs text-gray-500">Tax</span></h3>
                 </div>
                 <div
                     class="w-8 h-8 sm:w-10 sm:h-10 bg-accent/10 text-accent-700 rounded-xl flex items-center justify-center">
@@ -293,7 +308,7 @@
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="8" class="py-6 px-6 text-center text-gray-500">Tidak ada transaksi
+                            <td colspan="12" class="py-6 px-6 text-center text-gray-500">Tidak ada transaksi
                                 ditemukan.</td>
                         </tr>
                     @endforelse

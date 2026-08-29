@@ -5,12 +5,16 @@ namespace App\Livewire\Admin;
 use App\Models\Booking;
 use App\Models\Payment;
 use App\Models\Room;
+use App\Models\RoomUnit;
 use Illuminate\Support\Carbon;
 use Livewire\Component;
+use Livewire\WithPagination;
 
 class AdminDashboard extends Component
 {
-    public string $reportPeriod = 'daily';
+    use WithPagination;
+
+    public string $reportPeriod = 'weekly';
 
     public string $reportDate;
 
@@ -34,62 +38,48 @@ class AdminDashboard extends Component
 
     public function render()
     {
-        $rooms = Room::with(['units', 'bookings.user', 'bookings.room'])->get();
+        $rooms = Room::with('units')->get();
+        $recentBookings = Booking::query()
+            ->with(['user', 'room', 'roomUnit'])
+            ->latest()
+            ->paginate(5);
 
         $totalRevenue = Booking::where('status', 'paid')->sum('total_price');
         $totalBookings = Booking::count();
         $activeBookings = Booking::where('status', 'pending')->count();
-        $transactionsQuery = Payment::query()
-            ->with('booking.room', 'user');
-        // chart booking by month
-        $chartQuery = clone $transactionsQuery;
+        $totalRoomUnits = RoomUnit::count();
+        $chartCapacity = max($totalRoomUnits, 1);
 
-        if ($this->reportPeriod === 'daily') {
-            $currentStart = Carbon::parse($this->reportDate)->startOfDay();
-            $currentEnd = $currentStart->copy()->endOfDay();
-            $previousStart = $currentStart->copy()->subDay();
-            $previousEnd = $currentEnd->copy()->subDay();
+        if ($this->reportPeriod === 'weekly') {
+            $currentStart = Carbon::parse($this->reportDate)->startOfWeek(Carbon::MONDAY);
+            $currentEnd = $currentStart->copy()->endOfWeek(Carbon::SUNDAY);
         } elseif ($this->reportPeriod === 'monthly') {
             $currentStart = Carbon::parse($this->reportMonth . '-01')->startOfMonth();
             $currentEnd = $currentStart->copy()->endOfMonth();
-            $previousStart = $currentStart->copy()->subMonthNoOverflow();
-            $previousEnd = $previousStart->copy()->endOfMonth();
         } else {
             $currentStart = Carbon::create($this->reportYear)->startOfYear();
             $currentEnd = $currentStart->copy()->endOfYear();
-            $previousStart = $currentStart->copy()->subYear();
-            $previousEnd = $previousStart->copy()->endOfYear();
         }
 
-        $currentChartPayments = (clone $chartQuery)
+        $successfulPayments = Payment::query()
+            ->whereRaw('LOWER(transaction_status) = ?', ['success'])
             ->whereBetween('created_at', [$currentStart, $currentEnd])
             ->get(['created_at']);
-        $previousChartPayments = (clone $chartQuery)
-            ->whereBetween('created_at', [$previousStart, $previousEnd])
-            ->get(['created_at']);
 
-        if ($this->reportPeriod === 'daily') {
-            $labels = collect(range(0, 23))->map(fn($hour) => sprintf('%02d:00', $hour));
-            $currentCounts = $currentChartPayments->countBy(fn($payment) => $payment->created_at->format('H'));
-            $previousCounts = $previousChartPayments->countBy(fn($payment) => $payment->created_at->format('H'));
-            $currentData = collect(range(0, 23))->map(fn($hour) => $currentCounts->get(sprintf('%02d', $hour), 0));
-            $previousData = collect(range(0, 23))->map(fn($hour) => $previousCounts->get(sprintf('%02d', $hour), 0));
+        if ($this->reportPeriod === 'weekly') {
+            $labels = collect(range(0, 6))->map(fn($offset) => $currentStart->copy()->addDays($offset)->translatedFormat('D'));
+            $successfulPaymentsByPeriod = $successfulPayments->countBy(fn($payment) => $payment->created_at->isoWeekday());
+            $successData = collect(range(1, 7))->map(fn($day) => min($successfulPaymentsByPeriod->get($day, 0), $chartCapacity));
         } elseif ($this->reportPeriod === 'monthly') {
             $startOfMonth = Carbon::parse($this->reportMonth . '-01')->startOfMonth();
             $labels = collect(range(1, $startOfMonth->daysInMonth))->map(fn($day) => (string) $day);
-            $currentCounts = $currentChartPayments->countBy(fn($payment) => $payment->created_at->day);
-            $previousCounts = $previousChartPayments->countBy(fn($payment) => $payment->created_at->day);
-            $currentData = collect(range(1, $startOfMonth->daysInMonth))->map(fn($day) => $currentCounts->get($day, 0));
-            $previousData = collect(range(1, $startOfMonth->daysInMonth))->map(fn($day) => $previousCounts->get($day, 0));
+            $successfulPaymentsByPeriod = $successfulPayments->countBy(fn($payment) => $payment->created_at->day);
+            $successData = collect(range(1, $startOfMonth->daysInMonth))->map(fn($day) => min($successfulPaymentsByPeriod->get($day, 0), $chartCapacity));
         } else {
             $labels = collect(range(1, 12))->map(fn($month) => Carbon::create($this->reportYear, $month)->translatedFormat('M'));
-            $currentCounts = $currentChartPayments->countBy(fn($payment) => $payment->created_at->month);
-            $previousCounts = $previousChartPayments->countBy(fn($payment) => $payment->created_at->month);
-            $currentData = collect(range(1, 12))->map(fn($month) => $currentCounts->get($month, 0));
-            $previousData = collect(range(1, 12))->map(fn($month) => $previousCounts->get($month, 0));
+            $successfulPaymentsByPeriod = $successfulPayments->countBy(fn($payment) => $payment->created_at->month);
+            $successData = collect(range(1, 12))->map(fn($month) => min($successfulPaymentsByPeriod->get($month, 0), $chartCapacity));
         }
-
-
 
         $paidStatuses = ['success', 'capture', 'settlement', 'paid',];
         $paymentMethods = Payment::query()
@@ -105,20 +95,12 @@ class AdminDashboard extends Component
             'labels' => $labels,
             'datasets' => [
                 [
-                    'label' => 'Periode sebelumnya',
-                    'data' => $previousData,
-                    'borderColor' => '#2563eb',
-                    'backgroundColor' => 'rgba(37, 99, 235, 0.15)',
-                    'fill' => true,
-                    'tension' => 0.35,
-                ],
-                [
-                    'label' => 'Periode dipilih',
-                    'data' => $currentData,
-                    'borderColor' => '#059669',
-                    'backgroundColor' => 'rgba(5, 150, 105, 0.15)',
-                    'fill' => true,
-                    'tension' => 0.35,
+                    'label' => 'Grafik Penjualan',
+                    'data' => $successData,
+                    'backgroundColor' => '#059669',
+                    'borderRadius' => 6,
+                    'borderWidth' => 1,
+                    'borderColor' => '#ffffff',
                 ],
 
             ],
@@ -144,13 +126,16 @@ class AdminDashboard extends Component
 
         return view('admin.dashboard', compact(
             'rooms',
+            'recentBookings',
             'totalRevenue',
             'totalBookings',
             'activeBookings',
             'roomStats',
             'paymentMethods',
             'chartData',
-            'statusChartData'
+            'statusChartData',
+            'chartCapacity',
+            'totalRoomUnits'
         ))->layout('layouts.app');
     }
 }

@@ -7,6 +7,7 @@ use App\Models\Booking;
 use App\Models\Payment;
 use App\Models\Promo;
 use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Builder;
 use Livewire\Component;
 use Livewire\WithPagination;
 use Maatwebsite\Excel\Facades\Excel;
@@ -46,6 +47,26 @@ class TransactionManager extends Component
         $this->resetPage();
     }
 
+    public function updatedReportPeriod()
+    {
+        $this->resetPage();
+    }
+
+    public function updatedReportDate()
+    {
+        $this->resetPage();
+    }
+
+    public function updatedReportMonth()
+    {
+        $this->resetPage();
+    }
+
+    public function updatedReportYear()
+    {
+        $this->resetPage();
+    }
+
     public function render()
     {
         $transactionsQuery = Payment::query()
@@ -69,6 +90,8 @@ class TransactionManager extends Component
                 $query->where('transaction_status', $this->filterStatus);
             });
 
+        $this->applyPeriodFilter($transactionsQuery);
+
         $transactions = $transactionsQuery->latest()->paginate(10);
 
         $paymentMethods = Payment::query()
@@ -78,19 +101,27 @@ class TransactionManager extends Component
             ->get();
 
         $paidStatuses = ['success', 'capture', 'settlement', 'deny', 'pending', 'expire'];
+        $periodPaymentsQuery = $this->applyPeriodFilter(Payment::query());
+        $totalRevenue = (float) (clone $periodPaymentsQuery)->where('transaction_status', 'success')->sum('gross_amount');
+        $previousTotalRevenue = (float) $this->applyPreviousPeriodFilter(Payment::query())->where('transaction_status', 'success')->sum('gross_amount');
+
         return view('livewire.layout.transaction', [
             'transactions' => $transactions,
             'promos' => $this->promos,
             'paymentMethods' => $paymentMethods,
             'transactionStats' => [
-                'total' => Payment::count(),
-                'success' => Payment::whereIn('transaction_status', $paidStatuses)->count(),
-                'pending' => Payment::whereIn('transaction_status', ['pending', 'challenge'])->count(),
+                'total' => $totalRevenue,
+                'total_change' => $previousTotalRevenue > 0
+                    ? (($totalRevenue - $previousTotalRevenue) / $previousTotalRevenue) * 100
+                    : null,
+                'success' => (clone $periodPaymentsQuery)->where('transaction_status', 'success')->count(),
+                'pending' => (clone $periodPaymentsQuery)->where('transaction_status', 'pending')->count(),
                 'paid' => Booking::whereIn('status', ['paid', 'completed'])->count(),
                 'pending_booking' => Booking::where('status', 'pending')->count(),
-                'revenue' => (float) Payment::whereIn('transaction_status', $paidStatuses)->sum('gross_amount'),
-                'average' => (float) Payment::whereIn('transaction_status', $paidStatuses)->avg('gross_amount'),
-                'highest' => (float) Payment::whereIn('transaction_status', $paidStatuses)->max('gross_amount'),
+                'revenue' => (float) Payment::where('transaction_status', 'success')->sum('sub_total_amount'),
+                'total_tax' => (float) Payment::where('transaction_status', 'success')->sum('tax_amount'),
+                'average' => (float) (clone $periodPaymentsQuery)->whereIn('transaction_status', $paidStatuses)->avg('gross_amount'),
+                'highest' => (float) (clone $periodPaymentsQuery)->whereIn('transaction_status', $paidStatuses)->max('gross_amount'),
             ],
 
 
@@ -138,17 +169,7 @@ class TransactionManager extends Component
             })
             ->when($this->filterStatus, fn($q) => $q->where('transaction_status', $this->filterStatus));
 
-        // Terapkan filter tanggal
-        if ($this->reportPeriod === 'daily') {
-            $query->whereDate('created_at', $this->reportDate);
-        } elseif ($this->reportPeriod === 'monthly') {
-            $query->whereBetween('created_at', [
-                now()->parse($this->reportMonth . '-01')->startOfMonth(),
-                now()->parse($this->reportMonth . '-01')->endOfMonth(),
-            ]);
-        } elseif ($this->reportPeriod === 'yearly') {
-            $query->whereYear('created_at', $this->reportYear);
-        }
+        $this->applyPeriodFilter($query);
 
         // Ambil semua data tanpa pagination
         $payments = $query->latest()->get();
@@ -164,5 +185,38 @@ class TransactionManager extends Component
             ),
             "transaksi_{$this->reportPeriod}_{now()->format('YmdHis')}.xlsx"
         );
+    }
+
+    private function applyPeriodFilter(Builder $query): Builder
+    {
+        if ($this->reportPeriod === 'daily') {
+            $query->whereDate('created_at', $this->reportDate);
+        } elseif ($this->reportPeriod === 'monthly') {
+            $query->whereBetween('created_at', [
+                Carbon::parse($this->reportMonth . '-01')->startOfMonth(),
+                Carbon::parse($this->reportMonth . '-01')->endOfMonth(),
+            ]);
+        } elseif ($this->reportPeriod === 'yearly') {
+            $query->whereYear('created_at', $this->reportYear);
+        }
+
+        return $query;
+    }
+
+    private function applyPreviousPeriodFilter(Builder $query): Builder
+    {
+        if ($this->reportPeriod === 'daily') {
+            $query->whereDate('created_at', Carbon::parse($this->reportDate)->subDay());
+        } elseif ($this->reportPeriod === 'monthly') {
+            $previousMonth = Carbon::parse($this->reportMonth . '-01')->subMonth();
+            $query->whereBetween('created_at', [
+                $previousMonth->copy()->startOfMonth(),
+                $previousMonth->copy()->endOfMonth(),
+            ]);
+        } elseif ($this->reportPeriod === 'yearly') {
+            $query->whereYear('created_at', $this->reportYear - 1);
+        }
+
+        return $query;
     }
 }
