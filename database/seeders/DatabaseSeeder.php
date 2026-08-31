@@ -2,10 +2,8 @@
 
 namespace Database\Seeders;
 
-use App\Models\Facility;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use App\Models\Gallery;
-use App\Models\RoomFacility;
 use App\Models\User;
 use Illuminate\Database\Seeder;
 
@@ -40,6 +38,7 @@ class DatabaseSeeder extends Seeder
             RoomSeeder::class,
             RoomUnitSeeder::class,
             BookingSeeder::class,
+            FacilitySeeder::class,
         ]);
 
         $galleries = [
@@ -55,12 +54,5 @@ class DatabaseSeeder extends Seeder
             Gallery::insert($galleries);
         }
 
-        if (Facility::count() === 0) {
-            Facility::insert($facilities);
-        }
-
-        if (RoomFacility::count() === 0) {
-            RoomFacility::insert($facilityRoom);
-        }
     }
 }

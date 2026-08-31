@@ -30,7 +30,9 @@ new class extends Component {
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'lowercase', 'email', 'max:255', Rule::unique(User::class)->ignore($user->id)],
             'phone' => ['required', 'regex:/^(?:\+62|08)[0-9]{8,12}$/', Rule::unique(User::class)->ignore($user->id)],
-            'address' => ['required', 'string', 'max:255'],
+            'address' => ['nullable', 'string', 'max:255'],
+            'gender' => ['nullable', 'string', 'in:Male,Female'],
+            'nationality' => ['nullable', 'string', 'max:255'],
         ]);
 
         $user->fill($validated);
@@ -111,15 +113,42 @@ new class extends Component {
         <div>
             <x-input-label for="phone" :value="__('Phone')" />
             <x-text-input wire:model="phone" id="phone" name="phone" type="text" class="mt-1 block w-full"
-                required autofocus autocomplete="phone" />
+                required autofocus autocomplete="phone" placeholder="+62 1234567890" />
             <x-input-error class="mt-2" :message="$errors->get('phone')" />
         </div>
 
         <div>
             <x-input-label for="address" :value="__('Address')" />
             <x-text-input wire:model="address" id="address" name="address" type="text" class="mt-1 block w-full"
-                required autofocus autocomplete="address" />
+                required autofocus autocomplete="address" placeholder="Enter your address" />
             <x-input-error class="mt-2" :message="$errors->get('address')" />
+        </div>
+
+        <div>
+            <x-input-label for="gender" :value="__('Gender')" />
+            <select wire:model="gender" id="gender" name="gender"
+                class="mt-1 block w-full rounded-md shadow-sm border-gray-300 focus:border-primary focus:ring focus:ring-primary focus:ring-opacity-50">
+                <option value="">Select Gender</option>
+                <option value="Male">Male</option>
+                <option value="Female">Female</option>
+            </select>
+            <x-input-error class="mt-2" :message="$errors->get('gender')" />
+        </div>
+
+        <div>
+            <x-input-label for="nationality" :value="__('Nationality')" />
+            <select wire:model="nationality" id="nationality" name="nationality"
+                class="mt-1 block w-full rounded-md shadow-sm border-gray-300 focus:border-primary focus:ring focus:ring-primary focus:ring-opacity-50">
+                <option value="">Select Nationality</option>
+                <option value="Indonesia">Indonesia</option>
+                <option value="Malaysia">Malaysia</option>
+                <option value="Singapore">Singapore</option>
+                <option value="Thailand">Thailand</option>
+                <option value="Vietnam">Vietnam</option>
+                <option value="Philippines">Philippines</option>
+                <option value="Other">Other</option>
+            </select>
+            <x-input-error class="mt-2" :message="$errors->get('nationality')" />
         </div>
 
         <div class="flex items-center gap-4">

@@ -101,12 +101,14 @@
                   </svg>
               </a> --}}
 
-              <div class="mt-4 max-w-[280px] rounded-2xl overflow-hidden shadow-lg border border-gray-200 bg-white">
+              <div class="mt-4 w-full rounded-2xl overflow-hidden shadow-lg border border-gray-200 bg-white">
                   <iframe width="100%" height="160" frameborder="0" style="border:0; display:block;"
                       referrerpolicy="strict-origin-when-cross-origin" loading="lazy"
                       allow="fullscreen; accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                      src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d126421.20607539793!2d98.78469165000001!3d2.1578144999999996!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x302e437c07775635%3A0xa42f7580b07e5d75!2sSitio%20Tio%20Resort!5e0!3m2!1sen!2sid!4v1726424868683!5m2!1sen!2sid"
-                      allowfullscreen></iframe>
+                      src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d996.4115508159018!2d98.67438096487352!3d2.620457773852175!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3031c571e97ed373%3A0x6196bdd6b96c43e0!2sJl.%20Aek%20Rangat%20No.71%2C%20Siogung-Ogung%2C%20Kec.%20Pangururan%2C%20Kabupaten%20Samosir%2C%20Sumatera%20Utara!5e0!3m2!1sid!2sid!4v1788164260169!5m2!1sid!2sid"
+                      width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy"
+                      referrerpolicy="strict-origin-when-cross-origin">
+                  </iframe>
                   <a href="https://maps.app.goo.gl/KU8sb6zXcH3iyadc8" target="_blank" rel="noopener noreferrer"
                       class="flex items-center justify-center gap-2 px-4 py-2.5 text-sm font-poppins font-semibold text-primary hover:bg-gray-50 transition-colors">
                       <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
