@@ -26,7 +26,7 @@ class AdminDashboard extends Component
 
     public function mount(): void
     {
-        $this->reportDate = today()->format('Y-m-d');
+        $this->reportDate = today()->format('Y-m-d ');
         $this->reportMonth = today()->format('Y-m');
         $this->reportYear = today()->year;
     }
@@ -67,7 +67,8 @@ class AdminDashboard extends Component
             ->get(['created_at']);
 
         if ($this->reportPeriod === 'weekly') {
-            $labels = collect(range(0, 6))->map(fn($offset) => $currentStart->copy()->addDays($offset)->translatedFormat('D'));
+            $labels = collect(range(0, 6))->map(fn($offset) => $currentStart->copy()->addDays($offset)->translatedFormat('D - d'));
+
             $successfulPaymentsByPeriod = $successfulPayments->countBy(fn($payment) => $payment->created_at->isoWeekday());
             $successData = collect(range(1, 7))->map(fn($day) => min($successfulPaymentsByPeriod->get($day, 0), $chartCapacity));
         } elseif ($this->reportPeriod === 'monthly') {

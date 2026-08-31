@@ -182,6 +182,7 @@
                         <tr>
                             <th class="px-4 py-3 font-medium">No</th>
                             <th class="px-4 py-3 font-medium">Booking & Tamu</th>
+                            <th class="px-4 py-3 font-medium">Deposit</th>
                             <th class="px-4 py-3 font-medium">Kamar</th>
                             <th class="px-4 py-3 font-medium">Menginap</th>
                             <th class="px-4 py-3 font-medium">Tamu</th>
@@ -209,6 +210,9 @@
                                     <p class="font-medium text-gray-800">{{ $booking->booking_code }}</p>
                                     <p class="mt-0.5 text-xs text-gray-500">{{ $booking->user->name }}</p>
                                 </td>
+                                <td class="px-4 py-3 text-gray-700">
+                                    {{ strtoupper($booking->deposit_status) }}
+                                </td>
                                 <td class="px-4 py-3 text-gray-700"> {{ $booking->room->name }} No.
                                     {{ $booking->roomUnit->room_number }}</td>
                                 <td class="px-4 py-3 text-xs text-gray-600">
@@ -230,7 +234,7 @@
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="8" class="px-4 py-12 text-center text-gray-500">Tidak ada booking
+                                <td colspan="9" class="px-4 py-12 text-center text-gray-500">Tidak ada booking
                                     ditemukan.</td>
                             </tr>
                         @endforelse
@@ -490,14 +494,15 @@
                         <option value="">Select RoomUnit</option>
                         @if ($room_id)
                             @foreach ($rooms->find($room_id)->units as $room_unit)
-                                 @if ($room_unit->status == 'available' || $room_unit->id == $room_unit_id)
-                                     <option value="{{ $room_unit->id }}"
-                                         {{ $room_unit->id == $room_unit_id ? 'selected' : '' }}
-                                         @disabled($room_unit->status === 'occupied')>
-                                         {{ $room_unit->room_number }}{{ $room_unit->status === 'occupied' ? ' (Occupied)' : '' }}</option>
-                                 @else
-                                     <option value="{{ $room_unit->id }}" disabled>
-                                         {{ $room_unit->room_number }} ({{ ucfirst($room_unit->status) }})
+                                @if ($room_unit->status == 'available' || $room_unit->id == $room_unit_id)
+                                    <option value="{{ $room_unit->id }}"
+                                        {{ $room_unit->id == $room_unit_id ? 'selected' : '' }}
+                                        @disabled($room_unit->status === 'occupied')>
+                                        {{ $room_unit->room_number }}{{ $room_unit->status === 'occupied' ? ' (Occupied)' : '' }}
+                                    </option>
+                                @else
+                                    <option value="{{ $room_unit->id }}" disabled>
+                                        {{ $room_unit->room_number }} ({{ ucfirst($room_unit->status) }})
                                     </option>
                                 @endif
                             @endforeach
@@ -563,6 +568,22 @@
                     <x-input-error :message="$errors->get('status')" />
                 </div>
             @endif
+
+            <div class="mb-4">
+                <label class="input-label">Deposit Status <span class="text-red-500">*</span></label>
+                <select wire:model="deposit_status" class="input">
+                    <option value="none">None</option>
+                    <option value="ktp">KTP</option>
+                    <option value="cash">Cash (Rp. 100.000)</option>
+                    <option value="passport">Passport</option>
+                </select>
+                {{-- <div class="mb-4">
+                    <label class="input-label">Jumlah Deposit (Rp) <span class="text-red-500">*</span></label>
+                    <input type="text" id="depositAmount" wire:model="deposit_amount" class="input">
+                    <x-input-error :message="$errors->get('deposit_amount')" />
+                </div> --}}
+                <x-input-error :message="$errors->get('deposit_status')" />
+            </div>
             <!-- Duration Info -->
             <div id="durationInfo" class="mb-4 hidden">
                 <div class="p-4 bg-blue-50 rounded-xl border border-blue-100">

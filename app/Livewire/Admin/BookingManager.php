@@ -38,6 +38,7 @@ class BookingManager extends Component
     public ?int $bookingId = null;
 
     public $bookingEditId = null;
+    public $deposit_status = 'none';
 
     public $users;
 
@@ -188,6 +189,7 @@ class BookingManager extends Component
     {
         $this->bookingEditId = $bookingId;
         $booking = Booking::with(['room', 'roomUnit', 'user'])->findOrFail($bookingId);
+        $this->deposit_status = $booking->deposit_status;
         $this->booking_code = $booking->booking_code;
         $this->room_id = $booking->room->id;
         $this->room_unit_id = $booking->roomUnit?->id;
@@ -253,6 +255,7 @@ class BookingManager extends Component
             'check_in',
             'check_out',
             'total_guests',
+            'deposit_status',
             'total_price',
             'status',
             'bookingEditId',
@@ -313,6 +316,7 @@ class BookingManager extends Component
             'user_id' => 'required|exists:users,id',
             'room_id' => 'required|exists:rooms,id',
             'room_unit_id' => 'required|exists:room_units,id',
+            'deposit_status' => 'required|in:ktp,cash,passport,none',
             'check_in' => [
                 'required',
                 'date',
@@ -323,6 +327,38 @@ class BookingManager extends Component
                 'after:check_in',
             ],
             'status' => 'required|in:pending,paid,checked_in,checked_out,cancelled',
+
+            'total_guests' => 'required|integer|min:1|max:100',
+            'total_price' => 'required|integer|min:1|max:999999999',
+        ];
+    }
+
+    public function messages()
+    {
+        return [
+            'user_id.required' => 'User harus diisi.',
+            'user_id.exists' => 'User tidak ditemukan.',
+            'room_id.required' => 'Room harus diisi.',
+            'room_id.exists' => 'Room tidak ditemukan.',
+            'room_unit_id.required' => 'Room unit harus diisi.',
+            'room_unit_id.exists' => 'Room unit tidak ditemukan.',
+            'deposit_status.required' => 'Deposit status harus diisi.',
+            'deposit_status.in' => 'Deposit status tidak valid.',
+            'check_in.required' => 'Check in harus diisi.',
+            'check_in.date' => 'Check in harus berupa tanggal.',
+            'check_out.required' => 'Check out harus diisi.',
+            'check_out.date' => 'Check out harus berupa tanggal.',
+            'check_out.after' => 'Check out harus setelah check in.',
+            'status.required' => 'Status harus diisi.',
+            'status.in' => 'Status tidak valid.',
+            'total_guests.required' => 'Total guests harus diisi.',
+            'total_guests.integer' => 'Total guests harus berupa angka.',
+            'total_guests.min' => 'Total guests minimal 1.',
+            'total_guests.max' => 'Total guests maksimal 100.',
+            'total_price.required' => 'Total price harus diisi.',
+            'total_price.integer' => 'Total price harus berupa angka.',
+            'total_price.min' => 'Total price minimal 1.',
+            'total_price.max' => 'Total price maksimal 999999999.',
         ];
     }
 }

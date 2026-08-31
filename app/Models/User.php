@@ -24,6 +24,11 @@ class User extends Authenticatable
         'address',
         'role',
         'password',
+        'nationality',
+        'gender',
+        'photo',
+
+
     ];
 
     /**
@@ -51,12 +56,17 @@ class User extends Authenticatable
 
     public function isAdmin(): bool
     {
-        return $this->attributes['role'] === 'admin';
+        return $this->role === 'admin';
+    }
+
+    public function isReceptionist(): bool
+    {
+        return $this->role === 'receptionist';
     }
 
     public function isCustomer(): bool
     {
-        return $this->attributes['role'] === 'customer';
+        return $this->role === 'customer';
     }
 
     public function bookings(): HasMany

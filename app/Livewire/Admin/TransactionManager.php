@@ -11,6 +11,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Livewire\Component;
 use Livewire\WithPagination;
 use Maatwebsite\Excel\Facades\Excel;
+use Monolog\Processor\MemoryPeakUsageProcessor;
 
 class TransactionManager extends Component
 {

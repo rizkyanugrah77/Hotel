@@ -7,17 +7,17 @@
         window.setTimeout(() => this.toast.show = false, 5000);
     }
 }"
-    class="relative min-w-0 w-full max-w-full flex-1 overflow-x-hidden overflow-y-auto p-4 sm:p-6 lg:p-8">
+    class="relative min-w-0 w-full max-w-full flex-1 overflow-x-hidden overflow-y-auto p-3 sm:p-5 lg:p-6">
 
     <x-toast />
 
     <!-- KPI Cards -->
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-6 mb-6 sm:mb-8">
-        <div class="bg-slate-50 border border-slate-200 shadow-md rounded-2xl p-4 sm:p-6">
-            <div class="flex justify-between items-start mb-3 sm:mb-4">
-                <div>
-                    <p class="text-xs sm:text-sm text-gray-500 mb-1">Pendapatan Periode Terpilih</p>
-                    <h3 class="text-xl sm:text-2xl font-poppins font-bold text-foreground">
+    <div class="mb-5 grid grid-cols-2 gap-3 sm:mb-6 lg:grid-cols-4 lg:gap-4">
+        <div class="min-w-0 rounded-xl border border-slate-200 bg-slate-50 p-3 shadow-sm sm:p-4">
+            <div class="mb-2 flex items-start justify-between gap-2 sm:mb-3">
+                <div class="min-w-0">
+                    <p class="mb-1 text-xs text-gray-500">Pendapatan Periode Terpilih</p>
+                    <h3 class="break-words text-lg font-poppins font-bold leading-tight text-foreground sm:text-xl">
                         {{ 'Rp ' . number_format($transactionStats['total'] ?? 0, 0, ',', '.') }}</h3>
                     @if ($transactionStats['total_change'] !== null)
                         <p @class([
@@ -33,7 +33,7 @@
                     @endif
                 </div>
                 <div
-                    class="w-8 h-8 sm:w-10 sm:h-10 bg-primary/10 text-primary rounded-xl flex items-center justify-center">
+                    class="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-primary/10 text-primary sm:h-9 sm:w-9">
                     <svg class="w-4 h-4 sm:w-5 sm:h-5" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                         stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round"
@@ -41,18 +41,18 @@
                     </svg>
                 </div>
             </div>
-            <p class="text-[10px] sm:text-xs text-gray-500 font-medium">Semua transaksi</p>
+            <p class="hidden text-xs font-medium text-gray-500 sm:block">Semua transaksi</p>
         </div>
 
-        <div class="bg-emerald-50 border border-emerald-200 shadow-md rounded-2xl p-4 sm:p-6">
-            <div class="flex justify-between items-start mb-3 sm:mb-4">
-                <div>
-                    <p class="text-xs sm:text-sm text-gray-500 mb-1">Berhasil</p>
-                    <h3 class="text-xl sm:text-2xl font-poppins font-bold text-emerald-600">
+        <div class="min-w-0 rounded-xl border border-emerald-200 bg-emerald-50 p-3 shadow-sm sm:p-4">
+            <div class="mb-2 flex items-start justify-between gap-2 sm:mb-3">
+                <div class="min-w-0">
+                    <p class="mb-1 text-xs text-gray-500">Berhasil</p>
+                    <h3 class="text-lg font-poppins font-bold leading-tight text-emerald-600 sm:text-xl">
                         {{ $transactionStats['success'] ?? 0 }}</h3>
                 </div>
                 <div
-                    class="w-8 h-8 sm:w-10 sm:h-10 bg-emerald-50 text-emerald-600 rounded-xl flex items-center justify-center">
+                    class="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-emerald-100 text-emerald-700 sm:h-9 sm:w-9">
                     <svg class="w-4 h-4 sm:w-5 sm:h-5" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                         stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round"
@@ -60,18 +60,18 @@
                     </svg>
                 </div>
             </div>
-            <p class="text-[10px] sm:text-xs text-emerald-600 font-medium">Pembayaran sukses</p>
+            <p class="hidden text-xs font-medium text-emerald-700 sm:block">Pembayaran sukses</p>
         </div>
 
-        <div class="bg-amber-50 border border-amber-200 shadow-md rounded-2xl p-4 sm:p-6">
-            <div class="flex justify-between items-start mb-3 sm:mb-4">
-                <div>
-                    <p class="text-xs sm:text-sm text-gray-500 mb-1">Pending</p>
-                    <h3 class="text-xl sm:text-2xl font-poppins font-bold text-amber-600">
+        <div class="min-w-0 rounded-xl border border-amber-200 bg-amber-50 p-3 shadow-sm sm:p-4">
+            <div class="mb-2 flex items-start justify-between gap-2 sm:mb-3">
+                <div class="min-w-0">
+                    <p class="mb-1 text-xs text-gray-500">Pending</p>
+                    <h3 class="text-lg font-poppins font-bold leading-tight text-amber-700 sm:text-xl">
                         {{ $transactionStats['pending'] ?? 0 }}</h3>
                 </div>
                 <div
-                    class="w-8 h-8 sm:w-10 sm:h-10 bg-amber-50 text-amber-600 rounded-xl flex items-center justify-center">
+                    class="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-amber-100 text-amber-700 sm:h-9 sm:w-9">
                     <svg class="w-4 h-4 sm:w-5 sm:h-5" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                         stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round"
@@ -79,21 +79,21 @@
                     </svg>
                 </div>
             </div>
-            <p class="text-[10px] sm:text-xs text-amber-600 font-medium">Menunggu pembayaran</p>
+            <p class="hidden text-xs font-medium text-amber-700 sm:block">Menunggu pembayaran</p>
         </div>
 
-        <div class="bg-violet-50 border border-violet-200 shadow-md rounded-2xl p-4 sm:p-6">
-            <div class="flex justify-between items-start mb-3 sm:mb-4">
-                <div class="flex flex-col">
-                    <p class="text-xs sm:text-sm  mb-1">Laba Bersih Estimasi</p>
-                    <h3 class="text-xl sm:text-2xl font-poppins font-bold text-accent">
+        <div class="min-w-0 rounded-xl border border-violet-200 bg-violet-50 p-3 shadow-sm sm:p-4">
+            <div class="mb-2 flex items-start justify-between gap-2 sm:mb-3">
+                <div class="min-w-0 flex flex-col">
+                    <p class="mb-1 text-xs text-gray-500">Laba Bersih Estimasi</p>
+                    <h3 class="break-words text-lg font-poppins font-bold leading-tight text-accent sm:text-xl">
                         {{ 'Rp ' . number_format($transactionStats['revenue'] ?? 0, 0, ',', '.') }}</h3>
-                    <h3 class="text-sm sm:text-md font-poppins font-medium text-primary">
+                    <h3 class="text-xs font-poppins font-medium text-primary sm:text-sm">
                         {{ 'Rp ' . number_format($transactionStats['total_tax'] ?? 0, 0, ',', '.') }} <span
                             class="text-xs text-gray-500">Tax</span></h3>
                 </div>
                 <div
-                    class="w-8 h-8 sm:w-10 sm:h-10 bg-accent/10 text-accent-700 rounded-xl flex items-center justify-center">
+                    class="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-accent/10 text-accent-700 sm:h-9 sm:w-9">
                     <svg class="w-4 h-4 sm:w-5 sm:h-5" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                         stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round"
@@ -101,13 +101,13 @@
                     </svg>
                 </div>
             </div>
-            <p class="text-[10px] sm:text-xs text-accent-600 font-medium">Dari transaksi sukses</p>
+            <p class="hidden text-xs font-medium text-accent-700 sm:block">Dari transaksi sukses</p>
         </div>
     </div>
 
     <!-- Filter Laporan -->
-    <div class="bg-white border border-slate-200 shadow-md rounded-2xl p-4 sm:p-6 mb-6">
-        <div class="flex flex-col lg:flex-row lg:items-end justify-between gap-4">
+    <div class="mb-5 rounded-xl border border-slate-200 bg-white p-4 shadow-sm sm:mb-6 sm:p-5">
+        <div class="flex flex-col justify-between gap-4 xl:flex-row xl:items-end">
 
             <!-- Judul -->
             <div>
@@ -120,7 +120,7 @@
             </div>
 
             <!-- Filter -->
-            <div class="flex flex-col sm:flex-row gap-3 w-full lg:w-auto">
+            <div class="grid w-full grid-cols-1 gap-3 sm:grid-cols-2 xl:w-auto xl:grid-cols-[10rem_11rem_auto]">
 
                 <!-- Jenis Periode -->
                 <div class="w-full sm:w-40">
@@ -177,13 +177,13 @@
                 @endif
 
                 <!-- Export -->
-                <div class="flex items-end w-full sm:w-auto">
+                <div class="flex items-end">
                     <button type="button" wire:click="exportExcel" wire:loading.attr="disabled"
                         class="inline-flex items-center justify-center gap-2 px-5 py-2.5
                            bg-emerald-600 hover:bg-emerald-700
                            text-white text-sm font-semibold
-                           rounded-xl transition-all shadow-sm
-                           w-full sm:w-auto
+                           min-h-11 rounded-lg transition-colors shadow-sm
+                           w-full
                            disabled:opacity-50 disabled:cursor-not-allowed">
 
                         <!-- Excel Icon -->
@@ -219,25 +219,25 @@
 
 
     <!-- Search & Filter + Transaction List -->
-    <div class="w-full min-w-0 overflow-hidden bg-white border border-slate-200 shadow-md rounded-2xl mb-8">
+    <div class="mb-6 w-full min-w-0 overflow-scroll rounded-xl border border-slate-200 bg-white shadow-sm">
 
         {{-- daftar --}}
         <div
-            class="p-3 sm:p-6 border-b border-gray-100 flex flex-col lg:flex-row justify-between items-start lg:items-center gap-4">
+            class="flex flex-col items-start justify-between gap-3 border-b border-gray-100 p-4 sm:p-5 lg:flex-row lg:items-center">
             <h2 class="font-poppins font-bold text-lg">Daftar Transaksi</h2>
-            <div class="flex flex-col sm:flex-row w-full lg:w-auto items-stretch gap-3">
-                <div class="relative flex-1 sm:flex-none">
+            <div class="grid w-full grid-cols-1 gap-2 sm:grid-cols-[minmax(0,1fr)_10rem] lg:w-auto">
+                <div class="relative min-w-0">
                     <svg class="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" fill="none"
                         viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round"
                             d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />
                     </svg>
                     <input wire:model.live="search" type="text" placeholder="Cari kode transaksi, user, room..."
-                        class="input pl-10 pr-4 py-2 text-sm lg:w-full sm:w-64" />
+                        class="input w-full py-2 pl-10 pr-4 text-sm lg:w-64" />
                 </div>
 
                 <select id="filterStatus" wire:model.live="filterStatus"
-                    class="mt-2 block w-full rounded-md bg-white py-2 pl-3 pr-10 text-sm text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:w-40">
+                    class="input min-w-0 w-full py-2 text-sm lg:w-40">
                     <option value="">Semua Status</option>
                     <option value="success">Berhasil</option>
                     <option value="pending">Pending</option>
@@ -248,44 +248,44 @@
         </div>
 
         <!-- Table: desktop only -->
-        <div class="overflow-x-auto hidden md:block">
-            <table class="w-full text-left text-sm overflow-x-scroll">
+        <div class="hidden min-w-0 xl:block">
+            <table class="w-full table-fixed text-left text-xs 2xl:text-sm">
                 <thead class="bg-gray-50 text-gray-500">
                     <tr>
-                        <th class="py-3 px-6 font-medium">No</th>
-                        <th class="py-3 px-6 font-medium">Order ID</th>
-                        <th class="py-3 px-6 font-medium">Date</th>
-                        <th class="py-3 px-6 font-medium">Booking Code</th>
-                        <th class="py-3 px-6 font-medium">User</th>
-                        <th class="py-3 px-6 font-medium">Room</th>
-                        <th class="py-3 px-6 font-medium">Metode</th>
-                        <th class="py-3 px-6 font-medium">Tax</th>
-                        <th class="py-3 px-6 font-medium">Promo</th>
-                        <th class="py-3 px-6 font-medium">Subtotal</th>
-                        <th class="py-3 px-6 font-medium">Total</th>
-                        <th class="py-3 px-6 font-medium">Status</th>
+                        <th class="w-10 px-3 py-3 font-medium">No</th>
+                        <th class="w-[10%] px-3 py-3 font-medium">Order ID</th>
+                        <th class="w-[10%] px-3 py-3 font-medium">Date</th>
+                        <th class="w-[8%] px-3 py-3 font-medium">Booking Code</th>
+                        <th class="w-[10%] px-3 py-3 font-medium">User</th>
+                        <th class="w-[10%] px-3 py-3 font-medium">Room</th>
+                        <th class="w-[8%] px-3 py-3 font-medium">Metode</th>
+                        <th class="hidden w-[8%] px-3 py-3 font-medium 2xl:table-cell">Tax</th>
+                        <th class="hidden w-[8%] px-3 py-3 font-medium 2xl:table-cell">Promo</th>
+                        <th class="hidden w-[10%] px-3 py-3 font-medium 2xl:table-cell">Subtotal</th>
+                        <th class="w-[9%] px-3 py-3 font-medium">Total</th>
+                        <th class="w-[9%] px-3 py-3 font-medium">Status</th>
                     </tr>
                 </thead>
                 <tbody class="divide-y divide-gray-100">
                     @forelse ($transactions as $index => $tx)
                         <tr class="hover:bg-gray-50">
-                            <td class="py-3 px-6 text-gray-700 font-medium">{{ $index + 1 }}</td>
-                            <td class="py-3 px-6 text-gray-700 font-mono">{{ $tx->order_id }}</td>
-                            <td class="py-3 px-6 text-gray-700">
+                            <td class="px-3 py-3 font-medium text-gray-700">{{ $index + 1 }}</td>
+                            <td class="truncate px-3 py-3 font-mono text-gray-700">{{ $tx->order_id }}</td>
+                            <td class="truncate px-3 py-3 text-gray-700">
                                 {{ Carbon\Carbon::parse($tx->created_at)->setTimezone('Asia/Jakarta')->format('d M Y H:i') }}
                             </td>
-                            <td class="py-3 px-6 text-gray-700">{{ $tx->booking?->booking_code ?? '-' }}</td>
-                            <td class="py-3 px-6 text-gray-700">{{ $tx->user?->name ?? '-' }}</td>
-                            <td class="py-3 px-6 text-gray-700">{{ $tx->booking?->room?->name ?? '-' }}</td>
-                            <td class="py-3 px-6 text-gray-700">
+                            <td class="truncate px-3 py-3 text-gray-700">{{ $tx->booking?->booking_code ?? '-' }}</td>
+                            <td class="truncate px-3 py-3 text-gray-700">{{ $tx->user?->name ?? '-' }}</td>
+                            <td class="truncate px-3 py-3 text-gray-700">{{ $tx->booking?->room?->name ?? '-' }}</td>
+                            <td class="truncate px-3 py-3 text-gray-700">
                                 {{ $tx->payment_type ?? ($tx->payment_method ?? '-') }}
                             </td>
-                            <td class="py-3 px-6 text-gray-700">
+                            <td class="hidden truncate px-3 py-3 text-gray-700 2xl:table-cell">
                                 Rp. {{ number_format($tx->tax_amount, 0, ',', '.') }}
                             </td>
 
 
-                            <td class="py-3 px-6 text-gray-700">
+                            <td class="hidden truncate px-3 py-3 text-gray-700 2xl:table-cell">
                                 @if ($tx->promo)
                                     @if ($tx->promo->discount_type === 'percentage')
                                         {{ $tx->promo->discount_value }}%
@@ -296,19 +296,19 @@
                                     No Promo
                                 @endif
                             </td>
-                            <td class="py-3 px-6 text-gray-700">
+                            <td class="hidden truncate px-3 py-3 text-gray-700 2xl:table-cell">
                                 {{ 'Rp ' . number_format($tx->sub_total_amount, 0, ',', '.') }}
                             </td>
-                            <td class="py-3 px-6 text-gray-700">
+                            <td class="truncate px-3 py-3 text-gray-700">
                                 {{ 'Rp ' . number_format($tx->gross_amount, 0, ',', '.') }}
                             </td>
-                            <td class="py-3 px-6">
+                            <td class="px-3 py-3">
                                 <x-transaction-status :status="$tx->transaction_status" />
                             </td>
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="12" class="py-6 px-6 text-center text-gray-500">Tidak ada transaksi
+                            <td colspan="12" class="px-3 py-6 text-center text-gray-500">Tidak ada transaksi
                                 ditemukan.</td>
                         </tr>
                     @endforelse
@@ -317,20 +317,23 @@
         </div>
 
         <!-- Cards: mobile first -->
-        <div class="md:hidden grid grid-cols-1 gap-4">
+        <div class="divide-y divide-gray-100 xl:hidden">
             @forelse ($transactions as $tx)
-                <div class="p-4 space-y-3">
-                    <div class="flex items-start justify-between">
+                <article class="space-y-3 p-4">
+                    <div class="flex items-start justify-between gap-3">
                         <div class="min-w-0">
                             <p class="font-mono text-sm font-semibold text-gray-800 truncate">{{ $tx->order_id }}</p>
-                            <p class="text-xs text-gray-500">{{ $tx->user?->name ?? '-' }}</p>
+                            <p class="mt-0.5 truncate text-xs text-gray-500">{{ $tx->user?->name ?? '-' }}</p>
                         </div>
                         <x-transaction-status :status="$tx->transaction_status" />
                     </div>
-                    <div class="flex items-center justify-between gap-3 text-sm">
-                        <span class="min-w-0 truncate text-gray-500">{{ $tx->booking?->room?->name ?? '-' }}</span>
-                        <span
-                            class="min-w-0 truncate text-right text-gray-500">{{ $tx->booking?->booking_code ?? '-' }}</span>
+                    <div class="rounded-lg bg-gray-50 p-3 text-sm">
+                        <p class="truncate font-medium text-gray-800">{{ $tx->booking?->room?->name ?? '-' }}</p>
+                        <div class="mt-1 flex items-center justify-between gap-3 text-xs text-gray-500">
+                            <span class="min-w-0 truncate">{{ $tx->booking?->booking_code ?? '-' }}</span>
+                            <span
+                                class="shrink-0">{{ Carbon\Carbon::parse($tx->created_at)->setTimezone('Asia/Jakarta')->format('d M Y') }}</span>
+                        </div>
                     </div>
                     <div class="flex items-center justify-between pt-2 border-t border-gray-100">
                         <span
@@ -339,7 +342,7 @@
                             {{ 'Rp ' . number_format($tx->gross_amount, 0, ',', '.') }}
                         </span>
                     </div>
-                </div>
+                </article>
             @empty
                 <div class="p-6 text-center text-gray-500 text-sm">Tidak ada transaksi ditemukan.</div>
             @endforelse
@@ -348,15 +351,16 @@
         <div class="p-4">
             {{ $transactions->links() }}
         </div>
+
     </div>
 
     <!-- Recent Transactions Summary -->
-    <div class="grid min-w-0 grid-cols-1 gap-6 lg:grid-cols-3 lg:gap-8">
-        <div class="min-w-0 bg-sky-50 border border-sky-200 shadow-md rounded-2xl p-4 sm:p-6 lg:col-span-1">
-            <h2 class="font-poppins font-bold text-lg mb-4">Metode Pembayaran</h2>
-            <div class="space-y-4">
+    <div class="grid min-w-0 grid-cols-1 gap-4 lg:grid-cols-3">
+        <div class="min-w-0 rounded-xl border border-sky-200 bg-sky-50 p-4 shadow-sm sm:p-5 lg:col-span-1">
+            <h2 class="mb-3 font-poppins text-lg font-bold">Metode Pembayaran</h2>
+            <div class="space-y-2">
                 @forelse ($paymentMethods as $method)
-                    <div class="flex items-center justify-between p-3 bg-gray-50 rounded-xl">
+                    <div class="flex items-center justify-between gap-3 rounded-lg bg-white/70 p-3">
                         <span
                             class="text-sm font-medium text-gray-700 capitalize">{{ $method->payment_type ?: 'Lainnya' }}</span>
                         <span class="text-sm font-poppins font-bold text-primary">{{ $method->total }}</span>
@@ -367,20 +371,20 @@
             </div>
         </div>
 
-        <div class="min-w-0 bg-violet-50 border border-violet-200 shadow-md rounded-2xl p-4 sm:p-6">
-            <h2 class="font-poppins font-bold text-lg mb-4">Statistik Transaksi</h2>
-            <div class="space-y-4">
-                <div class="p-4 bg-gray-50 rounded-xl">
+        <div class="min-w-0 rounded-xl border border-violet-200 bg-violet-50 p-4 shadow-sm sm:p-5">
+            <h2 class="mb-3 font-poppins text-lg font-bold">Statistik Transaksi</h2>
+            <div class="grid gap-2 sm:grid-cols-3 lg:grid-cols-1">
+                <div class="rounded-lg bg-white/70 p-3">
                     <p class="text-sm text-gray-500 mb-1">Total Revenue (Berhasil)</p>
                     <p class="text-lg sm:text-xl font-poppins font-bold text-accent-700">
                         {{ 'Rp ' . number_format($transactionStats['revenue'] ?? 0, 0, ',', '.') }}</p>
                 </div>
-                <div class="p-4 bg-gray-50 rounded-xl">
+                <div class="rounded-lg bg-white/70 p-3">
                     <p class="text-sm text-gray-500 mb-1">Rata-rata per Transaksi</p>
                     <p class="text-lg sm:text-xl font-poppins font-bold text-foreground">
                         {{ 'Rp ' . number_format($transactionStats['average'] ?? 0, 0, ',', '.') }}</p>
                 </div>
-                <div class="p-4 bg-gray-50 rounded-xl">
+                <div class="rounded-lg bg-white/70 p-3">
                     <p class="text-sm text-gray-500 mb-1">Transaksi Tertinggi</p>
                     <p class="text-lg sm:text-xl font-poppins font-bold text-primary">
                         {{ 'Rp ' . number_format($transactionStats['highest'] ?? 0, 0, ',', '.') }}</p>
@@ -388,20 +392,20 @@
             </div>
         </div>
 
-        <div class="min-w-0 bg-indigo-50 border border-indigo-200 shadow-md rounded-2xl p-4 sm:p-6">
-            <h2 class="font-poppins font-bold text-lg mb-4">Ringkasan Booking</h2>
-            <div class="space-y-4">
-                <div class="p-4 bg-gray-50 rounded-xl">
+        <div class="min-w-0 rounded-xl border border-indigo-200 bg-indigo-50 p-4 shadow-sm sm:p-5">
+            <h2 class="mb-3 font-poppins text-lg font-bold">Ringkasan Booking</h2>
+            <div class="grid gap-2 sm:grid-cols-3 lg:grid-cols-1">
+                <div class="rounded-lg bg-white/70 p-3">
                     <p class="text-sm text-gray-500 mb-1">Total Pesanan</p>
                     <p class="text-lg sm:text-xl font-poppins font-bold text-foreground">
                         {{ $transactionStats['total'] ?? 0 }}</p>
                 </div>
-                <div class="p-4 bg-gray-50 rounded-xl">
+                <div class="rounded-lg bg-white/70 p-3">
                     <p class="text-sm text-gray-500 mb-1">Dibayar</p>
                     <p class="text-lg sm:text-xl font-poppins font-bold text-emerald-600">
                         {{ $transactionStats['paid'] ?? 0 }}</p>
                 </div>
-                <div class="p-4 bg-gray-50 rounded-xl">
+                <div class="rounded-lg bg-white/70 p-3">
                     <p class="text-sm text-gray-500 mb-1">Menunggu</p>
                     <p class="text-lg sm:text-xl font-poppins font-bold text-amber-600">
                         {{ $transactionStats['pending'] ?? 0 }}</p>

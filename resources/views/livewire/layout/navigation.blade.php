@@ -63,7 +63,7 @@ new class extends Component {
                     </x-slot>
 
                     <x-slot name="content">
-                        @if (auth()->user()->role === 'admin')
+                        @if (auth()->user()->isAdmin() || auth()->user()->isReceptionist())
                             <x-dropdown-link :href="route('dashboard')" wire:navigate>
                                 {{ __('Admin Dashboard') }}
                             </x-dropdown-link>

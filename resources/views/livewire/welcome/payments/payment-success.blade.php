@@ -102,10 +102,11 @@
                     <p class="text-xs text-gray-500 mb-1">Guest</p>
                     <p class="font-medium text-sm">{{ $payment->booking->user->name }}</p>
                     <p class="text-xs text-gray-400">{{ $payment->booking->user->phone }}</p>
+
                 </div>
                 <div>
-                    <p class="text-xs text-gray-500 mb-1">Payment Method</p>
-                    <p class="font-medium text-sm capitalize">{{ $payment->payment_method }}</p>
+                    <p class="text-xs text-gray-500 mb-1">Tipe Pembayaran</p>
+                    <p class="font-medium text-sm capitalize">{{ $payment->payment_type }}</p>
                 </div>
             </div>
         </div>

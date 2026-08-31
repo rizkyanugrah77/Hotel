@@ -17,3 +17,6 @@ yarn-error.log
 /.fleet
 /.idea
 /.vscode
+.AGENTS.md
+.implementation_plan.md
+.implementation_plan-

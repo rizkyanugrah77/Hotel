@@ -188,7 +188,7 @@
                                                     const percentage = {{ $totalRoomUnits }} ?
                                                         ((value / {{ $totalRoomUnits }}) * 100).toFixed(1) :
                                                         0;
-
+                        
                                                     return `${context.dataset.label}: ${value} unit (${percentage}%)`;
                                                 }
                                             }
@@ -204,7 +204,7 @@
                                                     const percentage = {{ $totalRoomUnits }} ?
                                                         Math.round((value / {{ $totalRoomUnits }}) * 100) :
                                                         0;
-
+                        
                                                     return `${value} unit (${percentage}%)`;
                                                 }
                                             }
@@ -328,41 +328,41 @@
                                 @forelse ($recentBookings as $booking)
                                     <tr class="hover:bg-gray-50 cursor-pointer">
 
-                                            <td class="px-4 py-3 lg:px-6">
-                                                <div class="font-medium text-foreground">
-                                                    {{ $booking->booking_code }}</div>
-                                                <div class="text-xs text-gray-500">{{ $booking->user->name }}</div>
-                                            </td>
-                                            <td class="px-4 py-3 lg:px-6">
-                                                <div class="font-medium text-foreground">
-                                                    {{ $booking->room->name }}</div>
-                                                <div class="text-xs text-gray-500">
-                                                    {{ $booking->roomUnit->room_number }}
-                                                </div>
-                                            </td>
-                                            <td class="px-4 py-3 lg:px-6">
-                                                <div class="text-xs">
-                                                    {{ \Carbon\Carbon::parse($booking->check_in)->format('d M Y H:i') }}
-                                                </div>
-                                                <div class="text-xs">
-                                                    {{ \Carbon\Carbon::parse($booking->check_out)->format('d M Y H:i') }}
-                                                </div>
-                                            </td>
-                                            <td class="px-4 py-3 lg:px-6">
-                                                <span @class([
-                                                    'badge',
-                                                    'badge-primary' => $booking->status === 'pending',
-                                                    'badge-info' => $booking->status === 'paid',
-                                                    'badge-success' => $booking->status === 'checked_in',
-                                                    'badge-warning' => $booking->status === 'checked_out',
-                                                    'badge-accent' => $booking->status === 'cancelled',
-                                                ])>
-                                                    {{ ucfirst($booking->status) }}
-                                                </span>
-                                            </td>
-                                            <td class="px-4 py-3 font-medium lg:px-6">
-                                                {{ $booking->total_price ? 'Rp ' . number_format($booking->total_price, 0, ',', '.') : 'Belum ada data' }}
-                                            </td>
+                                        <td class="px-4 py-3 lg:px-6">
+                                            <div class="font-medium text-foreground">
+                                                {{ $booking->booking_code }}</div>
+                                            <div class="text-xs text-gray-500">{{ $booking->user->name }}</div>
+                                        </td>
+                                        <td class="px-4 py-3 lg:px-6">
+                                            <div class="font-medium text-foreground">
+                                                {{ $booking->room->name }}</div>
+                                            <div class="text-xs text-gray-500">
+                                                {{ $booking->roomUnit->room_number }}
+                                            </div>
+                                        </td>
+                                        <td class="px-4 py-3 lg:px-6">
+                                            <div class="text-xs">
+                                                {{ \Carbon\Carbon::parse($booking->check_in)->format('d M Y H:i') }}
+                                            </div>
+                                            <div class="text-xs">
+                                                {{ \Carbon\Carbon::parse($booking->check_out)->format('d M Y H:i') }}
+                                            </div>
+                                        </td>
+                                        <td class="px-4 py-3 lg:px-6">
+                                            <span @class([
+                                                'badge',
+                                                'badge-primary' => $booking->status === 'pending',
+                                                'badge-info' => $booking->status === 'paid',
+                                                'badge-success' => $booking->status === 'checked_in',
+                                                'badge-warning' => $booking->status === 'checked_out',
+                                                'badge-accent' => $booking->status === 'cancelled',
+                                            ])>
+                                                {{ ucfirst($booking->status) }}
+                                            </span>
+                                        </td>
+                                        <td class="px-4 py-3 font-medium lg:px-6">
+                                            {{ $booking->total_price ? 'Rp ' . number_format($booking->total_price, 0, ',', '.') : 'Belum ada data' }}
+                                        </td>
                                     </tr>
                                 @empty
                                     <tr>
