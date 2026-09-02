@@ -20,7 +20,8 @@
                 <div class="mb-3 flex items-start justify-between sm:mb-4">
                     <div>
                         <p class="mb-1 text-xs text-gray-500 sm:text-sm">Today's Revenue</p>
-                        <h3 class="font-poppins text-lg font-bold text-foreground sm:text-2xl">Rp 12.4M</h3>
+                        <h3 class="font-poppins text-lg font-bold text-foreground sm:text-2xl">Rp.
+                            {{ number_format($todaysRevenue, 0, ',', '.') }}</h3>
                     </div>
                     <div
                         class="flex h-8 w-8 items-center justify-center rounded-lg bg-green-50 text-green-600 sm:h-10 sm:w-10 sm:rounded-xl">
@@ -38,7 +39,7 @@
                 <div class="mb-3 flex items-start justify-between sm:mb-4">
                     <div>
                         <p class="mb-1 text-xs text-gray-500 sm:text-sm">Total Bookings</p>
-                        <h3 class="font-poppins text-lg font-bold text-foreground sm:text-2xl">24</h3>
+                        <h3 class="font-poppins text-lg font-bold text-foreground sm:text-2xl">{{ $totalBookings }}</h3>
                     </div>
                     <div
                         class="flex h-8 w-8 items-center justify-center rounded-lg bg-primary/10 text-primary sm:h-10 sm:w-10 sm:rounded-xl">
@@ -56,7 +57,8 @@
                 <div class="mb-3 flex items-start justify-between sm:mb-4">
                     <div>
                         <p class="mb-1 text-xs text-gray-500 sm:text-sm">Occupancy Rate</p>
-                        <h3 class="font-poppins text-lg font-bold text-foreground sm:text-2xl">78%</h3>
+                        <h3 class="font-poppins text-lg font-bold text-foreground sm:text-2xl">{{ $totalRoomUnits }}
+                        </h3>
                     </div>
                     <div
                         class="flex h-8 w-8 items-center justify-center rounded-lg bg-blue-50 text-blue-600 sm:h-10 sm:w-10 sm:rounded-xl">
@@ -76,7 +78,8 @@
                 <div class="mb-3 flex items-start justify-between sm:mb-4">
                     <div>
                         <p class="mb-1 text-xs text-gray-500 sm:text-sm">Check-ins Today</p>
-                        <h3 class="font-poppins text-lg font-bold text-foreground sm:text-2xl">12</h3>
+                        <h3 class="font-poppins text-lg font-bold text-foreground sm:text-2xl">{{ $activeBookings }}
+                        </h3>
                     </div>
                     <div
                         class="flex h-8 w-8 items-center justify-center rounded-lg bg-accent/10 text-accent-700 sm:h-10 sm:w-10 sm:rounded-xl">
@@ -87,7 +90,7 @@
                         </svg>
                     </div>
                 </div>
-                <p class="text-[11px] font-medium text-gray-500 sm:text-xs">4 pending arrival</p>
+                <p class="text-[11px] font-medium text-gray-500 sm:text-xs">{{ $pendingArrivals }} arrivals</p>
             </div>
         </div>
 

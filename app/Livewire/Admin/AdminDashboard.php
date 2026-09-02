@@ -125,9 +125,26 @@ class AdminDashboard extends Component
             ];
         });
 
+        $todaysRevenue = Payment::whereIn('transaction_status', $paidStatuses)
+            ->whereDate('created_at', today())
+            ->sum('sub_total_amount');
+
+        $totalRevenue = Payment::whereIn('transaction_status', $paidStatuses)
+            ->sum('sub_total_amount');
+        $totalBookings = Booking::count();
+        $activeBookings = Booking::where('status', 'checked_in')->count();
+        $pendingArrivals = Booking::where('status', 'pending')->whereDate('created_at', Carbon::today())->count();
+        // $totalRoomUnits = RoomUnit::count();
+        // $chartCapacity = max($totalRoomUnits, 1);
+        // $bookingCounts = Booking::selectRaw('DATE(check_in_date) as date, COUNT(*) as count')
+        //     ->where('status', 'checked_in')
+        //     ->groupBy('date')
+        //     ->get();
+
         return view('admin.dashboard', compact(
             'rooms',
             'recentBookings',
+            'todaysRevenue',
             'totalRevenue',
             'totalBookings',
             'activeBookings',
@@ -136,7 +153,8 @@ class AdminDashboard extends Component
             'chartData',
             'statusChartData',
             'chartCapacity',
-            'totalRoomUnits'
+            'totalRoomUnits',
+            'pendingArrivals'
         ))->layout('layouts.app');
     }
 }

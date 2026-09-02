@@ -111,7 +111,8 @@
                     <div class="grid grid-cols-2 md:grid-cols-3 gap-y-6 gap-x-4 mb-12">
                         @foreach ($room->facilities as $facility)
                             <div class="flex items-center gap-3">
-                                <div class="w-10 h-10 bg-primary/10 rounded-xl flex items-center justify-center">
+                                <div
+                                    class="w-10 h-10 bg-primary/10 rounded-xl flex items-center text-primary justify-center">
                                     {!! $facility->icon !!}
                                 </div>
                                 <span class="text-sm font-medium">{{ $facility->name }}</span>

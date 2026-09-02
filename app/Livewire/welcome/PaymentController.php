@@ -5,6 +5,7 @@ namespace App\Livewire\welcome;
 use App\Models\Booking;
 use App\Models\Payment;
 use App\Models\Promo;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 use Livewire\Component;
 use Midtrans\Config;
@@ -49,7 +50,8 @@ class PaymentController extends Component
     public function mount($bookingCode)
     {
         $this->bookingCode = $bookingCode;
-        $this->bookings = Booking::with('room', 'roomUnit', 'user')->where('booking_code', $bookingCode)->first();
+
+        $this->bookings = Booking::with('room', 'roomUnit', 'user')->where('booking_code', $bookingCode)->where('user_id' === auth()->id)->first();
 
         if (! $this->bookings) {
             return redirect()->route('index');
@@ -84,11 +86,11 @@ class PaymentController extends Component
         $unitIsUnavailable = ! $booking->roomUnit
             || $booking->roomUnit->status !== 'available'
             || $booking->roomUnit->bookings()
-                ->whereKeyNot($booking->id)
-                ->whereIn('status', ['paid', 'checked_in'])
-                ->where('check_in', '<', $booking->check_out)
-                ->where('check_out', '>', $booking->check_in)
-                ->exists();
+            ->whereKeyNot($booking->id)
+            ->whereIn('status', ['paid', 'checked_in'])
+            ->where('check_in', '<', $booking->check_out)
+            ->where('check_out', '>', $booking->check_in)
+            ->exists();
 
         if ($unitIsUnavailable) {
             session()->flash('error', 'Unit kamar untuk tanggal booking ini sudah penuh dan tidak dapat dibayar.');

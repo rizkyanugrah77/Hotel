@@ -9,6 +9,10 @@ use Livewire\Volt\Component;
 new class extends Component {
     public string $name = '';
     public string $email = '';
+    public string $phone = '';
+    public string $address = '';
+    public string $gender = '';
+    public string $nationality = '';
 
     /**
      * Mount the component.
@@ -17,6 +21,10 @@ new class extends Component {
     {
         $this->name = Auth::user()->name;
         $this->email = Auth::user()->email;
+        $this->phone = Auth::user()->phone ?? '';
+        $this->address = Auth::user()->address ?? '';
+        $this->gender = Auth::user()->gender ?? '';
+        $this->nationality = Auth::user()->nationality ?? '';
     }
 
     /**
@@ -31,7 +39,7 @@ new class extends Component {
             'email' => ['required', 'string', 'lowercase', 'email', 'max:255', Rule::unique(User::class)->ignore($user->id)],
             'phone' => ['required', 'regex:/^(?:\+62|08)[0-9]{8,12}$/', Rule::unique(User::class)->ignore($user->id)],
             'address' => ['nullable', 'string', 'max:255'],
-            'gender' => ['nullable', 'string', 'in:Male,Female'],
+            'gender' => ['nullable', 'string', 'in:male,female'],
             'nationality' => ['nullable', 'string', 'max:255'],
         ]);
 
@@ -129,8 +137,8 @@ new class extends Component {
             <select wire:model="gender" id="gender" name="gender"
                 class="mt-1 block w-full rounded-md shadow-sm border-gray-300 focus:border-primary focus:ring focus:ring-primary focus:ring-opacity-50">
                 <option value="">Select Gender</option>
-                <option value="Male">Male</option>
-                <option value="Female">Female</option>
+                <option value="male">Male</option>
+                <option value="female">Female</option>
             </select>
             <x-input-error class="mt-2" :message="$errors->get('gender')" />
         </div>
