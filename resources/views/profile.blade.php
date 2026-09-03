@@ -13,9 +13,9 @@
                 <livewire:profile.update-password-form />
             </div>
 
-            <div class="card p-6 sm:p-8 bg-white border border-gray-100 shadow-sm rounded-2xl">
+            {{-- <div class="card p-6 sm:p-8 bg-white border border-gray-100 shadow-sm rounded-2xl">
                 <livewire:profile.delete-user-form />
-            </div>
+            </div> --}}
         </div>
     </main>
 </x-user-layout>
