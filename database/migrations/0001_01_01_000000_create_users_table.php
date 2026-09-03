@@ -18,7 +18,7 @@ return new class extends Migration
             $table->string('phone')->nullable();
             $table->text('address')->nullable();
             $table->enum('role', ['admin', 'receptionist', 'customer'])->default('customer');
-            $table->string('photo')->nullable();
+            $table->string('avatar')->nullable();
             $table->enum('gender', ['male', 'female'])->nullable();
             $table->string('nationality')->nullable();
             $table->timestamp('email_verified_at')->nullable();

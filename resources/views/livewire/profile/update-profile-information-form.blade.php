@@ -5,14 +5,17 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Validation\Rule;
 use Livewire\Volt\Component;
+use Livewire\WithFileUploads;
 
 new class extends Component {
+    use WithFileUploads;
     public string $name = '';
     public string $email = '';
     public string $phone = '';
     public string $address = '';
     public string $gender = '';
     public string $nationality = '';
+    public $avatar;
 
     /**
      * Mount the component.
@@ -25,6 +28,7 @@ new class extends Component {
         $this->address = Auth::user()->address ?? '';
         $this->gender = Auth::user()->gender ?? '';
         $this->nationality = Auth::user()->nationality ?? '';
+        $this->avatar = Auth::user()->avatar ?? '';
     }
 
     /**
@@ -37,9 +41,10 @@ new class extends Component {
         $validated = $this->validate([
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'lowercase', 'email', 'max:255', Rule::unique(User::class)->ignore($user->id)],
-            'phone' => ['required', 'regex:/^(?:\+62|08)[0-9]{8,12}$/', Rule::unique(User::class)->ignore($user->id)],
+            'phone' => ['nullable', 'regex:/^(?:\+62|08)[0-9]{8,12}$/', Rule::unique(User::class)->ignore($user->id)],
             'address' => ['nullable', 'string', 'max:255'],
             'gender' => ['nullable', 'string', 'in:male,female'],
+            'avatar' => ['nullable', 'image', 'max:10240'],
             'nationality' => ['nullable', 'string', 'max:255'],
         ]);
 
@@ -47,6 +52,12 @@ new class extends Component {
 
         if ($user->isDirty('email')) {
             $user->email_verified_at = null;
+        }
+
+        if ($this->avatar) {
+            $imageName = Str::uuid() . '.' . $this->avatar->getClientOriginalExtension();
+            $this->avatar->storeAs('assets/img/user', $imageName, 'public');
+            $user->avatar = $imageName;
         }
 
         $user->save();
@@ -86,9 +97,15 @@ new class extends Component {
 
     <form wire:submit="updateProfileInformation" class="mt-6 space-y-6">
         <div>
+            <x-input-label for="avatar" :value="__('Avatar')" />
+            <x-text-input wire:model="avatar" id="avatar" name="avatar" type="file" class="mt-1 block w-full" required
+                autofocus autocomplete="avatar" aria-placeholder="Photo Profile" />
+            <x-input-error class="mt-2" :message="$errors->get('avatar')" />
+        </div>
+        <div>
             <x-input-label for="name" :value="__('Name')" />
-            <x-text-input wire:model="name" id="name" name="name" type="text" class="mt-1 block w-full" required
-                autofocus autocomplete="name" />
+            <x-text-input wire:model="name" id="name" name="name" type="text" class="mt-1 block w-full"
+                required autofocus autocomplete="name" />
             <x-input-error class="mt-2" :message="$errors->get('name')" />
         </div>
 
@@ -121,14 +138,14 @@ new class extends Component {
         <div>
             <x-input-label for="phone" :value="__('Phone')" />
             <x-text-input wire:model="phone" id="phone" name="phone" type="text" class="mt-1 block w-full"
-                required autofocus autocomplete="phone" placeholder="+62 1234567890" />
+                autofocus autocomplete="phone" placeholder="+62 1234567890" />
             <x-input-error class="mt-2" :message="$errors->get('phone')" />
         </div>
 
         <div>
             <x-input-label for="address" :value="__('Address')" />
             <x-text-input wire:model="address" id="address" name="address" type="text" class="mt-1 block w-full"
-                required autofocus autocomplete="address" placeholder="Enter your address" />
+                autofocus autocomplete="address" placeholder="Enter your address" />
             <x-input-error class="mt-2" :message="$errors->get('address')" />
         </div>
 

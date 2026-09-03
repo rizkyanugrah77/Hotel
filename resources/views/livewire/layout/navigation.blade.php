@@ -44,10 +44,16 @@ new class extends Component {
                     <x-slot name="trigger">
                         <button type="button"
                             class="inline-flex items-center px-3 py-1 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 bg-white hover:text-gray-700 focus:outline-none transition ease-in-out duration-150">
-                            <div
-                                class="w-8 h-8 rounded-full bg-primary text-white flex items-center justify-center font-bold mr-2">
-                                {{ auth()->user()->name[0] }}
-                            </div>
+
+                            @if (auth()->user()->avatar)
+                                <img src="{{ asset('storage/assets/img/user/' . auth()->user()->avatar) }}"
+                                    alt="{{ auth()->user()->name }}" class="w-8 h-8 rounded-full object-cover mr-2">
+                            @else
+                                <div
+                                    class="w-8 h-8 rounded-full bg-primary text-white flex items-center justify-center font-bold mr-2">
+                                    {{ auth()->user()->name[0] }}
+                                </div>
+                            @endif
                             <div x-data="{{ json_encode(['name' => auth()->user()->name]) }}" x-text="name"
                                 x-on:profile-updated.window="name = $event.detail.name"></div>
 
