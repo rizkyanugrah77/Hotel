@@ -23,12 +23,14 @@ class Booking extends Model
         'total_guests',
         'total_price',
         'status',
+        'expires_at',
     ];
 
     protected $casts = [
-        'check_in' => 'datetime:Y-m-d, H:m:s',
-        'check_out' => 'datetime:Y-m-d, H:m:s',
+        'check_in' => 'datetime:Y-m-d, H:i:s',
+        'check_out' => 'datetime:Y-m-d, H:i:s',
         'total_price' => 'decimal:2',
+        'expires_at' => 'datetime',
     ];
 
     public function room(): BelongsTo

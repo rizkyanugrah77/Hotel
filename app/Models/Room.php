@@ -48,6 +48,15 @@ class Room extends Model
         return $this->hasMany(RoomUnit::class);
     }
 
+    public function getHasAvailableUnitAttribute(): bool
+    {
+        if ($this->relationLoaded('units')) {
+            return $this->units->contains('status', 'available');
+        }
+
+        return $this->units()->where('status', 'available')->exists();
+    }
+
     public function galleries()
     {
         return $this->hasMany(Gallery::class)->orderBy('is_featured', 'desc')->orderBy('created_at', 'desc');

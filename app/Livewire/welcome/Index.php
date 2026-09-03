@@ -24,11 +24,6 @@ class Index extends Component
             'payments'
         ])->where('is_active', 1)->latest()->get();
 
-        foreach ($rooms as $room) {
-            $room->hasAvailableUnit = $room->units()->where('status', 'available')->exists();
-        }
-
-
         $featuredGalleries = Gallery::where('is_featured', 1)->latest()->take(8)->get();
 
         return view('index', [

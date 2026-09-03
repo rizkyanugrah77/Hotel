@@ -8,28 +8,26 @@ use Illuminate\Support\Facades\DB;
 
 class ExpirePendingBookings extends Command
 {
-    protected $signature = 'bookings:expire-pending {--minutes=30 : Pending booking expiry period in minutes}';
+    protected $signature = 'bookings:expire-pending';
 
     protected $description = 'Cancel pending bookings that have passed their payment deadline';
 
     public function handle(): int
     {
-        $minutes = max((int) $this->option('minutes'), 1);
-        $cutoff = now()->subMinutes($minutes);
+        $cutoff = now();
 
         $expired = DB::transaction(function () use ($cutoff) {
             $bookings = Booking::query()
                 ->where('status', 'pending')
-                ->where('created_at', '<=', $cutoff)
+                ->whereNotNull('expires_at')
+                ->where('expires_at', '<=', $cutoff)
                 ->lockForUpdate()
                 ->get();
             $expiredCount = 0;
 
             foreach ($bookings as $booking) {
-                if (! $booking->payments()->where('transaction_status', 'SUCCESS')->exists()) {
-                    $booking->update(['status' => 'cancelled']);
-                    $expiredCount++;
-                }
+                $booking->update(['status' => 'cancelled']);
+                $expiredCount++;
             }
 
             return $expiredCount;

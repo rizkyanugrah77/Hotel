@@ -207,7 +207,7 @@ class BookingManager extends Component
     public function show(int $bookingId)
     {
         $this->bookingId = $bookingId;
-        $booking = Booking::with('payments')->findOrFail($bookingId);
+        $booking = Booking::with(['payments', 'room.facilities', 'user'])->findOrFail($bookingId);
         $this->payments = $booking->payments->first();
 
         $this->resetValidation();

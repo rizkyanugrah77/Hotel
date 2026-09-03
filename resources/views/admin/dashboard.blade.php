@@ -19,9 +19,9 @@
             <div class="card rounded-xl border border-gray-100 bg-white p-4 shadow-sm sm:rounded-2xl sm:p-5 lg:p-6">
                 <div class="mb-3 flex items-start justify-between sm:mb-4">
                     <div>
-                        <p class="mb-1 text-xs text-gray-500 sm:text-sm">Today's Revenue</p>
+                        <p class="mb-1 text-xs text-gray-500 sm:text-sm">Pendapatan</p>
                         <h3 class="font-poppins text-lg font-bold text-foreground sm:text-2xl">Rp.
-                            {{ number_format($todaysRevenue, 0, ',', '.') }}</h3>
+                            {{ number_format($revenue, 0, ',', '.') }}</h3>
                     </div>
                     <div
                         class="flex h-8 w-8 items-center justify-center rounded-lg bg-green-50 text-green-600 sm:h-10 sm:w-10 sm:rounded-xl">

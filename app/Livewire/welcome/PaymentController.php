@@ -5,7 +5,9 @@ namespace App\Livewire\welcome;
 use App\Models\Booking;
 use App\Models\Payment;
 use App\Models\Promo;
+use App\Models\RoomUnit;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use Livewire\Component;
 use Midtrans\Config;
@@ -51,7 +53,10 @@ class PaymentController extends Component
     {
         $this->bookingCode = $bookingCode;
 
-        $this->bookings = Booking::with('room', 'roomUnit', 'user')->where('booking_code', $bookingCode)->where('user_id' === auth()->id)->first();
+        $this->bookings = Booking::with('room', 'roomUnit', 'user')
+            ->where('booking_code', $bookingCode)
+            ->where('user_id', Auth::user()->id)
+            ->first();
 
         if (! $this->bookings) {
             return redirect()->route('index');
@@ -73,85 +78,97 @@ class PaymentController extends Component
 
     public function pay()
     {
-        $booking = Booking::with(['roomUnit', 'user'])
-            ->whereKey($this->bookings->id)
-            ->first();
-
-        if (! $booking || $booking->status !== 'pending') {
-            session()->flash('error', 'Booking ini tidak dapat dibayar.');
-
-            return;
-        }
-
-        $unitIsUnavailable = ! $booking->roomUnit
-            || $booking->roomUnit->status !== 'available'
-            || $booking->roomUnit->bookings()
-            ->whereKeyNot($booking->id)
-            ->whereIn('status', ['paid', 'checked_in'])
-            ->where('check_in', '<', $booking->check_out)
-            ->where('check_out', '>', $booking->check_in)
-            ->exists();
-
-        if ($unitIsUnavailable) {
-            session()->flash('error', 'Unit kamar untuk tanggal booking ini sudah penuh dan tidak dapat dibayar.');
-
-            return;
-        }
-
-        $this->bookings = $booking;
-
-        // 1. Setup Midtrans Configuration
         Config::$serverKey = config('midtrans.serverKey');
         Config::$isProduction = config('midtrans.isProduction');
         Config::$isSanitized = config('midtrans.isSanitized');
         Config::$is3ds = config('midtrans.is3ds');
 
-        // 2. Prepare transaction details
         $orderId = 'INV-' . Str::uuid()->toString();
-        $grossAmount = (int) $this->bookings->total_price;
-
-        $midtrans_parameter = [
-            'transaction_details' => [
-                'order_id' => $orderId,
-                'gross_amount' => $grossAmount,
-            ],
-            'customer_details' => [
-                'first_name' => $this->bookings->user->name,
-                'email' => $this->bookings->user->email,
-            ],
-            'callbacks' => [
-                'finish' => route('payment-check') . '?order_id=' . $orderId,
-            ],
-        ];
 
         try {
-            // 3. Make the Snap API request to get token and redirect URL
+            $payment = DB::transaction(function () use ($orderId) {
+                $booking = Booking::with('user')->lockForUpdate()->find($this->bookings->id);
+
+                if (! $booking || $booking->status !== 'pending' || ! $booking->expires_at?->isFuture()) {
+                    return null;
+                }
+
+                $unit = RoomUnit::whereKey($booking->room_unit_id)->lockForUpdate()->first();
+                $unitIsUnavailable = ! $unit
+                    || $unit->status !== 'available'
+                    || Booking::query()
+                    ->where('room_unit_id', $booking->room_unit_id)
+                    ->whereKeyNot($booking->id)
+                    ->where('check_in', '<', $booking->check_out)
+                    ->where('check_out', '>', $booking->check_in)
+                    ->where(function ($query) {
+                        $query->whereIn('status', ['paid', 'checked_in'])
+                            ->orWhere(function ($query) {
+                                $query->where('status', 'pending')->where('expires_at', '>', now());
+                            });
+                    })
+                    ->exists();
+
+                if ($unitIsUnavailable) {
+                    return null;
+                }
+
+                $hasActivePayment = Payment::where('booking_id', $booking->id)
+                    ->whereIn('transaction_status', ['pending', 'PENDING', 'CHALLENGE'])
+                    ->lockForUpdate()
+                    ->exists();
+
+                if ($hasActivePayment) {
+                    return null;
+                }
+
+                return Payment::create([
+                    'booking_id' => $booking->id,
+                    'user_id' => $booking->user_id,
+                    'order_id' => $orderId,
+                    'promo_id' => $this->promo_id,
+                    'sub_total_amount' => $this->sub_total_amount,
+                    'tax_amount' => $this->tax_amount,
+                    'gross_amount' => (int) $booking->total_price,
+                    'transaction_status' => 'PENDING',
+                ]);
+            }, 3);
+
+            if (! $payment) {
+                session()->flash('error', 'Booking ini tidak dapat dibayar atau pembayaran sedang diproses.');
+
+                return;
+            }
+
+            $booking = $payment->booking()->with('user')->firstOrFail();
+            $grossAmount = (int) $booking->total_price;
+            $midtrans_parameter = [
+                'transaction_details' => [
+                    'order_id' => $orderId,
+                    'gross_amount' => $grossAmount,
+                ],
+                'customer_details' => [
+                    'first_name' => $booking->user->name,
+                    'email' => $booking->user->email,
+                ],
+                'callbacks' => [
+                    'finish' => route('payment-check') . '?order_id=' . $orderId,
+                ],
+            ];
+
             $snap = Snap::createTransaction($midtrans_parameter);
 
-            // 4. Save Payment record to database
-            Payment::create([
-                'booking_id' => $this->bookings->id,
-                'user_id' => $this->bookings->user->id,
-                'order_id' => $orderId,
-                'promo_id' => $this->promo_id,
-                'sub_total_amount' => $this->sub_total_amount,
-                'tax_amount' => $this->tax_amount,
-                'gross_amount' => $grossAmount,
-                'payment_type' => $this->payment_type,
-                'transaction_id' => Str::random(10), // Placeholder until webhook updates it
-                'snap_token' => $snap->token,
-                'payment_method' => $this->payment_method,
-                'transaction_status' => 'pending',
-            ]);
+            $payment->update(['snap_token' => $snap->token]);
 
-            // 5. Redirect user to Midtrans payment page
             return redirect()->away($snap->redirect_url);
         } catch (\Exception $e) {
-            session()->flash('error', 'Payment initialization failed: ' . $e->getMessage());
+            if (isset($payment)) {
+                $payment->update(['transaction_status' => 'FAILED']);
+            }
+
+            report($e);
+            session()->flash('error', 'Payment initialization failed.');
         }
-
-        // return redirect()->back();
-
     }
 
     public function render()

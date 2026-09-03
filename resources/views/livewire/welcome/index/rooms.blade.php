@@ -117,15 +117,16 @@
                             </svg>
                         </a>
                     @else
-                        <a href="#"
-                            class="btn-outline w-full mt-6 text-sm !py-2.5 cursor-not-allowed disabled text-gray-500 border-gray-500 hover:bg-gray-500 hover:text-white">
+                        <button type="button" disabled aria-disabled="true"
+                            class="btn-outline w-full mt-6 text-sm !py-2.5 cursor-not-allowed text-gray-500 border-gray-500 opacity-60"
+                            title="Tidak ada unit kamar yang tersedia">
                             Room Not Available
                             <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke-width="2"
                                 stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round"
                                     d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3" />
                             </svg>
-                        </a>
+                        </button>
                     @endif
 
                 </div>

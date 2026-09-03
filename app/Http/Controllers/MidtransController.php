@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Payment;
 use App\Models\Booking;
+use App\Models\RoomUnit;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
@@ -47,9 +48,9 @@ class MidtransController extends Controller
             $transaction = $notification->transaction_status;
             $type = $notification->payment_type;
             $fraud = $notification->fraud_status ?? null;
-            $acquirer = $notification->acquirer;
+            // $acquirer = $notification->acquirer;
 
-            $paymentFound = DB::transaction(function () use ($orderId, $transaction, $type, $fraud, $acquirer, $notification) {
+            $paymentFound = DB::transaction(function () use ($orderId, $transaction, $type, $fraud, $notification) {
                 $payment = Payment::where('order_id', $orderId)->lockForUpdate()->first();
 
                 if (! $payment) {
@@ -57,6 +58,7 @@ class MidtransController extends Controller
                 }
 
                 $booking = Booking::whereKey($payment->booking_id)->lockForUpdate()->firstOrFail();
+                $unit = RoomUnit::whereKey($booking->room_unit_id)->lockForUpdate()->first();
                 $finalPaymentStatuses = ['SUCCESS', 'FAILED', 'EXPIRED', 'CANCEL', 'REFUND'];
 
                 if (in_array($payment->transaction_status, $finalPaymentStatuses, true)) {
@@ -84,15 +86,34 @@ class MidtransController extends Controller
                     'transaction_status' => $paymentStatus,
                     'payment_type' => $type,
                     'transaction_id' => $notification->transaction_id,
-                    'payment_method' => $acquirer,
+                    // 'payment_method' => $payment_type,
                 ]);
 
                 if ($paymentStatus === 'SUCCESS' && $booking->status === 'pending') {
-                    $booking->update(['status' => 'paid']);
+                    $holdIsActive = $booking->expires_at?->isFuture() ?? false;
+                    $unitHasConflict = ! $unit
+                        || $unit->status !== 'available'
+                        || Booking::query()
+                        ->where('room_unit_id', $booking->room_unit_id)
+                        ->whereKeyNot($booking->id)
+                        ->where('check_in', '<', $booking->check_out)
+                        ->where('check_out', '>', $booking->check_in)
+                        ->where(function ($query) {
+                            $query->whereIn('status', ['paid', 'checked_in'])
+                                ->orWhere(function ($query) {
+                                    $query->where('status', 'pending')->where('expires_at', '>', now());
+                                });
+                        })
+                        ->exists();
+
+                    // A successful charge after an expired or displaced hold must not confirm the unit.
+                    $booking->update(['status' => $holdIsActive && ! $unitHasConflict ? 'paid' : 'cancelled']);
                 }
 
-                if (in_array($paymentStatus, ['FAILED', 'EXPIRED', 'CANCEL', 'REFUND'], true)
-                    && $booking->status === 'pending') {
+                if (
+                    in_array($paymentStatus, ['FAILED', 'EXPIRED', 'CANCEL', 'REFUND'], true)
+                    && $booking->status === 'pending'
+                ) {
                     $hasOtherActivePayment = Payment::where('booking_id', $booking->id)
                         ->where('id', '!=', $payment->id)
                         ->whereIn('transaction_status', ['pending', 'PENDING', 'CHALLENGE', 'SUCCESS'])

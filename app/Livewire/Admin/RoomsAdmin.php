@@ -50,12 +50,29 @@ class RoomsAdmin extends Component
 
     public ?string $managingRoomSlug = null;
 
+    public ?int $selectedRoomId = null;
+
     // public $roomStats;
 
     public function manageRoomUnit(string $slug): void
     {
         $this->managingRoomSlug = $slug;
         $this->dispatch('manage-room-unit', slug: $slug);
+    }
+
+    public function selectRoom(int $roomId): void
+    {
+        $this->selectedRoomId = $roomId;
+    }
+
+    public function updatedSearch(): void
+    {
+        $this->selectedRoomId = null;
+    }
+
+    public function updatedFilterStatus(): void
+    {
+        $this->selectedRoomId = null;
     }
 
     public function increment(): void
@@ -172,6 +189,7 @@ class RoomsAdmin extends Component
     {
         $rooms = Room::query()
             ->with('facilities:id,name,icon')
+            ->with('galleries:id,room_id,image,caption,is_featured')
             ->withCount([
                 'units',
                 'units as available_units_count' => fn($query) => $query->where('status', 'available'),
@@ -196,6 +214,17 @@ class RoomsAdmin extends Component
 
         return view('livewire.layout.rooms-manager', [
             'rooms' => $rooms,
+            'selectedRoom' => $this->selectedRoomId
+                ? Room::query()
+                ->with('facilities:id,name,icon')
+                ->with('galleries:id,room_id,image,caption,is_featured')
+                ->with('units:id,room_id,room_number,status')
+                ->withCount([
+                    'units',
+                    'units as available_units_count' => fn($query) => $query->where('status', 'available'),
+                ])
+                ->find($this->selectedRoomId)
+                : $rooms->first(),
             'facilities' => Facility::query()->select(['id', 'name', 'icon'])->orderBy('name')->get(),
             'roomStats' => $roomStats,
             'managingRoom' => $this->managingRoomSlug
@@ -208,19 +237,6 @@ class RoomsAdmin extends Component
                 ->where('slug', $this->managingRoomSlug)
                 ->first()
                 : null,
-            'chartData' => [
-                'labels' => ['Available', 'Occupied', 'Maintenance'],
-                'datasets' => [
-                    [
-                        'data' => [$roomStats['available'], $roomStats['occupied'], $roomStats['maintenance']],
-                        'backgroundColor' => [
-                            '#059669',
-                            '#d97706',
-                            '#dc2626',
-                        ],
-                    ],
-                ],
-            ],
         ]);
     }
 

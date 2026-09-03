@@ -169,6 +169,7 @@
                         </div>
                         <div class="mt-3 flex justify-end border-t border-gray-100 pt-3">
                             <x-edit-button :item="$booking" action="edit" />
+                            <x-show-button :item="$booking" action="show" />
                         </div>
                     </article>
                 @empty
@@ -182,11 +183,9 @@
                         <tr>
                             <th class="px-4 py-3 font-medium">No</th>
                             <th class="px-4 py-3 font-medium">Booking & Tamu</th>
-                            <th class="px-4 py-3 font-medium">Deposit</th>
                             <th class="px-4 py-3 font-medium">Kamar</th>
                             <th class="px-4 py-3 font-medium">Menginap</th>
                             <th class="px-4 py-3 font-medium">Tamu</th>
-                            <th class="px-4 py-3 font-medium">Total</th>
                             <th class="px-4 py-3 font-medium">Status</th>
                             <th class="px-4 py-3 text-center font-medium">Aksi</th>
                         </tr>
@@ -210,9 +209,6 @@
                                     <p class="font-medium text-gray-800">{{ $booking->booking_code }}</p>
                                     <p class="mt-0.5 text-xs text-gray-500">{{ $booking->user->name }}</p>
                                 </td>
-                                <td class="px-4 py-3 text-gray-700">
-                                    {{ strtoupper($booking->deposit_status) }}
-                                </td>
                                 <td class="px-4 py-3 text-gray-700"> {{ $booking->room->name }} No.
                                     {{ $booking->roomUnit->room_number }}</td>
                                 <td class="px-4 py-3 text-xs text-gray-600">
@@ -220,8 +216,6 @@
                                     <p class="mt-1">{{ $booking->check_out->format('d M Y') }}</p>
                                 </td>
                                 <td class="px-4 py-3 text-gray-700">{{ $booking->total_guests }}</td>
-                                <td class="px-4 py-3 whitespace-nowrap font-medium text-emerald-700">
-                                    Rp{{ number_format($booking->total_price, 0, ',', '.') }}</td>
                                 <td class="px-4 py-3">
                                     <span
                                         class="inline-flex rounded-full px-2 py-1 text-xs font-medium {{ $statusClasses }}">{{ ucwords(str_replace('_', ' ', $booking->status)) }}</span>
@@ -241,143 +235,199 @@
                     </tbody>
                 </table>
             </div>
-            {{-- <div class="bg-gray-50 p-4">{{ $bookings->links() }}</div> --}}
+            <div class="bg-gray-50 p-4">{{ $bookings->links() }}</div>
         </div>
     </div>
 
-    <!-- Reports Section -->
-    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-        <!-- Booking per Room -->
-        <div class="bg-white border border-gray-100 shadow-sm rounded-2xl p-6 lg:col-span-1">
-            <h2 class="font-poppins font-bold text-lg mb-6">Booking per Room</h2>
-            <div class="space-y-4" id="reportByRoom">
-            </div>
-        </div>
 
-        <!-- Revenue Statistics -->
-        <div class="bg-white border border-gray-100 shadow-sm rounded-2xl p-6">
-            <h2 class="font-poppins font-bold text-lg mb-6">Statistik Revenue</h2>
-            <div class="space-y-4">
-                <div class="p-4 bg-gray-50 rounded-xl">
-                    <p class="text-sm text-gray-500 mb-1">Total Revenue (Confirmed)</p>
-                    <p class="text-xl font-poppins font-bold text-accent-700" id="statRevenue">Rp 0</p>
-                </div>
-                <div class="p-4 bg-gray-50 rounded-xl">
-                    <p class="text-sm text-gray-500 mb-1">Rata-rata per Booking</p>
-                    <p class="text-xl font-poppins font-bold text-foreground" id="statAvgPrice">Rp 0</p>
-                </div>
-                <div class="p-4 bg-gray-50 rounded-xl">
-                    <p class="text-sm text-gray-500 mb-1">Booking Tertinggi</p>
-                    <p class="text-xl font-poppins font-bold text-primary" id="statHighest">Rp 0</p>
-                </div>
-                <div class="p-4 bg-gray-50 rounded-xl">
-                    <p class="text-sm text-gray-500 mb-1">Total Tamu</p>
-                    <p class="text-xl font-poppins font-bold text-blue-600" id="statTotalGuests">0</p>
-                </div>
-            </div>
-        </div>
-
-        <!-- Status Summary & Quick Actions -->
-        <div class="bg-white border border-gray-100 shadow-sm rounded-2xl p-6">
-            <h2 class="font-poppins font-bold text-lg mb-6">Status Booking</h2>
-            <div class="space-y-4" id="statusReport">
-            </div>
-            <div class="mt-6 pt-6 border-t border-gray-100">
-                <h3 class="text-sm font-medium text-gray-600 mb-3">Aksi Cepat</h3>
-                <div class="grid grid-cols-2 gap-3">
-                    <button type="button" onclick="openModal()"
-                        class="p-3 border border-gray-200 rounded-xl text-sm font-medium hover:bg-gray-50 transition-colors flex flex-col items-center gap-2">
-                        <svg class="w-5 h-5 text-gray-500" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-                            stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
-                        </svg>
-                        Tambah Booking
-                    </button>
-                    <button type="button" onclick="exportReport()"
-                        class="p-3 border border-gray-200 rounded-xl text-sm font-medium hover:bg-gray-50 transition-colors flex flex-col items-center gap-2">
-                        <svg class="w-5 h-5 text-gray-500" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-                            stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round"
-                                d="M3 16.5v2.25A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75V16.5M16.5 12 12 16.5m0 0L7.5 12m4.5 4.5V3" />
-                        </svg>
-                        Export Laporan
-                    </button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <x-modal-2 name="booking-detail" title="Detail Booking">
+    <x-modal-2 name="booking-detail" title="Detail Booking" maxWidth="5xl">
         @if ($payments)
             @php
                 $status = $payments->transaction_status ?? 'N/A';
+                $booking = $payments->booking;
+                $guest = $booking?->user;
+                $room = $booking?->room;
+                $guestName = $guest?->name ?? 'Guest tidak diketahui';
+                $guestInitials = collect(explode(' ', trim($guestName)))
+                    ->filter()
+                    ->map(fn($name) => mb_strtoupper(mb_substr($name, 0, 1)))
+                    ->take(2)
+                    ->implode('');
                 $statusClasses = match ($status) {
                     'settlement', 'capture', 'success', 'paid', 'completed' => 'bg-emerald-100 text-emerald-700',
                     'pending', 'challenge' => 'bg-amber-100 text-amber-700',
                     'cancel', 'cancelled', 'deny', 'failure', 'expire' => 'bg-red-100 text-red-700',
                     default => 'bg-slate-100 text-slate-600',
                 };
+
             @endphp
 
-            <div class="space-y-4">
-                <div class="rounded-xl bg-gradient-to-br from-primary to-primary/80 p-4 text-white shadow-sm">
-                    <div class="flex items-start justify-between gap-3">
-                        <div>
-                            <p class="text-xs font-medium text-white/70">Total Pembayaran</p>
-                            <p class="mt-1 text-2xl font-bold">Rp
-                                {{ number_format($payments->gross_amount, 0, ',', '.') }}</p>
+            <div class="grid gap-5 lg:grid-cols-12">
+                <aside class="lg:col-span-3">
+                    <div class="h-full rounded-xl border border-gray-100 bg-gray-50 p-5">
+                        <p class="text-xs font-semibold uppercase tracking-wide text-gray-500">Profil Tamu</p>
+
+                        <div class="mt-5 flex items-center gap-3">
+                            <img class="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-primary text-sm font-bold text-white"
+                                src="{{ $guest?->photo ?? 'https://ui-avatars.com/api/?name=' . $guestName }}"
+                                alt="{{ $guestName }}">
+                            <div class="min-w-0">
+                                <p class="truncate font-poppins text-lg font-bold text-gray-900">{{ $guestName }}
+                                </p>
+                                <p class="mt-0.5 text-sm text-gray-500">Tamu booking</p>
+                            </div>
                         </div>
-                        <span class="rounded-full px-2.5 py-1 text-xs font-semibold {{ $statusClasses }}">
-                            {{ ucfirst(str_replace('_', ' ', $status)) }}
-                        </span>
-                    </div>
-                </div>
 
-                <dl class="divide-y divide-gray-100 overflow-hidden rounded-xl border border-gray-100 text-sm">
-                    <div class="grid grid-cols-3 gap-3 px-4 py-3">
-                        <dt class="text-gray-500">Payment ID</dt>
-                        <dd class="col-span-2 break-all text-right font-medium text-gray-800">
-                            {{ $payments->order_id }}</dd>
+                        <dl class="mt-6 space-y-4 text-sm">
+                            <div>
+                                <dt class="text-gray-500">Email</dt>
+                                <dd class="mt-1 break-all font-medium text-gray-800">{{ $guest?->email ?? 'N/A' }}
+                                </dd>
+                            </div>
+                            <div>
+                                <dt class="text-gray-500">Nomor telepon</dt>
+                                <dd class="mt-1 font-medium text-gray-800">{{ $guest?->phone ?? 'N/A' }}</dd>
+                            </div>
+                        </dl>
+                        <div class="w-full border-2 border-slate-600  my-3"></div>
+                        <dl class="space-y-2 text-sm">
+                            <h4 class="text-xs font-semibold uppercase tracking-wide text-gray-500">Identitas Tamu</h4>
+                            <div>
+                                <dt class="text-gray-500">Kewarganegaraan</dt>
+                                <dd class="mt-1 font-medium text-gray-800">{{ $guest?->nationality ?? 'N/A' }}</dd>
+                            </div>
+                            <div>
+                                <dt class="text-gray-500">Jenis Kelamin</dt>
+                                <dd class="mt-1 font-medium text-gray-800">{{ $guest?->gender ?? 'N/A' }}</dd>
+                            </div>
+                            <div>
+                                <dt class="text-gray-500">Alamat</dt>
+                                <dd class="mt-1 font-medium text-gray-800">{{ $guest?->address ?? 'N/A' }}</dd>
+                            </div>
+                        </dl>
+                    </div>
+                </aside>
+
+                <section class="space-y-4 lg:col-span-5">
+                    <div class="rounded-xl bg-gradient-to-br from-primary to-primary/80 p-4 text-white shadow-sm">
+                        <div class="flex items-start justify-between gap-3">
+                            <div>
+                                <p class="text-xs font-medium text-white/70">Total Pembayaran</p>
+                                <p class="mt-1 text-2xl font-bold">Rp
+                                    {{ number_format($payments->gross_amount, 0, ',', '.') }}</p>
+                            </div>
+                            <span class="rounded-full px-2.5 py-1 text-xs font-semibold {{ $statusClasses }}">
+                                {{ ucfirst(str_replace('_', ' ', $status)) }}
+                            </span>
+                        </div>
                     </div>
 
-                    <div class="grid grid-cols-3 gap-3 bg-gray-50/60 px-4 py-3">
-                        <dt class="text-gray-500">Kode Booking</dt>
-                        <dd class="col-span-2 text-right font-medium text-gray-800">
-                            {{ $payments->booking?->booking_code ?? 'N/A' }}</dd>
-                    </div>
-                    <div class="grid grid-cols-3 gap-3 px-4 py-3">
-                        <dt class="text-gray-500">Email</dt>
-                        <dd class="col-span-2 break-all text-right font-medium text-gray-800">
-                            {{ $payments->booking->user->email ?? 'N/A' }}</dd>
-                    </div>
-                    <div class="grid grid-cols-3 gap-3 px-4 py-3">
-                        <dt class="text-gray-500">Name</dt>
-                        <dd class="col-span-2 break-all text-right font-medium text-gray-800">
-                            {{ $payments->booking->user->name ?? 'N/A' }}</dd>
-                    </div>
-                    <div class="grid grid-cols-3 gap-3 px-4 py-3">
-                        <dt class="text-gray-500">Phone</dt>
-                        <dd class="col-span-2 break-all text-right font-medium text-gray-800">
-                            {{ $payments->booking->user->phone ?? 'N/A' }}</dd>
-                    </div>
+                    <dl class="divide-y divide-gray-100 overflow-hidden rounded-xl border border-gray-100 text-sm">
+                        <div class="grid grid-cols-3 gap-3 px-4 py-3">
+                            <dt class="text-gray-500">Kode booking</dt>
+                            <dd class="col-span-2 text-right font-medium text-gray-800">
+                                {{ $booking?->booking_code ?? 'N/A' }}</dd>
+                        </div>
+                        <div class="grid grid-cols-3 gap-3 bg-gray-50/60 px-4 py-3">
+                            <dt class="text-gray-500">Kamar</dt>
+                            <dd class="col-span-2 text-right font-medium text-gray-800">
+                                {{ $booking?->room?->name ?? 'N/A' }}</dd>
+                        </div>
+                        <div class="grid grid-cols-3 gap-3 px-4 py-3">
+                            <dt class="text-gray-500">Masa inap</dt>
+                            <dd class="col-span-2 text-right font-medium text-gray-800">
+                                {{ $booking?->check_in?->format('d M Y') ?? 'N/A' }} -
+                                {{ $booking?->check_out?->format('d M Y') ?? 'N/A' }}
+                            </dd>
+                        </div>
+                        <div class="grid grid-cols-3 gap-3 bg-gray-50/60 px-4 py-3">
+                            <dt class="text-gray-500">Jumlah tamu</dt>
+                            <dd class="col-span-2 text-right font-medium text-gray-800">
+                                {{ $booking?->total_guests ?? 'N/A' }}</dd>
+                        </div>
+                        <div class="grid grid-cols-3 gap-3 px-4 py-3">
+                            <dt class="text-gray-500">Payment ID</dt>
+                            <dd class="col-span-2 break-all text-right font-medium text-gray-800">
+                                {{ $payments->order_id }}</dd>
+                        </div>
+                        <div class="grid grid-cols-3 gap-3 bg-gray-50/60 px-4 py-3">
+                            <dt class="text-gray-500">Metode</dt>
+                            <dd class="col-span-2 text-right font-medium text-gray-800">
+                                {{ $payments->payment_method ?? 'N/A' }}</dd>
+                        </div>
+                        <div class="grid grid-cols-3 gap-3 px-4 py-3">
+                            <dt class="text-gray-500">Total Amount</dt>
+                            <dd class="col-span-2 text-right font-medium text-gray-800">
+                                Rp{{ number_format($booking->total_price, 0, ',', '.') }}</dd>
+                        </div>
+                        <div class="grid grid-cols-3 gap-3 px-4 bg-gray-50/60 py-3">
+                            <dt class="text-gray-500">Tanggal transaksi</dt>
+                            <dd class="col-span-2 text-right font-medium text-gray-800">
+                                {{ $payments->created_at?->format('d M Y, H:i') ?? 'N/A' }}
+                            </dd>
+                        </div>
+                        <div class="grid grid-cols-3 gap-3 px-4 py-3">
+                            <dt class="text-gray-500">Status</dt>
+                            <dd class="col-span-2 text-right font-medium text-gray-800">
+                                {{ $booking->status ?? 'N/A' }}
+                            </dd>
+                        </div>
+                    </dl>
+                </section>
 
-                    <div class="grid grid-cols-3 gap-3 px-4 py-3">
-                        <dt class="text-gray-500">Room</dt>
-                        <dd class="col-span-2 break-all text-right font-medium text-gray-800">
-                            {{ $payments->booking->room->name ?? 'N/A' }}</dd>
-                    </div>
+                <section class="overflow-hidden rounded-xl border border-gray-100 bg-white lg:col-span-4">
+                    @if ($room?->image)
+                        <img src="{{ asset('storage/assets/img/rooms/' . $room->image) }}" alt="{{ $room->name }}"
+                            class="h-48 w-full object-cover sm:h-56 lg:h-48">
+                    @else
+                        <div
+                            class="flex h-48 items-center justify-center bg-gray-100 text-sm text-gray-500 sm:h-56 lg:h-48">
+                            Gambar kamar belum tersedia
+                        </div>
+                    @endif
 
-                    <div class="grid grid-cols-3 gap-3 px-4 py-3">
-                        <dt class="text-gray-500">Metode</dt>
-                        <dd class="col-span-2 text-right font-medium text-gray-800">
-                            {{ $payments->payment_method ?? 'N/A' }}</dd>
+                    <div class="p-5">
+                        <p class="text-xs font-semibold uppercase tracking-wide text-gray-500">Detail Kamar</p>
+                        <h4 class="mt-1 font-poppins text-xl font-bold text-gray-900">
+                            {{ $room?->name ?? 'Kamar tidak diketahui' }}</h4>
+                        <p class="mt-1 text-base font-bold text-primary">Rp
+                            {{ number_format($room?->price ?? 0, 0, ',', '.') }} <span
+                                class="text-sm font-normal text-gray-500">/ malam</span></p>
+
+                        <dl class="mt-5 grid grid-cols-2 gap-x-4 gap-y-4 text-sm">
+                            <div>
+                                <dt class="text-gray-500">Kapasitas</dt>
+                                <dd class="mt-1 font-medium text-gray-800">
+                                    {{ $room?->capacity ? $room->capacity . ' orang' : 'N/A' }}</dd>
+                            </div>
+                            <div>
+                                <dt class="text-gray-500">Tempat tidur</dt>
+                                <dd class="mt-1 font-medium text-gray-800">{{ $room?->bed_type ?? 'N/A' }}</dd>
+                            </div>
+                            <div>
+                                <dt class="text-gray-500">Ukuran</dt>
+                                <dd class="mt-1 font-medium text-gray-800">
+                                    {{ $room?->size ? $room->size . ' m²' : 'N/A' }}</dd>
+                            </div>
+                        </dl>
+
+                        {{-- @if ($room?->description)
+                            <p class="mt-5 border-t border-gray-100 pt-4 text-sm leading-6 text-gray-600">{{ $room->description }}</p>
+                        @endif --}}
+
+                        <div class="mt-5 border-t border-gray-100 pt-4">
+                            <p class="text-sm font-semibold text-gray-900">Fasilitas</p>
+                            <div class="mt-2 flex flex-wrap gap-2">
+                                @forelse ($room?->facilities ?? [] as $facility)
+                                    <span
+                                        class="rounded-full bg-emerald-100 px-2.5 py-1 text-xs font-medium text-emerald-700">{{ $facility->name }}</span>
+                                @empty
+                                    <p class="text-sm text-gray-500">Belum ada fasilitas untuk kamar ini.</p>
+                                @endforelse
+                            </div>
+                        </div>
                     </div>
-                    <div class="grid grid-cols-3 gap-3 bg-gray-50/60 px-4 py-3">
-                        <dt class="text-gray-500">Tanggal</dt>
-                        <dd class="col-span-2 text-right font-medium text-gray-800">
-                            {{ $payments->created_at?->format('d M Y, H:i') ?? 'N/A' }}</dd>
-                    </div>
-                </dl>
+                </section>
             </div>
         @else
             <div class="rounded-xl border border-dashed border-gray-300 bg-gray-50 px-4 py-8 text-center">
@@ -577,11 +627,6 @@
                     <option value="cash">Cash (Rp. 100.000)</option>
                     <option value="passport">Passport</option>
                 </select>
-                {{-- <div class="mb-4">
-                    <label class="input-label">Jumlah Deposit (Rp) <span class="text-red-500">*</span></label>
-                    <input type="text" id="depositAmount" wire:model="deposit_amount" class="input">
-                    <x-input-error :message="$errors->get('deposit_amount')" />
-                </div> --}}
                 <x-input-error :message="$errors->get('deposit_status')" />
             </div>
             <!-- Duration Info -->

@@ -36,6 +36,7 @@ class BookingFactory extends Factory
             'total_guests' => fake()->numberBetween(1, 2),
             'total_price' => fake()->numberBetween(500000, 3000000),
             'status' => fake()->randomElement(['pending', 'paid', 'checked_in', 'checked_out', 'cancelled']),
+            'expires_at' => now()->addMinutes(30),
             'deposit_status' => fake()->randomElement(['none', 'ktp', 'cash', 'passport']),
         ];
     }

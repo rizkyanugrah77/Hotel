@@ -4,7 +4,7 @@ namespace App\Livewire\welcome;
 
 use App\Models\Payment;
 use Barryvdh\DomPDF\Facade\Pdf;
-use Illuminate\Container\Attributes\Auth;
+use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
 
 class PaymentStatus extends Component
@@ -15,7 +15,7 @@ class PaymentStatus extends Component
 
     public function mount($orderId)
     {
-        $payment = Payment::with('booking', 'booking.room', 'user')->where('order_id', $orderId)->where('user_id' === auth()->id)->first();
+        $payment = Payment::with('booking', 'booking.room', 'user')->where('order_id', $orderId)->where('user_id', Auth::user()->id)->first();
 
         if ($payment == null) {
             return redirect()->route('index');
@@ -30,7 +30,7 @@ class PaymentStatus extends Component
         $payment = Payment::with([
             'booking.room',
             'booking.user',
-        ])->where('order_id', $this->orderId)->where('user_id' === auth()->id)->firstOrFail();
+        ])->where('order_id', $this->orderId)->where('user_id', Auth::user()->id)->firstOrFail();
 
         $pdf = Pdf::loadView('livewire.welcome.payments.receipt', [
             'payment' => $payment,

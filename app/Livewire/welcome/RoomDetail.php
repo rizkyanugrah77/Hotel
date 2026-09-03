@@ -307,7 +307,13 @@ class RoomDetail extends Component
                     ->where('status', 'available')
                     ->lockForUpdate()
                     ->whereDoesntHave('bookings', function ($query) {
-                        $query->whereIn('status', ['paid', 'checked_in'])
+                        $query->where(function ($query) {
+                            $query->whereIn('status', ['paid', 'checked_in'])
+                                ->orWhere(function ($query) {
+                                    $query->where('status', 'pending')
+                                        ->where('expires_at', '>', now());
+                                });
+                        })
                             ->where('check_in', '<', $this->check_out)
                             ->where('check_out', '>', $this->check_in);
                     })
@@ -334,6 +340,7 @@ class RoomDetail extends Component
                     ->setTime(12, 0, 0)
                     ->format('Y-m-d H:i:s');
                 $attributes['status'] = 'pending';
+                $attributes['expires_at'] = now()->addMinutes(max((int) config('booking.hold_minutes'), 1));
 
                 return Booking::create($attributes);
             }, 3);
