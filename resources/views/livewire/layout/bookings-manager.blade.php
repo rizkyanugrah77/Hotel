@@ -355,11 +355,6 @@
                             <dd class="col-span-2 text-right font-medium text-gray-800">
                                 {{ $payments->payment_method ?? 'N/A' }}</dd>
                         </div>
-                        <div class="grid grid-cols-3 gap-3 px-4 py-3">
-                            <dt class="text-gray-500">Total Amount</dt>
-                            <dd class="col-span-2 text-right font-medium text-gray-800">
-                                Rp{{ number_format($booking->total_price, 0, ',', '.') }}</dd>
-                        </div>
                         <div class="grid grid-cols-3 gap-3 px-4 bg-gray-50/60 py-3">
                             <dt class="text-gray-500">Tanggal transaksi</dt>
                             <dd class="col-span-2 text-right font-medium text-gray-800">
