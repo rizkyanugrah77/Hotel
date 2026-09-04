@@ -9,7 +9,6 @@ use Livewire\Component;
 
 class UserDashboard extends Component
 {
-
     public function cancel($id)
     {
         $cancelled = Booking::whereKey($id)
@@ -48,17 +47,16 @@ class UserDashboard extends Component
             ->get();
 
         // All bookings (history) — most recent first
-        $allBookings = Booking::with('room',)
+        $allBookings = Booking::with('room')
             ->where('user_id', $user->id)
             ->orderBy('created_at', 'desc')
             ->get();
 
         $payments = Payment::with('booking')->whereIn('booking_id', $allBookings->pluck('id'))->get();
 
-
         // Stats
         $totalBookings = $allBookings->count();
-        $totalSpent = $allBookings->where('status', '!=', 'cancelled')->sum('total_price');
+        $totalSpent = $allBookings->whereNotIn('status', ['cancelled', 'refunded'])->sum('total_price');
         $activeCount = $activeBookings->count();
         $upcomingCount = $upcomingCheckins->count();
 

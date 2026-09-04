@@ -92,7 +92,7 @@ new class extends Component {
     @php
         $profileInitials = collect(explode(' ', trim($name)))
             ->filter()
-            ->map(fn ($part) => mb_strtoupper(mb_substr($part, 0, 1)))
+            ->map(fn($part) => mb_strtoupper(mb_substr($part, 0, 1)))
             ->take(2)
             ->implode('');
     @endphp
@@ -100,7 +100,7 @@ new class extends Component {
     <header class="flex items-start gap-4 sm:items-center sm:justify-between">
         <div>
             <h2 class="text-lg font-medium text-gray-900">
-            {{ __('Profile Information') }}
+                {{ __('Profile Information') }}
             </h2>
 
             <p class="mt-1 text-sm text-gray-600">
@@ -113,25 +113,29 @@ new class extends Component {
                 <img src="{{ asset('storage/assets/img/user/' . $currentAvatar) }}" alt="Foto profil {{ $name }}"
                     class="h-12 w-12 rounded-full object-cover ring-2 ring-primary/20">
             @else
-                <div class="flex h-12 w-12 items-center justify-center rounded-full bg-primary text-sm font-bold text-white" aria-hidden="true">
+                <div class="flex h-12 w-12 items-center justify-center rounded-full bg-primary text-sm font-bold text-white"
+                    aria-hidden="true">
                     {{ $profileInitials ?: 'UP' }}
                 </div>
             @endif
         </div>
     </header>
 
-    <form wire:submit="updateProfileInformation" class="mt-5 space-y-5">
-        <div class="rounded-xl border border-gray-100 bg-gray-50 p-4 sm:flex sm:items-center sm:justify-between sm:gap-5">
+    <form wire:submit.prevent="updateProfileInformation" class="mt-5 space-y-5">
+        <div
+            class="rounded-xl border border-gray-100 bg-gray-50 p-4 sm:flex sm:items-center sm:justify-between sm:gap-5">
             <div class="flex min-w-0 items-center gap-3">
                 <div class="hidden shrink-0 sm:block">
                     @if ($avatar)
                         <img src="{{ $avatar->temporaryUrl() }}" alt="Pratinjau foto profil"
                             class="h-16 w-16 rounded-full object-cover ring-2 ring-primary/20">
                     @elseif ($currentAvatar)
-                        <img src="{{ asset('storage/assets/img/user/' . $currentAvatar) }}" alt="Foto profil {{ $name }}"
+                        <img src="{{ asset('storage/assets/img/user/' . $currentAvatar) }}"
+                            alt="Foto profil {{ $name }}"
                             class="h-16 w-16 rounded-full object-cover ring-2 ring-primary/20">
                     @else
-                        <div class="flex h-16 w-16 items-center justify-center rounded-full bg-primary text-lg font-bold text-white" aria-hidden="true">
+                        <div class="flex h-16 w-16 items-center justify-center rounded-full bg-primary text-lg font-bold text-white"
+                            aria-hidden="true">
                             {{ $profileInitials ?: 'UP' }}
                         </div>
                     @endif
@@ -139,11 +143,12 @@ new class extends Component {
                 <div class="min-w-0">
                     <p class="font-medium text-gray-900">Foto profil</p>
                     <p class="mt-0.5 text-xs text-gray-500">JPG, PNG, atau WEBP, maksimal 10 MB.</p>
-                    <p wire:loading wire:target="avatar" class="mt-1 text-xs font-medium text-primary">Menyiapkan pratinjau foto...</p>
+                    <p wire:loading wire:target="avatar" class="mt-1 text-xs font-medium text-primary">Menyiapkan
+                        pratinjau foto...</p>
                 </div>
             </div>
             <div class="mt-3 sm:mt-0 sm:w-64">
-                <x-text-input wire:model="avatar" id="avatar" name="avatar" type="file" accept="image/*"
+                <x-text-input wire:model.live="avatar" id="avatar" name="avatar" type="file" accept="image/*"
                     class="block w-full text-sm" autocomplete="photo" />
                 <x-input-error class="mt-2" :message="$errors->get('avatar')" />
             </div>
@@ -208,8 +213,8 @@ new class extends Component {
 
             <div class="sm:col-span-2">
                 <x-input-label for="address" :value="__('Address')" />
-                <x-text-input wire:model="address" id="address" name="address" type="text" class="mt-1 block w-full"
-                    autocomplete="street-address" placeholder="Enter your address" />
+                <x-text-input wire:model="address" id="address" name="address" type="text"
+                    class="mt-1 block w-full" autocomplete="street-address" placeholder="Enter your address" />
                 <x-input-error class="mt-2" :message="$errors->get('address')" />
             </div>
 

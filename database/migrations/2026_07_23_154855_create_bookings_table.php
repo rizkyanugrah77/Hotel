@@ -21,7 +21,7 @@ return new class extends Migration
             $table->dateTime('check_out');
             $table->integer('total_guests');
             $table->unsignedBigInteger('total_price');
-            $table->enum('status', ['pending', 'paid', 'cancelled', 'checked_in', 'checked_out'])->default('pending');
+            $table->enum('status', ['pending', 'paid', 'cancelled', 'checked_in', 'checked_out', 'refunded'])->default('pending');
             $table->enum('deposit_status', ['ktp', 'cash', 'passport', 'none'])->default('none');
             $table->timestamps();
         });

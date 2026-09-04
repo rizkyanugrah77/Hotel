@@ -190,6 +190,7 @@ class RoomsAdmin extends Component
         $rooms = Room::query()
             ->with('facilities:id,name,icon')
             ->with('galleries:id,room_id,image,caption,is_featured')
+            ->with('units:id,room_id,status')
             ->withCount([
                 'units',
                 'units as available_units_count' => fn($query) => $query->where('status', 'available'),

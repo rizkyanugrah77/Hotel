@@ -93,117 +93,70 @@
                 </div>
             </div>
 
-            <div class="divide-y divide-gray-100 md:hidden">
-                @forelse ($rooms as $index => $room)
+            <div class="space-y-3 p-4">
+                @forelse ($rooms as $room)
                     @php
-                        $statusClasses =
+                        $availabilityLabel =
                             $room->units->where('status', 'available')->count() < 1
-                                ? 'badge badge-primary'
-                                : 'badge badge-success';
+                                ? 'Occupied'
+                                : ucfirst($room->status);
+                        $availabilityClasses =
+                            $room->units->where('status', 'available')->count() < 1 ? 'badge-primary' : 'badge-success';
                     @endphp
-                    <article wire:key="room-mobile-{{ $room->id }}" wire:click="selectRoom({{ $room->id }})"
+                    <article wire:key="room-{{ $room->id }}" wire:click="selectRoom({{ $room->id }})"
                         wire:keydown.enter="selectRoom({{ $room->id }})"
                         wire:keydown.space.prevent="selectRoom({{ $room->id }})" role="button" tabindex="0"
                         @class([
-                            'cursor-pointer p-4 transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-[-2px] focus-visible:outline-primary focus-within:bg-primary/5 hover:bg-gray-50',
-                            'bg-primary/5' => $selectedRoom?->id === $room->id,
+                            'cursor-pointer rounded-xl border p-3 transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary hover:border-primary/30 hover:bg-primary/5 sm:p-4',
+                            'border-primary bg-primary/5' => $selectedRoom?->id === $room->id,
+                            'border-gray-200 bg-white' => $selectedRoom?->id !== $room->id,
                         ])>
-                        <div class="flex gap-3">
+                        <div class="flex flex-col gap-4 sm:flex-row">
                             @if ($room->image)
                                 <img src="{{ asset('storage/assets/img/rooms/' . $room->image) }}"
-                                    alt="{{ $room->name }}" class="h-16 w-20 shrink-0 rounded-lg object-cover">
+                                    alt="{{ $room->name }}"
+                                    class="h-40 w-full rounded-lg object-cover sm:h-36 sm:w-40">
                             @else
                                 <div
-                                    class="flex h-16 w-20 shrink-0 items-center justify-center rounded-lg bg-gray-100 text-xs text-gray-400">
-                                    -</div>
+                                    class="flex h-40 w-full items-center justify-center rounded-lg bg-gray-100 text-sm text-gray-400 sm:h-36 sm:w-40">
+                                    Tidak ada gambar</div>
                             @endif
                             <div class="min-w-0 flex-1">
-                                <div class="flex items-start justify-between gap-2">
+                                <div class="flex flex-wrap items-start justify-between gap-2">
                                     <div class="min-w-0">
-                                        <h3 class="truncate font-semibold text-gray-900">{{ $room->name }}</h3>
-                                        <p class="truncate text-xs text-gray-500">{{ $room->slug }}</p>
+                                        <h3 class="truncate font-poppins text-md font-bold text-gray-900">
+                                            {{ $room->name }}</h3>
+                                        <p class="mt-1 truncate text-xs text-gray-500">{{ $room->slug }}</p>
                                     </div>
-                                    <span
-                                        class="shrink-0 rounded-full px-2 py-1 text-xs font-medium {{ $statusClasses }}">
-                                        {{ $room->units->where('status', 'available')->count() < 1 ? 'Occupied' : ucfirst($room->status) }}
-                                    </span>
+                                    <span class="{{ $availabilityClasses }} shrink-0">{{ $availabilityLabel }}</span>
+                                </div>
+                                <p class="mt-1 text-xs leading-6 text-gray-600">
+                                    {{ \Illuminate\Support\Str::limit((string) $room->description, 150) }}</p>
+                                <dl class="mt-1 grid grid-cols-3 gap-x-4 gap-y-3 text-sm">
+                                    <div>
+                                        <dd class=" font-medium text-gray-800">{{ $room->capacity }} tamu</dd>
+                                    </div>
+                                    <div>
+                                        <dd class=" font-medium text-gray-800">{{ $room->bed_type }}</dd>
+                                    </div>
+                                    <div>
+                                        <dd class=" font-medium text-gray-800">{{ $room->size }} m2</dd>
+                                    </div>
+                                </dl>
+                                <div class="mt-4 flex items-end justify-between gap-3 border-t border-gray-100 pt-3">
+                                    <p class="text-xs text-gray-500">
+                                        {{ $room->available_units_count }}/{{ $room->units_count }} unit tersedia</p>
+                                    <p class="text-right text-sm font-bold text-primary">
+                                        Rp{{ number_format($room->price, 0, ',', '.') }}<span
+                                            class="font-normal text-gray-500"> / malam</span></p>
                                 </div>
                             </div>
                         </div>
-                        <div class="mt-3 flex items-center justify-between gap-3 text-xs">
-                            <span class="text-gray-500">{{ $room->available_units_count }}/{{ $room->units_count }}
-                                unit tersedia</span>
-                            <span
-                                class="shrink-0 font-semibold text-emerald-700">Rp{{ number_format($room->price, 0, ',', '.') }}</span>
-                        </div>
                     </article>
                 @empty
-                    <p class="px-4 py-12 text-center text-sm text-gray-500">Belum ada kamar. Klik &ldquo;Tambah
-                        Kamar&rdquo; untuk menambahkan kamar baru.</p>
+                    <p class="py-12 text-center text-sm text-gray-500">Belum ada kamar. Klik &ldquo;Tambah Kamar&rdquo;
+                        untuk menambahkan kamar baru.</p>
                 @endforelse
-            </div>
-
-            <div class="hidden md:block">
-                <table class="w-full table-fixed text-left text-sm">
-                    <thead class="bg-gray-50 text-gray-500">
-                        <tr>
-                            <th class="w-1/2 px-4 py-3 font-medium">Kamar</th>
-                            <th class="w-1/4 px-4 py-3 font-medium">Ketersediaan</th>
-                            <th class="w-1/4 px-4 py-3 font-medium">Status</th>
-                        </tr>
-                    </thead>
-                    <tbody class="divide-y divide-gray-100">
-                        @forelse ($rooms as $index => $room)
-                            <tr wire:key="room-{{ $room->id }}" wire:click="selectRoom({{ $room->id }})"
-                                wire:keydown.enter="selectRoom({{ $room->id }})"
-                                wire:keydown.space.prevent="selectRoom({{ $room->id }})" role="button"
-                                tabindex="0" @class([
-                                    'cursor-pointer transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-[-2px] focus-visible:outline-primary hover:bg-gray-50',
-                                    'bg-primary/5' => $selectedRoom?->id === $room->id,
-                                ])>
-                                @php
-                                    $statusClasses =
-                                        $room->units->where('status', 'available')->count() < 1
-                                            ? 'badge badge-primary'
-                                            : 'badge badge-success';
-                                @endphp
-                                <td class="px-4 py-3">
-                                    <div class="flex items-center gap-3">
-                                        @if ($room->image)
-                                            <img src="{{ asset('storage/assets/img/rooms/' . $room->image) }}"
-                                                alt="{{ $room->name }}" class="h-10 w-14 rounded-lg object-cover">
-                                        @else
-                                            <div
-                                                class="flex h-10 w-14 items-center justify-center rounded-lg bg-gray-100 text-xs text-gray-400">
-                                                -</div>
-                                        @endif
-                                        <div class="min-w-0">
-                                            <p class="truncate font-medium text-gray-900">{{ $room->name }}</p>
-                                            <p class="mt-1 truncate text-xs text-gray-500">
-                                                Rp{{ number_format($room->price, 0, ',', '.') }} / malam</p>
-                                        </div>
-                                    </div>
-                                </td>
-                                <td class="px-4 py-3">
-                                    <p class="font-medium text-gray-800">
-                                        {{ $room->available_units_count }}/{{ $room->units_count }} unit</p>
-                                    <span
-                                        class="mt-1 inline-flex rounded-full px-2 py-1 text-xs font-medium {{ $statusClasses }}">{{ $room->units->where('status', 'available')->count() < 1 ? 'Occupied' : ucfirst($room->status) }}</span>
-                                </td>
-                                <td class="px-4 py-3">
-                                    <span
-                                        class="mt-1 inline-flex rounded-full px-2 py-1 text-xs font-medium {{ $statusClasses }}">{{ ucfirst($room->status) }}</span>
-                                </td>
-                            </tr>
-                        @empty
-                            <tr>
-                                <td colspan="3" class="py-12 text-center text-gray-500">
-                                    Belum ada kamar. Klik &ldquo;Tambah Kamar&rdquo; untuk menambahkan kamar baru.
-                                </td>
-                            </tr>
-                        @endforelse
-                    </tbody>
-                </table>
             </div>
         </section>
 
@@ -261,9 +214,11 @@
                         </div>
 
                         <div class="order-3 sm:col-span-2 sm:order-3">
-                            <p class="text-xl font-bold text-emerald-700">
-                                Rp{{ number_format($selectedRoom->price, 0, ',', '.') }} <span
-                                    class="text-sm font-normal text-gray-500">/ malam</span></p>
+                            <div class="mb-3">
+                                <p class="text-xl font-bold text-primary">
+                                    Rp{{ number_format($selectedRoom->price, 0, ',', '.') }} <span
+                                        class="text-sm font-normal text-gray-500">/ malam</span></p>
+                            </div>
                             <dl class="mt-3 grid grid-cols-2 gap-3 text-sm">
                                 <div>
                                     <dt class="text-gray-500">Ukuran</dt>
@@ -313,8 +268,10 @@
                             @forelse ($selectedRoom->units as $unit)
                                 <div
                                     class="flex items-center justify-between rounded-lg border border-gray-200 px-3 py-2 text-sm">
-                                    <span class="font-medium text-gray-800">{{ $unit->room_number }}</span>
-                                    <span class="text-gray-600">{{ ucfirst($unit->status) }}</span>
+                                    <span
+                                        class="font-medium text-gray-800">{{ $unit->room_number ?? 'Data Tidak Tersedia' }}</span>
+                                    <span
+                                        class="badge {{ $unit->status === 'available' ? 'badge-success' : 'badge-primary' }}">{{ ucfirst($unit->status) }}</span>
                                 </div>
                             @empty
                                 <p class="text-sm text-gray-500">Belum ada unit untuk kamar ini.</p>

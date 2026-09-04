@@ -137,26 +137,29 @@
   }
 
   .badge-primary {
-    @apply badge bg-primary/10 text-primary ;
+    @apply badge bg-primary/20 text-primary;
   }
 
   .badge-accent {
-    @apply badge bg-accent/10 text-accent-700;
+    @apply badge bg-accent/30 text-yellow-900;
   }
 
   .badge-success {
-    @apply badge bg-emerald-50 text-emerald-700;
+    @apply badge bg-emerald-100 text-emerald-800;
   }
 
   .badge-warning {
-    @apply badge bg-amber-50 text-amber-700;
+    @apply badge bg-amber-100 text-amber-800;
   }
 
   .badge-danger {
-    @apply badge bg-rose-50 text-primary;
+    @apply badge bg-rose-100 text-rose-800;
   }
   .badge-info {
-    @apply badge bg-sky-50 text-sky-700 ;
+    @apply badge bg-sky-100 text-sky-800;
+  }
+  .badge-secondary {
+    @apply badge bg-slate-200 text-slate-700;
   }
 
   /* Input styles */

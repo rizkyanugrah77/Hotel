@@ -112,11 +112,12 @@
                     </div>
                     <select wire:model.live="filterStatus" id="filterStatus" class="input min-w-0 py-2 text-sm lg:w-36">
                         <option value="">Semua Status</option>
-                        <option value="paid">Paid</option>
                         <option value="pending">Pending</option>
+                        <option value="paid">Paid</option>
                         <option value="checked_in">Checked In</option>
                         <option value="cancelled">Cancelled</option>
                         <option value="checked_out">Checked Out</option>
+                        <option value="refunded">Refunded</option>
                     </select>
                     <select wire:model.live="filterRoom" id="filterRoom" class="input min-w-0 py-2 text-sm lg:w-40">
                         <option value="">Semua Room</option>
@@ -144,6 +145,7 @@
                             'pending' => 'badge-warning',
                             'cancelled' => 'badge-danger',
                             'checked_out' => 'badge-accent',
+                            'refunded' => 'badge-secondary',
                             default => 'badge-primary',
                         };
                     @endphp
@@ -153,8 +155,8 @@
                                 <p class="truncate font-semibold text-gray-900">{{ $booking->booking_code }}</p>
                                 <p class="mt-0.5 truncate text-sm text-gray-600">{{ $booking->user->name }}</p>
                             </div>
-                            <span
-                                class="shrink-0 rounded-full px-2 py-1 text-xs font-medium {{ $statusClasses }}">{{ ucwords(str_replace('_', ' ', $booking->status)) }}</span>
+                            <span class="shrink-0 rounded-full px-2 py-1 text-xs font-medium  {{ $statusClasses }}">
+                                {{ ucwords(str_replace('_', ' ', $booking->status)) }}</span>
                         </div>
                         <div class="mt-3 rounded-lg bg-gray-50 p-3 text-sm">
                             <p class="font-medium text-gray-800">{{ $booking->room->name }} No
@@ -200,6 +202,7 @@
                                         'pending' => 'badge-warning',
                                         'cancelled' => 'badge-primary',
                                         'checked_out' => 'badge-accent',
+                                        'refunded' => 'badge-secondary',
                                         default => 'badge-primary',
                                     };
                                 @endphp
@@ -218,7 +221,7 @@
                                 <td class="px-4 py-3 text-gray-700">{{ $booking->total_guests }}</td>
                                 <td class="px-4 py-3">
                                     <span
-                                        class="inline-flex rounded-full px-2 py-1 text-xs font-medium {{ $statusClasses }}">{{ ucwords(str_replace('_', ' ', $booking->status)) }}</span>
+                                        class="inline-flex rounded-full px-2 py-1 text-xs font-medium  {{ $statusClasses }}">{{ ucwords(str_replace('_', ' ', $booking->status)) }}</span>
                                 </td>
                                 <td class="px-4 py-3 flex items-center space-x-2  text-center text-gray-700">
                                     <x-edit-button :item="$booking" action="edit" />
@@ -257,6 +260,7 @@
                     'settlement', 'capture', 'success', 'paid', 'completed' => 'bg-emerald-100 text-emerald-700',
                     'pending', 'challenge' => 'bg-amber-100 text-amber-700',
                     'cancel', 'cancelled', 'deny', 'failure', 'expire' => 'bg-red-100 text-red-700',
+                    'refunded' => 'bg-blue-100 text-blue-700',
                     default => 'bg-slate-100 text-slate-600',
                 };
 
@@ -603,11 +607,12 @@
                 <div class="mb-4">
                     <label class="input-label">Status <span class="text-red-500">*</span></label>
                     <select id="bookingStatus" wire:model="status" class="input"
-                        @if ($this->status === 'checked_out' || $this->status === 'cancelled') disabled @endif>
+                        @if ($this->status === 'checked_out' || $this->status === 'cancelled' || $this->status === 'refunded') disabled @endif>
                         <option value="pending">Pending</option>
                         <option value="paid">Paid</option>
                         <option value="checked_in">Checked In</option>
                         <option value="checked_out">Checked Out</option>
+                        <option value="refunded">Refunded</option>
                         <option value="cancelled">Cancelled</option>
                     </select>
                     <x-input-error :message="$errors->get('status')" />

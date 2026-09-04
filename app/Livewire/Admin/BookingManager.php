@@ -255,6 +255,7 @@ class BookingManager extends Component
             'check_in',
             'check_out',
             'total_guests',
+
             'deposit_status',
             'total_price',
             'status',
@@ -326,7 +327,7 @@ class BookingManager extends Component
                 'date',
                 'after:check_in',
             ],
-            'status' => 'required|in:pending,paid,checked_in,checked_out,cancelled',
+            'status' => 'required|in:pending,paid,checked_in,checked_out,cancelled,refunded',
 
             'total_guests' => 'required|integer|min:1|max:100',
             'total_price' => 'required|integer|min:1|max:999999999',
