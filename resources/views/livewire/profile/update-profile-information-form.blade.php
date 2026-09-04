@@ -141,7 +141,10 @@ new class extends Component {
                     @endif
                 </div>
                 <div class="min-w-0">
-                    <p class="font-medium text-gray-900">Foto profil</p>
+                    <div class="inline-flex gap-2">
+                        <x-input-label for="avatar" :value="__('Foto Profil')" />
+                        <span class="text-xs text-red-500">*</span>
+                    </div>
                     <p class="mt-0.5 text-xs text-gray-500">JPG, PNG, atau WEBP, maksimal 10 MB.</p>
                     <p wire:loading wire:target="avatar" class="mt-1 text-xs font-medium text-primary">Menyiapkan
                         pratinjau foto...</p>
@@ -149,23 +152,29 @@ new class extends Component {
             </div>
             <div class="mt-3 sm:mt-0 sm:w-64">
                 <x-text-input wire:model.live="avatar" id="avatar" name="avatar" type="file" accept="image/*"
-                    class="block w-full text-sm" autocomplete="photo" />
+                    class="input text-sm mt-1 block w-full" required autocomplete="photo" />
                 <x-input-error class="mt-2" :message="$errors->get('avatar')" />
             </div>
         </div>
 
         <div class="grid gap-4 sm:grid-cols-2">
             <div>
-                <x-input-label for="name" :value="__('Name')" />
-                <x-text-input wire:model="name" id="name" name="name" type="text" class="mt-1 block w-full"
-                    required autofocus autocomplete="name" />
+                <div class="inline-flex gap-2">
+                    <x-input-label for="name" :value="__('Name')" />
+                    <span class="text-xs text-red-500">*</span>
+                </div>
+                <x-text-input wire:model="name" id="name" name="name" type="text"
+                    class="input text-sm mt-1 block w-full" required autofocus autocomplete="name" />
                 <x-input-error class="mt-2" :message="$errors->get('name')" />
             </div>
 
             <div>
-                <x-input-label for="email" :value="__('Email')" />
-                <x-text-input wire:model="email" id="email" name="email" type="email" class="mt-1 block w-full"
-                    required autocomplete="username" />
+                <div class="inline-flex gap-2">
+                    <x-input-label for="email" :value="__('Email')" />
+                    <span class="text-xs text-red-500">*</span>
+                </div>
+                <x-text-input wire:model="email" id="email" name="email" type="email"
+                    class="input text-sm mt-1 block w-full" required autocomplete="username" />
                 <x-input-error class="mt-2" :message="$errors->get('email')" />
 
                 @if (auth()->user() instanceof \Illuminate\Contracts\Auth\MustVerifyEmail && !auth()->user()->hasVerifiedEmail())
@@ -189,16 +198,24 @@ new class extends Component {
             </div>
 
             <div>
-                <x-input-label for="phone" :value="__('Phone')" />
-                <x-text-input wire:model="phone" id="phone" name="phone" type="tel" class="mt-1 block w-full"
-                    autocomplete="tel" placeholder="+62 1234567890" />
+                <div class="inline-flex gap-2">
+                    <x-input-label for="phone" :value="__('Phone')" />
+                    <span class="text-xs text-red-500">*</span>
+                </div>
+
+                <x-text-input wire:model="phone" id="phone" name="phone" type="tel"
+                    class="input text-sm mt-1 block w-full" autocomplete="tel" required
+                    placeholder="+62/08-1234567890" />
                 <x-input-error class="mt-2" :message="$errors->get('phone')" />
             </div>
 
             <div>
-                <x-input-label for="nationality" :value="__('Nationality')" />
-                <select wire:model="nationality" id="nationality" name="nationality"
-                    class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary focus:ring focus:ring-primary focus:ring-opacity-50">
+                <div class="inline-flex gap-2">
+                    <x-input-label for="nationality" :value="__('Nationality')" />
+                    <span class="text-xs text-red-500">*</span>
+                </div>
+                <select wire:model="nationality" id="nationality" name="nationality" required
+                    class="input text-sm mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary focus:ring focus:ring-primary focus:ring-opacity-50">
                     <option value="">Select Nationality</option>
                     <option value="Indonesia">Indonesia</option>
                     <option value="Malaysia">Malaysia</option>
@@ -219,9 +236,12 @@ new class extends Component {
             </div>
 
             <div>
-                <x-input-label for="gender" :value="__('Gender')" />
-                <select wire:model="gender" id="gender" name="gender"
-                    class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary focus:ring focus:ring-primary focus:ring-opacity-50">
+                <div class="inline-flex gap-2">
+                    <x-input-label for="gender" :value="__('Gender')" />
+                    <span class="text-xs text-red-500">*</span>
+                </div>
+                <select wire:model="gender" id="gender" name="gender" required
+                    class="input text-sm mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary focus:ring focus:ring-primary focus:ring-opacity-50">
                     <option value="">Select Gender</option>
                     <option value="male">Male</option>
                     <option value="female">Female</option>
