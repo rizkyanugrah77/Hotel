@@ -40,16 +40,17 @@ class FacilityManager extends Component
                 Facility::findOrFail($this->editingFacilityId)->update($attributes);
             } else {
                 Facility::create($attributes);
-
             }
             $this->resetForm();
 
-            $this->dispatch('facility-saved', message: $isEditing ? 'Fasilitas berhasil diperbarui.' : 'Fasilitas berhasil ditambahkan.', type: $isEditing ? 'success' : 'success'
+            $this->dispatch(
+                'facility-saved',
+                message: $isEditing ? 'Fasilitas berhasil diperbarui.' : 'Fasilitas berhasil ditambahkan.',
+                type: $isEditing ? 'success' : 'success'
             );
         } catch (\Throwable $th) {
             $this->dispatch('facility-error', message: $th->getMessage(), type: 'error');
         }
-
     }
 
     public function edit(int $facilityId): void
@@ -104,7 +105,7 @@ class FacilityManager extends Component
                 'active' => Facility::query()->count(), // all facilities are active for now
                 'maintenance' => 0,
             ],
-        ]);
+        ])->layout('layouts.app');
     }
 
     protected function rules(): array

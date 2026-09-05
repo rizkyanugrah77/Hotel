@@ -13,6 +13,12 @@
     x-on:facility-editing.window="$dispatch('open-modal', 'manage-facility')"
     x-on:facility-delete-confirmation.window="$dispatch('open-modal', 'delete-facility')">
 
+    <x-slot name="header">
+        <div class="h-20 bg-white border-b border-gray-200 flex items-center justify-between px-8 flex-shrink-0">
+            <h1 class="text-xl font-poppins font-bold text-foreground">Facilities Management</h1>
+        </div>
+    </x-slot>
+
     <div class="min-w-0 flex-1 overflow-y-auto p-4 sm:p-6 lg:p-8">
         {{-- Toast Notification --}}
         <x-toast />
@@ -134,8 +140,8 @@
                                         <button type="button" wire:click="edit({{ $facility->id }})"
                                             class="w-8 h-8 rounded-lg bg-amber-50 text-amber-600 flex items-center justify-center hover:bg-amber-100 transition-colors"
                                             title="Edit">
-                                            <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-                                                stroke="currentColor">
+                                            <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24"
+                                                stroke-width="1.5" stroke="currentColor">
                                                 <path stroke-linecap="round" stroke-linejoin="round"
                                                     d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10" />
                                             </svg>
