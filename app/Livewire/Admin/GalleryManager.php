@@ -37,14 +37,14 @@ class GalleryManager extends Component
         $attributes = collect($validated)->except('image')->all();
         try {
             if ($this->image) {
-                $imageName = Str::uuid().'.'.$this->image->getClientOriginalExtension();
+                $imageName = Str::uuid() . '.' . $this->image->getClientOriginalExtension();
                 $this->image->storeAs('assets/img/gallery', $imageName, 'public');
                 $attributes['image'] = $imageName;
             }
 
             if ($gallery) {
                 if ($this->image) {
-                    Storage::disk('public')->delete('assets/img/gallery/'.$gallery->image);
+                    Storage::disk('public')->delete('assets/img/gallery/' . $gallery->image);
                 }
                 $gallery->update($attributes);
             } else {
@@ -55,7 +55,6 @@ class GalleryManager extends Component
         } catch (\Throwable $th) {
             $this->dispatch('gallery-error', message: $th->getMessage(), type: 'error');
         }
-
     }
 
     public function edit(int $galleryId): void
@@ -78,7 +77,7 @@ class GalleryManager extends Component
         $gallery = Gallery::findOrFail($this->editingGalleryId);
         $this->editingGalleryId = $gallery->id;
         if ($this->image) {
-            $imageName = Str::uuid().'.'.$this->image->getClientOriginalExtension();
+            $imageName = Str::uuid() . '.' . $this->image->getClientOriginalExtension();
             $this->image->storeAs('assets/img/gallery', $imageName, 'public');
             $gallery->image = $imageName;
         }
@@ -105,7 +104,7 @@ class GalleryManager extends Component
     {
         $gallery = Gallery::findOrFail($this->editingGalleryId);
         if ($gallery->image) {
-            Storage::disk('public')->delete('assets/img/gallery/'.$gallery->image);
+            Storage::disk('public')->delete('assets/img/gallery/' . $gallery->image);
         }
         $gallery->delete();
         $this->resetForm();
@@ -145,6 +144,6 @@ class GalleryManager extends Component
                 ->orderByDesc('galleries_count')
                 ->first(),
             'rooms' => Room::all(),
-        ]);
+        ])->layout('layouts.app');
     }
 }

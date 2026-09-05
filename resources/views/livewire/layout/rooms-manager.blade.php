@@ -14,6 +14,13 @@
     x-on:manage-room-unit.window="$dispatch('open-modal', 'manage-room-unit', {roomId: $event.detail.roomId})"
     x-on:room-delete-confirmation.window="$dispatch('open-modal', 'delete-room')"
     class="min-w-0 flex-1 overflow-y-auto p-4 sm:p-6 lg:p-8">
+
+    <x-slot name="header">
+        <div class="h-20 bg-white border-b border-gray-200 flex items-center justify-between px-8 flex-shrink-0">
+            <h1 class="text-xl font-poppins font-bold text-foreground">Rooms Management</h1>
+        </div>
+    </x-slot>
+
     {{-- toast --}}
     <x-toast />
     {{-- KPI Cards --}}
@@ -161,13 +168,15 @@
         </section>
 
         {{-- room-detail --}}
-        <section class="overflow-hidden rounded-2xl border border-gray-100 bg-white shadow-sm" aria-live="polite">
+        <section
+            class="overflow-hidden rounded-2xl border border-gray-100 bg-white shadow-sm lg:sticky lg:top-20 lg:flex lg:h-[calc(100dvh-6rem)] lg:flex-col"
+            aria-live="polite">
             @if ($selectedRoom)
                 @php
                     $selectedStatusClasses =
                         $selectedRoom->available_units_count < 1 ? 'badge badge-primary' : 'badge badge-success';
                 @endphp
-                <div class="border-b border-gray-100 p-4 sm:p-5">
+                <div class="shrink-0 border-b border-gray-100 p-4 sm:p-5">
                     <div class="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
                         <div>
                             <div class="flex flex-wrap items-center gap-2">
@@ -187,7 +196,7 @@
                     </div>
                 </div>
 
-                <div class="p-4 sm:p-5">
+                <div class="min-h-0 p-4 sm:p-5 lg:flex-1 lg:overflow-y-auto">
                     <div class="grid grid-cols-1 gap-4 sm:grid-cols-[minmax(0,1fr)_5rem]">
                         <div class="order-2 flex gap-2 overflow-x-auto pb-1 sm:order-2 sm:max-h-80 sm:flex-col sm:overflow-x-hidden sm:overflow-y-auto sm:pb-0"
                             aria-label="Galeri kamar">

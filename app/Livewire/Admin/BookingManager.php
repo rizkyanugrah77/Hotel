@@ -308,7 +308,7 @@ class BookingManager extends Component
             'rooms' => $this->rooms,
             'bookingStats' => $bookingStats,
             'payments' => $this->payments,
-        ]);
+        ])->layout('layouts.app');
     }
 
     public function rules()

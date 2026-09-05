@@ -15,6 +15,12 @@
     x-on:booking-delete-confirmation.window="$dispatch('open-modal', 'delete-booking')"
     class="min-w-0 flex-1 overflow-y-auto p-4 sm:p-6 lg:p-8">
 
+    <x-slot name="header">
+        <div class="h-20 bg-white border-b border-gray-200 flex items-center justify-between px-8 flex-shrink-0">
+            <h1 class="text-xl font-poppins font-bold text-foreground">Bookings Management</h1>
+        </div>
+    </x-slot>
+
     <!-- Content -->
 
     <x-toast />

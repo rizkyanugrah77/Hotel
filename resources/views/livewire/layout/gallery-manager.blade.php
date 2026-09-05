@@ -14,6 +14,12 @@
     x-on:gallery-delete-confirmation.window="$dispatch('open-modal', 'gallery-delete-confirmation')"
     class="min-w-0 h-full flex-1 overflow-y-auto p-4 sm:p-6 lg:p-8">
 
+    <x-slot name="header">
+        <div class="h-20 bg-white border-b border-gray-200 flex items-center justify-between px-8 flex-shrink-0">
+            <h1 class="text-xl font-poppins font-bold text-foreground">Gallery Management</h1>
+        </div>
+    </x-slot>
+
     <x-toast />
     <!-- KPI Cards -->
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">

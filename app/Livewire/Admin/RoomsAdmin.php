@@ -5,13 +5,14 @@ namespace App\Livewire\Admin;
 use App\Models\Facility;
 use App\Models\Room;
 use App\Models\RoomUnit;
+use function PHPSTORM_META\map;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\View;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
+
 use Livewire\Component;
 use Livewire\WithFileUploads;
-
-use function PHPSTORM_META\map;
 
 class RoomsAdmin extends Component
 {
@@ -154,6 +155,7 @@ class RoomsAdmin extends Component
         $this->dispatch('room-editing');
     }
 
+
     public function confirmDelete(int $roomId): void
     {
         $this->roomToDelete = Room::findOrFail($roomId)->id;
@@ -238,7 +240,7 @@ class RoomsAdmin extends Component
                 ->where('slug', $this->managingRoomSlug)
                 ->first()
                 : null,
-        ]);
+        ])->layout('layouts.app');
     }
 
     protected function rules(): array
