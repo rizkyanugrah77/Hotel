@@ -1,29 +1,156 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Sitio-Tio
 
 <p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
+  <img src="https://img.shields.io/badge/PHP-8.2%2B-777BB4?logo=php&logoColor=white" alt="PHP 8.2 atau lebih baru">
+  <img src="https://img.shields.io/badge/Laravel-11-FF2D20?logo=laravel&logoColor=white" alt="Laravel 11">
+  <img src="https://img.shields.io/badge/Livewire-4-FB70A9?logo=livewire&logoColor=white" alt="Livewire 4">
+  <img src="https://img.shields.io/badge/Tailwind_CSS-3-06B6D4?logo=tailwindcss&logoColor=white" alt="Tailwind CSS 3">
+  <img src="https://img.shields.io/badge/MySQL-8-4479A1?logo=mysql&logoColor=white" alt="MySQL 8">
+  <img src="https://img.shields.io/badge/Vite-5-646CFF?logo=vite&logoColor=white" alt="Vite 5">
+  <img src="https://img.shields.io/badge/Midtrans-Payment-002B80" alt="Midtrans Payment">
 </p>
 
-## About Laravel
+Aplikasi reservasi hotel berbasis web. Pengunjung dapat melihat kamar, membuat pemesanan, dan menyelesaikan pembayaran melalui Midtrans. Administrator dapat mengelola kamar, unit kamar, fasilitas, galeri, promo, reservasi, transaksi, dan data tamu.
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+## About Project
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+Aplikasi ini menyediakan alur pemesanan dari pencarian kamar sampai pembayaran dan status pembayaran. Reservasi yang belum dibayar akan dibatalkan otomatis setelah melewati batas waktu yang ditentukan. Area admin dilindungi oleh autentikasi, verifikasi email, dan middleware peran admin.
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+## Tech Stack
 
-## Testing database
+| Area | Teknologi |
+| --- | --- |
+| Backend | PHP 8.2+, Laravel 11 |
+| UI reaktif | Livewire 4, Livewire Volt |
+| Template | Blade |
+| Styling | Tailwind CSS 3, `@tailwindcss/forms`, PostCSS, Autoprefixer |
+| Frontend build | Vite 5, Laravel Vite Plugin |
+| Interaksi frontend | Alpine.js, Alpine Clipboard, Axios, SweetAlert2 |
+| Visualisasi data | Chart.js |
+| Database | MySQL |
+| Pembayaran | Midtrans PHP SDK |
+| Dokumen dan ekspor | Laravel DOMPDF, Laravel Excel |
+| Autentikasi | Laravel Breeze |
+| Pengujian | Pest 3, PHPUnit |
 
-Tests use MySQL database `sitio_tio_testing`, never the development database. Create a dedicated database and user with a MySQL administrator account:
+## Requirements
+
+- PHP 8.2 atau lebih baru dengan ekstensi `pdo_mysql`.
+- Composer 2.
+- Node.js dan npm.
+- MySQL 8 atau database MySQL-compatible.
+- Akun Midtrans Sandbox atau Production bila fitur pembayaran akan digunakan.
+
+## Installation Guide
+
+1. Clone repositori dan masuk ke direktori proyek.
+
+   ```bash
+   git clone <repository-url>
+   cd sitio-tio
+   ```
+
+2. Instal dependensi PHP dan JavaScript.
+
+   ```bash
+   composer install
+   npm ci
+   ```
+
+3. Salin konfigurasi lingkungan, lalu isi koneksi MySQL dan kredensial Midtrans.
+
+   ```bash
+   copy .env.example .env
+   php artisan key:generate
+   ```
+
+   Pada macOS atau Linux, gunakan `cp .env.example .env`.
+
+4. Buat database MySQL, lalu atur variabel `DB_*` pada `.env`.
+
+   ```sql
+   CREATE DATABASE sitio_tio CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+   ```
+
+5. Jalankan migrasi dan data awal.
+
+   ```bash
+   php artisan migrate --seed
+   ```
+
+6. Buat symbolic link untuk file unggahan publik.
+
+   ```bash
+   php artisan storage:link
+   ```
+
+7. Jalankan server aplikasi dan Vite pada terminal terpisah.
+
+   ```bash
+   php artisan serve
+   npm run dev
+   ```
+
+   Aplikasi tersedia di URL yang ditampilkan oleh `php artisan serve`.
+
+8. Untuk membatalkan reservasi pending secara otomatis, jalankan scheduler pada lingkungan lokal atau daftarkan cron di server.
+
+   ```bash
+   php artisan schedule:work
+   ```
+
+   Produksi dapat menjalankan `php artisan schedule:run` setiap menit. Scheduler memanggil `bookings:expire-pending` setiap menit.
+
+## Project Structure
+
+```text
+app/
+  Console/Commands/       Perintah Artisan, termasuk kedaluwarsa reservasi
+  Exports/                Ekspor data transaksi
+  Http/Controllers/       Callback Midtrans dan controller HTTP
+  Http/Middleware/        Middleware otorisasi admin
+  Livewire/               Komponen halaman pelanggan dan admin
+  Models/                 Model Eloquent
+  View/Components/        Komponen Blade berbasis class
+bootstrap/
+  app.php                 Alias middleware dan pengecualian CSRF Midtrans
+config/                   Konfigurasi Laravel, booking, dan Midtrans
+database/
+  migrations/             Skema database
+  seeders/                Data awal aplikasi
+public/                   Entry point dan aset publik
+resources/
+  css/                    CSS sumber
+  js/                     Entry point Livewire dan interaksi frontend
+  views/                  Layout, komponen Blade, dan view Livewire
+routes/
+  web.php                 Rute HTTP utama
+  console.php             Jadwal perintah Artisan
+```
+
+## Environment Variables
+
+Salin `.env.example` menjadi `.env`. Jangan commit file `.env` atau kredensial pembayaran.
+
+| Variabel | Keterangan |
+| --- | --- |
+| `APP_NAME`, `APP_ENV`, `APP_KEY`, `APP_DEBUG`, `APP_URL` | Identitas dan mode aplikasi Laravel |
+| `APP_LOCALE`, `APP_FALLBACK_LOCALE`, `APP_TIMEZONE` | Bahasa dan zona waktu aplikasi |
+| `DB_CONNECTION`, `DB_HOST`, `DB_PORT`, `DB_DATABASE`, `DB_USERNAME`, `DB_PASSWORD` | Koneksi database utama |
+| `SESSION_DRIVER`, `CACHE_STORE`, `QUEUE_CONNECTION` | Driver sesi, cache, dan antrean. Template menggunakan database untuk ketiganya. |
+| `FILESYSTEM_DISK` | Disk penyimpanan Laravel untuk unggahan |
+| `MAIL_MAILER`, `MAIL_HOST`, `MAIL_PORT`, `MAIL_USERNAME`, `MAIL_PASSWORD`, `MAIL_FROM_ADDRESS`, `MAIL_FROM_NAME` | Konfigurasi email |
+| `MIDTRANS_CLIENT_KEY`, `MIDTRANS_SERVER_KEY` | Kredensial API Midtrans |
+| `MIDTRANS_IS_PRODUCTION` | Gunakan `false` untuk Sandbox dan `true` untuk Production |
+| `MIDTRANS_IS_SANITIZED`, `MIDTRANS_IS_3DS` | Pengaturan sanitasi dan 3DS Midtrans |
+| `BOOKING_HOLD_MINUTES` | Durasi reservasi berstatus pending sebelum dibatalkan. Default: `30`. |
+| `VITE_APP_NAME` | Nama aplikasi yang tersedia untuk bundle Vite |
+
+Endpoint callback pembayaran adalah `POST /midtrans/callback`. Endpoint ini dikecualikan dari validasi CSRF agar notifikasi Midtrans dapat diterima.
+
+### Testing Environment
+
+Pengujian hanya boleh memakai database MySQL terpisah bernama `sitio_tio_testing`. Salin `.env.testing.example` menjadi `.env.testing`, lalu buat database dan pengguna khusus berikut.
 
 ```sql
 CREATE DATABASE sitio_tio_testing CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
@@ -32,48 +159,48 @@ GRANT ALL PRIVILEGES ON sitio_tio_testing.* TO 'sitio_tio_test'@'127.0.0.1';
 FLUSH PRIVILEGES;
 ```
 
-Set the matching credentials in the ignored `.env.testing`, using `.env.testing.example` as the reference. `Tests\TestCase` refuses to run if the active connection is not MySQL or if its database is not the value of `TEST_DB_DATABASE` from `phpunit.xml`.
+`Tests\TestCase` akan menghentikan test bila koneksi bukan MySQL atau database tidak sama dengan `TEST_DB_DATABASE` di `phpunit.xml`.
 
-## Learning Laravel
+## Useful Commands
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+| Perintah | Fungsi |
+| --- | --- |
+| `php artisan serve` | Menjalankan server pengembangan Laravel |
+| `npm run dev` | Menjalankan Vite development server dengan HMR |
+| `npm run build` | Membuat bundle frontend produksi |
+| `php artisan migrate --seed` | Menjalankan migrasi dan data awal |
+| `php artisan migrate:fresh --seed` | Menghapus seluruh tabel, lalu membuat ulang skema dan data awal |
+| `php artisan storage:link` | Membuat link storage publik untuk unggahan |
+| `php artisan test` | Menjalankan seluruh test |
+| `php artisan test tests/Feature/Livewire/RoomsAdminTest.php` | Menjalankan satu file test |
+| `php artisan test --filter="stores a room"` | Menjalankan test berdasarkan nama |
+| `php artisan bookings:expire-pending` | Membatalkan reservasi pending yang sudah melewati tenggat |
+| `php artisan schedule:work` | Menjalankan scheduler secara terus-menerus |
+| `php artisan optimize:clear` | Membersihkan cache konfigurasi, rute, view, dan aplikasi |
+| `php artisan route:list` | Menampilkan seluruh rute terdaftar |
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+## Troubleshooting
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+### `Base table or view not found`
 
-## Laravel Sponsors
+Pastikan konfigurasi database pada `.env` benar, lalu jalankan `php artisan migrate --seed`. Karena sesi, cache, dan antrean pada template memakai driver database, migrasi wajib dijalankan sebelum aplikasi digunakan.
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+### Gambar unggahan tidak tampil
 
-### Premium Partners
+Jalankan `php artisan storage:link`. Pastikan `FILESYSTEM_DISK` dan izin direktori `storage` sudah benar.
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[WebReinvent](https://webreinvent.com/)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Jump24](https://jump24.co.uk)**
-- **[Redberry](https://redberry.international/laravel/)**
-- **[Active Logic](https://activelogic.com)**
-- **[byte5](https://byte5.de)**
-- **[OP.GG](https://op.gg)**
+### Pembayaran Midtrans tidak berjalan
 
-## Contributing
+Periksa `MIDTRANS_CLIENT_KEY`, `MIDTRANS_SERVER_KEY`, dan `MIDTRANS_IS_PRODUCTION`. Untuk webhook, URL publik harus dapat dijangkau Midtrans dan diarahkan ke `/midtrans/callback`.
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+### Perubahan Tailwind atau JavaScript tidak terlihat
 
-## Code of Conduct
+Jalankan `npm run dev` saat pengembangan. Untuk build produksi, jalankan `npm run build`, kemudian bersihkan cache Laravel dengan `php artisan optimize:clear` bila diperlukan.
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+### Test gagal sebelum dijalankan
 
-## Security Vulnerabilities
+Buat `.env.testing` dari `.env.testing.example` dan pastikan database `sitio_tio_testing` tersedia. Test sengaja menolak koneksi selain MySQL dan database pengembangan agar data lokal tidak terhapus oleh `RefreshDatabase`.
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+### Reservasi pending tidak berubah menjadi dibatalkan
 
-## License
-
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+Jalankan `php artisan bookings:expire-pending` untuk memeriksa proses secara manual. Agar otomatis, jalankan `php artisan schedule:work` secara lokal atau konfigurasi cron produksi setiap menit.
