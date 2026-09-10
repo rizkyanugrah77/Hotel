@@ -10,9 +10,11 @@
   <img src="https://img.shields.io/badge/Midtrans-Payment-002B80" alt="Midtrans Payment">
 </p>
 
-Aplikasi reservasi hotel berbasis web. Pengunjung dapat melihat kamar, membuat pemesanan, dan menyelesaikan pembayaran melalui Midtrans. Administrator dapat mengelola kamar, unit kamar, fasilitas, galeri, promo, reservasi, transaksi, dan data tamu.
+
 
 ## About Project
+
+Aplikasi reservasi hotel berbasis web. Pengunjung dapat melihat kamar, membuat pemesanan, dan menyelesaikan pembayaran melalui Midtrans. Administrator dapat mengelola kamar, unit kamar, fasilitas, galeri, promo, reservasi, transaksi, dan data tamu.
 
 Aplikasi ini menyediakan alur pemesanan dari pencarian kamar sampai pembayaran dan status pembayaran. Reservasi yang belum dibayar akan dibatalkan otomatis setelah melewati batas waktu yang ditentukan. Area admin dilindungi oleh autentikasi, verifikasi email, dan middleware peran admin.
 
