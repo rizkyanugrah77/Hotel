@@ -24,6 +24,7 @@ return new class extends Migration
                 'maintenance',
             ])->default('available');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

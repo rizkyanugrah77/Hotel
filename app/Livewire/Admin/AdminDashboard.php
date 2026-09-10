@@ -2,6 +2,7 @@
 
 namespace App\Livewire\Admin;
 
+use App\Enums\PaymentStatus;
 use App\Models\Booking;
 use App\Models\Payment;
 use App\Models\Room;
@@ -26,7 +27,7 @@ class AdminDashboard extends Component
 
     public function mount(): void
     {
-        $this->reportDate = today()->format('Y-m-d ');
+        $this->reportDate = today()->format('Y-m-d');
         $this->reportMonth = today()->format('Y-m');
         $this->reportYear = today()->year;
     }
@@ -44,9 +45,6 @@ class AdminDashboard extends Component
             ->latest()
             ->paginate(5);
 
-        $totalRevenue = Booking::where('status', 'paid')->sum('total_price');
-        $totalBookings = Booking::count();
-        $activeBookings = Booking::where('status', 'pending')->count();
         $totalRoomUnits = RoomUnit::count();
         $chartCapacity = max($totalRoomUnits, 1);
 
@@ -62,7 +60,7 @@ class AdminDashboard extends Component
         }
 
         $successfulPayments = Payment::query()
-            ->whereRaw('LOWER(transaction_status) = ?', ['success'])
+            ->whereIn('transaction_status', PaymentStatus::successful())
             ->whereBetween('created_at', [$currentStart, $currentEnd])
             ->get(['created_at']);
 
@@ -82,7 +80,7 @@ class AdminDashboard extends Component
             $successData = collect(range(1, 12))->map(fn($month) => min($successfulPaymentsByPeriod->get($month, 0), $chartCapacity));
         }
 
-        $paidStatuses = ['success', 'capture', 'settlement', 'paid',];
+        $paidStatuses = PaymentStatus::successful();
         $paymentMethods = Payment::query()
             ->selectRaw("COALESCE(payment_method, 'Lainnya') as payment_type, COUNT(*) as total")
             ->whereIn('transaction_status', $paidStatuses)
@@ -107,21 +105,38 @@ class AdminDashboard extends Component
             ],
         ];
 
+        $periodPayments = Payment::query()
+            ->whereBetween('created_at', [$currentStart, $currentEnd]);
+
         $statusChartData = [
-            'labels' => ['Berhasil', 'Pending', 'Expired', 'Dibatalkan'],
+            'labels' => ['Berhasil', 'Pending', 'Gagal', 'Kedaluwarsa', 'Dibatalkan', 'Dikembalikan'],
             'data' => [
-                Payment::whereIn('transaction_status', $paidStatuses)->count(),
-                Payment::whereIn('transaction_status', ['pending', 'challenge'])->count(),
-                Payment::whereIn('transaction_status', ['deny', 'expired'])->count(),
-                Payment::whereIn('transaction_status', ['cancelled', 'cancel'])->count(),
+                (clone $periodPayments)->whereIn('transaction_status', $paidStatuses)->count(),
+                (clone $periodPayments)->whereIn('transaction_status', PaymentStatus::pending())->count(),
+                (clone $periodPayments)->whereIn('transaction_status', [PaymentStatus::FAILED->value])->count(),
+                (clone $periodPayments)->whereIn('transaction_status', [PaymentStatus::EXPIRED->value])->count(),
+                (clone $periodPayments)->whereIn('transaction_status', [PaymentStatus::CANCEL->value])->count(),
+                (clone $periodPayments)->whereIn('transaction_status', [PaymentStatus::REFUND->value])->count(),
             ],
         ];
 
-        $roomStats = $rooms->groupBy('name')->map(function ($group) {
+        $occupiedUnitIds = Booking::query()
+            ->whereIn('status', ['paid', 'checked_in'])
+            ->where('check_in', '<', $currentEnd)
+            ->where('check_out', '>', $currentStart)
+            ->pluck('room_unit_id')
+            ->filter()
+            ->unique();
+        $occupiedRoomUnits = $occupiedUnitIds->count();
+        $occupancyRate = $totalRoomUnits > 0 ? round(($occupiedRoomUnits / $totalRoomUnits) * 100, 1) : 0;
+
+        $roomStats = $rooms->groupBy('name')->map(function ($group) use ($occupiedUnitIds) {
+            $occupied = $group->flatMap->units->whereIn('id', $occupiedUnitIds)->count();
+
             return [
-                'total' => $group->count(),
-                'occupied' => $group->where('status', '!=', 'cancelled')->count(),
-                'available' => $group->where('status', 'cancelled')->count(),
+                'total' => $group->flatMap->units->count(),
+                'occupied' => $occupied,
+                'available' => $group->flatMap->units->count() - $occupied,
             ];
         });
 
@@ -131,14 +146,8 @@ class AdminDashboard extends Component
 
         $totalRevenue = Payment::whereIn('transaction_status', $paidStatuses)->sum('sub_total_amount');
         $totalBookings = Booking::where('status', '!=', 'cancelled')->count();
-        $activeBookings = Booking::where('status', ['pending', 'checked_in', 'paid'])->count();
-        $pendingArrivals = Booking::where('status', 'pending')->whereDate('created_at', Carbon::today())->count();
-        // $totalRoomUnits = RoomUnit::count();
-        // $chartCapacity = max($totalRoomUnits, 1);
-        // $bookingCounts = Booking::selectRaw('DATE(check_in_date) as date, COUNT(*) as count')
-        //     ->where('status', 'checked_in')
-        //     ->groupBy('date')
-        //     ->get();
+        $activeBookings = Booking::whereIn('status', ['pending', 'checked_in', 'paid'])->count();
+        $pendingArrivals = Booking::where('status', 'pending')->whereDate('check_in', Carbon::today())->count();
 
         return view('admin.dashboard', compact(
             'rooms',
@@ -153,6 +162,9 @@ class AdminDashboard extends Component
             'statusChartData',
             'chartCapacity',
             'totalRoomUnits',
+            'occupiedRoomUnits',
+            'occupancyRate',
+            'occupiedUnitIds',
             'pendingArrivals'
         ))->layout('layouts.app');
     }

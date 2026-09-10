@@ -2,6 +2,7 @@
 
 namespace App\Livewire\welcome;
 
+use App\Enums\PaymentStatus;
 use App\Models\Booking;
 use App\Models\Payment;
 use App\Models\Promo;
@@ -40,7 +41,7 @@ class PaymentController extends Component
 
     public int $tax_amount = 0;
 
-    public string $transaction_status = 'pending';
+    public string $transaction_status = PaymentStatus::PENDING->value;
 
     public $bookingCode;
 
@@ -118,7 +119,7 @@ class PaymentController extends Component
                 'transaction_id' => Str::random(10), // Placeholder until webhook updates it
                 'snap_token' => $snap->token,
                 'payment_method' => $this->payment_method,
-                'transaction_status' => 'pending',
+                'transaction_status' => PaymentStatus::PENDING->value,
             ]);
 
             // 5. Redirect user to Midtrans payment page

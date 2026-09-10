@@ -13,7 +13,7 @@ return new class extends Migration
         DB::table('room_units')->where('status', 'occupied')->update(['status' => 'available']);
 
         Schema::table('room_units', function (Blueprint $table) {
-            $table->enum('status', ['available', 'maintenance'])->default('available')->change();
+            $table->enum('status', ['available', 'occupied', 'maintenance'])->default('available')->change();
         });
 
         Schema::table('bookings', function (Blueprint $table) {

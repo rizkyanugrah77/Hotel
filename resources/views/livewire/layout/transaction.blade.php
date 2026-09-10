@@ -239,10 +239,12 @@
                 <select id="filterStatus" wire:model.live="filterStatus"
                     class="input min-w-0 w-full py-2 text-sm lg:w-40">
                     <option value="">Semua Status</option>
-                    <option value="success">Berhasil</option>
-                    <option value="pending">Pending</option>
-                    <option value="failed">Gagal</option>
-                    <option value="cancelled">Dibatalkan</option>
+                    <option value="SUCCESS">Berhasil</option>
+                    <option value="PENDING">Pending</option>
+                    <option value="FAILED">Gagal</option>
+                    <option value="EXPIRED">Kedaluwarsa</option>
+                    <option value="CANCEL">Dibatalkan</option>
+                    <option value="REFUND">Dikembalikan</option>
                 </select>
             </div>
         </div>

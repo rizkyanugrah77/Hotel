@@ -10,6 +10,7 @@ use Livewire\Component;
 class RoomUnitAdmin extends Component
 {
     public ?int $roomUnitId = null;
+    public ?int $roomUnitToDelete = null;
     public ?int $roomId = null;
     public string $roomName = '';
     public string $roomSlug = '';
@@ -59,18 +60,38 @@ class RoomUnitAdmin extends Component
         $this->dispatch('open-modal-edit-unit');
     }
 
-    // public function confirmDelete(int $id): void
-    // {
-    //     $this->roomUnitId = $id;
-    //     $this->dispatch('room-unit-delete-confirmation');
-    // }
+    public function confirmDelete(int $id): void
+    {
+        $this->roomUnitToDelete = RoomUnit::query()
+            ->where('room_id', $this->roomId)
+            ->findOrFail($id)
+            ->id;
+
+        $this->dispatch('room-unit-delete-confirmation');
+    }
 
     public function deleteUnit(): void
     {
-        $unit = RoomUnit::findOrFail($this->roomUnitId);
-        // TODO: Check if unit is occupied
+        abort_unless($this->roomUnitToDelete, 404);
+
+        $unit = RoomUnit::query()
+            ->where('room_id', $this->roomId)
+            ->findOrFail($this->roomUnitToDelete);
+
+        if ($unit->bookings()->exists()) {
+            $this->dispatch('room-unit-error', message: 'Unit tidak bisa dihapus karena sudah memiliki riwayat booking.');
+            return;
+        }
+
+        if ($unit->status === 'occupied') {
+            $this->dispatch('room-unit-error', message: 'Unit tidak bisa dihapus karena sedang digunakan.');
+            return;
+        }
+
         $unit->delete();
-        $this->dispatch('success', message: 'Unit berhasil dihapus.');
+        $this->roomUnitToDelete = null;
+
+        $this->dispatch('room-unit-deleted', message: 'Unit berhasil dihapus.');
     }
 
     public function render()

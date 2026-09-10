@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\PaymentStatus;
 use App\Models\Booking;
 use App\Models\Payment;
 use App\Models\RoomUnit;
@@ -45,9 +46,9 @@ class MidtransController extends Controller
         // Validasi Signature
         $mySignature = hash(
             'sha512',
-            $orderId.
-                $statusCode.
-                $grossAmount.
+            $orderId .
+                $statusCode .
+                $grossAmount .
                 config('midtrans.serverKey')
         );
 
@@ -73,14 +74,14 @@ class MidtransController extends Controller
             $unit = RoomUnit::whereKey($booking->room_unit_id)->lockForUpdate()->first();
             $paymentStatus = match ($transaction) {
                 'capture' => $type === 'credit_card' && $fraud === 'challenge'
-                    ? 'CHALLENGE'
-                    : 'SUCCESS',
-                'settlement' => 'SUCCESS',
-                'pending' => 'PENDING',
-                'deny' => 'FAILED',
-                'expire' => 'EXPIRED',
-                'cancel' => 'CANCEL',
-                'refund' => 'REFUND',
+                    ? PaymentStatus::CHALLENGE->value
+                    : PaymentStatus::SUCCESS->value,
+                'settlement' => PaymentStatus::SUCCESS->value,
+                'pending' => PaymentStatus::PENDING->value,
+                'deny' => PaymentStatus::FAILED->value,
+                'expire' => PaymentStatus::EXPIRED->value,
+                'cancel' => PaymentStatus::CANCEL->value,
+                'refund' => PaymentStatus::REFUND->value,
                 default => null,
             };
 
@@ -88,13 +89,13 @@ class MidtransController extends Controller
                 return true;
             }
 
-            $finalPaymentStatuses = ['FAILED', 'EXPIRED', 'CANCEL', 'REFUND'];
+            $finalPaymentStatuses = PaymentStatus::failed();
 
             if (in_array($payment->transaction_status, $finalPaymentStatuses, true)) {
                 return true;
             }
 
-            if ($payment->transaction_status === 'SUCCESS' && $paymentStatus !== 'REFUND') {
+            if ($payment->transaction_status === PaymentStatus::SUCCESS->value && $paymentStatus !== PaymentStatus::REFUND->value) {
                 return true;
             }
 
@@ -105,38 +106,40 @@ class MidtransController extends Controller
                 // 'payment_method' => $payment_type,
             ]);
 
-            if ($paymentStatus === 'SUCCESS' && $booking->status === 'pending') {
+            if ($paymentStatus === PaymentStatus::SUCCESS->value && $booking->status === 'pending') {
                 $holdIsActive = $booking->expires_at?->isFuture() ?? false;
+
                 $unitHasConflict = ! $unit
                     || $unit->status !== 'available'
                     || Booking::query()
-                        ->where('room_unit_id', $booking->room_unit_id)
-                        ->whereKeyNot($booking->id)
-                        ->where('check_in', '<', $booking->check_out)
-                        ->where('check_out', '>', $booking->check_in)
-                        ->where(function ($query) {
-                            $query->whereIn('status', ['paid', 'checked_in'])
-                                ->orWhere(function ($query) {
-                                    $query->where('status', 'pending')->where('expires_at', '>', now());
-                                });
-                        })
-                        ->exists();
+                    ->where('room_unit_id', $booking->room_unit_id)
+                    ->whereKeyNot($booking->id)
+                    ->where('check_in', '<', $booking->check_out)
+                    ->where('check_out', '>', $booking->check_in)
+                    ->where(function ($query) {
+                        $query->whereIn('status', ['paid', 'checked_in'])
+                            ->orWhere(function ($query) {
+                                $query->where('status', 'pending')->where('expires_at', '>', now());
+                            });
+                    })
+                    ->exists();
+
 
                 // A successful charge after an expired or displaced hold must not confirm the unit.
                 $booking->update(['status' => $holdIsActive && ! $unitHasConflict ? 'paid' : 'cancelled']);
             }
 
-            if ($paymentStatus === 'REFUND' && $booking->status === 'paid') {
+            if ($paymentStatus === PaymentStatus::REFUND->value && $booking->status === 'paid') {
                 $booking->update(['status' => 'refunded']);
             }
 
             if (
-                in_array($paymentStatus, ['FAILED', 'EXPIRED', 'CANCEL', 'REFUND'], true)
+                in_array($paymentStatus, PaymentStatus::failed(), true)
                 && $booking->status === 'pending'
             ) {
                 $hasOtherActivePayment = Payment::where('booking_id', $booking->id)
                     ->where('id', '!=', $payment->id)
-                    ->whereIn('transaction_status', ['pending', 'PENDING', 'CHALLENGE', 'SUCCESS'])
+                    ->whereIn('transaction_status', [...PaymentStatus::pending(), PaymentStatus::SUCCESS->value])
                     ->exists();
 
                 if (! $hasOtherActivePayment) {

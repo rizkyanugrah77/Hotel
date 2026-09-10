@@ -1,4 +1,4 @@
-<div>
+<div x-data x-on:guest-detail.window="$dispatch('open-modal', 'guest-detail')">
     <x-slot name="header">
         <div
             class="flex h-16 flex-shrink-0 items-center justify-between border-b border-gray-200 bg-white px-4 sm:px-6 lg:h-20 lg:px-8">
@@ -133,12 +133,16 @@
                                         </p>
                                     </div>
                                 </div>
-                                @if ($guest->address)
-                                    <p class="mt-2 truncate text-xs text-gray-500">{{ $guest->address }}</p>
-                                @endif
-                            </div>
-                        </div>
-                    </article>
+                                 @if ($guest->address)
+                                     <p class="mt-2 truncate text-xs text-gray-500">{{ $guest->address }}</p>
+                                 @endif
+                                <button type="button" wire:click="showGuest({{ $guest->id }})"
+                                    class="mt-3 min-h-11 text-sm font-medium text-primary hover:text-primary/80 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary">
+                                    Lihat detail
+                                </button>
+                             </div>
+                         </div>
+                     </article>
                 @empty
                     <div class="flex flex-col items-center gap-3 px-4 py-12 text-center">
                         <svg class="h-12 w-12 text-gray-300" fill="none" viewBox="0 0 24 24" stroke-width="1"
@@ -163,8 +167,9 @@
                             <th class="px-4 py-3 font-medium">Identitas</th>
                             <th class="px-4 py-3 font-medium">Warga Negara</th>
                             <th class="px-4 py-3 font-medium">Bookings</th>
-                            <th class="px-4 py-3 font-medium">Total Spent</th>
-                            <th class="px-4 py-3 font-medium">Joined</th>
+                             <th class="px-4 py-3 font-medium">Total Spent</th>
+                             <th class="px-4 py-3 font-medium">Joined</th>
+                             <th class="px-4 py-3 font-medium"><span class="sr-only">Aksi</span></th>
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-gray-100">
@@ -207,13 +212,19 @@
                                 <td class="px-4 py-3 font-medium">
                                     {{ $guest->total_spent ? 'Rp ' . number_format($guest->total_spent, 0, ',', '.') : '—' }}
                                 </td>
-                                <td class="px-4 py-3 text-gray-500">
-                                    {{ $guest->created_at->format('d M Y') }}
-                                </td>
+                                 <td class="px-4 py-3 text-gray-500">
+                                     {{ $guest->created_at->format('d M Y') }}
+                                 </td>
+                                 <td class="px-4 py-3 text-right">
+                                     <button type="button" wire:click="showGuest({{ $guest->id }})"
+                                         class="min-h-11 px-2 text-sm font-medium text-primary hover:text-primary/80 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary">
+                                         Detail
+                                     </button>
+                                 </td>
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="7" class="py-12 text-center">
+                                <td colspan="10" class="py-12 text-center">
                                     <div class="flex flex-col items-center gap-3">
                                         <svg class="w-12 h-12 text-gray-300" fill="none" viewBox="0 0 24 24"
                                             stroke-width="1" stroke="currentColor">
@@ -236,5 +247,151 @@
                 </div>
             @endif
         </div>
+
+        <x-modal-2 name="guest-detail" title="Detail Guest" maxWidth="3xl" focusable>
+            @if ($selectedGuest)
+                @php
+                    $guestInitials = collect(explode(' ', trim($selectedGuest->name)))
+                        ->filter()
+                        ->map(fn ($name) => mb_strtoupper(mb_substr($name, 0, 1)))
+                        ->take(2)
+                        ->implode('');
+                    $gender = match ($selectedGuest->gender) {
+                        'male' => 'Laki-laki',
+                        'female' => 'Perempuan',
+                        default => 'Belum diisi',
+                    };
+                    $nationality = match ($selectedGuest->nationality) {
+                        'indonesian' => 'WNI',
+                        null, '' => 'Belum diisi',
+                        default => ucfirst($selectedGuest->nationality),
+                    };
+                @endphp
+
+                <div class="space-y-7">
+                    <section class="rounded-xl bg-gray-50 p-4 sm:p-5">
+                        <div class="flex items-start gap-4">
+                            <div class="flex h-14 w-14 shrink-0 items-center justify-center rounded-xl bg-primary font-poppins text-lg font-semibold text-white">
+                                {{ $guestInitials }}
+                            </div>
+                            <div class="min-w-0 self-center">
+                                <h4 class="break-words font-poppins text-xl font-bold text-gray-900 sm:text-2xl">{{ $selectedGuest->name }}</h4>
+                                <p class="mt-1 break-all text-sm text-gray-600">{{ $selectedGuest->email }}</p>
+                            </div>
+                        </div>
+                        <dl class="mt-5 grid gap-4 border-t border-gray-200 pt-4 sm:grid-cols-[1fr_2fr]">
+                            <div class="min-w-0">
+                                <dt class="text-sm text-gray-600">Total booking</dt>
+                                <dd class="mt-1 font-poppins text-2xl font-semibold tabular-nums text-gray-900">{{ $selectedGuest->bookings_count }}</dd>
+                            </div>
+                            <div class="min-w-0 sm:border-l sm:border-gray-200 sm:pl-6">
+                                <dt class="text-sm text-gray-600">Total pembayaran berhasil</dt>
+                                <dd class="mt-1 break-words font-poppins text-2xl font-semibold tabular-nums text-gray-900">Rp{{ number_format($selectedGuest->total_spent ?? 0, 0, ',', '.') }}</dd>
+                            </div>
+                        </dl>
+                    </section>
+
+                    <section>
+                        <h4 class="font-poppins text-base font-semibold text-gray-900">Informasi Guest</h4>
+                        <dl class="mt-4 grid gap-x-8 gap-y-4 text-sm sm:grid-cols-2 [&_dd]:break-words">
+                            <div>
+                                <dt class="text-gray-500">Nomor telepon</dt>
+                                <dd class="mt-1 font-medium text-gray-800">{{ $selectedGuest->phone ?: 'Belum diisi' }}</dd>
+                            </div>
+                            <div>
+                                <dt class="text-gray-500">Jenis kelamin</dt>
+                                <dd class="mt-1 font-medium text-gray-800">{{ $gender }}</dd>
+                            </div>
+                            <div>
+                                <dt class="text-gray-500">Kewarganegaraan</dt>
+                                <dd class="mt-1 font-medium text-gray-800">{{ $nationality }}</dd>
+                            </div>
+                            <div>
+                                <dt class="text-gray-500">Terdaftar sejak</dt>
+                                <dd class="mt-1 font-medium text-gray-800">{{ $selectedGuest->created_at->format('d M Y') }}</dd>
+                            </div>
+                            <div class="sm:col-span-2">
+                                <dt class="text-gray-500">Alamat</dt>
+                                <dd class="mt-1 whitespace-pre-line font-medium leading-relaxed text-gray-800">{{ $selectedGuest->address ?: 'Belum diisi' }}</dd>
+                            </div>
+                        </dl>
+                    </section>
+
+                    <section class="border-t border-gray-200 pt-6">
+                        <div class="flex flex-wrap items-baseline justify-between gap-2">
+                            <h4 class="font-poppins text-base font-semibold text-gray-900">Riwayat Booking</h4>
+                            <span class="text-xs text-gray-600">5 booking terbaru</span>
+                        </div>
+                        @error('receipt')
+                            <p role="alert" class="mt-3 rounded-lg bg-red-50 p-3 text-sm text-red-800">{{ $message }}</p>
+                        @enderror
+                        <div class="mt-4 space-y-3">
+                            @forelse ($selectedGuest->bookings as $booking)
+                                @php
+                                    $canDownloadReceipt = $booking->payments->contains('transaction_status', 'SUCCESS')
+                                        && in_array($booking->status, ['paid', 'checked_in', 'checked_out'], true);
+                                    [$statusLabel, $statusClass] = match ($booking->status) {
+                                        'paid' => ['Lunas', 'bg-emerald-50 text-emerald-800'],
+                                        'checked_in' => ['Check-in', 'bg-emerald-50 text-emerald-800'],
+                                        'checked_out' => ['Check-out', 'bg-gray-100 text-gray-700'],
+                                        'pending' => ['Menunggu pembayaran', 'bg-amber-50 text-amber-800'],
+                                        'cancelled' => ['Dibatalkan', 'bg-red-50 text-red-800'],
+                                        'expired' => ['Kedaluwarsa', 'bg-gray-100 text-gray-700'],
+                                        default => [ucfirst(str_replace('_', ' ', $booking->status)), 'bg-gray-100 text-gray-700'],
+                                    };
+                                @endphp
+                                <article wire:key="guest-booking-{{ $booking->id }}" class="rounded-xl border border-gray-200 p-4 sm:p-5">
+                                    <div class="flex flex-wrap items-start justify-between gap-3">
+                                        <div class="min-w-0">
+                                            <p class="break-all text-xs font-medium text-gray-600">{{ $booking->booking_code }}</p>
+                                            <h5 class="mt-1 break-words font-poppins font-semibold text-gray-900">{{ $booking->room?->name ?? 'Kamar tidak tersedia' }}</h5>
+                                        </div>
+                                        <span class="inline-flex rounded-md px-2.5 py-1 text-xs font-semibold {{ $statusClass }}">{{ $statusLabel }}</span>
+                                    </div>
+                                    <dl class="mt-4 grid grid-cols-2 gap-3 text-sm">
+                                        <div>
+                                            <dt class="text-xs text-gray-500">Check-in</dt>
+                                            <dd class="mt-1 font-medium text-gray-800">{{ $booking->check_in->format('d M Y') }}</dd>
+                                        </div>
+                                        <div>
+                                            <dt class="text-xs text-gray-500">Check-out</dt>
+                                            <dd class="mt-1 font-medium text-gray-800">{{ $booking->check_out->format('d M Y') }}</dd>
+                                        </div>
+                                    </dl>
+                                    <div class="mt-4 flex flex-col gap-3 border-t border-dashed border-gray-200 pt-4 sm:flex-row sm:items-center sm:justify-between">
+                                        <div class="min-w-0">
+                                            <p class="text-xs text-gray-500">Total booking</p>
+                                            <p class="mt-1 break-words text-lg font-semibold tabular-nums text-gray-900">Rp{{ number_format($booking->total_price, 0, ',', '.') }}</p>
+                                        </div>
+                                        <div class="sm:text-right">
+                                            <button type="button" wire:click="downloadReceipt({{ $booking->id }})"
+                                                wire:loading.attr="disabled" wire:target="downloadReceipt"
+                                                @disabled(! $canDownloadReceipt)
+                                                aria-label="Download receipt booking {{ $booking->booking_code }}"
+                                                @if (! $canDownloadReceipt) aria-describedby="receipt-unavailable-{{ $booking->id }}" @endif
+                                                class="inline-flex min-h-11 w-full items-center justify-center gap-2 rounded-lg border border-gray-500 px-4 py-2 text-sm font-semibold text-gray-800 transition-colors hover:bg-gray-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary disabled:cursor-not-allowed disabled:border-gray-200 disabled:bg-gray-50 disabled:text-gray-500 sm:w-auto">
+                                                <svg aria-hidden="true" class="h-4 w-4 shrink-0" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 3v12m0 0 4-4m-4 4-4-4M4 16v4a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-4" />
+                                                </svg>
+                                                <span wire:loading.remove wire:target="downloadReceipt({{ $booking->id }})">Download receipt</span>
+                                                <span wire:loading wire:target="downloadReceipt({{ $booking->id }})" role="status">Menyiapkan PDF...</span>
+                                            </button>
+                                            @if (! $canDownloadReceipt)
+                                                <p id="receipt-unavailable-{{ $booking->id }}" class="mt-2 text-xs text-gray-600">Receipt belum tersedia untuk booking ini.</p>
+                                            @endif
+                                        </div>
+                                    </div>
+                                </article>
+                            @empty
+                                <div class="rounded-xl border border-dashed border-gray-300 px-4 py-8 text-center">
+                                    <p class="font-semibold text-gray-800">Belum ada riwayat booking</p>
+                                    <p class="mt-1 text-sm text-gray-600">Guest ini belum memiliki booking.</p>
+                                </div>
+                            @endforelse
+                        </div>
+                    </section>
+                </div>
+            @endif
+        </x-modal-2>
     </main>
 </div>

@@ -142,7 +142,7 @@
             <tr>
                 <td class="label">Tipe Kamar</td>
                 <td class="value">
-                    {{ $payment->booking->room->name }}
+                    {{ $payment->booking->room?->name ?? 'Kamar tidak tersedia' }}
                 </td>
             </tr>
 

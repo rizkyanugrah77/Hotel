@@ -168,9 +168,21 @@ class RoomsAdmin extends Component
         abort_unless($this->roomToDelete, 404);
 
         $room = Room::findOrFail($this->roomToDelete);
+
+        if ($room->bookings()->exists()) {
+            $this->dispatch('room-error', message: 'Kamar tidak bisa dihapus karena sudah memiliki riwayat booking.', type: 'error');
+            return;
+        }
+
+        if ($room->units()->where('status', '!=', 'available')->exists()) {
+            $this->dispatch('room-error', message: 'Kamar tidak bisa dihapus karena masih memiliki unit yang belum tersedia.', type: 'error');
+            return;
+        }
+
         if ($room->image) {
             Storage::disk('public')->delete('assets/img/rooms/' . $room->image);
         }
+
         $room->delete();
         $this->roomToDelete = null;
 

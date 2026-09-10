@@ -7,10 +7,10 @@
         window.setTimeout(() => this.toast.show = false, 3000);
     }
 }" x-on:open-modal-edit-unit.window="$dispatch('open-modal', 'manage-room-unit')"
-    x-on:room-unit-saved.window="$dispatch('close-modal', 'manage-room-unit'), $dispatch('show-toast', $event.detail.message, $event.detail.type)"
-    x-on:room-number-deleted.window="$dispatch('close-modal', 'manage-room-unit'), $dispatch('show-toast', $event.detail.message, 'success')"
-    x-on:room-number-deleted.window="$dispatch('room-unit-delete-confirmation')"
-    x-on:room-number-deleted-error.window="$dispatch('show-toast', $event.detail.message, 'error')"
+    x-on:room-unit-saved.window="$dispatch('close-modal', 'manage-room-unit'); showToast($event.detail.message, $event.detail.type)"
+    x-on:room-unit-deleted.window="$dispatch('close-modal', 'room-unit-delete-confirmation'); showToast($event.detail.message, 'success')"
+    x-on:room-unit-delete-confirmation.window="$dispatch('open-modal', 'room-unit-delete-confirmation')"
+    x-on:room-unit-error.window="showToast($event.detail.message, 'error')"
     class="min-w-0 flex-1 overflow-y-auto p-4 sm:p-6 lg:p-8">
     <x-toast />
 
@@ -167,7 +167,7 @@
                                     <div class="flex justify-center">
                                         <x-edit-button :item="$unit" :title="'Edit unit'" action="edit" />
                                         <x-delete-button :item="$unit" :title="'Hapus unit'"
-                                            confirmDelete="confirmDelete " />
+                                            confirmDelete="confirmDelete" />
                                     </div>
                                 </td>
                             </tr>
@@ -246,7 +246,8 @@
                     <option value="maintenance">Maintenance</option>
                 </select>
                 @if ($status === 'occupied')
-                    <p class="mt-1 text-xs text-amber-700">Status unit berubah otomatis saat booking check-in/check-out.</p>
+                    <p class="mt-1 text-xs text-amber-700">Status unit berubah otomatis saat booking
+                        check-in/check-out.</p>
                 @endif
                 <x-input-error :message="$errors->first('status')" />
             </div>
@@ -266,11 +267,15 @@
     <x-modal-2 name="room-unit-delete-confirmation">
         <p>Apakah anda yakin ingin menghapus unit ini?</p>
         <div class="flex justify-end gap-2">
-            <button type="button" wire:click="deleteUnit" class="btn-primary">Hapus</button>
-            <button type="button" wire:click="$dispatch('close-modal-room-unit-delete-confirmation')"
+
+            <button type="button" @click="$dispatch('close-modal', 'room-unit-delete-confirmation')"
                 class="btn-secondary">
                 Batal
             </button>
+            <x-danger-button wire:click="deleteUnit" wire:loading.attr="disabled" type="button">
+                <span wire:loading.remove wire:target="deleteUnit">Hapus</span>
+                <span wire:loading wire:target="deleteUnit">Menghapus...</span>
+            </x-danger-button>
         </div>
     </x-modal-2>
 </div>

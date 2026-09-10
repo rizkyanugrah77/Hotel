@@ -2,6 +2,7 @@
 
 namespace App\Livewire\Admin;
 
+use App\Enums\PaymentStatus;
 use App\Exports\TransactionsExport;
 use App\Models\Booking;
 use App\Models\Payment;
@@ -101,10 +102,10 @@ class TransactionManager extends Component
             ->orderByDesc('total')
             ->get();
 
-        $paidStatuses = ['success', 'capture', 'settlement', 'deny', 'pending', 'expire'];
+        $paidStatuses = PaymentStatus::successful();
         $periodPaymentsQuery = $this->applyPeriodFilter(Payment::query());
-        $totalRevenue = (float) (clone $periodPaymentsQuery)->where('transaction_status', 'success')->sum('gross_amount');
-        $previousTotalRevenue = (float) $this->applyPreviousPeriodFilter(Payment::query())->where('transaction_status', 'success')->sum('gross_amount');
+        $totalRevenue = (float) (clone $periodPaymentsQuery)->whereIn('transaction_status', $paidStatuses)->sum('gross_amount');
+        $previousTotalRevenue = (float) $this->applyPreviousPeriodFilter(Payment::query())->whereIn('transaction_status', $paidStatuses)->sum('gross_amount');
 
         return view('livewire.layout.transaction', [
             'transactions' => $transactions,
@@ -115,12 +116,12 @@ class TransactionManager extends Component
                 'total_change' => $previousTotalRevenue > 0
                     ? (($totalRevenue - $previousTotalRevenue) / $previousTotalRevenue) * 100
                     : null,
-                'success' => (clone $periodPaymentsQuery)->where('transaction_status', 'success')->count(),
-                'pending' => (clone $periodPaymentsQuery)->where('transaction_status', 'pending')->count(),
+                'success' => (clone $periodPaymentsQuery)->whereIn('transaction_status', $paidStatuses)->count(),
+                'pending' => (clone $periodPaymentsQuery)->whereIn('transaction_status', PaymentStatus::pending())->count(),
                 'paid' => Booking::whereIn('status', ['paid', 'completed'])->count(),
                 'pending_booking' => Booking::where('status', 'pending')->count(),
-                'revenue' => (float) Payment::where('transaction_status', 'success')->sum('sub_total_amount'),
-                'total_tax' => (float) Payment::where('transaction_status', 'success')->sum('tax_amount'),
+                'revenue' => (float) (clone $periodPaymentsQuery)->whereIn('transaction_status', $paidStatuses)->sum('sub_total_amount'),
+                'total_tax' => (float) (clone $periodPaymentsQuery)->whereIn('transaction_status', $paidStatuses)->sum('tax_amount'),
                 'average' => (float) (clone $periodPaymentsQuery)->whereIn('transaction_status', $paidStatuses)->avg('gross_amount'),
                 'highest' => (float) (clone $periodPaymentsQuery)->whereIn('transaction_status', $paidStatuses)->max('gross_amount'),
             ],

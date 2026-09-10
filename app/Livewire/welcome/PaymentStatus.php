@@ -15,6 +15,7 @@ class PaymentStatus extends Component
 
     public function mount($orderId)
     {
+        $this->orderId = $orderId;
         $payment = Payment::with('booking', 'booking.room', 'user')->where('order_id', $orderId)->where('user_id', Auth::user()->id)->first();
 
         if ($payment == null) {

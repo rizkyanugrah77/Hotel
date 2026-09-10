@@ -21,6 +21,19 @@ Laravel is a web application framework with expressive, elegant syntax. We belie
 
 Laravel is accessible, powerful, and provides tools required for large, robust applications.
 
+## Testing database
+
+Tests use MySQL database `sitio_tio_testing`, never the development database. Create a dedicated database and user with a MySQL administrator account:
+
+```sql
+CREATE DATABASE sitio_tio_testing CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+CREATE USER 'sitio_tio_test'@'127.0.0.1' IDENTIFIED BY 'change-this-test-password';
+GRANT ALL PRIVILEGES ON sitio_tio_testing.* TO 'sitio_tio_test'@'127.0.0.1';
+FLUSH PRIVILEGES;
+```
+
+Set the matching credentials in the ignored `.env.testing`, using `.env.testing.example` as the reference. `Tests\TestCase` refuses to run if the active connection is not MySQL or if its database is not the value of `TEST_DB_DATABASE` from `phpunit.xml`.
+
 ## Learning Laravel
 
 Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.

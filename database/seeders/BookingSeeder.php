@@ -142,7 +142,7 @@ class BookingSeeder extends Seeder
                     'payment_type' => 'qris',
                     'transaction_id' => (string) Str::uuid(),
                     'snap_token' => Str::random(32),
-                    'transaction_status' => 'settlement',
+                    'transaction_status' => \App\Enums\PaymentStatus::SUCCESS->value,
                     'payment_method' => 'qris',
                 ]);
             }

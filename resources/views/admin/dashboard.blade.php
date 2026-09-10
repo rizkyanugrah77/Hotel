@@ -57,7 +57,7 @@
                 <div class="mb-3 flex items-start justify-between sm:mb-4">
                     <div>
                         <p class="mb-1 text-xs text-gray-500 sm:text-sm">Occupancy Rate</p>
-                        <h3 class="font-poppins text-lg font-bold text-foreground sm:text-2xl">{{ $totalRoomUnits }}
+                        <h3 class="font-poppins text-lg font-bold text-foreground sm:text-2xl">{{ $occupancyRate }}%
                         </h3>
                     </div>
                     <div
@@ -70,7 +70,8 @@
                     </div>
                 </div>
                 <div class="mt-2 h-1.5 w-full rounded-full bg-gray-200">
-                    <div class="h-1.5 rounded-full bg-blue-600" style="width: 78%"></div>
+                    <div class="h-1.5 rounded-full bg-blue-600" style="width: {{ $occupancyRate }}%"></div>
+                    <p class="mt-2 text-[11px] text-gray-500 sm:text-xs">{{ $occupiedRoomUnits }} dari {{ $totalRoomUnits }} unit</p>
                 </div>
             </div>
 
@@ -230,7 +231,7 @@
                                         datasets: [{
                                             label: 'Jumlah transaksi',
                                             data: {{ Js::from($statusChartData['data']) }},
-                                            backgroundColor: ['#059669', '#d97706', '#dc2626', '#64748b'],
+                                            backgroundColor: ['#059669', '#d97706', '#dc2626', '#7c3aed', '#64748b', '#0891b2'],
                                             borderRadius: 6
                                         }]
                                     },
@@ -394,12 +395,12 @@
                                 <div class="mb-1 flex justify-between text-xs sm:text-sm">
                                     <span class="truncate pr-3 text-gray-600">{{ $room->name }}</span>
                                     <span
-                                        class="font-medium badge-success">{{ $room->units->where('status', 'available')->count() }}
+                                        class="font-medium badge-success">{{ $room->units->whereNotIn('id', $occupiedUnitIds)->count() }}
                                         / {{ $room->units->count() }}</span>
                                 </div>
                                 <div class="h-1.5 w-full rounded-full bg-gray-100 sm:h-2">
                                     <div class="h-1.5 rounded-full bg-emerald-500 sm:h-2"
-                                        style="width: {{ $room->units->count() ? ($room->units->where('status', 'available')->count() / $room->units->count()) * 100 : 0 }}%">
+                                         style="width: {{ $room->units->count() ? ($room->units->whereNotIn('id', $occupiedUnitIds)->count() / $room->units->count()) * 100 : 0 }}%">
                                     </div>
                                 </div>
                             </div>

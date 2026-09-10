@@ -2,6 +2,7 @@
 
 namespace App\Livewire\welcome;
 
+use App\Enums\PaymentStatus;
 use App\Models\Booking;
 use App\Models\Payment;
 use App\Models\Promo;
@@ -43,7 +44,7 @@ class PaymentController extends Component
 
     public int $tax_amount = 0;
 
-    public string $transaction_status = 'pending';
+    public string $transaction_status = PaymentStatus::PENDING->value;
 
     public $bookingCode;
 
@@ -114,7 +115,7 @@ class PaymentController extends Component
                 }
 
                 $hasActivePayment = Payment::where('booking_id', $booking->id)
-                    ->whereIn('transaction_status', ['pending', 'PENDING', 'CHALLENGE'])
+                    ->whereIn('transaction_status', PaymentStatus::pending())
                     ->lockForUpdate()
                     ->exists();
 
@@ -130,7 +131,7 @@ class PaymentController extends Component
                     'sub_total_amount' => $this->sub_total_amount,
                     'tax_amount' => $this->tax_amount,
                     'gross_amount' => (int) $booking->total_price,
-                    'transaction_status' => 'PENDING',
+                    'transaction_status' => PaymentStatus::PENDING->value,
                 ]);
             }, 3);
 
@@ -163,7 +164,7 @@ class PaymentController extends Component
             return redirect()->away($snap->redirect_url);
         } catch (\Exception $e) {
             if (isset($payment)) {
-                $payment->update(['transaction_status' => 'FAILED']);
+                $payment->update(['transaction_status' => PaymentStatus::FAILED->value]);
             }
 
             report($e);
@@ -189,7 +190,7 @@ class PaymentController extends Component
             'transaction_id' => 'required|string|unique:payments,transaction_id',
             'snap_token' => 'required|string|unique:payments,snap_token',
             'payment_method' => 'nullable|string|max:255',
-            'transaction_status' => 'required|in:pending,settlement,deny,expire,capture,unpaid,cancel',
+            'transaction_status' => 'required|in:PENDING,CHALLENGE,SUCCESS,FAILED,EXPIRED,CANCEL,REFUND',
         ];
     }
 }
