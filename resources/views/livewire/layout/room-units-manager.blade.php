@@ -17,9 +17,14 @@
     @php
         $unitCollection = collect($units);
         $registeredUnits = $unitCollection->count();
-        $availableUnits = $unitCollection->where('status', 'available')->count();
-        $occupiedUnits = $unitCollection->where('status', 'occupied')->count();
+        $availableUnits = $unitCollection
+            ->filter(fn ($unit) => $unit->status === 'available' && ! in_array($unit->id, $occupiedUnitIds, true))
+            ->count();
+        $occupiedUnits = $unitCollection
+            ->filter(fn ($unit) => in_array($unit->id, $occupiedUnitIds, true))
+            ->count();
         $maintenanceUnits = $unitCollection->where('status', 'maintenance')->count();
+        $unavailableUnits = $occupiedUnits + $maintenanceUnits;
     @endphp
 
     <div class="mb-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
@@ -86,7 +91,7 @@
             <div class="flex items-start justify-between">
                 <div>
                     <p class="mb-1 text-sm font-medium text-amber-700">Tidak Tersedia</p>
-                    <h3 class="font-poppins text-2xl font-bold text-amber-800">{{ $occupiedUnits + $maintenanceUnits }}
+                    <h3 class="font-poppins text-2xl font-bold text-amber-800">{{ $unavailableUnits }}
                     </h3>
                 </div>
                 <div class="flex h-10 w-10 items-center justify-center rounded-xl bg-amber-600 text-white shadow-sm">
@@ -153,14 +158,15 @@
                                         <span class="font-semibold text-foreground">{{ $unit->room_number }}</span>
                                     </div>
                                 </td>
+                                @php($unitIsOccupied = in_array($unit->id, $occupiedUnitIds, true))
                                 <td class="px-6 py-4">
                                     <span @class([
                                         'inline-flex items-center rounded-full px-2.5 py-1 text-xs font-medium',
-                                        'bg-emerald-100 text-emerald-700' => $unit->status === 'available',
-                                        'bg-amber-100 text-amber-700' => $unit->status === 'occupied',
-                                        'bg-red-100 text-red-700' => $unit->status === 'maintenance',
+                                        'bg-emerald-100 text-emerald-700' => ! $unitIsOccupied && $unit->status === 'available',
+                                        'bg-amber-100 text-amber-700' => $unitIsOccupied,
+                                        'bg-red-100 text-red-700' => ! $unitIsOccupied && $unit->status === 'maintenance',
                                     ])>
-                                        {{ ucfirst($unit->status) }}
+                                        {{ $unitIsOccupied ? 'Occupied' : ucfirst($unit->status) }}
                                     </span>
                                 </td>
                                 <td class="px-6 py-4">
@@ -240,15 +246,12 @@
             </div>
             <div>
                 <x-input-label for="status" value="Status Unit" />
-                <select id="status" wire:model="status" class="mt-1" @disabled($status === 'occupied')>
+                <select id="status" wire:model="status" class="mt-1">
                     <option value="available">Available</option>
-                    <option value="occupied" disabled>Occupied (otomatis saat check-in)</option>
                     <option value="maintenance">Maintenance</option>
                 </select>
-                @if ($status === 'occupied')
-                    <p class="mt-1 text-xs text-amber-700">Status unit berubah otomatis saat booking
-                        check-in/check-out.</p>
-                @endif
+                <p class="mt-1 text-xs text-gray-500">Status ini hanya untuk kondisi operasional. Okupansi dihitung
+                    otomatis dari booking aktif.</p>
                 <x-input-error :message="$errors->first('status')" />
             </div>
 

@@ -99,12 +99,34 @@
         </div>
     </div>
 
-    <!-- Action Bar & Table -->
+    <!-- Action Bar & Calendar / Table -->
     <div class="mb-8 overflow-hidden rounded-2xl border border-gray-100 bg-white shadow-sm">
         <div class="grid grid-cols-1">
             <div
                 class="flex flex-col items-start justify-between gap-3 border-b border-gray-100 p-4 sm:p-5 lg:flex-row lg:items-center">
-                <h2 class="font-poppins text-lg font-bold">Daftar Booking</h2>
+                <div class="flex flex-wrap items-center gap-3">
+                    <h2 class="font-poppins text-lg font-bold text-foreground">Daftar Booking</h2>
+                    <div class="inline-flex rounded-xl border border-gray-200 bg-gray-50 p-1">
+                        <button type="button" wire:click="setViewMode('calendar')"
+                            class="inline-flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-semibold transition-all {{ $viewMode === 'calendar' ? 'bg-primary text-white shadow-sm' : 'text-gray-600 hover:text-gray-900' }}">
+                            <svg class="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke-width="2"
+                                stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round"
+                                    d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 0 1 2.25-2.25h13.5A2.25 2.25 0 0 1 21 7.5v11.25m-18 0A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75m-18 0v-7.5A2.25 2.25 0 0 1 5.25 9h13.5A2.25 2.25 0 0 1 21 11.25v7.5" />
+                            </svg>
+                            Kalender 7 Hari
+                        </button>
+                        <button type="button" wire:click="setViewMode('table')"
+                            class="inline-flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-semibold transition-all {{ $viewMode === 'table' ? 'bg-primary text-white shadow-sm' : 'text-gray-600 hover:text-gray-900' }}">
+                            <svg class="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke-width="2"
+                                stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round"
+                                    d="M3.75 12h16.5m-16.5 3.75h16.5M3.75 19.5h16.5M5.625 4.5h12.75a1.875 1.875 0 0 1 0 3.75H5.625a1.875 1.875 0 0 1 0-3.75Z" />
+                            </svg>
+                            Tabel
+                        </button>
+                    </div>
+                </div>
                 <div class="grid w-full grid-cols-2 gap-2 lg:flex lg:w-auto lg:items-center lg:gap-3">
                     <div class="relative">
                         <svg class="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" fill="none"
@@ -142,109 +164,412 @@
                 </div>
             </div>
 
-            <div class="divide-y divide-gray-100 md:hidden">
-                @forelse ($bookings as $booking)
-                    @php
-                        $statusClasses = match ($booking->status) {
-                            'paid' => 'badge-info',
-                            'checked_in' => 'badge-success',
-                            'pending' => 'badge-warning',
-                            'cancelled' => 'badge-danger',
-                            'checked_out' => 'badge-accent',
-                            'refunded' => 'badge-secondary',
-                            default => 'badge-primary',
-                        };
-                    @endphp
-                    <article wire:key="booking-mobile-{{ $booking->id }}" class="p-4">
-                        <div class="flex items-start justify-between gap-3">
-                            <div class="min-w-0">
-                                <p class="truncate font-semibold text-gray-900">{{ $booking->booking_code }}</p>
-                                <p class="mt-0.5 truncate text-sm text-gray-600">{{ $booking->user->name }}</p>
+            @if ($viewMode === 'calendar')
+                <div class="p-4 sm:p-5" x-data="{
+                    slideCalendar(amount) {
+                        if (this.$refs.calendarTrack) {
+                            this.$refs.calendarTrack.scrollBy({ left: amount, behavior: 'smooth' });
+                        }
+                    }
+                }">
+                    <!-- Calendar Navigation & Legend -->
+                    <div class="mb-4 flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
+                        <div class="flex flex-wrap items-center gap-2">
+                            <div class="inline-flex items-center rounded-xl border border-gray-200 bg-gray-50 p-1">
+                                <button type="button" wire:click="shiftCalendar(-7)"
+                                    class="rounded-lg px-2.5 py-1.5 text-xs font-medium text-gray-600 transition hover:bg-white hover:text-gray-900"
+                                    title="7 hari sebelumnya">
+                                    &laquo; 7H
+                                </button>
+                                <button type="button" wire:click="shiftCalendar(-1)"
+                                    class="rounded-lg px-2.5 py-1.5 text-xs font-medium text-gray-600 transition hover:bg-white hover:text-gray-900"
+                                    title="Hari sebelumnya">
+                                    &lsaquo; Prev
+                                </button>
+                                <button type="button" wire:click="resetCalendarToday"
+                                    class="rounded-lg bg-white px-3 py-1.5 text-xs font-semibold text-primary shadow-sm transition hover:bg-primary hover:text-white">
+                                    Hari Ini
+                                </button>
+                                <button type="button" wire:click="shiftCalendar(1)"
+                                    class="rounded-lg px-2.5 py-1.5 text-xs font-medium text-gray-600 transition hover:bg-white hover:text-gray-900"
+                                    title="Hari berikutnya">
+                                    Next &rsaquo;
+                                </button>
+                                <button type="button" wire:click="shiftCalendar(7)"
+                                    class="rounded-lg px-2.5 py-1.5 text-xs font-medium text-gray-600 transition hover:bg-white hover:text-gray-900"
+                                    title="7 hari berikutnya">
+                                    7H &raquo;
+                                </button>
                             </div>
-                            <span class="shrink-0 rounded-full px-2 py-1 text-xs font-medium  {{ $statusClasses }}">
-                                {{ ucwords(str_replace('_', ' ', $booking->status)) }}</span>
-                        </div>
-                        <div class="mt-3 rounded-lg bg-gray-50 p-3 text-sm">
-                            <p class="font-medium text-gray-800">{{ $booking->room->name }} No
-                                {{ $booking->roomUnit->room_number[2] }}</p>
-                            <p class="mt-1 text-xs text-gray-500">{{ $booking->check_in->format('d M Y') }} -
-                                {{ $booking->check_out->format('d M Y') }}</p>
-                        </div>
-                        <div class="mt-3 flex items-center justify-between text-sm">
-                            <span class="text-gray-500">{{ $booking->total_guests }} tamu</span>
-                            <span
-                                class="font-semibold text-emerald-700">Rp{{ number_format($booking->total_price, 0, ',', '.') }}</span>
-                        </div>
-                        <div class="mt-3 flex justify-end border-t border-gray-100 pt-3">
-                            <x-edit-button :item="$booking" action="edit" />
-                            <x-show-button :item="$booking" action="show" />
-                        </div>
-                    </article>
-                @empty
-                    <p class="px-4 py-12 text-center text-sm text-gray-500">Tidak ada booking ditemukan.</p>
-                @endforelse
-            </div>
 
-            <div class="hidden overflow-x-auto md:block">
-                <table class="w-full min-w-[850px] text-left text-sm" id="bookingsTable">
-                    <thead class="bg-gray-50 text-gray-500">
-                        <tr>
-                            <th class="px-4 py-3 font-medium">No</th>
-                            <th class="px-4 py-3 font-medium">Booking & Tamu</th>
-                            <th class="px-4 py-3 font-medium">Kamar</th>
-                            <th class="px-4 py-3 font-medium">Menginap</th>
-                            <th class="px-4 py-3 font-medium">Tamu</th>
-                            <th class="px-4 py-3 font-medium">Status</th>
-                            <th class="px-4 py-3 text-center font-medium">Aksi</th>
-                        </tr>
-                    </thead>
-                    <tbody class="divide-y divide-gray-100">
-                        @forelse ($bookings as $index => $booking)
-                            <tr wire:key="booking-{{ $booking->id }}" class="hover:bg-gray-50">
+                            <span class="rounded-xl bg-gray-100 px-3 py-1.5 text-xs font-semibold text-gray-700">
+                                {{ $calendarStart->format('d M') }} &ndash; {{ $calendarEnd->format('d M Y') }}
+                            </span>
+
+                            @if ($upcomingOutsideCount > 0)
+                                <button type="button" wire:click="shiftCalendar(7)"
+                                    class="inline-flex items-center gap-1 rounded-xl border border-primary/20 bg-primary/5 px-3 py-1.5 text-xs font-semibold text-primary transition hover:bg-primary/10">
+                                    <span>{{ $upcomingOutsideCount }} booking di tanggal berikutnya</span>
+                                    <svg class="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke-width="2"
+                                        stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round"
+                                            d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3" />
+                                    </svg>
+                                </button>
+                            @endif
+                        </div>
+
+                        <div class="flex flex-wrap items-center justify-between gap-3">
+                            <!-- Status Legend -->
+                            <div class="flex flex-wrap items-center gap-x-3 gap-y-1.5 text-xs text-gray-600">
+                                <span class="inline-flex items-center gap-1.5 font-medium text-emerald-700">
+                                    <span class="h-2.5 w-2.5 rounded-full bg-emerald-500"></span>
+                                    Checked-in
+                                </span>
+                                <span class="inline-flex items-center gap-1.5">
+                                    <span class="h-2.5 w-2.5 rounded-full bg-sky-500"></span>
+                                    Paid
+                                </span>
+                                <span class="inline-flex items-center gap-1.5">
+                                    <span class="h-2.5 w-2.5 rounded-full bg-amber-500"></span>
+                                    Pending
+                                </span>
+                                <span class="inline-flex items-center gap-1.5">
+                                    <span class="h-2.5 w-2.5 rounded-full bg-slate-400"></span>
+                                    Checked-out
+                                </span>
+                                <span class="inline-flex items-center gap-1.5">
+                                    <span class="h-2.5 w-2.5 rounded-full bg-rose-500"></span>
+                                    Cancelled
+                                </span>
+                            </div>
+
+                            <!-- Horizontal Track Slider Controls -->
+                            <div class="inline-flex items-center gap-1">
+                                <button type="button" @click="slideCalendar(-300)"
+                                    class="rounded-lg border border-gray-200 bg-white p-1.5 text-gray-600 shadow-sm transition hover:bg-gray-50 hover:text-primary"
+                                    aria-label="Geser kalender ke kiri">
+                                    <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke-width="2"
+                                        stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round"
+                                            d="M15.75 19.5 8.25 12l7.5-7.5" />
+                                    </svg>
+                                </button>
+                                <button type="button" @click="slideCalendar(300)"
+                                    class="rounded-lg border border-gray-200 bg-white p-1.5 text-gray-600 shadow-sm transition hover:bg-gray-50 hover:text-primary"
+                                    aria-label="Geser kalender ke kanan">
+                                    <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke-width="2"
+                                        stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round"
+                                            d="m8.25 4.5 7.5 7.5-7.5 7.5" />
+                                    </svg>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 7-Day Horizontal Calendar Matrix (Card per Room) -->
+                    <div x-ref="calendarTrack" class="overflow-x-auto pb-3 scroll-smooth">
+                        <div class="min-w-[1480px] space-y-3">
+                            <!-- 7-Day Header Row -->
+                            <div
+                                class="flex overflow-hidden rounded-2xl border border-gray-200/90 bg-gray-50/90 shadow-sm">
+                                <div
+                                    class="sticky left-0 z-20 flex w-48 shrink-0 flex-col justify-center border-r border-gray-200 bg-gray-100/95 px-4 py-3 backdrop-blur-sm">
+                                    <p class="font-poppins text-xs font-bold uppercase tracking-wider text-gray-500">
+                                        Kamar / Room
+                                    </p>
+                                    <p class="mt-0.5 text-xs font-medium text-gray-700">
+                                        {{ $calendarRooms->count() }} Tipe Room
+                                    </p>
+                                </div>
+
+                                <div class="flex flex-1">
+                                    @foreach ($calendarDays as $day)
+                                        <div wire:key="calendar-header-{{ $day['dateKey'] }}"
+                                            class="flex-1 min-w-[185px] border-r last:border-r-0 border-gray-200/80 px-3 py-3 {{ $day['isToday'] ? 'bg-primary/10' : 'bg-white' }}">
+                                            <div class="flex items-center justify-between gap-1.5">
+                                                <div>
+                                                    <p
+                                                        class="text-[11px] font-semibold uppercase tracking-wider {{ $day['isToday'] ? 'text-primary' : 'text-gray-500' }}">
+                                                        {{ $day['date']->locale('id')->translatedFormat('D') }},
+                                                        {{ $day['date']->format('d M') }}
+                                                    </p>
+                                                </div>
+                                                @if ($day['isToday'])
+                                                    <span
+                                                        class="rounded-full bg-primary px-2 py-0.5 text-[10px] font-semibold text-white">
+                                                        Hari Ini
+                                                    </span>
+                                                @endif
+                                            </div>
+                                            <div class="mt-2 flex items-center gap-1.5 text-[11px]">
+                                                <span
+                                                    class="rounded-lg bg-gray-100 px-2 py-0.5 font-semibold text-gray-800">
+                                                    {{ $day['totalRooms'] }} Kamar
+                                                </span>
+                                                <span
+                                                    class="rounded-lg bg-primary/10 px-2 py-0.5 font-semibold text-primary">
+                                                    {{ $day['bookingCount'] }} Booking
+                                                </span>
+                                            </div>
+                                        </div>
+                                    @endforeach
+                                </div>
+                            </div>
+
+                            <!-- Card Per Room -->
+                            @forelse ($calendarRooms as $room)
                                 @php
-                                    $statusClasses = match ($booking->status) {
-                                        'paid' => 'badge-info',
-                                        'checked_in' => 'badge-success',
-                                        'pending' => 'badge-warning',
-                                        'cancelled' => 'badge-primary',
-                                        'checked_out' => 'badge-accent',
-                                        'refunded' => 'badge-secondary',
-                                        default => 'badge-primary',
-                                    };
+                                    $roomBookingsByDate = $calendarBookingsByRoomAndDate->get($room->id, collect());
+                                    $roomBookingCount = $roomBookingsByDate->flatten(1)->count();
+                                    $roomCheckedInCount = $roomBookingsByDate
+                                        ->flatten(1)
+                                        ->where('status', 'checked_in')
+                                        ->count();
                                 @endphp
-                                <td class="px-4 py-3 font-medium text-gray-500">{{ $index + 1 }}
-                                </td>
-                                <td class="px-4 py-3">
-                                    <p class="font-medium text-gray-800">{{ $booking->booking_code }}</p>
-                                    <p class="mt-0.5 text-xs text-gray-500">{{ $booking->user->name }}</p>
-                                </td>
-                                <td class="px-4 py-3 text-gray-700"> {{ $booking->room->name }} No.
-                                    {{ $booking->roomUnit->room_number }}</td>
-                                <td class="px-4 py-3 text-xs text-gray-600">
-                                    <p>{{ $booking->check_in->format('d M Y') }}</p>
-                                    <p class="mt-1">{{ $booking->check_out->format('d M Y') }}</p>
-                                </td>
-                                <td class="px-4 py-3 text-gray-700">{{ $booking->total_guests }}</td>
-                                <td class="px-4 py-3">
-                                    <span
-                                        class="inline-flex rounded-full px-2 py-1 text-xs font-medium  {{ $statusClasses }}">{{ ucwords(str_replace('_', ' ', $booking->status)) }}</span>
-                                </td>
-                                <td class="px-4 py-3 flex items-center space-x-2  text-center text-gray-700">
-                                    <x-edit-button :item="$booking" action="edit" />
 
-                                    <x-show-button :item="$booking" action="show" />
-                                </td>
-                            </tr>
-                        @empty
+                                <section wire:key="calendar-room-{{ $room->id }}"
+                                    class="flex overflow-hidden rounded-2xl border border-gray-200/90 bg-white shadow-sm transition hover:border-gray-300">
+                                    <!-- Room Info Column (Sticky on horizontal scroll) -->
+                                    <div
+                                        class="sticky left-0 z-10 flex w-48 shrink-0 flex-col justify-between border-r border-gray-200 bg-gray-50/95 p-4 backdrop-blur-sm">
+                                        <div>
+                                            <div class="flex items-center gap-2">
+                                                <span
+                                                    class="h-2.5 w-2.5 shrink-0 rounded-full bg-primary"></span>
+                                                <h3 class="font-poppins text-sm font-bold text-gray-900 leading-snug">
+                                                    {{ $room->name }}
+                                                </h3>
+                                            </div>
+                                            <p class="mt-1 text-xs text-gray-500">
+                                                {{ $room->units->count() }} Unit Tersedia
+                                            </p>
+                                        </div>
+
+                                        <div class="mt-4 space-y-1.5 border-t border-gray-200/80 pt-3">
+                                            <div class="flex items-center justify-between text-xs">
+                                                <span class="text-gray-500">Total Booking</span>
+                                                <span class="font-semibold text-gray-900">{{ $roomBookingCount }}</span>
+                                            </div>
+                                            <div class="flex items-center justify-between text-xs">
+                                                <span class="text-emerald-700">Checked-in</span>
+                                                <span
+                                                    class="rounded-full bg-emerald-100 px-2 py-0.5 text-[11px] font-semibold text-emerald-800">
+                                                    {{ $roomCheckedInCount }}
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- 7-Day Cells for This Room -->
+                                    <div class="flex flex-1">
+                                        @foreach ($calendarDays as $day)
+                                            @php
+                                                $cellBookings = $roomBookingsByDate->get($day['dateKey'], collect());
+                                            @endphp
+                                            <div wire:key="calendar-cell-{{ $room->id }}-{{ $day['dateKey'] }}"
+                                                class="flex-1 min-w-[185px] border-r last:border-r-0 border-gray-100 p-2.5 {{ $day['isToday'] ? 'bg-primary/[0.02]' : '' }}">
+                                                <div class="space-y-2">
+                                                    @forelse ($cellBookings as $booking)
+                                                        @php
+                                                            $cardTheme = match ($booking->status) {
+                                                                'checked_in' => [
+                                                                    'wrapper' => 'border-emerald-300 bg-emerald-50/95 ring-1 ring-emerald-200',
+                                                                    'accent' => 'bg-emerald-500',
+                                                                    'badge' => 'bg-emerald-600 text-white',
+                                                                ],
+                                                                'paid' => [
+                                                                    'wrapper' => 'border-sky-200 bg-sky-50/90',
+                                                                    'accent' => 'bg-sky-500',
+                                                                    'badge' => 'bg-sky-100 text-sky-800',
+                                                                ],
+                                                                'pending' => [
+                                                                    'wrapper' => 'border-amber-200 bg-amber-50/90',
+                                                                    'accent' => 'bg-amber-500',
+                                                                    'badge' => 'bg-amber-100 text-amber-800',
+                                                                ],
+                                                                'checked_out' => [
+                                                                    'wrapper' => 'border-slate-200 bg-slate-50',
+                                                                    'accent' => 'bg-slate-400',
+                                                                    'badge' => 'bg-slate-200 text-slate-700',
+                                                                ],
+                                                                default => [
+                                                                    'wrapper' => 'border-rose-200 bg-rose-50/90',
+                                                                    'accent' => 'bg-rose-500',
+                                                                    'badge' => 'bg-rose-100 text-rose-800',
+                                                                ],
+                                                            };
+                                                        @endphp
+
+                                                        <article wire:key="calendar-booking-{{ $booking->id }}"
+                                                            class="relative overflow-hidden rounded-xl border p-2.5 shadow-sm transition hover:-translate-y-0.5 hover:shadow-md {{ $cardTheme['wrapper'] }}">
+                                                            <div
+                                                                class="absolute inset-y-0 left-0 w-1 {{ $cardTheme['accent'] }}">
+                                                            </div>
+
+                                                            <div class="pl-1.5">
+                                                                <div class="flex items-start justify-between gap-1.5">
+                                                                    <p
+                                                                        class="truncate font-poppins text-xs font-bold text-gray-900">
+                                                                        {{ $booking->user?->name ?? 'Tamu' }}
+                                                                    </p>
+                                                                    <span
+                                                                        class="shrink-0 rounded-full px-1.5 py-0.5 text-[9px] font-semibold uppercase {{ $cardTheme['badge'] }}">
+                                                                        {{ ucwords(str_replace('_', ' ', $booking->status)) }}
+                                                                    </span>
+                                                                </div>
+
+                                                                <p class="mt-0.5 truncate text-[11px] font-medium text-gray-500">
+                                                                    {{ $booking->booking_code }} &bull; Unit
+                                                                    {{ $booking->roomUnit?->room_number ?? '-' }}
+                                                                </p>
+
+                                                                <p class="mt-1.5 text-[10px] text-gray-600">
+                                                                    In:
+                                                                    <span
+                                                                        class="font-semibold">{{ $booking->check_in->format('d M') }}</span>
+                                                                    &rarr; Out:
+                                                                    {{ $booking->check_out->format('d M') }}
+                                                                </p>
+
+                                                                <div
+                                                                    class="mt-2 flex items-center justify-between border-t border-black/5 pt-1.5">
+                                                                    <span class="text-[11px] font-semibold text-gray-800">
+                                                                        Rp{{ number_format($booking->total_price, 0, ',', '.') }}
+                                                                    </span>
+                                                                    <div class="flex items-center gap-0.5">
+                                                                        <x-edit-button :item="$booking" action="edit" />
+                                                                        <x-show-button :item="$booking" action="show" />
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </article>
+                                                    @empty
+                                                        <div
+                                                            class="flex h-20 items-center justify-center rounded-xl border border-dashed border-gray-200/90 bg-gray-50/40 text-[11px] text-gray-400">
+                                                            &mdash;
+                                                        </div>
+                                                    @endforelse
+                                                </div>
+                                            </div>
+                                        @endforeach
+                                    </div>
+                                </section>
+                            @empty
+                                <div
+                                    class="rounded-2xl border border-dashed border-gray-300 bg-gray-50 p-10 text-center text-sm text-gray-500">
+                                    Tidak ada room ditemukan.
+                                </div>
+                            @endforelse
+                        </div>
+                    </div>
+                </div>
+            @else
+                <div class="divide-y divide-gray-100 md:hidden">
+                    @forelse ($bookings as $booking)
+                        @php
+                            $statusClasses = match ($booking->status) {
+                                'paid' => 'badge-info',
+                                'checked_in' => 'badge-success',
+                                'pending' => 'badge-warning',
+                                'cancelled' => 'badge-danger',
+                                'checked_out' => 'badge-accent',
+                                'refunded' => 'badge-secondary',
+                                default => 'badge-primary',
+                            };
+                        @endphp
+                        <article wire:key="booking-mobile-{{ $booking->id }}" class="p-4">
+                            <div class="flex items-start justify-between gap-3">
+                                <div class="min-w-0">
+                                    <p class="truncate font-semibold text-gray-900">{{ $booking->booking_code }}</p>
+                                    <p class="mt-0.5 truncate text-sm text-gray-600">{{ $booking->user->name }}</p>
+                                </div>
+                                <span class="shrink-0 rounded-full px-2 py-1 text-xs font-medium  {{ $statusClasses }}">
+                                    {{ ucwords(str_replace('_', ' ', $booking->status)) }}</span>
+                            </div>
+                            <div class="mt-3 rounded-lg bg-gray-50 p-3 text-sm">
+                                <p class="font-medium text-gray-800">{{ $booking->room->name }} No
+                                    {{ $booking->roomUnit?->room_number ?? '-' }}</p>
+                                <p class="mt-1 text-xs text-gray-500">{{ $booking->check_in->format('d M Y') }} -
+                                    {{ $booking->check_out->format('d M Y') }}</p>
+                            </div>
+                            <div class="mt-3 flex items-center justify-between text-sm">
+                                <span class="text-gray-500">{{ $booking->total_guests }} tamu</span>
+                                <span
+                                    class="font-semibold text-emerald-700">Rp{{ number_format($booking->total_price, 0, ',', '.') }}</span>
+                            </div>
+                            <div class="mt-3 flex justify-end border-t border-gray-100 pt-3">
+                                <x-edit-button :item="$booking" action="edit" />
+                                <x-show-button :item="$booking" action="show" />
+                            </div>
+                        </article>
+                    @empty
+                        <p class="px-4 py-12 text-center text-sm text-gray-500">Tidak ada booking ditemukan.</p>
+                    @endforelse
+                </div>
+
+                <div class="hidden overflow-x-auto md:block">
+                    <table class="w-full min-w-[850px] text-left text-sm" id="bookingsTable">
+                        <thead class="bg-gray-50 text-gray-500">
                             <tr>
-                                <td colspan="9" class="px-4 py-12 text-center text-gray-500">Tidak ada booking
-                                    ditemukan.</td>
+                                <th class="px-4 py-3 font-medium">No</th>
+                                <th class="px-4 py-3 font-medium">Booking & Tamu</th>
+                                <th class="px-4 py-3 font-medium">Kamar</th>
+                                <th class="px-4 py-3 font-medium">Menginap</th>
+                                <th class="px-4 py-3 font-medium">Tamu</th>
+                                <th class="px-4 py-3 font-medium">Status</th>
+                                <th class="px-4 py-3 text-center font-medium">Aksi</th>
                             </tr>
-                        @endforelse
-                    </tbody>
-                </table>
-            </div>
-            <div class="bg-gray-50 p-4">{{ $bookings->links() }}</div>
+                        </thead>
+                        <tbody class="divide-y divide-gray-100">
+                            @forelse ($bookings as $index => $booking)
+                                <tr wire:key="booking-{{ $booking->id }}" class="hover:bg-gray-50">
+                                    @php
+                                        $statusClasses = match ($booking->status) {
+                                            'paid' => 'badge-info',
+                                            'checked_in' => 'badge-success',
+                                            'pending' => 'badge-warning',
+                                            'cancelled' => 'badge-primary',
+                                            'checked_out' => 'badge-accent',
+                                            'refunded' => 'badge-secondary',
+                                            default => 'badge-primary',
+                                        };
+                                    @endphp
+                                    <td class="px-4 py-3 font-medium text-gray-500">{{ $index + 1 }}
+                                    </td>
+                                    <td class="px-4 py-3">
+                                        <p class="font-medium text-gray-800">{{ $booking->booking_code }}</p>
+                                        <p class="mt-0.5 text-xs text-gray-500">{{ $booking->user->name }}</p>
+                                    </td>
+                                    <td class="px-4 py-3 text-gray-700"> {{ $booking->room->name }} No.
+                                        {{ $booking->roomUnit?->room_number ?? '-' }}</td>
+                                    <td class="px-4 py-3 text-xs text-gray-600">
+                                        <p>{{ $booking->check_in->format('d M Y') }}</p>
+                                        <p class="mt-1">{{ $booking->check_out->format('d M Y') }}</p>
+                                    </td>
+                                    <td class="px-4 py-3 text-gray-700">{{ $booking->total_guests }}</td>
+                                    <td class="px-4 py-3">
+                                        <span
+                                            class="inline-flex rounded-full px-2 py-1 text-xs font-medium  {{ $statusClasses }}">{{ ucwords(str_replace('_', ' ', $booking->status)) }}</span>
+                                    </td>
+                                    <td class="px-4 py-3 flex items-center space-x-2  text-center text-gray-700">
+                                        <x-edit-button :item="$booking" action="edit" />
+
+                                        <x-show-button :item="$booking" action="show" />
+                                    </td>
+                                </tr>
+                            @empty
+                                <tr>
+                                    <td colspan="9" class="px-4 py-12 text-center text-gray-500">Tidak ada booking
+                                        ditemukan.</td>
+                                </tr>
+                            @endforelse
+                        </tbody>
+                    </table>
+                </div>
+                <div class="bg-gray-50 p-4">{{ $bookings->links() }}</div>
+            @endif
         </div>
     </div>
 
@@ -257,177 +582,195 @@
                 $guest = $booking?->user;
                 $room = $booking?->room;
                 $guestName = $guest?->name ?? 'Guest tidak diketahui';
-                $guestInitials = collect(explode(' ', trim($guestName)))
-                    ->filter()
-                    ->map(fn($name) => mb_strtoupper(mb_substr($name, 0, 1)))
-                    ->take(2)
-                    ->implode('');
                 $statusClasses = match ($status) {
-                    'settlement', 'capture', 'success', 'paid', 'completed' => 'bg-emerald-100 text-emerald-700',
-                    'pending', 'challenge' => 'bg-amber-100 text-amber-700',
-                    'cancel', 'cancelled', 'deny', 'failure', 'expire' => 'bg-red-100 text-red-700',
-                    'refunded' => 'bg-blue-100 text-blue-700',
-                    default => 'bg-slate-100 text-slate-600',
+                    'settlement', 'capture', 'success', 'paid', 'completed' => 'bg-emerald-100 text-emerald-700 ring-1 ring-emerald-200',
+                    'pending', 'challenge' => 'bg-amber-100 text-amber-800 ring-1 ring-amber-200',
+                    'cancel', 'cancelled', 'deny', 'failure', 'expire' => 'bg-rose-100 text-rose-700 ring-1 ring-rose-200',
+                    'refunded' => 'bg-sky-100 text-sky-700 ring-1 ring-sky-200',
+                    default => 'bg-slate-100 text-slate-600 ring-1 ring-slate-200',
                 };
-
+                $bookingStatusClasses = match ($booking?->status) {
+                    'checked_in' => 'bg-emerald-100 text-emerald-800',
+                    'paid' => 'bg-sky-100 text-sky-800',
+                    'pending' => 'bg-amber-100 text-amber-800',
+                    'checked_out' => 'bg-slate-200 text-slate-700',
+                    default => 'bg-rose-100 text-rose-800',
+                };
             @endphp
 
             <div class="grid gap-5 lg:grid-cols-12">
-                <aside class="lg:col-span-3">
-                    <div class="h-full rounded-xl border border-gray-100 bg-gray-50 p-5">
-                        <p class="text-xs font-semibold uppercase tracking-wide text-gray-500">Profil Tamu</p>
+                <!-- Left: Profil Tamu -->
+                <aside class="lg:col-span-4">
+                    <div class="h-full rounded-2xl border border-gray-200/80 bg-gray-50/70 p-5">
+                        <p class="text-[11px] font-bold uppercase tracking-wider text-gray-400">Profil Tamu</p>
 
-                        <div class="mt-5 flex items-center gap-3">
-                            <img class="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-primary text-sm font-bold text-white"
-                                src="{{ $guest?->photo ?? 'https://ui-avatars.com/api/?name=' . $guestName }}"
+                        <div class="mt-4 flex items-center gap-3.5">
+                            <img class="h-12 w-12 shrink-0 rounded-2xl bg-primary object-cover shadow-sm ring-2 ring-white"
+                                src="{{ $guest?->photo ?? 'https://ui-avatars.com/api/?name=' . urlencode($guestName) . '&background=A61B1B&color=fff' }}"
                                 alt="{{ $guestName }}">
                             <div class="min-w-0">
-                                <p class="truncate font-poppins text-lg font-bold text-gray-900">{{ $guestName }}
+                                <p class="font-poppins text-base font-bold text-gray-900 leading-snug break-words">
+                                    {{ $guestName }}
                                 </p>
-                                <p class="mt-0.5 text-sm text-gray-500">Tamu booking</p>
+                                <p class="mt-0.5 text-xs font-medium text-gray-500">Tamu Booking</p>
                             </div>
                         </div>
 
-                        <dl class="mt-6 space-y-4 text-sm">
-                            <div>
-                                <dt class="text-gray-500">Email</dt>
-                                <dd class="mt-1 break-all font-medium text-gray-800">{{ $guest?->email ?? 'N/A' }}
-                                </dd>
+                        <dl class="mt-5 space-y-3 border-t border-gray-200/80 pt-4 text-sm">
+                            <div class="flex flex-col">
+                                <dt class="text-xs text-gray-500">Email</dt>
+                                <dd class="mt-0.5 break-all font-medium text-gray-800">{{ $guest?->email ?? 'N/A' }}</dd>
                             </div>
-                            <div>
-                                <dt class="text-gray-500">Nomor telepon</dt>
-                                <dd class="mt-1 font-medium text-gray-800">{{ $guest?->phone ?? 'N/A' }}</dd>
+                            <div class="flex flex-col">
+                                <dt class="text-xs text-gray-500">Nomor Telepon</dt>
+                                <dd class="mt-0.5 font-medium text-gray-800">{{ $guest?->phone ?? 'N/A' }}</dd>
                             </div>
                         </dl>
-                        <div class="w-full border-2 border-slate-600  my-3"></div>
-                        <dl class="space-y-2 text-sm">
-                            <h4 class="text-xs font-semibold uppercase tracking-wide text-gray-500">Identitas Tamu</h4>
-                            <div>
-                                <dt class="text-gray-500">Kewarganegaraan</dt>
-                                <dd class="mt-1 font-medium text-gray-800">{{ $guest?->nationality ?? 'N/A' }}</dd>
+
+                        <div class="my-4 border-t border-gray-200/80"></div>
+
+                        <p class="text-[11px] font-bold uppercase tracking-wider text-gray-400">Identitas Tamu</p>
+                        <dl class="mt-3 grid grid-cols-2 gap-3 text-sm">
+                            <div class="rounded-xl bg-white p-2.5 border border-gray-100">
+                                <dt class="text-[11px] text-gray-500">Kewarganegaraan</dt>
+                                <dd class="mt-0.5 font-semibold text-gray-800">{{ $guest?->nationality ?? 'N/A' }}</dd>
                             </div>
-                            <div>
-                                <dt class="text-gray-500">Jenis Kelamin</dt>
-                                <dd class="mt-1 font-medium text-gray-800">{{ $guest?->gender ?? 'N/A' }}</dd>
+                            <div class="rounded-xl bg-white p-2.5 border border-gray-100">
+                                <dt class="text-[11px] text-gray-500">Jenis Kelamin</dt>
+                                <dd class="mt-0.5 font-semibold text-gray-800">{{ $guest?->gender ?? 'N/A' }}</dd>
                             </div>
-                            <div>
-                                <dt class="text-gray-500">Alamat</dt>
-                                <dd class="mt-1 font-medium text-gray-800">{{ $guest?->address ?? 'N/A' }}</dd>
+                            <div class="col-span-2 rounded-xl bg-white p-2.5 border border-gray-100">
+                                <dt class="text-[11px] text-gray-500">Alamat</dt>
+                                <dd class="mt-0.5 font-medium text-gray-800 leading-relaxed">{{ $guest?->address ?? 'N/A' }}</dd>
                             </div>
                         </dl>
                     </div>
                 </aside>
 
-                <section class="space-y-4 lg:col-span-5">
-                    <div class="rounded-xl bg-gradient-to-br from-primary to-primary/80 p-4 text-white shadow-sm">
-                        <div class="flex items-start justify-between gap-3">
+                <!-- Middle: Ringkasan Pembayaran & Booking -->
+                <section class="space-y-4 lg:col-span-4">
+                    <div class="relative overflow-hidden rounded-2xl bg-gradient-to-br from-primary to-red-700 p-5 text-white shadow-md">
+                        <div class="pointer-events-none absolute -right-6 -top-6 h-24 w-24 rounded-full bg-white/10"></div>
+                        <div class="relative flex items-start justify-between gap-3">
                             <div>
-                                <p class="text-xs font-medium text-white/70">Total Pembayaran</p>
-                                <p class="mt-1 text-2xl font-bold">Rp
-                                    {{ number_format($payments->gross_amount, 0, ',', '.') }}</p>
+                                <p class="text-xs font-medium text-white/80">Total Pembayaran</p>
+                                <p class="mt-1 font-poppins text-2xl font-bold tracking-tight">
+                                    Rp {{ number_format($payments->gross_amount, 0, ',', '.') }}
+                                </p>
                             </div>
-                            <span class="rounded-full px-2.5 py-1 text-xs font-semibold {{ $statusClasses }}">
+                            <span class="rounded-full px-2.5 py-1 text-[11px] font-bold uppercase tracking-wide {{ $statusClasses }}">
                                 {{ ucfirst(str_replace('_', ' ', $status)) }}
                             </span>
                         </div>
                     </div>
 
-                    <dl class="divide-y divide-gray-100 overflow-hidden rounded-xl border border-gray-100 text-sm">
-                        <div class="grid grid-cols-3 gap-3 px-4 py-3">
-                            <dt class="text-gray-500">Kode booking</dt>
-                            <dd class="col-span-2 text-right font-medium text-gray-800">
-                                {{ $booking?->booking_code ?? 'N/A' }}</dd>
+                    <dl class="divide-y divide-gray-100 overflow-hidden rounded-2xl border border-gray-200/80 bg-white text-sm">
+                        <div class="flex items-center justify-between gap-3 px-4 py-3">
+                            <dt class="text-xs text-gray-500">Kode Booking</dt>
+                            <dd class="font-poppins font-semibold text-gray-900">{{ $booking?->booking_code ?? 'N/A' }}</dd>
                         </div>
-                        <div class="grid grid-cols-3 gap-3 bg-gray-50/60 px-4 py-3">
-                            <dt class="text-gray-500">Kamar</dt>
-                            <dd class="col-span-2 text-right font-medium text-gray-800">
-                                {{ $booking?->room?->name ?? 'N/A' }}</dd>
+                        <div class="flex items-center justify-between gap-3 bg-gray-50/70 px-4 py-3">
+                            <dt class="text-xs text-gray-500">Kamar</dt>
+                            <dd class="text-right font-medium text-gray-800">
+                                {{ $booking?->room?->name ?? 'N/A' }}
+                                @if ($booking?->roomUnit?->room_number)
+                                    <span class="text-gray-500">&bull; No. {{ $booking->roomUnit->room_number }}</span>
+                                @endif
+                            </dd>
                         </div>
-                        <div class="grid grid-cols-3 gap-3 px-4 py-3">
-                            <dt class="text-gray-500">Masa inap</dt>
-                            <dd class="col-span-2 text-right font-medium text-gray-800">
-                                {{ $booking?->check_in?->format('d M Y') ?? 'N/A' }} -
+                        <div class="flex items-center justify-between gap-3 px-4 py-3">
+                            <dt class="text-xs text-gray-500">Masa Inap</dt>
+                            <dd class="text-right font-medium text-gray-800">
+                                {{ $booking?->check_in?->format('d M Y') ?? 'N/A' }} &ndash;
                                 {{ $booking?->check_out?->format('d M Y') ?? 'N/A' }}
                             </dd>
                         </div>
-                        <div class="grid grid-cols-3 gap-3 bg-gray-50/60 px-4 py-3">
-                            <dt class="text-gray-500">Jumlah tamu</dt>
-                            <dd class="col-span-2 text-right font-medium text-gray-800">
-                                {{ $booking?->total_guests ?? 'N/A' }}</dd>
+                        <div class="flex items-center justify-between gap-3 bg-gray-50/70 px-4 py-3">
+                            <dt class="text-xs text-gray-500">Jumlah Tamu</dt>
+                            <dd class="font-medium text-gray-800">{{ $booking?->total_guests ? $booking->total_guests . ' orang' : 'N/A' }}</dd>
                         </div>
-                        <div class="grid grid-cols-3 gap-3 px-4 py-3">
-                            <dt class="text-gray-500">Payment ID</dt>
-                            <dd class="col-span-2 break-all text-right font-medium text-gray-800">
-                                {{ $payments->order_id }}</dd>
+                        <div class="flex flex-col gap-1 px-4 py-3">
+                            <dt class="text-xs text-gray-500">Payment ID</dt>
+                            <dd class="break-all font-mono text-xs font-medium text-gray-700">{{ $payments->order_id }}</dd>
                         </div>
-                        <div class="grid grid-cols-3 gap-3 bg-gray-50/60 px-4 py-3">
-                            <dt class="text-gray-500">Metode</dt>
-                            <dd class="col-span-2 text-right font-medium text-gray-800">
-                                {{ $payments->payment_method ?? 'N/A' }}</dd>
+                        <div class="flex items-center justify-between gap-3 bg-gray-50/70 px-4 py-3">
+                            <dt class="text-xs text-gray-500">Metode</dt>
+                            <dd class="font-medium uppercase text-gray-800">{{ $payments->payment_method ?? 'N/A' }}</dd>
                         </div>
-                        <div class="grid grid-cols-3 gap-3 px-4 bg-gray-50/60 py-3">
-                            <dt class="text-gray-500">Tanggal transaksi</dt>
-                            <dd class="col-span-2 text-right font-medium text-gray-800">
-                                {{ $payments->created_at?->format('d M Y, H:i') ?? 'N/A' }}
-                            </dd>
+                        <div class="flex items-center justify-between gap-3 px-4 py-3">
+                            <dt class="text-xs text-gray-500">Tanggal Transaksi</dt>
+                            <dd class="font-medium text-gray-800">{{ $payments->created_at?->format('d M Y, H:i') ?? 'N/A' }}</dd>
                         </div>
-                        <div class="grid grid-cols-3 gap-3 px-4 py-3">
-                            <dt class="text-gray-500">Status</dt>
-                            <dd class="col-span-2 text-right font-medium text-gray-800">
-                                {{ $booking->status ?? 'N/A' }}
+                        <div class="flex items-center justify-between gap-3 bg-gray-50/70 px-4 py-3">
+                            <dt class="text-xs text-gray-500">Status Booking</dt>
+                            <dd>
+                                <span class="inline-flex rounded-full px-2.5 py-0.5 text-xs font-semibold {{ $bookingStatusClasses }}">
+                                    {{ $booking?->status ? ucwords(str_replace('_', ' ', $booking->status)) : 'N/A' }}
+                                </span>
                             </dd>
                         </div>
                     </dl>
                 </section>
 
-                <section class="overflow-hidden rounded-xl border border-gray-100 bg-white lg:col-span-4">
+                <!-- Right: Detail Kamar -->
+                <section class="flex flex-col overflow-hidden rounded-2xl border border-gray-200/80 bg-white lg:col-span-4">
                     @if ($room?->image)
-                        <img src="{{ asset('storage/assets/img/rooms/' . $room->image) }}" alt="{{ $room->name }}"
-                            class="h-48 w-full object-cover sm:h-56 lg:h-48">
+                        <div class="relative">
+                            <img src="{{ asset('storage/assets/img/rooms/' . $room->image) }}" alt="{{ $room->name }}"
+                                class="h-44 w-full object-cover">
+                            <div class="absolute inset-x-0 bottom-0 h-12 bg-gradient-to-t from-black/40 to-transparent"></div>
+                        </div>
                     @else
-                        <div
-                            class="flex h-48 items-center justify-center bg-gray-100 text-sm text-gray-500 sm:h-56 lg:h-48">
+                        <div class="flex h-44 items-center justify-center bg-gray-100 text-sm text-gray-500">
                             Gambar kamar belum tersedia
                         </div>
                     @endif
 
-                    <div class="p-5">
-                        <p class="text-xs font-semibold uppercase tracking-wide text-gray-500">Detail Kamar</p>
-                        <h4 class="mt-1 font-poppins text-xl font-bold text-gray-900">
-                            {{ $room?->name ?? 'Kamar tidak diketahui' }}</h4>
-                        <p class="mt-1 text-base font-bold text-primary">Rp
-                            {{ number_format($room?->price ?? 0, 0, ',', '.') }} <span
-                                class="text-sm font-normal text-gray-500">/ malam</span></p>
+                    <div class="flex flex-1 flex-col p-5">
+                        <p class="text-[11px] font-bold uppercase tracking-wider text-gray-400">Detail Kamar</p>
+                        <h4 class="mt-1 font-poppins text-lg font-bold text-gray-900">
+                            {{ $room?->name ?? 'Kamar tidak diketahui' }}
+                        </h4>
+                        <p class="mt-0.5 text-base font-bold text-primary">
+                            Rp {{ number_format($room?->price ?? 0, 0, ',', '.') }}
+                            <span class="text-xs font-normal text-gray-500">/ malam</span>
+                        </p>
 
-                        <dl class="mt-5 grid grid-cols-2 gap-x-4 gap-y-4 text-sm">
-                            <div>
-                                <dt class="text-gray-500">Kapasitas</dt>
-                                <dd class="mt-1 font-medium text-gray-800">
-                                    {{ $room?->capacity ? $room->capacity . ' orang' : 'N/A' }}</dd>
+                        <dl class="mt-4 grid grid-cols-2 gap-2.5 text-sm">
+                            <div class="rounded-xl border border-gray-100 bg-gray-50/80 p-2.5">
+                                <dt class="text-[11px] text-gray-500">Kapasitas</dt>
+                                <dd class="mt-0.5 font-semibold text-gray-800">
+                                    {{ $room?->capacity ? $room->capacity . ' orang' : 'N/A' }}
+                                </dd>
                             </div>
-                            <div>
-                                <dt class="text-gray-500">Tempat tidur</dt>
-                                <dd class="mt-1 font-medium text-gray-800">{{ $room?->bed_type ?? 'N/A' }}</dd>
+                            <div class="rounded-xl border border-gray-100 bg-gray-50/80 p-2.5">
+                                <dt class="text-[11px] text-gray-500">Tempat Tidur</dt>
+                                <dd class="mt-0.5 font-semibold text-gray-800">{{ $room?->bed_type ?? 'N/A' }}</dd>
                             </div>
-                            <div>
-                                <dt class="text-gray-500">Ukuran</dt>
-                                <dd class="mt-1 font-medium text-gray-800">
-                                    {{ $room?->size ? $room->size . ' m²' : 'N/A' }}</dd>
+                            <div class="rounded-xl border border-gray-100 bg-gray-50/80 p-2.5">
+                                <dt class="text-[11px] text-gray-500">Ukuran</dt>
+                                <dd class="mt-0.5 font-semibold text-gray-800">
+                                    {{ $room?->size ? $room->size . ' m²' : 'N/A' }}
+                                </dd>
+                            </div>
+                            <div class="rounded-xl border border-gray-100 bg-gray-50/80 p-2.5">
+                                <dt class="text-[11px] text-gray-500">Nomor Unit</dt>
+                                <dd class="mt-0.5 font-semibold text-gray-800">
+                                    {{ $booking?->roomUnit?->room_number ? 'No. ' . $booking->roomUnit->room_number : 'N/A' }}
+                                </dd>
                             </div>
                         </dl>
 
-                        {{-- @if ($room?->description)
-                            <p class="mt-5 border-t border-gray-100 pt-4 text-sm leading-6 text-gray-600">{{ $room->description }}</p>
-                        @endif --}}
-
-                        <div class="mt-5 border-t border-gray-100 pt-4">
-                            <p class="text-sm font-semibold text-gray-900">Fasilitas</p>
-                            <div class="mt-2 flex flex-wrap gap-2">
+                        <div class="mt-4 border-t border-gray-100 pt-4">
+                            <p class="text-xs font-bold uppercase tracking-wider text-gray-400">Fasilitas</p>
+                            <div class="mt-2.5 flex flex-wrap gap-1.5">
                                 @forelse ($room?->facilities ?? [] as $facility)
                                     <span
-                                        class="rounded-full bg-emerald-100 px-2.5 py-1 text-xs font-medium text-emerald-700">{{ $facility->name }}</span>
+                                        class="rounded-full bg-emerald-50 border border-emerald-200/80 px-2.5 py-1 text-xs font-medium text-emerald-700">
+                                        {{ $facility->name }}
+                                    </span>
                                 @empty
-                                    <p class="text-sm text-gray-500">Belum ada fasilitas untuk kamar ini.</p>
+                                    <p class="text-xs text-gray-500">Belum ada fasilitas untuk kamar ini.</p>
                                 @endforelse
                             </div>
                         </div>
@@ -435,8 +778,8 @@
                 </section>
             </div>
         @else
-            <div class="rounded-xl border border-dashed border-gray-300 bg-gray-50 px-4 py-8 text-center">
-                <p class="text-sm font-medium text-gray-700">Belum ada pembayaran</p>
+            <div class="rounded-2xl border border-dashed border-gray-300 bg-gray-50 px-6 py-12 text-center">
+                <p class="font-poppins text-sm font-semibold text-gray-700">Belum ada pembayaran</p>
                 <p class="mt-1 text-xs text-gray-500">Data pembayaran akan tampil setelah transaksi dibuat.</p>
             </div>
         @endif
@@ -549,17 +892,18 @@
                         <option value="">Select RoomUnit</option>
                         @if ($room_id)
                             @foreach ($rooms->find($room_id)->units as $room_unit)
-                                @if ($room_unit->status == 'available' || $room_unit->id == $room_unit_id)
-                                    <option value="{{ $room_unit->id }}"
-                                        {{ $room_unit->id == $room_unit_id ? 'selected' : '' }}
-                                        @disabled($room_unit->status === 'occupied')>
-                                        {{ $room_unit->room_number }}{{ $room_unit->status === 'occupied' ? ' (Occupied)' : '' }}
-                                    </option>
-                                @else
-                                    <option value="{{ $room_unit->id }}" disabled>
-                                        {{ $room_unit->room_number }} ({{ ucfirst($room_unit->status) }})
-                                    </option>
-                                @endif
+                                @php
+                                    $unitBooked = in_array($room_unit->id, $unavailableUnitIds, true);
+                                    $unitUnavailable = $room_unit->status !== 'available' || $unitBooked;
+                                    $unitLabel = $room_unit->status !== 'available'
+                                        ? ucfirst($room_unit->status)
+                                        : ($unitBooked ? 'Terisi' : '');
+                                @endphp
+                                <option value="{{ $room_unit->id }}"
+                                    {{ $room_unit->id == $room_unit_id ? 'selected' : '' }}
+                                    @disabled($unitUnavailable && $room_unit->id != $room_unit_id)>
+                                    {{ $room_unit->room_number }}{{ $unitLabel ? ' (' . $unitLabel . ')' : '' }}
+                                </option>
                             @endforeach
                         @endif
                     </select>
@@ -610,17 +954,19 @@
             </div> --}}
             <!-- Status -->
             @if ($bookingEditId)
+                @php($statusTransitions = \App\Enums\BookingStatus::adminTransitionsFor($status))
                 <div class="mb-4">
                     <label class="input-label">Status <span class="text-red-500">*</span></label>
                     <select id="bookingStatus" wire:model="status" class="input"
-                        @if ($this->status === 'checked_out' || $this->status === 'cancelled' || $this->status === 'refunded') disabled @endif>
-                        <option value="pending">Pending</option>
-                        <option value="paid">Paid</option>
-                        <option value="checked_in">Checked In</option>
-                        <option value="checked_out">Checked Out</option>
-                        <option value="refunded">Refunded</option>
-                        <option value="cancelled">Cancelled</option>
+                        @disabled(empty($statusTransitions))>
+                        <option value="{{ $status }}" selected>
+                            {{ ucwords(str_replace('_', ' ', $status)) }} (saat ini)
+                        </option>
+                        @foreach ($statusTransitions as $transitionValue => $transitionLabel)
+                            <option value="{{ $transitionValue }}">{{ $transitionLabel }}</option>
+                        @endforeach
                     </select>
+                    <p class="mt-1 text-xs text-gray-500">Status pembayaran hanya dapat berubah melalui alur pembayaran.</p>
                     <x-input-error :message="$errors->get('status')" />
                 </div>
             @endif

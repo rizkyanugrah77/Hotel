@@ -167,107 +167,377 @@
                 </div>
             </div>
         </div>
-        {{-- Chart --}}
-        <div class="mb-5 w-full max-w-full sm:mb-6  rounded-xl">
-            <div
-                class="grid min-w-0 grid-cols-1 gap-4 rounded-xl border border-slate-200 bg-white p-4 shadow-sm sm:gap-5 sm:rounded-2xl sm:p-5 lg:grid-cols-12 lg:p-6">
-                <h2 class="font-poppins text-base font-bold text-gray-800 sm:text-lg lg:col-span-12 lg:text-xl">Grafik
-                    Transaksi</h2>
+        {{-- Analytics & Charts --}}
+        <div class="mb-6 rounded-2xl border border-slate-200 bg-white p-4 shadow-sm sm:p-6">
+            {{-- Header + Period Summary KPIs --}}
+            <div class="mb-6 flex flex-col gap-4 border-b border-slate-100 pb-5 lg:flex-row lg:items-center lg:justify-between">
+                <div>
+                    <div class="flex flex-wrap items-center gap-2.5">
+                        <h2 class="font-poppins text-lg font-bold text-slate-800 sm:text-xl">Analitik Transaksi</h2>
+                        <span class="inline-flex items-center rounded-full bg-slate-100 px-2.5 py-0.5 text-xs font-medium text-slate-600">
+                            {{ $analyticsSummary['period_label'] }}
+                        </span>
+                    </div>
+                    <p class="mt-1 text-xs text-slate-500 sm:text-sm">
+                        Ringkasan tren pendapatan, konversi status, metode pembayaran, dan performa tipe kamar.
+                    </p>
+                </div>
 
-                <div class="h-52 min-w-0 w-full sm:h-60 lg:col-span-8 lg:h-64 border border-gray-300 rounded-xl p-2">
-                    <canvas
-                        wire:key="transaction-chart-{{ $chartVersion }}-{{ $reportPeriod }}-{{ $reportDate }}-{{ $reportMonth }}-{{ $reportYear }}"
-                        wire:ignore x-data x-init="$nextTick(() => {
-                            new window.Chart($el, {
-                                type: 'bar',
-                                data: {{ Js::from($chartData) }},
-                                options: {
-                                    responsive: true,
-                                    maintainAspectRatio: false,
-                                    plugins: {
-                                        tooltip: {
-                                            callbacks: {
-                                                label: (context) => {
-                                                    const value = context.parsed.y;
-                                                    const percentage = {{ $totalRoomUnits }} ?
-                                                        ((value / {{ $totalRoomUnits }}) * 100).toFixed(1) :
-                                                        0;
-                        
-                                                    return `${context.dataset.label}: ${value} unit (${percentage}%)`;
+                <div class="grid grid-cols-2 gap-2.5 sm:grid-cols-4">
+                    <div class="rounded-xl border border-emerald-100 bg-emerald-50/60 px-3.5 py-2.5">
+                        <p class="text-[11px] font-medium text-emerald-700">Pendapatan Periode</p>
+                        <p class="mt-0.5 font-poppins text-sm font-bold text-emerald-950 sm:text-base">
+                            Rp {{ number_format($analyticsSummary['revenue'], 0, ',', '.') }}
+                        </p>
+                    </div>
+                    <div class="rounded-xl border border-indigo-100 bg-indigo-50/60 px-3.5 py-2.5">
+                        <p class="text-[11px] font-medium text-indigo-700">Transaksi Berhasil</p>
+                        <p class="mt-0.5 font-poppins text-sm font-bold text-indigo-950 sm:text-base">
+                            {{ $analyticsSummary['successful_count'] }}
+                            <span class="text-xs font-normal text-indigo-600">/ {{ $analyticsSummary['total_transactions'] }}</span>
+                        </p>
+                    </div>
+                    <div class="rounded-xl border border-slate-200 bg-slate-50/80 px-3.5 py-2.5">
+                        <p class="text-[11px] font-medium text-slate-500">Rata-rata (AOV)</p>
+                        <p class="mt-0.5 font-poppins text-sm font-bold text-slate-800 sm:text-base">
+                            Rp {{ number_format($analyticsSummary['avg_order_value'], 0, ',', '.') }}
+                        </p>
+                    </div>
+                    <div class="rounded-xl border border-slate-200 bg-slate-50/80 px-3.5 py-2.5">
+                        <p class="text-[11px] font-medium text-slate-500">Success Rate</p>
+                        <p class="mt-0.5 font-poppins text-sm font-bold text-slate-800 sm:text-base">
+                            {{ $analyticsSummary['success_rate'] }}%
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            {{-- Row 1: Revenue & Volume Trend (8 cols) + Status Distribution (4 cols) --}}
+            <div class="grid grid-cols-1 gap-5 lg:grid-cols-12">
+                <div class="min-w-0 rounded-xl border border-slate-200/80 bg-slate-50/40 p-4 lg:col-span-8">
+                    <div class="mb-3 flex flex-wrap items-center justify-between gap-2">
+                        <div>
+                            <h3 class="font-poppins text-sm font-semibold text-slate-800 sm:text-base">
+                                Tren Pendapatan &amp; Volume Transaksi
+                            </h3>
+                            <p class="text-xs text-slate-500">Perbandingan nominal pendapatan (Rp) dan jumlah transaksi berhasil</p>
+                        </div>
+                    </div>
+                    <div class="h-72 w-full min-w-0">
+                        <canvas
+                            wire:key="transaction-chart-{{ $chartVersion }}-{{ $reportPeriod }}-{{ $reportDate }}-{{ $reportMonth }}-{{ $reportYear }}"
+                            wire:ignore x-data x-init="$nextTick(() => {
+                                const formatCompactRp = (val) => {
+                                    if (val >= 1000000) return 'Rp ' + (val / 1000000).toFixed(1).replace('.0', '') + ' jt';
+                                    if (val >= 1000) return 'Rp ' + Math.round(val / 1000) + ' rb';
+                                    return 'Rp ' + val;
+                                };
+                                const formatFullRp = (val) => 'Rp ' + new Intl.NumberFormat('id-ID').format(val);
+                                new window.Chart($el, {
+                                    data: {
+                                        labels: {{ Js::from($chartData['labels']) }},
+                                        datasets: [
+                                            {
+                                                type: 'bar',
+                                                label: 'Pendapatan',
+                                                data: {{ Js::from($chartData['revenueData']) }},
+                                                backgroundColor: 'rgba(5, 150, 105, 0.85)',
+                                                hoverBackgroundColor: '#047857',
+                                                borderRadius: 6,
+                                                borderSkipped: false,
+                                                maxBarThickness: 32,
+                                                yAxisID: 'y',
+                                                order: 2
+                                            },
+                                            {
+                                                type: 'line',
+                                                label: 'Jumlah Transaksi',
+                                                data: {{ Js::from($chartData['transactionCountData']) }},
+                                                borderColor: '#4f46e5',
+                                                backgroundColor: 'rgba(79, 70, 229, 0.12)',
+                                                borderWidth: 2.5,
+                                                tension: 0.35,
+                                                fill: true,
+                                                pointRadius: 3.5,
+                                                pointHoverRadius: 6,
+                                                pointBackgroundColor: '#ffffff',
+                                                pointBorderColor: '#4f46e5',
+                                                pointBorderWidth: 2,
+                                                yAxisID: 'y1',
+                                                order: 1
+                                            }
+                                        ]
+                                    },
+                                    options: {
+                                        responsive: true,
+                                        maintainAspectRatio: false,
+                                        interaction: { mode: 'index', intersect: false },
+                                        plugins: {
+                                            legend: {
+                                                position: 'top',
+                                                align: 'end',
+                                                labels: { usePointStyle: true, boxWidth: 8, boxHeight: 8, padding: 14, color: '#475569', font: { size: 12 } }
+                                            },
+                                            tooltip: {
+                                                backgroundColor: '#0f172a',
+                                                titleColor: '#f8fafc',
+                                                bodyColor: '#e2e8f0',
+                                                padding: 10,
+                                                cornerRadius: 8,
+                                                callbacks: {
+                                                    label: (ctx) => ctx.dataset.yAxisID === 'y'
+                                                        ? ` Pendapatan: ${formatFullRp(ctx.parsed.y)}`
+                                                        : ` Transaksi: ${ctx.parsed.y}x`
                                                 }
                                             }
-                                        }
-                                    },
-                                    scales: {
-                                        y: {
-                                            beginAtZero: true,
-                                            max: {{ $chartCapacity }},
-                                            ticks: {
-                                                precision: 0,
-                                                callback: (value) => {
-                                                    const percentage = {{ $totalRoomUnits }} ?
-                                                        Math.round((value / {{ $totalRoomUnits }}) * 100) :
-                                                        0;
-                        
-                                                    return `${value} unit (${percentage}%)`;
+                                        },
+                                        scales: {
+                                            x: {
+                                                grid: { display: false },
+                                                border: { display: false },
+                                                ticks: { color: '#64748b', font: { size: 11 } }
+                                            },
+                                            y: {
+                                                type: 'linear',
+                                                position: 'left',
+                                                beginAtZero: true,
+                                                border: { display: false },
+                                                grid: { color: '#e2e8f0', tickBorderDash: [4, 4] },
+                                                ticks: {
+                                                    color: '#64748b',
+                                                    font: { size: 11 },
+                                                    callback: (v) => formatCompactRp(v)
+                                                }
+                                            },
+                                            y1: {
+                                                type: 'linear',
+                                                position: 'right',
+                                                beginAtZero: true,
+                                                border: { display: false },
+                                                grid: { drawOnChartArea: false },
+                                                ticks: {
+                                                    precision: 0,
+                                                    color: '#4f46e5',
+                                                    font: { size: 11 },
+                                                    callback: (v) => `${v} tx`
                                                 }
                                             }
                                         }
                                     }
-                                }
-                            })
-                        })"></canvas>
+                                });
+                            })"></canvas>
+                    </div>
                 </div>
 
-                <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:col-span-4 lg:grid-cols-1 lg:gap-5 ">
-                    <div class="h-36 min-w-0 w-full sm:h-40 lg:h-28 border border-slate-400 rounded-xl">
+                <div class="min-w-0 rounded-xl border border-slate-200/80 bg-slate-50/40 p-4 lg:col-span-4">
+                    <div class="mb-3">
+                        <h3 class="font-poppins text-sm font-semibold text-slate-800 sm:text-base">
+                            Distribusi Status Transaksi
+                        </h3>
+                        <p class="text-xs text-slate-500">Proporsi seluruh status pembayaran pada periode ini</p>
+                    </div>
+                    <div class="h-72 w-full min-w-0">
                         <canvas
                             wire:key="transaction-status-chart-{{ $chartVersion }}-{{ $reportPeriod }}-{{ $reportDate }}-{{ $reportMonth }}-{{ $reportYear }}"
                             wire:ignore x-data x-init="$nextTick(() => {
+                                const totalStatus = {{ $statusChartData['total'] }};
                                 new window.Chart($el, {
                                     type: 'bar',
                                     data: {
                                         labels: {{ Js::from($statusChartData['labels']) }},
                                         datasets: [{
-                                            label: 'Jumlah transaksi',
+                                            label: 'Jumlah Transaksi',
                                             data: {{ Js::from($statusChartData['data']) }},
                                             backgroundColor: ['#059669', '#d97706', '#dc2626', '#7c3aed', '#64748b', '#0891b2'],
-                                            borderRadius: 6
+                                            borderRadius: 6,
+                                            barThickness: 18
                                         }]
                                     },
                                     options: {
+                                        indexAxis: 'y',
                                         responsive: true,
                                         maintainAspectRatio: false,
-                                        plugins: { legend: { display: false } },
-                                        scales: { y: { beginAtZero: true, ticks: { precision: 0 } } }
+                                        plugins: {
+                                            legend: { display: false },
+                                            tooltip: {
+                                                backgroundColor: '#0f172a',
+                                                padding: 10,
+                                                cornerRadius: 8,
+                                                callbacks: {
+                                                    label: (ctx) => {
+                                                        const count = ctx.parsed.x;
+                                                        const pct = totalStatus > 0 ? ((count / totalStatus) * 100).toFixed(1) : '0.0';
+                                                        return ` ${count} transaksi (${pct}%)`;
+                                                    }
+                                                }
+                                            }
+                                        },
+                                        scales: {
+                                            x: {
+                                                beginAtZero: true,
+                                                border: { display: false },
+                                                grid: { color: '#e2e8f0' },
+                                                ticks: { precision: 0, color: '#64748b', font: { size: 11 } }
+                                            },
+                                            y: {
+                                                border: { display: false },
+                                                grid: { display: false },
+                                                ticks: { color: '#334155', font: { size: 11, weight: '500' } }
+                                            }
+                                        }
                                     }
-                                })
+                                });
                             })"></canvas>
                     </div>
+                </div>
+            </div>
 
-                    <div class="h-40 min-w-0 w-full sm:h-40 lg:h-32rounded-xl">
-                        <h3 class="mb-1 text-center text-xs font-semibold text-gray-700 sm:mb-2 sm:text-sm">Metode
-                            Pembayaran</h3>
+            {{-- Row 2: Payment Methods (6 cols) + Room Type Performance (6 cols) --}}
+            <div class="mt-5 grid grid-cols-1 gap-5 lg:grid-cols-12">
+                <div class="min-w-0 rounded-xl border border-slate-200/80 bg-slate-50/40 p-4 lg:col-span-6">
+                    <div class="mb-3 flex items-center justify-between">
+                        <div>
+                            <h3 class="font-poppins text-sm font-semibold text-slate-800 sm:text-base">Metode Pembayaran</h3>
+                            <p class="text-xs text-slate-500">Kanal pembayaran yang digunakan pada transaksi berhasil</p>
+                        </div>
+                    </div>
+
+                    @if ($paymentMethods->isEmpty())
+                        <div class="flex h-56 flex-col items-center justify-center rounded-lg border border-dashed border-slate-200 bg-white/60 text-center">
+                            <p class="text-sm font-medium text-slate-500">Belum ada transaksi berhasil pada periode ini</p>
+                            <p class="mt-1 text-xs text-slate-400">Ubah periode atau tanggal untuk melihat distribusi metode pembayaran</p>
+                        </div>
+                    @else
+                        @php
+                            $methodColors = ['#2563eb', '#7c3aed', '#0891b2', '#ea580c', '#16a34a', '#db2777'];
+                            $totalMethodCount = max($paymentMethods->sum('total'), 1);
+                        @endphp
+                        <div class="grid grid-cols-1 items-center gap-4 sm:grid-cols-12">
+                            <div class="h-52 w-full min-w-0 sm:col-span-5">
+                                <canvas
+                                    wire:key="payment-method-chart-{{ $chartVersion }}-{{ $reportPeriod }}-{{ $reportDate }}-{{ $reportMonth }}-{{ $reportYear }}"
+                                    wire:ignore x-data x-init="$nextTick(() => {
+                                        const methodRevenues = {{ Js::from($paymentMethods->pluck('revenue')->values()) }};
+                                        new window.Chart($el, {
+                                            type: 'doughnut',
+                                            data: {
+                                                labels: {{ Js::from($paymentMethods->pluck('payment_type')->values()) }},
+                                                datasets: [{
+                                                    data: {{ Js::from($paymentMethods->pluck('total')->values()) }},
+                                                    backgroundColor: ['#2563eb', '#7c3aed', '#0891b2', '#ea580c', '#16a34a', '#db2777'],
+                                                    borderWidth: 2,
+                                                    borderColor: '#ffffff',
+                                                    hoverOffset: 6
+                                                }]
+                                            },
+                                            options: {
+                                                responsive: true,
+                                                maintainAspectRatio: false,
+                                                cutout: '68%',
+                                                plugins: {
+                                                    legend: { display: false },
+                                                    tooltip: {
+                                                        backgroundColor: '#0f172a',
+                                                        padding: 10,
+                                                        cornerRadius: 8,
+                                                        callbacks: {
+                                                            label: (ctx) => {
+                                                                const rev = methodRevenues[ctx.dataIndex] ?? 0;
+                                                                const formatted = new Intl.NumberFormat('id-ID').format(rev);
+                                                                return ` ${ctx.label}: ${ctx.parsed}x (Rp ${formatted})`;
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        });
+                                    })"></canvas>
+                            </div>
+                            <div class="space-y-2 sm:col-span-7">
+                                @foreach ($paymentMethods as $idx => $method)
+                                    @php $pct = round(($method->total / $totalMethodCount) * 100, 1); @endphp
+                                    <div class="flex items-center justify-between rounded-lg bg-white px-3 py-2 text-xs shadow-sm ring-1 ring-slate-100">
+                                        <div class="flex min-w-0 items-center gap-2">
+                                            <span class="h-2.5 w-2.5 shrink-0 rounded-full"
+                                                style="background-color: {{ $methodColors[$idx % count($methodColors)] }}"></span>
+                                            <span class="truncate font-medium uppercase text-slate-700">{{ $method->payment_type }}</span>
+                                        </div>
+                                        <div class="shrink-0 text-right">
+                                            <span class="font-semibold text-slate-800">{{ $method->total }}x ({{ $pct }}%)</span>
+                                            <span class="ml-1.5 text-slate-500">Rp {{ number_format($method->revenue, 0, ',', '.') }}</span>
+                                        </div>
+                                    </div>
+                                @endforeach
+                            </div>
+                        </div>
+                    @endif
+                </div>
+
+                <div class="min-w-0 rounded-xl border border-slate-200/80 bg-slate-50/40 p-4 lg:col-span-6">
+                    <div class="mb-3">
+                        <h3 class="font-poppins text-sm font-semibold text-slate-800 sm:text-base">Performa Tipe Kamar</h3>
+                        <p class="text-xs text-slate-500">Kontribusi pendapatan dan jumlah transaksi per tipe kamar</p>
+                    </div>
+                    <div class="h-56 w-full min-w-0">
                         <canvas
-                            wire:key="payment-method-chart-{{ $chartVersion }}-{{ $reportPeriod }}-{{ $reportDate }}-{{ $reportMonth }}-{{ $reportYear }}"
+                            wire:key="room-performance-chart-{{ $chartVersion }}-{{ $reportPeriod }}-{{ $reportDate }}-{{ $reportMonth }}-{{ $reportYear }}"
                             wire:ignore x-data x-init="$nextTick(() => {
+                                const roomBookings = {{ Js::from($roomPerformance['bookings']) }};
+                                const formatCompactRp = (val) => {
+                                    if (val >= 1000000) return 'Rp ' + (val / 1000000).toFixed(1).replace('.0', '') + ' jt';
+                                    if (val >= 1000) return 'Rp ' + Math.round(val / 1000) + ' rb';
+                                    return 'Rp ' + val;
+                                };
                                 new window.Chart($el, {
-                                    type: 'doughnut',
+                                    type: 'bar',
                                     data: {
-                                        labels: {{ Js::from($paymentMethods->pluck('payment_type')->values()) }},
+                                        labels: {{ Js::from($roomPerformance['labels']) }},
                                         datasets: [{
-                                            data: {{ Js::from($paymentMethods->pluck('total')->values()) }},
-                                            backgroundColor: ['#2563eb', '#7c3aed', '#0891b2', '#ea580c', '#16a34a', '#db2777'],
-                                            borderWidth: 2,
-                                            borderColor: '#ffffff'
+                                            label: 'Pendapatan',
+                                            data: {{ Js::from($roomPerformance['revenues']) }},
+                                            backgroundColor: ['#0f766e', '#2563eb', '#d97706', '#7c3aed'],
+                                            borderRadius: 6,
+                                            barThickness: 24
                                         }]
                                     },
                                     options: {
+                                        indexAxis: 'y',
                                         responsive: true,
                                         maintainAspectRatio: false,
-                                        plugins: { legend: { position: 'bottom' } }
+                                        plugins: {
+                                            legend: { display: false },
+                                            tooltip: {
+                                                backgroundColor: '#0f172a',
+                                                padding: 10,
+                                                cornerRadius: 8,
+                                                callbacks: {
+                                                    label: (ctx) => {
+                                                        const txCount = roomBookings[ctx.dataIndex] ?? 0;
+                                                        const formatted = new Intl.NumberFormat('id-ID').format(ctx.parsed.x);
+                                                        return ` Rp ${formatted} (${txCount} transaksi)`;
+                                                    }
+                                                }
+                                            }
+                                        },
+                                        scales: {
+                                            x: {
+                                                beginAtZero: true,
+                                                border: { display: false },
+                                                grid: { color: '#e2e8f0' },
+                                                ticks: {
+                                                    color: '#64748b',
+                                                    font: { size: 11 },
+                                                    callback: (v) => formatCompactRp(v)
+                                                }
+                                            },
+                                            y: {
+                                                border: { display: false },
+                                                grid: { display: false },
+                                                ticks: { color: '#334155', font: { size: 11, weight: '500' } }
+                                            }
+                                        }
                                     }
-                                })
+                                });
                             })"></canvas>
                     </div>
                 </div>

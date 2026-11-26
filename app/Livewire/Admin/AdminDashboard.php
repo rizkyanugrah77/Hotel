@@ -59,65 +59,81 @@ class AdminDashboard extends Component
             $currentEnd = $currentStart->copy()->endOfYear();
         }
 
+        $paidStatuses = PaymentStatus::successful();
+
         $successfulPayments = Payment::query()
-            ->whereIn('transaction_status', PaymentStatus::successful())
+            ->with('booking.room')
+            ->whereIn('transaction_status', $paidStatuses)
             ->whereBetween('created_at', [$currentStart, $currentEnd])
-            ->get(['created_at']);
+            ->get(['id', 'booking_id', 'sub_total_amount', 'created_at']);
 
         if ($this->reportPeriod === 'weekly') {
-            $labels = collect(range(0, 6))->map(fn($offset) => $currentStart->copy()->addDays($offset)->translatedFormat('D - d'));
-
-            $successfulPaymentsByPeriod = $successfulPayments->countBy(fn($payment) => $payment->created_at->isoWeekday());
-            $successData = collect(range(1, 7))->map(fn($day) => min($successfulPaymentsByPeriod->get($day, 0), $chartCapacity));
+            $labels = collect(range(0, 6))->map(fn($offset) => $currentStart->copy()->addDays($offset)->translatedFormat('D, d M'));
+            $groupedPayments = $successfulPayments->groupBy(fn($payment) => $payment->created_at->isoWeekday());
+            $bucketKeys = range(1, 7);
+            $periodLabel = $currentStart->translatedFormat('d M') . ' - ' . $currentEnd->translatedFormat('d M Y');
         } elseif ($this->reportPeriod === 'monthly') {
             $startOfMonth = Carbon::parse($this->reportMonth . '-01')->startOfMonth();
             $labels = collect(range(1, $startOfMonth->daysInMonth))->map(fn($day) => (string) $day);
-            $successfulPaymentsByPeriod = $successfulPayments->countBy(fn($payment) => $payment->created_at->day);
-            $successData = collect(range(1, $startOfMonth->daysInMonth))->map(fn($day) => min($successfulPaymentsByPeriod->get($day, 0), $chartCapacity));
+            $groupedPayments = $successfulPayments->groupBy(fn($payment) => $payment->created_at->day);
+            $bucketKeys = range(1, $startOfMonth->daysInMonth);
+            $periodLabel = $startOfMonth->translatedFormat('F Y');
         } else {
             $labels = collect(range(1, 12))->map(fn($month) => Carbon::create($this->reportYear, $month)->translatedFormat('M'));
-            $successfulPaymentsByPeriod = $successfulPayments->countBy(fn($payment) => $payment->created_at->month);
-            $successData = collect(range(1, 12))->map(fn($month) => min($successfulPaymentsByPeriod->get($month, 0), $chartCapacity));
+            $groupedPayments = $successfulPayments->groupBy(fn($payment) => $payment->created_at->month);
+            $bucketKeys = range(1, 12);
+            $periodLabel = 'Tahun ' . $this->reportYear;
         }
 
-        $paidStatuses = PaymentStatus::successful();
+        $revenueData = collect($bucketKeys)->map(
+            fn($key) => (int) ($groupedPayments->get($key)?->sum('sub_total_amount') ?? 0)
+        )->values();
+
+        $transactionCountData = collect($bucketKeys)->map(
+            fn($key) => (int) ($groupedPayments->get($key)?->count() ?? 0)
+        )->values();
+
         $paymentMethods = Payment::query()
-            ->selectRaw("COALESCE(payment_method, 'Lainnya') as payment_type, COUNT(*) as total")
+            ->selectRaw("COALESCE(NULLIF(payment_method, ''), 'Lainnya') as payment_type, COUNT(*) as total, COALESCE(SUM(sub_total_amount), 0) as revenue")
             ->whereIn('transaction_status', $paidStatuses)
             ->whereBetween('created_at', [$currentStart, $currentEnd])
-            ->groupByRaw("COALESCE(payment_method, 'Lainnya')")
+            ->groupByRaw("COALESCE(NULLIF(payment_method, ''), 'Lainnya')")
             ->orderByDesc('total')
             ->get();
 
-
         $chartData = [
-            'labels' => $labels,
-            'datasets' => [
-                [
-                    'label' => 'Grafik Penjualan',
-                    'data' => $successData,
-                    'backgroundColor' => '#059669',
-                    'borderRadius' => 6,
-                    'borderWidth' => 1,
-                    'borderColor' => '#ffffff',
-                ],
-
-            ],
+            'labels' => $labels->values(),
+            'revenueData' => $revenueData,
+            'transactionCountData' => $transactionCountData,
         ];
 
         $periodPayments = Payment::query()
             ->whereBetween('created_at', [$currentStart, $currentEnd]);
 
+        $statusCounts = [
+            (clone $periodPayments)->whereIn('transaction_status', $paidStatuses)->count(),
+            (clone $periodPayments)->whereIn('transaction_status', PaymentStatus::pending())->count(),
+            (clone $periodPayments)->whereIn('transaction_status', [PaymentStatus::FAILED->value])->count(),
+            (clone $periodPayments)->whereIn('transaction_status', [PaymentStatus::EXPIRED->value])->count(),
+            (clone $periodPayments)->whereIn('transaction_status', [PaymentStatus::CANCEL->value])->count(),
+            (clone $periodPayments)->whereIn('transaction_status', [PaymentStatus::REFUND->value])->count(),
+        ];
+
+        $totalPeriodTransactions = array_sum($statusCounts);
+        $successfulCount = $statusCounts[0];
+
         $statusChartData = [
             'labels' => ['Berhasil', 'Pending', 'Gagal', 'Kedaluwarsa', 'Dibatalkan', 'Dikembalikan'],
-            'data' => [
-                (clone $periodPayments)->whereIn('transaction_status', $paidStatuses)->count(),
-                (clone $periodPayments)->whereIn('transaction_status', PaymentStatus::pending())->count(),
-                (clone $periodPayments)->whereIn('transaction_status', [PaymentStatus::FAILED->value])->count(),
-                (clone $periodPayments)->whereIn('transaction_status', [PaymentStatus::EXPIRED->value])->count(),
-                (clone $periodPayments)->whereIn('transaction_status', [PaymentStatus::CANCEL->value])->count(),
-                (clone $periodPayments)->whereIn('transaction_status', [PaymentStatus::REFUND->value])->count(),
-            ],
+            'data' => $statusCounts,
+            'total' => $totalPeriodTransactions,
+        ];
+
+        $paymentsByRoom = $successfulPayments->groupBy(fn($payment) => $payment->booking?->room?->name ?? 'Lainnya');
+        $roomNames = $rooms->pluck('name')->unique()->values();
+        $roomPerformance = [
+            'labels' => $roomNames,
+            'revenues' => $roomNames->map(fn($name) => (int) ($paymentsByRoom->get($name)?->sum('sub_total_amount') ?? 0))->values(),
+            'bookings' => $roomNames->map(fn($name) => (int) ($paymentsByRoom->get($name)?->count() ?? 0))->values(),
         ];
 
         $occupiedUnitIds = Booking::query()
@@ -140,9 +156,16 @@ class AdminDashboard extends Component
             ];
         });
 
-        $revenue = Payment::whereIn('transaction_status', $paidStatuses)
-            ->whereBetween('created_at', [$currentStart, $currentEnd])
-            ->sum('sub_total_amount');
+        $revenue = (int) $successfulPayments->sum('sub_total_amount');
+
+        $analyticsSummary = [
+            'period_label' => $periodLabel,
+            'revenue' => $revenue,
+            'successful_count' => $successfulCount,
+            'total_transactions' => $totalPeriodTransactions,
+            'avg_order_value' => $successfulCount > 0 ? (int) round($revenue / $successfulCount) : 0,
+            'success_rate' => $totalPeriodTransactions > 0 ? round(($successfulCount / $totalPeriodTransactions) * 100, 1) : 0,
+        ];
 
         $totalRevenue = Payment::whereIn('transaction_status', $paidStatuses)->sum('sub_total_amount');
         $totalBookings = Booking::where('status', '!=', 'cancelled')->count();
@@ -160,6 +183,8 @@ class AdminDashboard extends Component
             'paymentMethods',
             'chartData',
             'statusChartData',
+            'roomPerformance',
+            'analyticsSummary',
             'chartCapacity',
             'totalRoomUnits',
             'occupiedRoomUnits',

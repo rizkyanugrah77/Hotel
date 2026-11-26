@@ -144,7 +144,7 @@
                     @forelse ($galleries as $gallery)
                         <tr>
                             <td class="py-3 px-6">{{ $loop->iteration }}</td>
-                            <td class="py-3 px-6"><img src="{{ asset('assets/img/gallery/' . $gallery->image) }}"
+                            <td class="py-3 px-6"><img src="{{ asset('storage/assets/img/gallery/' . $gallery->image) }}"
                                     alt="{{ $gallery->caption }}" class="w-20 h-20 object-cover rounded-lg"></td>
                             <td class="py-3 px-6">{{ $gallery->room->name }}</td>
                             <td class="py-3 px-6">{{ $gallery->image_path }}</td>

@@ -2,19 +2,34 @@
 
 namespace App\Livewire\Welcome;
 
+use App\Enums\BookingStatus;
 use App\Models\Booking;
 use App\Models\Payment;
+use App\Services\PromoReservationService;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\DB;
 use Livewire\Component;
 
 class UserDashboard extends Component
 {
     public function cancel($id)
     {
-        $cancelled = Booking::whereKey($id)
-            ->where('user_id', auth()->id())
-            ->where('status', 'pending')
-            ->update(['status' => 'cancelled']);
+        $cancelled = DB::transaction(function () use ($id) {
+            $booking = Booking::whereKey($id)
+                ->where('user_id', auth()->id())
+                ->where('status', BookingStatus::PENDING->value)
+                ->lockForUpdate()
+                ->first();
+
+            if (! $booking) {
+                return false;
+            }
+
+            $booking->update(['status' => BookingStatus::CANCELLED->value]);
+            app(PromoReservationService::class)->release($booking);
+
+            return true;
+        }, 3);
 
         if ($cancelled) {
             session()->flash('success', 'Booking berhasil dibatalkan.');

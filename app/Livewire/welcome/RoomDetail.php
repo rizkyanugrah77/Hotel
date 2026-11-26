@@ -2,10 +2,12 @@
 
 namespace App\Livewire\Welcome;
 
+use App\Exceptions\PromoUnavailableException;
 use App\Models\Booking;
 use App\Models\Payment;
 use App\Models\Promo;
 use App\Models\Room;
+use App\Services\PromoReservationService;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -77,16 +79,12 @@ class RoomDetail extends Component
     {
         $this->promo_code = strtoupper(trim($this->promo_code));
 
-        if (! $this->promo || $this->promo->code === $this->promo_code || ! in_array($this->promo->id, $this->claimed_promo_ids, true)) {
+        if ($this->promo && $this->promo->code === $this->promo_code) {
             return;
         }
 
-        Promo::whereKey($this->promo->id)
-            ->where('used_count', '>', 0)
-            ->decrement('used_count');
-
-        $this->claimed_promo_ids = array_values(array_diff($this->claimed_promo_ids, [$this->promo->id]));
         $this->promo = null;
+        $this->claimed_promo_ids = [];
         $this->calculatePrice();
     }
 
@@ -132,25 +130,7 @@ class RoomDetail extends Component
             return;
         }
 
-        if (in_array($this->promo->id, $this->claimed_promo_ids, true)) {
-            return;
-        }
-
-        $claimed = Promo::query()
-            ->whereKey($this->promo->id)
-            ->where('is_active', true)
-            ->where('start_date', '<=', now('Asia/Jakarta'))
-            ->where('end_date', '>=', now('Asia/Jakarta'))
-            ->where(function ($query) {
-                $query->whereNull('quota')->orWhereColumn('used_count', '<', 'quota');
-            })
-            ->increment('used_count');
-
-        if (! $claimed) {
-            $this->promo = null;
-            $this->calculatePrice();
-            $this->addError('promo_code', 'Kuota promo sudah habis.');
-
+        if (! $this->promo || in_array($this->promo->id, $this->claimed_promo_ids, true)) {
             return;
         }
 
@@ -303,24 +283,23 @@ class RoomDetail extends Component
 
         try {
             $booking = DB::transaction(function () use ($user) {
+                $checkIn = Carbon::parse($this->check_in)->setTimezone('Asia/Jakarta');
+                $checkOut = Carbon::parse($this->check_out)->setTimezone('Asia/Jakarta')->setTime(12, 0, 0);
+
                 $unit = $this->room->units()
                     ->where('status', 'available')
                     ->lockForUpdate()
-                    ->whereDoesntHave('bookings', function ($query) {
-                        $query->where(function ($query) {
-                            $query->whereIn('status', ['paid', 'checked_in'])
-                                ->orWhere(function ($query) {
-                                    $query->where('status', 'pending')
-                                        ->where('expires_at', '>', now());
-                                });
-                        })
-                            ->where('check_in', '<', $this->check_out)
-                            ->where('check_out', '>', $this->check_in);
+                    ->whereDoesntHave('bookings', function ($query) use ($checkIn, $checkOut) {
+                        $query->overlapping($checkIn, $checkOut)->blocking();
                     })
                     ->first();
 
                 if (! $unit) {
                     return null;
+                }
+
+                if ($this->promo && ! app(PromoReservationService::class)->reserve($this->promo->id)) {
+                    throw new PromoUnavailableException();
                 }
 
                 $this->user_id = $user->id;
@@ -331,16 +310,13 @@ class RoomDetail extends Component
                 $validation = $this->validate();
 
                 $attributes = collect($validation)->except('status')->all();
-                $attributes['check_in'] = Carbon::parse($this->check_in)
-                    ->setTimezone('Asia/Jakarta')
+                $attributes['check_in'] = $checkIn->copy()
                     ->setTimeFrom(Carbon::now('Asia/Jakarta'))
                     ->format('Y-m-d H:i:s');
-                $attributes['check_out'] = Carbon::parse($this->check_out)
-                    ->setTimezone('Asia/Jakarta')
-                    ->setTime(12, 0, 0)
-                    ->format('Y-m-d H:i:s');
+                $attributes['check_out'] = $checkOut->format('Y-m-d H:i:s');
                 $attributes['status'] = 'pending';
                 $attributes['expires_at'] = now()->addMinutes(max((int) config('booking.hold_minutes'), 1));
+                $attributes['promo_id'] = $this->promo?->id;
 
                 return Booking::create($attributes);
             }, 3);
@@ -367,6 +343,16 @@ class RoomDetail extends Component
             $this->dispatch('room-detail-saved', message: 'Booking berhasil ditambahkan.', type: 'success');
             $this->resetForm();
             $this->redirect(route('payment', $booking->booking_code), navigate: true);
+        } catch (PromoUnavailableException $e) {
+            $this->promo = null;
+            $this->claimed_promo_ids = [];
+            $this->calculatePrice();
+            $this->addError('promo_code', 'Kuota promo sudah habis.');
+            $this->dispatch(
+                'room-detail-error',
+                message: 'Kuota promo sudah habis. Silakan coba kembali tanpa promo.',
+                type: 'error'
+            );
         } catch (\Throwable $e) {
             report($e);
 

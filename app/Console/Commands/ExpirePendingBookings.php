@@ -3,6 +3,7 @@
 namespace App\Console\Commands;
 
 use App\Models\Booking;
+use App\Services\PromoReservationService;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\DB;
 
@@ -15,8 +16,9 @@ class ExpirePendingBookings extends Command
     public function handle(): int
     {
         $cutoff = now();
+        $promos = app(PromoReservationService::class);
 
-        $expired = DB::transaction(function () use ($cutoff) {
+        $expired = DB::transaction(function () use ($cutoff, $promos) {
             $bookings = Booking::query()
                 ->where('status', 'pending')
                 ->whereNotNull('expires_at')
@@ -27,6 +29,7 @@ class ExpirePendingBookings extends Command
 
             foreach ($bookings as $booking) {
                 $booking->update(['status' => 'cancelled']);
+                $promos->release($booking);
                 $expiredCount++;
             }
 

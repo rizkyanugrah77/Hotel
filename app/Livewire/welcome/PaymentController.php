@@ -65,9 +65,10 @@ class PaymentController extends Component
 
         $paymentData = session("booking_payment_data.{$bookingCode}", []);
 
+        $this->promo_id = $this->bookings->promo_id;
+        $this->promo = $this->promo_id ? Promo::find($this->promo_id) : null;
+
         if (($paymentData['gross_amount'] ?? null) === (int) $this->bookings->total_price) {
-            $this->promo_id = $paymentData['promo_id'] ?? null;
-            $this->promo = $this->promo_id ? Promo::find($this->promo_id) : null;
             $this->sub_total_amount = $paymentData['subtotal_amount'];
             $this->discount_amount = $paymentData['discount_amount'];
             $this->tax_amount = $paymentData['tax_amount'];
@@ -100,14 +101,8 @@ class PaymentController extends Component
                     || Booking::query()
                     ->where('room_unit_id', $booking->room_unit_id)
                     ->whereKeyNot($booking->id)
-                    ->where('check_in', '<', $booking->check_out)
-                    ->where('check_out', '>', $booking->check_in)
-                    ->where(function ($query) {
-                        $query->whereIn('status', ['paid', 'checked_in'])
-                            ->orWhere(function ($query) {
-                                $query->where('status', 'pending')->where('expires_at', '>', now());
-                            });
-                    })
+                    ->overlapping($booking->check_in, $booking->check_out)
+                    ->blocking()
                     ->exists();
 
                 if ($unitIsUnavailable) {
@@ -116,6 +111,7 @@ class PaymentController extends Component
 
                 $hasActivePayment = Payment::where('booking_id', $booking->id)
                     ->whereIn('transaction_status', PaymentStatus::pending())
+                    ->whereNotNull('snap_token')
                     ->lockForUpdate()
                     ->exists();
 
@@ -127,7 +123,7 @@ class PaymentController extends Component
                     'booking_id' => $booking->id,
                     'user_id' => $booking->user_id,
                     'order_id' => $orderId,
-                    'promo_id' => $this->promo_id,
+                    'promo_id' => $booking->promo_id,
                     'sub_total_amount' => $this->sub_total_amount,
                     'tax_amount' => $this->tax_amount,
                     'gross_amount' => (int) $booking->total_price,
@@ -163,12 +159,8 @@ class PaymentController extends Component
 
             return redirect()->away($snap->redirect_url);
         } catch (\Exception $e) {
-            if (isset($payment)) {
-                $payment->update(['transaction_status' => PaymentStatus::FAILED->value]);
-            }
-
             report($e);
-            session()->flash('error', 'Payment initialization failed.');
+            session()->flash('error', 'Payment initialization failed. Silakan coba lagi.');
         }
     }
 

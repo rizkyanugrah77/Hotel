@@ -89,35 +89,7 @@ export function initMobileNav() {
 // Navbar Scroll Effect
 // ===================================
 export function initNavbarScroll() {
-  if (window._navbarScrollInitialized) {
-    // Just trigger it once for the new page state
-    window.dispatchEvent(new Event('scroll'));
-    return;
-  }
-
-  const navbar = document.getElementById('navbar');
-  // We can't return early if !navbar because the navbar might be on a different page.
-  // We need to attach the listener to the window regardless.
-
-  let lastScroll = 0;
-
-  window.addEventListener('scroll', () => {
-    const currentNavbar = document.getElementById('navbar');
-    if (!currentNavbar) return;
-    const currentScroll = window.pageYOffset;
-
-    if (currentScroll > 50) {
-      currentNavbar.classList.add('bg-white/95', 'backdrop-blur-md', 'shadow-soft');
-      currentNavbar.classList.remove('bg-transparent');
-    } else {
-      currentNavbar.classList.remove('bg-white/95', 'backdrop-blur-md', 'shadow-soft');
-      currentNavbar.classList.add('bg-transparent');
-    }
-
-    lastScroll = currentScroll;
-  });
-
-  window._navbarScrollInitialized = true;
+  // Handled declaratively by Alpine.js on #navbar in navigation.blade.php
   window.dispatchEvent(new Event('scroll'));
 }
 

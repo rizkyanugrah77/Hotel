@@ -48,16 +48,16 @@
 
     {{-- Modal Panel --}}
     <div x-show="show" role="dialog" aria-modal="true" aria-label="{{ $title ?: $name }}"
-        class="relative w-full {{ $maxWidthClass }} max-h-[90dvh] bg-white rounded-2xl shadow-2xl flex flex-col mx-4 "
-        x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0 scale-90"
+        class="relative w-full {{ $maxWidthClass }} max-h-[90dvh] bg-white rounded-3xl shadow-2xl ring-1 ring-black/5 flex flex-col mx-4 overflow-hidden"
+        x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0 scale-95"
         x-transition:enter-end="opacity-100 scale-100" x-transition:leave="transition ease-in duration-200"
-        x-transition:leave-start="opacity-100 scale-100" x-transition:leave-end="opacity-0 scale-90">
+        x-transition:leave-start="opacity-100 scale-100" x-transition:leave-end="opacity-0 scale-95">
         {{-- Modal Header --}}
         @if ($title)
-            <div class="flex items-center justify-between gap-3 px-4 sm:px-6 py-4 border-b border-gray-100 flex-shrink-0">
-                <h3 class="font-poppins font-bold text-lg">{{ $title }}</h3>
+            <div class="flex items-center justify-between gap-3 px-5 sm:px-7 py-4 border-b border-gray-100 bg-gray-50/50 flex-shrink-0">
+                <h3 class="font-poppins font-bold text-lg text-gray-900">{{ $title }}</h3>
                 <button x-on:click="show = false" type="button" aria-label="Tutup modal"
-                    class="w-11 h-11 shrink-0 rounded-lg bg-gray-100 flex items-center justify-center text-gray-600 hover:bg-gray-200 hover:text-gray-700 transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary">
+                    class="w-9 h-9 shrink-0 rounded-xl bg-white border border-gray-200/80 flex items-center justify-center text-gray-500 shadow-sm hover:bg-gray-100 hover:text-gray-800 transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary">
                     <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
                     </svg>

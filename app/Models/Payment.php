@@ -29,10 +29,15 @@ class Payment extends Model
         'snap_token',
         'transaction_status',
         'payment_method',
+        'refund_required',
+        'refund_reason',
+        'refunded_at',
     ];
 
     protected $casts = [
         'paid_at' => 'datetime',
+        'refund_required' => 'boolean',
+        'refunded_at' => 'datetime',
     ];
 
     protected function transactionStatus(): Attribute

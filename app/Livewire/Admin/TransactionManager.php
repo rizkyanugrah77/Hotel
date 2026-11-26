@@ -88,7 +88,10 @@ class TransactionManager extends Component
                         });
                 });
             })
-            ->when($this->filterStatus, function ($query) {
+            ->when($this->filterStatus === 'REFUND_REQUIRED', function ($query) {
+                $query->where('refund_required', true);
+            })
+            ->when($this->filterStatus && $this->filterStatus !== 'REFUND_REQUIRED', function ($query) {
                 $query->where('transaction_status', $this->filterStatus);
             });
 
@@ -169,7 +172,11 @@ class TransactionManager extends Component
                         });
                 });
             })
-            ->when($this->filterStatus, fn($q) => $q->where('transaction_status', $this->filterStatus));
+            ->when($this->filterStatus === 'REFUND_REQUIRED', fn($q) => $q->where('refund_required', true))
+            ->when(
+                $this->filterStatus && $this->filterStatus !== 'REFUND_REQUIRED',
+                fn($q) => $q->where('transaction_status', $this->filterStatus)
+            );
 
         $this->applyPeriodFilter($query);
 

@@ -240,6 +240,7 @@
                     class="input min-w-0 w-full py-2 text-sm lg:w-40">
                     <option value="">Semua Status</option>
                     <option value="SUCCESS">Berhasil</option>
+                    <option value="REFUND_REQUIRED">Perlu Refund</option>
                     <option value="PENDING">Pending</option>
                     <option value="FAILED">Gagal</option>
                     <option value="EXPIRED">Kedaluwarsa</option>
@@ -305,7 +306,14 @@
                                 {{ 'Rp ' . number_format($tx->gross_amount, 0, ',', '.') }}
                             </td>
                             <td class="px-3 py-3">
-                                <x-transaction-status :status="$tx->transaction_status" />
+                                <div class="flex flex-wrap items-center gap-1.5">
+                                    <x-transaction-status :status="$tx->transaction_status" />
+                                    @if ($tx->refund_required)
+                                        <span class="inline-flex items-center rounded-full bg-red-100 px-2 py-0.5 text-xs font-semibold text-red-700">
+                                            Perlu Refund
+                                        </span>
+                                    @endif
+                                </div>
                             </td>
                         </tr>
                     @empty
@@ -327,7 +335,14 @@
                             <p class="font-mono text-sm font-semibold text-gray-800 truncate">{{ $tx->order_id }}</p>
                             <p class="mt-0.5 truncate text-xs text-gray-500">{{ $tx->user?->name ?? '-' }}</p>
                         </div>
-                        <x-transaction-status :status="$tx->transaction_status" />
+                        <div class="flex flex-wrap items-center justify-end gap-1.5">
+                            <x-transaction-status :status="$tx->transaction_status" />
+                            @if ($tx->refund_required)
+                                <span class="inline-flex items-center rounded-full bg-red-100 px-2 py-0.5 text-xs font-semibold text-red-700">
+                                    Perlu Refund
+                                </span>
+                            @endif
+                        </div>
                     </div>
                     <div class="rounded-lg bg-gray-50 p-3 text-sm">
                         <p class="truncate font-medium text-gray-800">{{ $tx->booking?->room?->name ?? '-' }}</p>

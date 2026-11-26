@@ -2,6 +2,7 @@
 
 namespace App\Livewire\Admin;
 
+use App\Models\Booking;
 use App\Models\Room;
 use App\Models\RoomUnit;
 use Illuminate\Validation\Rule;
@@ -83,11 +84,6 @@ class RoomUnitAdmin extends Component
             return;
         }
 
-        if ($unit->status === 'occupied') {
-            $this->dispatch('room-unit-error', message: 'Unit tidak bisa dihapus karena sedang digunakan.');
-            return;
-        }
-
         $unit->delete();
         $this->roomUnitToDelete = null;
 
@@ -100,9 +96,20 @@ class RoomUnitAdmin extends Component
             ->orderBy('room_number')
             ->get();
 
+        $occupiedUnitIds = Booking::query()
+            ->where('room_id', $this->roomId)
+            ->where('check_in', '<=', now())
+            ->where('check_out', '>=', now())
+            ->whereIn('status', ['paid', 'checked_in'])
+            ->pluck('room_unit_id')
+            ->filter()
+            ->unique()
+            ->all();
+
         return view('livewire.layout.room-units-manager', [
             'units' => $units,
             'roomStock' => $this->roomStock,
+            'occupiedUnitIds' => $occupiedUnitIds,
         ])->layout('layouts.app');
     }
 
@@ -116,7 +123,7 @@ class RoomUnitAdmin extends Component
                 'max:25',
                 Rule::unique('room_units', 'room_number')->ignore($this->roomUnitId),
             ],
-            'status' => 'required|in:available,maintenance,occupied',
+            'status' => 'required|in:available,maintenance',
         ];
     }
 

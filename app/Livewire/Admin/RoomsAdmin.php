@@ -2,6 +2,7 @@
 
 namespace App\Livewire\Admin;
 
+use App\Models\Booking;
 use App\Models\Facility;
 use App\Models\Room;
 use App\Models\RoomUnit;
@@ -219,13 +220,20 @@ class RoomsAdmin extends Component
             ->latest()
             ->paginate($this->perPage);
 
-        $roomStats = RoomUnit::query()
-            ->selectRaw('COUNT(*) as total')
-            ->selectRaw("COALESCE(SUM(CASE WHEN status = 'available' THEN 1 ELSE 0 END), 0) as available")
-            ->selectRaw("COALESCE(SUM(CASE WHEN status = 'occupied' THEN 1 ELSE 0 END), 0) as occupied")
-            ->selectRaw("COALESCE(SUM(CASE WHEN status = 'maintenance' THEN 1 ELSE 0 END), 0) as maintenance")
-            ->first()
-            ->only(['total', 'available', 'occupied', 'maintenance']);
+        $occupiedUnitIds = Booking::query()
+            ->where('check_in', '<=', now())
+            ->where('check_out', '>=', now())
+            ->whereIn('status', ['paid', 'checked_in'])
+            ->pluck('room_unit_id')
+            ->filter()
+            ->unique();
+
+        $roomStats = [
+            'total' => RoomUnit::query()->count(),
+            'available' => RoomUnit::query()->where('status', 'available')->count(),
+            'occupied' => RoomUnit::query()->whereIn('id', $occupiedUnitIds)->count(),
+            'maintenance' => RoomUnit::query()->where('status', 'maintenance')->count(),
+        ];
 
         return view('livewire.layout.rooms-manager', [
             'rooms' => $rooms,

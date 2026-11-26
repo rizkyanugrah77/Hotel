@@ -14,7 +14,7 @@
                        data-gallery-item>
                        @php $firstGallery = $featuredGalleries->first(); @endphp
                        <div class="relative aspect-[4/3] md:h-full md:aspect-auto">
-                          <img src="{{ asset('assets/img/gallery/' . $firstGallery->image) }}"
+                          <img src="{{ asset('storage/assets/img/gallery/' . $firstGallery->image) }}"
                               alt="{{ $firstGallery->caption }} - Sitio Tio Resort"
                               class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
                               loading="lazy" />
@@ -33,7 +33,7 @@
                        <div class="overflow-hidden rounded-2xl shadow-soft cursor-pointer group animate-on-scroll-scale stagger-{{ $index + 1 }} md:rounded-3xl"
                            data-gallery-item>
                            <div class="relative aspect-square md:h-full md:aspect-auto">
-                              <img src="{{ asset('assets/img/gallery/' . $gallery->image) }}"
+                              <img src="{{ asset('storage/assets/img/gallery/' . $gallery->image) }}"
                                   alt="{{ $gallery->caption }} - Sitio Tio Resort"
                                   class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
                                   loading="lazy" />
